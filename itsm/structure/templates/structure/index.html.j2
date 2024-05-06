@@ -1,0 +1,22 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}Organizations{% endblock %}
+
+{% block body%}
+
+<table class="data">
+    <tr>
+        <th>name</th>
+        <th>Created</th>
+        <th>Modified</th>
+    </tr>
+    {% for org in organization_list %}
+    <tr>
+        <td><a href="/organization/{{ org.id }}/">{{ org.name }}</a></td>
+        <td>{{ org.created }}</td>
+        <td>{{ org.modified }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}
