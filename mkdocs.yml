@@ -1,0 +1,27 @@
+INHERIT: website-template/mkdocs.yml
+
+docs_dir: 'docs'
+
+repo_name: ITSM APP
+repo_url: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
+edit_uri: '/-/ide/project/nofusscomputing/infrastructure/configuration-management/django_app/edit/development/-/docs/'
+
+nav:
+- Home: index.md
+
+- Articles: 
+
+  - articles/index.md
+
+- Projects: 
+
+  - projects/index.md
+
+  - projects/itsm/index.md
+
+- Operations: 
+
+  - operations/index.md
+
+- Contact Us: contact.md
+

@@ -1,0 +1,20 @@
+---
+
+variables:
+  MY_PROJECT_ID: "57560288"
+  # GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/.git"
+
+  # Docs NFC
+  PAGES_ENVIRONMENT_PATH: projects/itsm/
+
+  # RELEASE_ADDITIONAL_ACTIONS_BUMP: ./.gitlab/additional_actions_bump.sh
+
+
+include:
+  # - local: .gitlab/integration_test.gitlab-ci.yml
+  # - local: .gitlab/unit-test.gitlab-ci.yml
+  - project: nofusscomputing/projects/gitlab-ci
+    ref: development
+    file:
+      - .gitlab-ci_common.yaml
+      - template/automagic.gitlab-ci.yaml

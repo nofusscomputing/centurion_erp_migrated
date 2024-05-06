@@ -1,0 +1,4 @@
+{
+    "gitlab.aiAssistedCodeSuggestions.enabled": false,
+    "gitlab.duoChat.enabled": false,
+}
