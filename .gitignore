@@ -1,1 +1,4 @@
 venv/**
+itsm/static/**
+__pycache__
+itsm/db.sqlite3
