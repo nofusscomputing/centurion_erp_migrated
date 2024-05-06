@@ -1,0 +1,26 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}{{ organization.name }}{% endblock %}
+
+{% block body%}
+<section class="content-header">
+    <fieldset><label>Name</label><input type="text" value="{{ organization.name }}" /></fieldset>
+    <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
+    <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
+</section>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Created</th>
+        <th>Modified</th>
+    </tr>
+    {% for tm in organization.teams.all %}
+    <tr>
+        <td>{{ tm.name }}</td>
+        <td>{{ tm.created }} </td>
+        <td>{{ tm.modified }} </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
