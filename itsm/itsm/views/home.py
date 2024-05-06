@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.views.generic import View
 
 class HomeView(View):
-    template_name = 'home.html'
+    template_name = 'home.html.j2'
 
     def get(self, request):
 

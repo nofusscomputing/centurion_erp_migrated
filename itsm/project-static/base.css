@@ -91,7 +91,7 @@ footer {
   background-color: cadetblue;
   width: 100%;
   height: 76px;
-  line-height:76px;
+  line-height: 76px;
   text-align: center;
   vertical-align: middle;
   padding: 0%;
@@ -116,7 +116,7 @@ header .dropdown {
 .dropdown {
   /* position: fixed; */
   /* display: inline-block; */
-  display:inline-flexbox;
+  display: inline-flexbox;
   /* left: 300px; */
   /* position: relative; */
   /* vertical-align: middle; */
@@ -129,11 +129,11 @@ header .dropdown {
   position: absolute;
   background-color: #f9f9f9;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
-/* Links inside the dropdown */
+
 .dropdown-content a {
   color: black;
   padding: 12px 16px;
@@ -141,15 +141,21 @@ header .dropdown {
   display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #b4adad}
 
-/* Show the dropdown menu on hover */
+.dropdown-content a:hover {
+  background-color: #b4adad
+}
+
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid #b1b1b1;
+  font-size: inherit;
 }
