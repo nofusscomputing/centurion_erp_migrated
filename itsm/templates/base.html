@@ -1,0 +1,62 @@
+<html>
+
+<head>
+  {% load static %}
+  <title>CSS Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="{% static 'base.css' %}">
+
+</head>
+
+<body>
+
+  <header>
+    <h1>Site Title</h1>
+
+<div class="dropdown">
+  <button class="dropbtn">{% block org_name %}Organization{% endblock %}</button>
+  <div class="dropdown-content">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+  </div>
+</div>
+
+<div class="dropdown", style="right: 0px; position: fixed; padding-right: 50px;">
+  <button class="dropbtn">{% block user_name %}My Account{% endblock %}</button>
+  <div class="dropdown-content">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+  </div>
+</div>
+
+  </header>
+
+  <main>
+    <nav>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </nav>
+
+    <section>
+      <h2>{% block title %}Page Title{% endblock %}</h2>
+
+      <article>
+        {% block body%}{% endblock %}
+      </article>
+      <footer>
+        Footer
+      </footer>
+    </section>
+
+  </main>
+
+</body>
+
+</html>
