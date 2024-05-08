@@ -41,36 +41,6 @@ header {
   vertical-align: middle;
 }
 
-nav {
-  display: flex;
-  flex-direction: column;
-  background: #212427;
-  padding: 20px;
-  width: 275px;
-  height: 100%;
-
-  position: fixed;
-  top: 76px;
-  bottom: 4rem;
-  left: 0;
-  overflow-y: auto;
-}
-
-nav ul {
-  list-style-type: none;
-  padding: 0;
-
-}
-
-nav ul li {
-  padding: 10px;
-}
-
-nav ul li:hover {
-  border-left-color: #73bcf7;
-  border-left: 3px solid #73bcf7;
-  background-color: #666;
-}
 
 section {
   display: flexbox;
@@ -158,4 +128,91 @@ input {
   border: none;
   border-bottom: 1px solid #b1b1b1;
   font-size: inherit;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  background: #212427;
+  padding: 20px;
+  width: 275px;
+  height: 100%;
+
+  position: fixed;
+  top: 76px;
+  bottom: 4rem;
+  left: 0;
+  overflow-y: auto;
+}
+
+
+nav button.collapsible {
+  background-color: inherit;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin: 0px;
+}
+
+nav button.active, .collapsible:hover {
+  font-weight: bold;
+}
+
+nav button.collapsible:after {
+  content: '\002B';
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+nav button.active:after {
+  content: "\2212";
+  font-weight: bold;
+}
+
+nav div.content {
+  padding: 0px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  margin: 0px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0px;
+
+}
+
+nav ul li {
+  padding: 10px;
+}
+
+nav ul li:hover {
+  border-left: 3px solid #73bcf7;
+  background-color: #666;
+}
+
+nav ul li.active {
+  border-left: 3px solid #73bcf7;
+}
+
+nav a {
+
+  color: #177ee6;
+  text-decoration: none;
+
+}
+
+nav a:visited {
+
+  color: #177ee6;
+  text-decoration: none;
+
 }

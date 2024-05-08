@@ -15,7 +15,7 @@
 <body>
 
   <header>
-    <h1>Site Title</h1>
+    <h1><a href="/" style="text-decoration: none; color: inherit;">Site Title</a></h1>
 
     <div class="dropdown">
       <button class="dropbtn">{% block org_name %}Organization{% endblock %}</button>
@@ -38,12 +38,8 @@
   </header>
 
   <main>
-    <nav>
-      <ul>
-        <li><a href="#">Link 1</a></li>
-        <li><a href="#">Link 2</a></li>
-        <li><a href="#">Link 3</a></li>
-      </ul>
+    <nav style="padding: 0px;">
+      {% include 'navigation.html.j2' %}
     </nav>
 
     <section>

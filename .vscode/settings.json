@@ -1,4 +1,7 @@
 {
     "gitlab.aiAssistedCodeSuggestions.enabled": false,
     "gitlab.duoChat.enabled": false,
+    "cSpell.enableFiletypes": [
+        "!python"
+    ],
 }
