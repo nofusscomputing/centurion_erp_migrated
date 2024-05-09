@@ -1,29 +1,27 @@
-from django.shortcuts import render
+from django.conf import settings
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.views import generic
 
 from .models import Organization, Team
 
 
-class IndexView(generic.ListView):
-    # model = Organization
+class IndexView(PermissionRequiredMixin, generic.ListView):
+    permission_required = 'organization.view_organization'
     template_name = 'structure/index.html.j2'
-
     context_object_name = "organization_list"
+
 
     def get_queryset(self):
 
         return Organization.objects.filter(team=None)
 
 
-class OrganizationView(generic.DetailView):
+class OrganizationView(PermissionRequiredMixin, generic.DetailView):
     model = Organization
     template_name = "structure/organization.html.j2"
-
-    # context_object_name = Team
+    permission_required = 'organization.view_organization'
 
 
     def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
+
         return Organization.objects.filter()
