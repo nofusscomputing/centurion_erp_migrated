@@ -1,5 +1,12 @@
 from django.contrib import admin
 
+from organizations.models import (Organization, OrganizationUser,
+    OrganizationOwner, OrganizationInvitation)
+
+admin.site.unregister(Organization)
+admin.site.unregister(OrganizationInvitation)
+admin.site.unregister(OrganizationOwner)
+
 from .models import Organization, Team
 
 
