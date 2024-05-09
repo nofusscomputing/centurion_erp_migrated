@@ -27,11 +27,23 @@
     </div>
 
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
-      <button class="dropbtn">{% block user_name %}My Account{% endblock %}</button>
+      <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
       <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
+        <!-- <a href="#">Link 1</a> -->
+        {% if user.is_superuser %}
+        <form action="{% url 'admin:index' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Admin Panel</button>
+        </form>
+        {% endif %}
+        <form action="{% url 'password_change' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Change Password</button>
+        </form>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Log Out</button>
+        </form>
       </div>
     </div>
 

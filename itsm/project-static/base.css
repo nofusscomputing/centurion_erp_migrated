@@ -76,6 +76,18 @@ footer {
   font-size: 16px;
   border: none;
   cursor: pointer;
+  min-width: 160px;
+}
+
+.accbtn {
+  background-color: inherit;
+  color: #000;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin: 0px;
 }
 
 header .dropdown {
@@ -103,6 +115,15 @@ header .dropdown {
   z-index: 1;
 }
 
+
+.dropdown-content form {
+  margin: 0px;
+  padding: 0px;
+}
+
+.accbtn:hover {
+  background-color: #b4adad
+}
 
 .dropdown-content a {
   color: black;
