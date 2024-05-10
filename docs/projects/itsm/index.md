@@ -40,6 +40,6 @@ This Django Project is designed to be a base template for Django applications. I
     ```
 
 !!! tip
-    No url from the application will be visible without including the `name` parameter when calling the `path` function within the applications `url.py`. i.e. `urlpatterns[].path(name='<Navigation Name>')`. This is by design and provides the option to limit what URL's are displayed within the navigation menu.
+    No url from the application will be visible without including the `name` parameter when calling the `path` function within the applications `url.py`. i.e. `urlpatterns[].path(name='<Navigation Name>')`. This is by design and when combined with a prefix of `_` provides the option to limit what URL's are displayed within the navigation menu. A name beginning with an underscore `_` will not be displayed in the menu.
 
 Once you have completed the above list, your application will display collapsed within the navigation menu with the name of your application.

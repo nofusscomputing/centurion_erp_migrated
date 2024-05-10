@@ -63,7 +63,11 @@ def nav_items(context) -> list(dict()):
                     if str(context.path).startswith('/' + str(nav_group.pattern)):
                         group_active = True
 
-                    if pattern.pattern.name is not None:
+                    if (
+                        pattern.pattern.name is not None
+                          and
+                        not str(pattern.pattern.name).startswith('_')
+                    ):
 
                         name = str(pattern.name)
 
