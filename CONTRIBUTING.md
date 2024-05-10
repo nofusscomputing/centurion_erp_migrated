@@ -30,3 +30,13 @@ python3 manage.py createsuperuser
 ```
 
 Updates to python modules will need to be captured with SCM. This can be done by running `pip freeze > requirements.txt` from the running virtual environment.
+
+
+## Running Tests
+
+test can be run by running the following:
+
+1. `pip install -r requirements_test.txt -r requirements.txt`
+
+1. `pytest --cov --cov-report html --cov=./`
+

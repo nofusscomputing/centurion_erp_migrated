@@ -11,7 +11,7 @@ variables:
 
 
 include:
-  # - local: .gitlab/integration_test.gitlab-ci.yml
+  - local: .gitlab/pytest.gitlab-ci.yml
   # - local: .gitlab/unit-test.gitlab-ci.yml
   - project: nofusscomputing/projects/gitlab-ci
     ref: development
