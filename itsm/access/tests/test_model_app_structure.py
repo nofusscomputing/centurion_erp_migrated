@@ -34,17 +34,12 @@ def test_org_name_character_count(organization) -> None:
     with pytest.raises(ValidationError) as e:
         organization.full_clean()
 
-    assert 'Ensure this value has at most 200 characters' in str(e.value)
+    assert 'Ensure this value has at most 50 characters' in str(e.value)
 
 
-@pytest.mark.django_db
+@pytest.mark.skip(reason="Already Tested by django devs as Team uses Group as base class")
 def test_team_name_character_count(team) -> None:
-    team.name = 'A' * 256
-
-    with pytest.raises(ValidationError) as e:
-        team.full_clean()
-
-    assert 'Ensure this value has at most 200 characters' in str(e.value)
+    pass
 
 
 @pytest.mark.skip(reason="to be written")

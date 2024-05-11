@@ -30,7 +30,7 @@
       <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
       <div class="dropdown-content">
         <!-- <a href="#">Link 1</a> -->
-        {% if user.is_superuser %}
+        {% if user.is_superuser or user.is_staff %}
         <form action="{% url 'admin:index' %}" method="post">
           {% csrf_token %}
           <button class="accbtn">Admin Panel</button>

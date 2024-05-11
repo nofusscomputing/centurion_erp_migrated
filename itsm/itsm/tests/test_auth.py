@@ -5,7 +5,7 @@ from django.test import TestCase, Client
 import pytest
 import unittest
 
-from structure.models import Organization
+from access.models import Organization
 
 
 @pytest.mark.django_db
