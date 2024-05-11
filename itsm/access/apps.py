@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class StructureConfig(AppConfig):
+class AccessConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'structure'
+    name = 'access'

@@ -1,0 +1,81 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}{{ team.team_name }} Team{% endblock %}
+
+{% block body%}
+<section class="content-header">
+  <fieldset><label>Name</label><input type="text" value="{{ team.team_name }}" /></fieldset>
+  <fieldset><label>Created</label><input type="text" value="{{ team.created }}" readonly /></fieldset>
+  <fieldset><label>Modified</label><input type="text" value="{{ team.modified }}" readonly /></fieldset>
+  <fieldset><label>Permissions</label>
+  <select multiple style="height: 200px;">
+{% for permission in permissions %}
+{% if 'administration' not in permission.content_type|lower and 'authorization' not in permission.content_type|lower and 'content types' not in permission.content_type|lower and 'session' not in permission.content_type|lower and 'add_organization' not in permission.codename|lower and 'delete_organization' not in permission.codename|lower %}
+<option value="{{ permission.id }}" {% for team_permission in team.permissions.all %}{% if permission.id == team_permission.id %}selected{% endif %}{% endfor %}>{{ permission.content_type }} | {{ permission.name }}</option>
+{% endif %}
+{% endfor %}
+</select>
+  </fieldset>
+</section>
+<!-- <hr />
+{{ permissions }}
+<hr />
+{{ team.permissions|pprint }}
+<hr />
+{{ team.permissions.all.0.id }} - {{ team.permissions.all.0.content_type }} | {{ team.permissions.all.0.name }} - {{ team.permissions.all.0.codename }}
+<hr />
+
+
+
+<hr />
+--{{ form }}-- -->
+<hr />
+
+
+{{ formset.non_form_errors.as_ul }}
+
+<form action="{% url 'Access:_team' arg1=organization.id arg2=team.id as url %}" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Submit">
+  {{ formset.management_form }}
+
+
+  {{ formset.non_form_errors.as_ul }}
+  <table id="formset" class="form">
+    {% for form in formset.forms %}
+    {% if forloop.first %}
+    <thead>
+      <tr>
+        <!-- <th>&nbsp;</th> -->
+        {% for field in form.visible_fields %}
+        <th>{{ field.label|capfirst }}</th>
+        {% endfor %}
+        <th>Created</th>
+        <th>Modified</th>
+      </tr>
+    </thead>
+    {% endif %}
+    <tr>
+      <!-- <td style="text-align: center; width: 50px;">{ if form.initial.id %}<a href="{ url 'Access:_organization' organization.id %}team/{{ form.initial.id }}/">edit</a>{ endif %}</td> -->
+      {% for field in form.visible_fields %}
+
+      <td>
+        {# Include the hidden fields in the form #}
+        {% if forloop.first %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {% endif %}
+        {{ field.errors.as_ul }}
+        {{ field }}
+      </td>
+
+
+      {% endfor %}
+
+      <td>{% if form.initial.id %}{{ form.instance.created }}{% endif %}</td>
+      <td>{% if form.initial.id %}{{ form.instance.modified }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% endblock %}

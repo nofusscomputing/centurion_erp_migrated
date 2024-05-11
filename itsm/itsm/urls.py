@@ -25,5 +25,5 @@ urlpatterns = [
     path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"),
          name="change_password"),
     path("account/", include("django.contrib.auth.urls")),
-    path("organization/", include("structure.urls")),
+    path("organization/", include("access.urls")),
 ]

@@ -11,3 +11,55 @@ main section a:visited {
   text-decoration: none;
 
 }
+
+article div {
+  /* background-color: #ff0000; */
+  justify-content: center;
+  width: 100%;
+  /* display: block; */
+  display: flex;
+  flex-wrap: wrap;
+}
+
+article div form {
+  /* background-color: #00ff00; */
+  display: block;
+  /* text-align: center; */
+  align-content: center;
+  align-items: center;
+  /* justify-content: center; */
+  /* display: block; */
+  /* flex-wrap: wrap; */
+  /* for horizontal aligning of child divs */
+  justify-content: center;
+  /* for vertical aligning */
+  /* align-items: center; */
+  width: 650px;
+}
+
+article div form div {
+  /* background-color: #0000ff; */
+  /* display:inline-flexbox; */
+  /* width: 100%; */
+  /* display: block; */
+  width: 650px;
+  line-height: 30px;
+  /* align-items: center; */
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: inline-block;
+
+}
+
+
+article div form div label {
+  width: 100px;
+  /* display: block; */
+}
+
+article div form div input {
+  width: 200px;
+  /* display: block; */
+}
+

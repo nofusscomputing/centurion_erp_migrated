@@ -1,0 +1,70 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}Organization - {{ organization.name }}{% endblock %}
+
+{% block body%}
+<section class="content-header">
+  <fieldset><label>Name</label><input type="text" value="{{ organization.name }}" /></fieldset>
+  <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
+  <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
+</section>
+
+---{{ form }}---
+
+{{ formset.non_form_errors.as_ul }}
+
+<form action="{% url 'Access:_organization' organization.id %}" method="post">
+  {% csrf_token %}
+  <input type="submit" value="Submit">
+  {{ formset.management_form }}
+
+  {{ formset.non_form_errors.as_ul }}
+  <table id="formset" class="form">
+
+    {% for form in formset.forms %}
+    {% if forloop.first %}
+    <thead>
+      <tr>
+        {% for field in form.visible_fields %}
+        <th>{{ field.label|capfirst }}</th>
+        {% endfor %}
+        <th>Created</th>
+        <th>Modified</th>
+      </tr>
+    </thead>
+    {% endif %}
+    <tr>
+      {% for field in form.visible_fields %}
+
+      <td>
+        {# Include the hidden fields in the form #}
+        {% if forloop.first %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+        {% endfor %}
+        {% endif %}
+        {{ field.errors.as_ul }}
+        {% if field.name == 'team_name' and form.initial.id %}
+        <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}/">{{ form.instance.team_name }}</a>
+        {% else %}
+        {{ field }}
+        {% endif %}
+      </td>
+
+      {% endfor %}
+      <td>{% if form.initial.id %}{{ form.instance.created }}{% endif %}</td>
+      <td>{% if form.initial.id %}{{ form.instance.modified }}{% endif %}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <!--
+<br>
+<hr>
+<hr>
+    {{ formset.forms.0.initial }}
+    {% for key, value in formset.forms.items %}
+    {{values}}
+    <hr>
+    {% endfor%} -->
+
+  {% endblock %}

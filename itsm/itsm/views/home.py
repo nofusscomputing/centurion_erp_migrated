@@ -16,5 +16,3 @@ class HomeView(View):
         context = {}
 
         return render(request, self.template_name, context)
-
-

@@ -8,7 +8,7 @@ import requests
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from structure.models import Organization
+from access.models import Organization
 
 # class Test_app_structure_auth(unittest.TestCase):
 User = get_user_model()
@@ -19,18 +19,18 @@ def user() -> User:
     return User.objects.create_user(username="testuser", password="testpassword")
 
 
-# @pytest.fixture
-# def organization() -> Organization:
-#     return Organization.objects.create(
-#         name='Test org',
-#     )
+@pytest.fixture
+def organization() -> Organization:
+    return Organization.objects.create(
+        name='Test org',
+    )
 
 
 @pytest.mark.django_db
 def test_require_login_organizations():
     """Some docstring defining what the test is checking."""
     client = Client()
-    url = reverse('Structure:Organizations')
+    url = reverse('Access:Organizations')
 
     response = client.get(url)
 
@@ -38,10 +38,10 @@ def test_require_login_organizations():
 
 
 @pytest.mark.django_db
-def test_require_login_organization_pk():
-    """Some docstring defining what the test is checking."""
+def test_require_login_organization_pk(organization):
+    """Ensure login is required to view an organization"""
     client = Client()
-    url = reverse('Structure:_singleorg', kwargs={'pk': 1})
+    url = reverse('Access:_organization', kwargs={'organization_id': 1})
 
     response = client.get(url)
 
@@ -52,7 +52,7 @@ def test_require_login_organization_pk():
 def test_login_view_organizations_no_permission(user):
     """Some docstring defining what the test is checking."""
     client = Client()
-    url = reverse('Structure:Organizations')
+    url = reverse('Access:Organizations')
     client.force_login(user)
 
     response = client.get(url)

@@ -27,6 +27,9 @@ python3 manage.py migrate
 
 python3 manage.py createsuperuser
 
+# If model changes
+python3 manage.py makemigrations --noinput
+
 ```
 
 Updates to python modules will need to be captured with SCM. This can be done by running `pip freeze > requirements.txt` from the running virtual environment.
