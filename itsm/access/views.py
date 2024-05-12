@@ -63,7 +63,23 @@ class OrganizationView(LoginRequiredMixin, generic.DetailView):
         return render(request, self.template_name, {"formset": formset, "organization": organization})
 
 
-class TeamView(generic.UpdateView):
+class OrganizationChange(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
+    pass
+
+
+class OrganizationDelete(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
+    pass
+
+
+
+
+
+
+
+
+
+
+class TeamView(OrganizationPermission, generic.UpdateView):
     model = Team
     template_name = 'access/team.html.j2'
     user = User
@@ -104,4 +120,66 @@ class TeamView(generic.UpdateView):
             return HttpResponseRedirect('#')
 
 
-        return render(request, self.template_name, {"formset": formset, "team": team})
+
+class TeamAdd(OrganizationPermission, generic.CreateView):
+    model = Team
+    permission_required = 'access.add_team'
+    template_name = 'form.html.j2'
+    fields = [
+        'team_name',
+        'organization',
+    ]
+
+    def get_success_url(self, **kwargs):
+        return f"/organization/{self.kwargs['pk']}/"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Add Team'
+
+        return context
+
+
+class TeamChange(OrganizationPermission, generic.UpdateView):
+    model = Team
+    permission_required = 'access.change_team'
+    template_name = 'form.html.j2'
+    fields = [
+        'team_name',
+        'permissions',
+        'organization'
+    ]
+
+    def get_success_url(self, **kwargs):
+        return f"/organization/{self.kwargs['pk']}/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit Team'
+
+        return context
+
+
+
+class TeamDelete(OrganizationPermission, generic.DeleteView):
+    model = Team
+    permission_required = 'access.delete_team'
+    template_name = 'form.html.j2'
+    fields = [
+        'team_name',
+        'permissions',
+        'organization'
+    ]
+
+    def get_success_url(self, **kwargs):
+        return f"/organization/{self.kwargs['organization_id']}/"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete Team'
+
+        return context
