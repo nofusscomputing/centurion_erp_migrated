@@ -3,19 +3,25 @@
 {% block title %}Organization - {{ organization.name }}{% endblock %}
 
 {% block body%}
+<form method="post">
+{% csrf_token %}
 <section class="content-header">
-  <fieldset><label>Name</label><input type="text" value="{{ organization.name }}" /></fieldset>
+  <fieldset><label>Name</label><!-- <input type="text" value="{{ organization.name }}" /> -->{{form.name}}</fieldset>
   <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
   <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
 </section>
-
----{{ form }}---
+<input type="submit" value="Submit">
+<input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
+</form>
 
 {{ formset.non_form_errors.as_ul }}
 
-<form action="{% url 'Access:_organization' organization.id %}" method="post">
+
+<form method="post">
+{{form.name.as_hidden}}
+
   {% csrf_token %}
-  <input type="submit" value="Submit">
+  <!-- <input type="submit" value="Submit"> -->
   {{ formset.management_form }}
 
   {{ formset.non_form_errors.as_ul }}
@@ -25,9 +31,10 @@
     {% if forloop.first %}
     <thead>
       <tr>
-        {% for field in form.visible_fields %}
+        <!-- {% for field in form.visible_fields %}
         <th>{{ field.label|capfirst }}</th>
-        {% endfor %}
+        {% endfor %} -->
+        <th>Team Name</th>
         <th>Created</th>
         <th>Modified</th>
       </tr>
@@ -35,7 +42,7 @@
     {% endif %}
     <tr>
       {% for field in form.visible_fields %}
-
+      {% if field.name == 'team_name' and form.initial.id %}
       <td>
         {# Include the hidden fields in the form #}
         {% if forloop.first %}
@@ -44,17 +51,17 @@
         {% endfor %}
         {% endif %}
         {{ field.errors.as_ul }}
-        {% if field.name == 'team_name' and form.initial.id %}
+        
         <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}/">{{ form.instance.team_name }}</a>
         {{ field.as_hidden }}
-        {% else %}
-        {{ field }}
-        {% endif %}
+        
       </td>
-
-      {% endfor %}
       <td>{% if form.initial.id %}{{ form.instance.created }}{% endif %}</td>
       <td>{% if form.initial.id %}{{ form.instance.modified }}{% endif %}</td>
+      {% endif %}
+
+      {% endfor %}
+
     </tr>
     {% endfor %}
   </table>

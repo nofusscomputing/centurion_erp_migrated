@@ -8,9 +8,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import generic
 
-from access.forms import TeamForm, TeamsForm
+from access.forms import TeamForm
 from access.models import *
 from access.mixin import *
+
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -24,40 +25,41 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
         return Organization.objects.filter(pk__in=self.user_organizations())
 
 
-class OrganizationView(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
+
+class OrganizationView(LoginRequiredMixin, OrganizationPermission, generic.UpdateView):
     model = Organization
     permission_required = 'access.view_organization'
     template_name = "access/organization.html.j2"
-    fields = ["team_name", 'id', 'created']
-    hidden_fields = ['team_name']
+    fields = ["name", 'id']
 
 
-    def get(self, request, pk):
-        organization = Organization.objects.get(pk=pk)
+    def get_success_url(self, **kwargs):
+        return f"/organization/{self.kwargs['pk']}/"
+
+    def get_queryset(self):
+
+        return Organization.objects.filter(pk=self.kwargs['pk'])
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        organization = Organization.objects.get(pk=self.kwargs['pk'])
+
+        context['organization'] = organization
+
         TeamsForm = inlineformset_factory(Organization, Team, fields=["team_name", 'id'], fk_name='organization', extra=1)
-
         formset = TeamsForm(instance=organization)
 
-        return render(request, self.template_name, {"formset": formset, "organization": organization})
+        context['formset'] = formset
 
+        return context
 
-    def post(self, request, pk):
-        organization = Organization.objects.get(pk=pk)
-        TeamsForm = inlineformset_factory(Organization, Team, fields=["team_name", 'id'], fk_name='organization', extra=1)
-
-        formset = TeamsForm(request.POST, request.FILES, instance=organization)
-
-        if formset.is_valid():
-
-            formset.save()
-
-            return HttpResponseRedirect('#')
-
-        return render(request, self.template_name, {"formset": formset, "organization": organization})
 
 
 class OrganizationChange(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
     pass
+
 
 
 class OrganizationDelete(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
@@ -117,8 +119,12 @@ class TeamAdd(OrganizationPermission, generic.CreateView):
     template_name = 'form.html.j2'
     fields = [
         'team_name',
-        'organization',
     ]
+
+    def form_valid(self, form):
+        form.instance.organization = Organization.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+
 
     def get_success_url(self, **kwargs):
         return f"/organization/{self.kwargs['pk']}/"

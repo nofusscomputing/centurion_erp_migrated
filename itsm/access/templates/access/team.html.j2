@@ -16,19 +16,9 @@
 {% endfor %}
 </select>
   </fieldset>
+
 </section>
-<!-- <hr />
-{{ permissions }}
-<hr />
-{{ team.permissions|pprint }}
-<hr />
-{{ team.permissions.all.0.id }} - {{ team.permissions.all.0.content_type }} | {{ team.permissions.all.0.name }} - {{ team.permissions.all.0.codename }}
-<hr />
 
-
-
-<hr />
---{{ form }}-- -->
 <hr />
 
 
@@ -37,6 +27,8 @@
 <form action="{% url 'Access:_team' arg1=organization.id arg2=team.id as url %}" method="post">
   {% csrf_token %}
   <input type="submit" value="Submit">
+  <input type="button" value="delete Team" onclick="window.location='{% url 'Access:_team_delete' organization_id=organization_id pk=team.id %}';">
+
   {{ formset.management_form }}
 
 
