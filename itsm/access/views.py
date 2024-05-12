@@ -8,11 +8,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views import generic
 
-from .forms import TeamForm, TeamsForm
-from .models import *
+from access.forms import TeamForm, TeamsForm
+from access.models import *
+from access.mixin import *
 
 
-class IndexView(PermissionRequiredMixin, generic.ListView):
+class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     permission_required = 'access.view_organization'
     template_name = 'access/index.html.j2'
     context_object_name = "organization_list"
@@ -20,18 +21,19 @@ class IndexView(PermissionRequiredMixin, generic.ListView):
 
     def get_queryset(self):
 
-        return Organization.objects.filter()
+        return Organization.objects.filter(pk__in=self.user_organizations())
 
 
-class OrganizationView(LoginRequiredMixin, generic.DetailView):
+class OrganizationView(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
     model = Organization
+    permission_required = 'access.view_organization'
     template_name = "access/organization.html.j2"
     fields = ["team_name", 'id', 'created']
+    hidden_fields = ['team_name']
 
 
-    @method_decorator(permission_required('access.view_organization', raise_exception=True))
-    def get(self, request, organization_id):
-        organization = Organization.objects.get(pk=organization_id)
+    def get(self, request, pk):
+        organization = Organization.objects.get(pk=pk)
         TeamsForm = inlineformset_factory(Organization, Team, fields=["team_name", 'id'], fk_name='organization', extra=1)
 
         formset = TeamsForm(instance=organization)
@@ -39,13 +41,9 @@ class OrganizationView(LoginRequiredMixin, generic.DetailView):
         return render(request, self.template_name, {"formset": formset, "organization": organization})
 
 
-    @method_decorator(permission_required('access.add_organization', raise_exception=True))
-    @method_decorator(permission_required('access.edit_organization', raise_exception=True))
-    @method_decorator(permission_required('access.delete_organization', raise_exception=True))
-    def post(self, request, organization_id):
-        organization = Organization.objects.get(pk=organization_id)
+    def post(self, request, pk):
+        organization = Organization.objects.get(pk=pk)
         TeamsForm = inlineformset_factory(Organization, Team, fields=["team_name", 'id'], fk_name='organization', extra=1)
-
 
         formset = TeamsForm(request.POST, request.FILES, instance=organization)
 
@@ -53,12 +51,7 @@ class OrganizationView(LoginRequiredMixin, generic.DetailView):
 
             formset.save()
 
-            # Do something. Should generally end with a redirect. For example:
-            # return HttpResponseRedirect(team.get_absolute_url(organization_id))
             return HttpResponseRedirect('#')
-
-
-        # formset = TeamsForm(instance=organization)
 
         return render(request, self.template_name, {"formset": formset, "organization": organization})
 
@@ -81,16 +74,16 @@ class OrganizationDelete(LoginRequiredMixin, OrganizationPermission, generic.Det
 
 class TeamView(OrganizationPermission, generic.UpdateView):
     model = Team
+    permission_required = 'access.view_team'
     template_name = 'access/team.html.j2'
     user = User
 
     readonly_fields = ['team_name']
 
 
-    @method_decorator(permission_required('access.view_team', raise_exception=True))
-    def get(self, request, organization_id, team_id):
+    def get(self, request, organization_id, pk):
 
-        team = Team.objects.get(pk=team_id)
+        team = Team.objects.get(pk=pk)
 
         TeamForm = inlineformset_factory(Team, TeamUsers, fields=['id', 'user', 'manager'], fk_name='team', extra=1)
 
@@ -98,15 +91,11 @@ class TeamView(OrganizationPermission, generic.UpdateView):
 
         formset = TeamForm(instance=team)
 
-        return render(request, self.template_name, {"formset": formset, "team": team, 'permissions': permissions})
-        # return render(request, self.template_name)
+        return render(request, self.template_name, {"formset": formset, "team": team, 'organization_id': organization_id, 'permissions': permissions})
 
 
-    @method_decorator(permission_required('access.add_team', raise_exception=True))
-    @method_decorator(permission_required('access.change_team', raise_exception=True))
-    @method_decorator(permission_required('access.delete_team', raise_exception=True))
-    def post(self, request, organization_id, team_id):
-        team = Team.objects.get(pk=team_id)
+    def post(self, request, organization_id, pk):
+        team = Team.objects.get(pk=pk)
         TeamForm = inlineformset_factory(Team, TeamUsers, fields=['user'], fk_name='team', extra=1)
 
 
@@ -115,10 +104,11 @@ class TeamView(OrganizationPermission, generic.UpdateView):
         if formset.is_valid():
 
             formset.save()
-            # Do something. Should generally end with a redirect. For example:
-            # return HttpResponseRedirect(team.get_absolute_url(organization_id, team_id))
+
             return HttpResponseRedirect('#')
 
+
+        return render(request, self.template_name, {"formset": formset, 'organization_id': organization_id, "team_id": pk, "team": team})
 
 
 class TeamAdd(OrganizationPermission, generic.CreateView):

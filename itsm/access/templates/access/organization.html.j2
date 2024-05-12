@@ -46,6 +46,7 @@
         {{ field.errors.as_ul }}
         {% if field.name == 'team_name' and form.initial.id %}
         <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}/">{{ form.instance.team_name }}</a>
+        {{ field.as_hidden }}
         {% else %}
         {{ field }}
         {% endif %}
