@@ -43,7 +43,18 @@ class Organization(models.Model):
     modified = AutoLastModifiedField()
 
 
-class Team(Group):
+class TenancyObject(models.Model):
+
+    class Meta:
+        abstract = True
+
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+    )
+
+
+class Team(Group, TenancyObject):
     class Meta:
         # proxy = True
         verbose_name_plural = "Teams"
@@ -59,18 +70,13 @@ class Team(Group):
 
         super().save(*args, **kwargs)
 
+
     team_name = models.CharField(
         verbose_name = 'Name',
         blank = False,
         max_length = 50,
         unique = False,
         default = ''
-    )
-
-    organization = models.ForeignKey(
-        Organization,
-        related_name="team",
-        on_delete=models.CASCADE,
     )
 
     created = AutoCreatedField()
