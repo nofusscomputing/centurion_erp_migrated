@@ -24,10 +24,10 @@
 
 {{ formset.non_form_errors.as_ul }}
 
-<form action="{% url 'Access:_team' arg1=organization.id arg2=team.id as url %}" method="post">
+<form method="post">
   {% csrf_token %}
   <input type="submit" value="Submit">
-  <input type="button" value="delete Team" onclick="window.location='{% url 'Access:_team_delete' organization_id=organization_id pk=team.id %}';">
+  <input type="button" value="delete Team" onclick="window.location='{% url 'Access:_team_delete' organization_id=organization.id pk=team.id %}';">
 
   {{ formset.management_form }}
 

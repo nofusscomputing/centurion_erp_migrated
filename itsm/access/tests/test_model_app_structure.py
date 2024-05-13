@@ -26,7 +26,10 @@ from access.models import Organization, Team
 #     )
 
 
-
+######################################################################
+# SoF for loop for tests
+#    for test in ['organization','team']
+######################################################################
 @pytest.mark.skip(reason="to be written")
 def test_authorization_organization_view(user):
     """User of organization can view
@@ -95,3 +98,11 @@ def test_authorization_organization_object_no_delete(user):
     """User not part of organization cant view organization object
     """
     pass
+
+######################################################################
+# EoF for loop for tests
+#    for test in ['organization','team']
+######################################################################
+
+# is_superuser to be able to view, add, change, delete for all objects
+

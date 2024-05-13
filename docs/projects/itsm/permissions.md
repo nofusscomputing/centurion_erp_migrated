@@ -35,6 +35,7 @@ class YourObject(TenancyObject):
 
 ```
 
+
 #### View Setup
 
 ``` python
