@@ -1,6 +1,6 @@
 venv/**
-itsm/static/**
+*/static/**
 __pycache__
-itsm/db.sqlite3
+**db.sqlite3
 **.coverage
 artifacts/
