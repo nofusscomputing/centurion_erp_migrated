@@ -137,7 +137,7 @@ class OrganizationPermission(OrganizationMixin):
 
         if hasattr(self, 'get_object'):
 
-            if not self.has_permission():
+            if not self.has_permission() and not request.user.is_superuser:
                 raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)

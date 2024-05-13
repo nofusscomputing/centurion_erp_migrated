@@ -22,7 +22,13 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 
     def get_queryset(self):
 
-        return Organization.objects.filter(pk__in=self.user_organizations())
+        if self.request.user.is_superuser:
+
+            return Organization.objects.filter()
+
+        else:
+
+            return Organization.objects.filter(pk__in=self.user_organizations())
 
 
 
