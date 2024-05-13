@@ -1,4 +1,4 @@
-from django.conf import settings
+from app import settings
 
 import pytest
 import unittest
@@ -12,6 +12,7 @@ class Test_aa_settings_default(unittest.TestCase):
 
         assert settings.LOGIN_REQUIRED
 
+
     @pytest.mark.django_db
     def test_setting_use_tz_default(self):
         """ Ensure that 'USE_TZ = True' is within settings
@@ -19,3 +20,10 @@ class Test_aa_settings_default(unittest.TestCase):
 
         assert settings.USE_TZ
 
+
+    @pytest.mark.django_db
+    def test_setting_debug_off(self):
+        """ Ensure that debug is off within settings by default
+        """
+
+        assert not settings.DEBUG
