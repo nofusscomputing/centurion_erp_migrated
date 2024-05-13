@@ -50,6 +50,11 @@ class TenancyObject(models.Model):
         on_delete=models.CASCADE,
     )
 
+    is_global = models.BooleanField(
+        default = False,
+        blank = False
+    )
+
 
 class Team(Group, TenancyObject):
     class Meta:

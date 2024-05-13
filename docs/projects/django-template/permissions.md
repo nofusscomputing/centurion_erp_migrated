@@ -15,6 +15,8 @@ The overall permissions system of django has not been modified with it remaining
 
 A User who is added to an team as a "Manager" can modify the team members or if they have permission `access.change_team` which also allows the changing of team permissions. Modification of an organization can be done by the django administrator (super user) or any user with permission `access._change_organization`.
 
+Items can be set as `Global`, meaning that all users who have the correct permission regardless of organization will be able to take action against the object. 
+
 Permissions that can be modified for a team have been limited to application permissions only unless adjust the permissions from the django admin site.
 
 ## Multi-Tenancy workflow
@@ -59,7 +61,10 @@ The mixin inlcuded in this template `OrganizationPermission` is designed to work
 
 ``` python title="<your app name>/views.py"
 
+from django.db.models import Q
+
 from access.mixins import OrganizationPermission
+
 
 class IndexView(OrganizationPermission, generic.ListView):
     
@@ -79,7 +84,7 @@ class IndexView(OrganizationPermission, generic.ListView):
 
     def get_queryset(self):
 
-        return MyModel.objects.filter(organization__in=self.user_organizations())
+        return MyModel.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True))
 
 ```
 

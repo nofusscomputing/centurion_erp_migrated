@@ -24,6 +24,10 @@ class OrganizationMixin():
 
             id = self.get_object().organization.id
 
+            if self.get_object().is_global:
+
+                id = 0
+
         return id
 
 
@@ -107,7 +111,7 @@ class OrganizationMixin():
 
         has_permission = False
 
-        if self.is_member(self.object_organization()):
+        if self.is_member(self.object_organization()) or self.object_organization() == 0:
 
             groups = Group.objects.filter(pk__in=self.user_groups)
 
@@ -120,7 +124,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required()[0] and team['organization_id'] == self.object_organization():
+                    if assembled_permission in self.get_permission_required()[0] and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
 
                         return True
 
