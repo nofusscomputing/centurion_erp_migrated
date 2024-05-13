@@ -96,3 +96,13 @@ input[type=checkbox]:checked:after,
 input[type=checkbox]:checked::after {
   content: "\2714";
 }
+
+input[type=submit] {
+  color: #fff;
+  background-color: blue;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

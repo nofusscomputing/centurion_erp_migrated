@@ -19,7 +19,7 @@ h1 {
 
 h2 {
   width: 100%;
-  background-color: aqua;
+  background-color: #fff;
   height: 80px;
   line-height: 80px;
   text-align: center;
@@ -58,7 +58,7 @@ article {
 }
 
 footer {
-  background-color: cadetblue;
+  background-color: #fff;
   width: 100%;
   height: 76px;
   line-height: 76px;

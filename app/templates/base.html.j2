@@ -1,3 +1,4 @@
+{% load settings_value %}
 <html>
 
 <head>
@@ -15,16 +16,8 @@
 <body>
 
   <header>
-    <h1><a href="/" style="text-decoration: none; color: inherit;">Site Title</a></h1>
-
-    <div class="dropdown">
-      <button class="dropbtn">{% block org_name %}Organization{% endblock %}</button>
-      <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-      </div>
-    </div>
+    
+    <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
       <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
@@ -53,16 +46,12 @@
     <nav style="padding: 0px;">
       {% include 'navigation.html.j2' %}
     </nav>
-
     <section>
       <h2>{% block title %}Page Title{% endblock %}</h2>
-
       <article>
         {% block body%}{% endblock %}
       </article>
-      <footer>
-        Footer
-      </footer>
+      <footer>{% block footer%}{% endblock %}</footer>
     </section>
 
   </main>
