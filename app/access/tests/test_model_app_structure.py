@@ -87,7 +87,6 @@ def test_authorization_team_permission_no_view(user):
     pass
 
 
-
 @pytest.mark.skip(reason="to be written")
 def test_authorization_team_permission_change(user):
     """Ensure team can be changed when user has correct permissions
@@ -138,8 +137,16 @@ def test_authorization_user_permission_add(user):
     pass
 
 @pytest.mark.skip(reason="to be written")
-def test_authorization_user_permission_no_view(user):
+def test_authorization_user_permission_no_add(user):
     """Ensure user can't be added when user is missing permissions
+
+        user requires permissions team view and user add
+    """
+    pass
+
+@pytest.mark.skip(reason="to be written")
+def test_authorization_user_permission_add_team_manager(user):
+    """Ensure user can be added when user is team manager
 
         user requires permissions team view and user add
     """
@@ -181,6 +188,13 @@ def test_authorization_user_permission_no_delete(user):
     """
     pass
 
+@pytest.mark.skip(reason="to be written")
+def test_authorization_user_permission_delete_team_manager(user):
+    """Ensure user can be deleted when user is team manager
+
+        user requires permissions team view and user delete
+    """
+    pass
 
 ######################################################################
 # EoF for loop for tests

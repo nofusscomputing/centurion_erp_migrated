@@ -2,7 +2,7 @@ INHERIT: website-template/mkdocs.yml
 
 docs_dir: 'docs'
 
-repo_name: ITSM APP
+repo_name: Django Template
 repo_url: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 edit_uri: '/-/ide/project/nofusscomputing/infrastructure/configuration-management/django_app/edit/development/-/docs/'
 
@@ -17,7 +17,11 @@ nav:
 
   - projects/index.md
 
-  - projects/itsm/index.md
+  - Django Template:
+
+    - projects/django-template/index.md
+
+    - projects/django-template/permissions.md
 
 - Operations: 
 
