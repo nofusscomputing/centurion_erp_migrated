@@ -31,3 +31,21 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         context['content_title'] = 'Add Team User'
 
         return context
+
+
+class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+    model = TeamUsers
+    permission_required = 'access.delete_teamusers'
+    template_name = 'form.html.j2'
+
+
+    def get_success_url(self, **kwargs):
+        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['team_id']}"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete Team User'
+
+        return context
