@@ -65,7 +65,7 @@ if DEBUG:
         "127.0.0.1",
     ]
 
-ROOT_URLCONF = 'itsm.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
@@ -78,13 +78,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'itsm.context_processors.navigation',
+                'app.context_processors.navigation',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'itsm.wsgi.application'
+WSGI_APPLICATION = 'app.wsgi.application'
 
 
 # Database
