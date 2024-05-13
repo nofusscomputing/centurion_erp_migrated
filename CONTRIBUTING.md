@@ -19,7 +19,7 @@ To setup the django test server run the following
 
 ``` bash
 
-cd itsm
+cd app
 
 python manage.py runserver 8002
 
@@ -42,4 +42,17 @@ test can be run by running the following:
 1. `pip install -r requirements_test.txt -r requirements.txt`
 
 1. `pytest --cov --cov-report html --cov=./`
+
+
+## Docker Container
+
+``` bash
+
+cd app
+
+docker build . --tag django-app:dev
+
+docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app django-app:dev
+
+```
 

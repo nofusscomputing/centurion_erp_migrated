@@ -1,0 +1,12 @@
+.git
+.git*
+website-template/
+gitlab-ci/
+venv/
+docs/
+**/*.sqlite3
+**/static/
+__pycache__
+**__pycache__
+**.pyc
+** .pytest*
