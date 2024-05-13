@@ -28,7 +28,7 @@
   {% csrf_token %}
   <input type="submit" value="Submit">
   <input type="button" value="delete Team" onclick="window.location='{% url 'Access:_team_delete' organization_id=organization.id pk=team.id %}';">
-
+  <input type="button" value="New User" onclick="window.location='{% url 'Access:_team_user_add' organization_id=organization.id pk=team.id %}';">
   {{ formset.management_form }}
 
 
