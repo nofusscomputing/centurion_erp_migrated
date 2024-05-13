@@ -72,3 +72,27 @@ input[type=button] {
   border-radius: 5px;
   cursor: pointer;
 }
+
+input[type=checkbox] {
+  visibility: hidden;
+  font-size: 25px;
+}
+
+input[type=checkbox]:after,
+input[type=checkbox]::after {
+  content: " ";
+  background-color: blue;
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+  visibility: visible;
+  border-radius: 15px;
+}
+
+input[type=checkbox]:checked:after,
+input[type=checkbox]:checked::after {
+  content: "\2714";
+}

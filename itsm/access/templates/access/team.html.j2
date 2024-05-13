@@ -33,6 +33,7 @@
     <thead>
       <tr>
         <th>User</th>
+        <th>Manager</th>
         <th>Created</th>
         <th>Modified</th>
         <th>&nbsp;</th>
@@ -42,6 +43,7 @@
     {% for field in teamusers %}
     <tr>
       <td>{{ field.user }}</td>
+      <td><input type="checkbox" {% if field.manager %}checked{% endif %}></td>
       <td>{{ field.created }}</td>
       <td>{{ field.modified }}</td>
       <td><a href="{% url 'Access:_team_user_delete' organization_id=organization.id team_id=field.team_id pk=field.id %}">Delete</a></a></td>
