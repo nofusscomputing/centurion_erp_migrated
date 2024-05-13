@@ -23,6 +23,8 @@ nav:
 
     - projects/django-template/permissions.md
 
+    - projects/django-template/template.md
+
 - Operations: 
 
   - operations/index.md

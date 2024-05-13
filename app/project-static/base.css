@@ -25,7 +25,28 @@ h2 {
   text-align: center;
   vertical-align: middle;
   margin: 0px;
+  vertical-align: middle;
+  align-content: center;
+  padding-right: 50px;
+  padding-left: 50px
 }
+
+span#content_header_icon {
+  float: right;
+  width: 30px;
+  height: 100%;
+  margin-right: 10px;
+  text-align: center;
+  align-content: center;
+  color: #177ee6;
+}
+
+/* .icon {
+  display: block;
+  content: none;
+  background-color: #3e8e41;
+} */
+
 
 header {
   display: flex;
