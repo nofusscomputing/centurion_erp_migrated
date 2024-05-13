@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.models import Permission
-from django.forms import inlineformset_factory
 from django.views import generic
 
 from access.forms import TeamForm
@@ -28,12 +27,9 @@ class View(OrganizationPermission, generic.UpdateView):
 
         team = Team.objects.get(pk=self.kwargs['pk'])
 
-        TeamForm = inlineformset_factory(Team, TeamUsers, fields=['id', 'user', 'manager'], fk_name='team', extra=1)
+        teamusers = TeamUsers.objects.filter(team=self.kwargs['pk'])
 
-        formset = TeamForm(instance=team)
-
-        # {"formset": formset, "team": team, 'organization_id': organization_id, 'permissions': permissions}
-        context['formset'] = formset
+        context['teamusers'] = teamusers
         context['permissions'] = permissions = Permission.objects.filter()
 
         return context

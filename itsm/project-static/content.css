@@ -63,3 +63,12 @@ article div form div input {
   /* display: block; */
 }
 
+
+input[type=button] {
+  color: #fff;
+  background-color: blue;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

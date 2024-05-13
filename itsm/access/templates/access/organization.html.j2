@@ -52,7 +52,7 @@
         {% endif %}
         {{ field.errors.as_ul }}
         
-        <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}/">{{ form.instance.team_name }}</a>
+        <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}">{{ form.instance.team_name }}</a>
         {{ field.as_hidden }}
         
       </td>
