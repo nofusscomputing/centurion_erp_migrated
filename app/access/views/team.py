@@ -2,7 +2,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.contrib.auth.models import Permission
 from django.views import generic
 
-from access.forms import TeamForm
 from access.models import Team, TeamUsers, Organization
 from access.mixin import *
 

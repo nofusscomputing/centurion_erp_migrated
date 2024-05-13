@@ -3,76 +3,32 @@
 {% block title %}Organization - {{ organization.name }}{% endblock %}
 
 {% block body%}
-<form method="post">
-{% csrf_token %}
+
+
 <section class="content-header">
   <fieldset><label>Name</label><!-- <input type="text" value="{{ organization.name }}" /> -->{{form.name}}</fieldset>
   <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
   <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
 </section>
-<input type="submit" value="Submit">
+
+<input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
 <input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
-</form>
 
-{{ formset.non_form_errors.as_ul }}
-
-
-<form method="post">
-{{form.name.as_hidden}}
-
-  {% csrf_token %}
-  <!-- <input type="submit" value="Submit"> -->
-  {{ formset.management_form }}
-
-  {{ formset.non_form_errors.as_ul }}
-  <table id="formset" class="form">
-
-    {% for form in formset.forms %}
-    {% if forloop.first %}
-    <thead>
-      <tr>
-        <!-- {% for field in form.visible_fields %}
-        <th>{{ field.label|capfirst }}</th>
-        {% endfor %} -->
-        <th>Team Name</th>
-        <th>Created</th>
-        <th>Modified</th>
-      </tr>
-    </thead>
-    {% endif %}
+<table>
+  <thead>
     <tr>
-      {% for field in form.visible_fields %}
-      {% if field.name == 'team_name' and form.initial.id %}
-      <td>
-        {# Include the hidden fields in the form #}
-        {% if forloop.first %}
-        {% for hidden in form.hidden_fields %}
-        {{ hidden }}
-        {% endfor %}
-        {% endif %}
-        {{ field.errors.as_ul }}
-        
-        <a href="{% url 'Access:_organization' organization.id %}team/{{ form.initial.id }}">{{ form.instance.team_name }}</a>
-        {{ field.as_hidden }}
-        
-      </td>
-      <td>{% if form.initial.id %}{{ form.instance.created }}{% endif %}</td>
-      <td>{% if form.initial.id %}{{ form.instance.modified }}{% endif %}</td>
-      {% endif %}
-
-      {% endfor %}
-
+      <th>Team Name</th>
+      <th>Created</th>
+      <th>Modified</th>
     </tr>
-    {% endfor %}
-  </table>
-  <!--
-<br>
-<hr>
-<hr>
-    {{ formset.forms.0.initial }}
-    {% for key, value in formset.forms.items %}
-    {{values}}
-    <hr>
-    {% endfor%} -->
+  </thead>
+  {% for field in teams %}
+  <tr>
+    <td><a href="{% url 'Access:_team' organization_id=organization.id pk=field.id %}">{{ field.team_name }}</a></td>
+    <td>{{ field.created }}</td>
+    <td>{{ field.modified }}</td>
+  </tr>
+  {% endfor %}
+</table>
 
-  {% endblock %}
+{% endblock %}
