@@ -15,6 +15,7 @@ The overall permissions system of django has not been modified with it remaining
 
 A User who is added to an team as a "Manager" can modify the team members or if they have permission `access.change_team` which also allows the changing of team permissions. Modification of an organization can be done by the django administrator (super user) or any user with permission `access._change_organization`.
 
+Permissions that can be modified for a team have been limited to application permissions only unless adjust the permissions from the django admin site.
 
 ## Multi-Tenancy workflow
 

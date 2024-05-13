@@ -10,7 +10,7 @@
   <fieldset><label>Permissions</label>
   <select multiple style="height: 200px;">
 {% for permission in permissions %}
-{% if 'administration' not in permission.content_type|lower and 'authorization' not in permission.content_type|lower and 'content types' not in permission.content_type|lower and 'session' not in permission.content_type|lower and 'add_organization' not in permission.codename|lower and 'delete_organization' not in permission.codename|lower %}
+{% if 'administration' not in permission.content_type|lower and 'authorization' not in permission.content_type|lower and 'content types' not in permission.content_type|lower and 'session' not in permission.content_type|lower and 'python social auth' not in permission.content_type|lower and 'add_organization' not in permission.codename|lower and 'delete_organization' not in permission.codename|lower %}
 <option value="{{ permission.id }}" {% for team_permission in team.permissions.all %}{% if permission.id == team_permission.id %}selected{% endif %}{% endfor %}>{{ permission.content_type }} | {{ permission.name }}</option>
 {% endif %}
 {% endfor %}
