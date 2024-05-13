@@ -10,7 +10,10 @@ from access.mixin import *
 
 class View(OrganizationPermission, generic.UpdateView):
     model = Team
-    permission_required = 'access.view_team'
+    permission_required = [
+        'access.view_organization',
+        'access.view_team'
+    ]
     template_name = 'access/team.html.j2'
 
     fields = [
@@ -41,7 +44,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
 class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     model = Team
-    permission_required = 'access.add_team'
+    permission_required = [
+        'access.view_organization',
+        'access.add_team',
+    ]
     template_name = 'form.html.j2'
     fields = [
         'team_name',
@@ -66,7 +72,10 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 class Change(PermissionRequiredMixin, OrganizationPermission, generic.UpdateView):
     model = Team
-    permission_required = 'access.change_team'
+    permission_required = [
+        'access.view_organization',
+        'access.change_team',
+    ]
     template_name = 'form.html.j2'
     fields = [
         'team_name',
@@ -88,7 +97,10 @@ class Change(PermissionRequiredMixin, OrganizationPermission, generic.UpdateView
 
 class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
     model = Team
-    permission_required = 'access.delete_team'
+    permission_required = [
+        'access.view_organization',
+        'access.delete_team'
+    ]
     template_name = 'form.html.j2'
     fields = [
         'team_name',

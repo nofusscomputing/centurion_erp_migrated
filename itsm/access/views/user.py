@@ -8,7 +8,10 @@ from access.models import Team, TeamUsers
 
 class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     model = TeamUsers
-    permission_required = 'access.add_teamusers'
+    permission_required = [
+        'access.view_team',
+        'access.add_teamusers'
+    ]
     template_name = 'form.html.j2'
     fields = [
         'user',
@@ -35,7 +38,10 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
     model = TeamUsers
-    permission_required = 'access.delete_teamusers'
+    permission_required = [
+        'access.view_team',
+        'access.delete_teamusers'
+    ]
     template_name = 'form.html.j2'
 
 
