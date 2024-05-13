@@ -9,6 +9,7 @@ Unit:
     - pip install -r requirements_test.txt
     - cd itsm
     - pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/test.junit.xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     expire_in: "30 days"
     when: always
