@@ -47,10 +47,13 @@ class AutoSlugField(models.SlugField):
 
     def pre_save(self, model_instance, add):
 
-        value = self.name.lower().replace(' ', '_')
+        if not model_instance.slug or model_instance.slug == '_':
+            value = model_instance.name.lower().replace(' ', '_')
 
-        setattr(model_instance, self.attname, value)
+            setattr(model_instance, self.attname, value)
 
-        return value
+            return value
+
+        return model_instance.slug
 
 

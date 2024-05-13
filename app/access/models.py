@@ -33,10 +33,7 @@ class Organization(models.Model):
         unique = True,
     )
 
-    slug = models.SlugField(
-        max_length=50,
-        default='_',
-    )
+    slug = AutoSlugField()
 
     created = AutoCreatedField()
 
