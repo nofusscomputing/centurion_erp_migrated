@@ -23,7 +23,7 @@ Permissions that can be modified for a team have been limited to application per
 
 The workflow is conducted as part of the view and has the following flow:
 
-1. Checks if user is member of organization the object the action is being performed on.
+1. Checks if user is member of organization the object the action is being performed on. Will also return true if the object has field `is_global` set to `true`.
 
 1. Fetches all teams the user is part of.
 
