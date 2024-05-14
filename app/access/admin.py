@@ -49,12 +49,4 @@ class TeamAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     readonly_fields = ['organization', 'name']
 
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        #  if db_field.name == "permission":
-        #     # limited_choices = [(choice[0], choice[1]) for choice in Permission if choice[0] == 1 or choice[0] == 5]
-        #     # kwargs['permission'] = forms.ChoiceField(choices=limited_choices)
-        kwargs["permissions"] = Permission.objects.filter(id=5)
-        return super(TeamAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-
 admin.site.register(Team,TeamAdmin)
