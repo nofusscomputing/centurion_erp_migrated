@@ -17,8 +17,11 @@ class View(OrganizationPermission, generic.UpdateView):
 
     fields = [
         "name",
-        'id'
+        'id',
+        'organization',
+        'permissions'
     ]
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -32,7 +35,7 @@ class View(OrganizationPermission, generic.UpdateView):
         teamusers = TeamUsers.objects.filter(team=self.kwargs['pk'])
 
         context['teamusers'] = teamusers
-        context['permissions'] = permissions = Permission.objects.filter()
+        context['permissions'] = Permission.objects.filter()
 
         return context
 
