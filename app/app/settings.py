@@ -158,7 +158,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_TITLE = "Site Title"
 
 
-API_ENABLED = False    # Disabled until setup and secure
+API_ENABLED = True
 
 if API_ENABLED:
 
@@ -179,10 +179,12 @@ if API_ENABLED:
             'rest_framework.parsers.FormParser',
             'rest_framework.parsers.MultiPartParser'
         ),
-        'DEFAULT_RENDERER_CLASSES': (
-            'rest_framework_json_api.renderers.JSONRenderer',
-            'rest_framework_json_api.renderers.BrowsableAPIRenderer',
-        ),
+        # leaving these uncommented, even though are the default renderers
+        # causes the api to output the fields under a 'attributes' key
+        # 'DEFAULT_RENDERER_CLASSES': (
+        #     'rest_framework_json_api.renderers.JSONRenderer',
+        #     'rest_framework_json_api.renderers.BrowsableAPIRenderer',
+        # ),
         'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
         'DEFAULT_FILTER_BACKENDS': (
             'rest_framework_json_api.filters.QueryParameterValidationFilter',
