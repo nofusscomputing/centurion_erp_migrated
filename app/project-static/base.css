@@ -91,7 +91,7 @@ footer {
 
 /* Style The Dropdown Button */
 .dropbtn {
-  background-color: #4CAF50;
+  background-color: #177ee6;
   color: white;
   padding: 10px;
   font-size: 16px;
@@ -163,7 +163,7 @@ header .dropdown {
 }
 
 .dropdown:hover .dropbtn {
-  background-color: #3e8e41;
+  background-color: #177ee6;
 }
 
 
