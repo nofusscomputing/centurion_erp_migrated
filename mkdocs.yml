@@ -21,9 +21,19 @@ nav:
 
     - projects/django-template/index.md
 
+    - projects/django-template/api.md
+
     - projects/django-template/permissions.md
 
     - projects/django-template/template.md
+
+    - ITAM:
+
+      - projects/django-template/itam/index.md
+
+      - projects/django-template/itam/device.md
+
+      - projects/django-template/itam/software.md
 
 - Operations: 
 

@@ -1,7 +1,7 @@
 ---
 title: Django Template
 description: No Fuss Computings NetBox Django Site Template
-date: 2024-04-06
+date: 2024-05-06
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
@@ -12,6 +12,8 @@ This template has built into it multi-tenancy which can easily added to your dja
 
 
 ## Features
+
+- [API](api.md)
 
 - [Multi-Tenancy](permissions.md)
 

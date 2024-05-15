@@ -1,7 +1,7 @@
 ---
 title: Template
 description: No Fuss Computings Django Template Jinja TEmplate
-date: 2024-06-14
+date: 2024-05-14
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
