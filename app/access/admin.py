@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 
 from .models import *
 
+admin.site.unregister(Group)
 
 class TeamInline(admin.TabularInline):
     model = Team
