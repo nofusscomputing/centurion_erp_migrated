@@ -28,26 +28,3 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 admin.site.register(Organization,OrganizationAdmin)
 
-
-class UserInline(admin.TabularInline):
-    model = TeamUsers
-    extra = 0
-
-    fk_name = 'team'
-
-    readonly_fields = ['created', 'modified']
-
-
-
-class TeamAdmin(admin.ModelAdmin):
-    fieldsets = [
-        (None, {"fields": ["organization", 'name', "team_name", 'permissions']}),
-        #("Date information", {"fields": ["slug"], "classes": ["collapse"]}),
-    ]
-    inlines = [UserInline]
-    list_display = ["team_name", "created", "modified"]
-    list_filter = ["created"]
-    search_fields = ["name"]
-    readonly_fields = ['organization', 'name']
-
-admin.site.register(Team,TeamAdmin)
