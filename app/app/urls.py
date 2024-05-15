@@ -23,13 +23,20 @@ from .views import HomeView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
-    path("api/", include("api.urls")),
     path('admin/', admin.site.urls, name='_administration'),
     path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"),
          name="change_password"),
     path("account/", include("django.contrib.auth.urls")),
     path("organization/", include("access.urls")),
+
+    path("itam/", include("itam.urls")),
 ]
+
+if settings.API_ENABLED:
+    urlpatterns += [
+
+        path("api/", include("api.urls")),
+    ]
 
 if settings.DEBUG:
 
