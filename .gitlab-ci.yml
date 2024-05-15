@@ -2,7 +2,7 @@
 
 variables:
   MY_PROJECT_ID: "57560288"
-  # GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/.git"
+  GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/django_template.git"
 
   # Docker Build / Publish
   DOCKER_IMAGE_BUILD_TARGET_PLATFORMS: "linux/amd64,linux/arm64"
