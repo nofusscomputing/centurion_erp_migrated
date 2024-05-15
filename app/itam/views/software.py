@@ -44,7 +44,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['content_title'] = self.object.name
 
-        context['device_software'] = DeviceSoftware.objects.filter(Q(device__in=self.user_organizations(), software=self.kwargs['pk']))
+        if self.request.user.is_superuser:
+            context['device_software'] = DeviceSoftware.objects.filter(software=self.kwargs['pk']).order_by('device', 'organization')
+        elif not self.request.user.is_superuser:
+            context['device_software'] = DeviceSoftware.objects.filter(Q(device__in=self.user_organizations(), software=self.kwargs['pk'])).order_by('name', 'organization')
 
         return context
 

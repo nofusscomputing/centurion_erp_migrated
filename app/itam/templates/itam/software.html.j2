@@ -109,6 +109,7 @@
     <table>
     <thead>
       <th>Device</th>
+      <th>Organization</th>
       <th title="Not Set/Install/Remove">Action</th>
       <th title="Date Software Installed">Installed</th>
       <th>&nbsp;</th>
@@ -116,6 +117,7 @@
     {% for device in device_software %}
     <tr>
       <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
+      <td>{{ device.organization }}</td>
       <td>{{ device.get_action_display }}</td>
       <td>Not Implemented</td>
       <td>&nbsp;</td>
