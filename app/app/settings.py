@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'social_django',
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
+    'itam.apps.ItamConfig',
 ]
 
 MIDDLEWARE = [
