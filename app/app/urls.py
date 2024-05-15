@@ -29,7 +29,6 @@ urlpatterns = [
     path("account/", include("django.contrib.auth.urls")),
     path("organization/", include("access.urls")),
 
-    path("itam/", include("itam.urls")),
 ]
 
 if settings.API_ENABLED:
