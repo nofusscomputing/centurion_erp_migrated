@@ -142,7 +142,6 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
 
     def form_valid(self, form):
         device = Device.objects.get(pk=self.kwargs['pk'])
-        print(f'HERE={device.organization.id}')
         form.instance.organization_id = device.organization.id
         form.instance.device_id = self.kwargs['pk']
         return super().form_valid(form)
@@ -150,7 +149,8 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['organizations'] = self.user_organizations()
+        device = Device.objects.get(pk=self.kwargs['pk'])
+        kwargs['organizations'] = [ device.organization.id ]
         return kwargs
 
 
