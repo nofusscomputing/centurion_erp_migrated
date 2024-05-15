@@ -1,0 +1,35 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}Organization - {{ organization.name }}{% endblock %}
+
+{% block body%}
+
+
+<section class="content-header">
+  <fieldset><label>Name</label><!-- <input type="text" value="{{ organization.name }}" /> -->{{form.name}}</fieldset>
+  <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
+  <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
+</section>
+
+<input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
+<input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
+
+<hr />
+<table>
+  <thead>
+    <tr>
+      <th>Team Name</th>
+      <th>Created</th>
+      <th>Modified</th>
+    </tr>
+  </thead>
+  {% for field in teams %}
+  <tr>
+    <td><a href="{% url 'Access:_team' organization_id=organization.id pk=field.id %}">{{ field.team_name }}</a></td>
+    <td>{{ field.created }}</td>
+    <td>{{ field.modified }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

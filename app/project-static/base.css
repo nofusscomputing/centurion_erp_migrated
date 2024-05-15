@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0px;
+  background: #f0f0f0;
+}
+
+h1 {
+  width: 275px;
+  height: 76px;
+  line-height: 76px;
+  vertical-align: middle;
+  padding: 0%;
+  margin: 0%;
+}
+
+h2 {
+  width: 100%;
+  background-color: #fff;
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0px;
+  vertical-align: middle;
+  align-content: center;
+  padding-right: 50px;
+  padding-left: 50px
+}
+
+span#content_header_icon {
+  float: right;
+  width: 30px;
+  height: 100%;
+  margin-right: 10px;
+  text-align: center;
+  align-content: center;
+  color: #177ee6;
+}
+
+/* .icon {
+  display: block;
+  content: none;
+  background-color: #3e8e41;
+} */
+
+
+header {
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  background-color: #151515;
+  text-align: center;
+  color: white;
+  height: 76px;
+  /* line-height: 76px; */
+  vertical-align: middle;
+}
+
+
+section {
+  display: flexbox;
+  width: 100%;
+  padding-top: 76px;
+  padding-left: 275px;
+}
+
+article {
+  background-color: #fff;
+  padding: 10px;
+  margin: 20px;
+  border: 1px solid #e6dcdc;
+
+}
+
+footer {
+  background-color: #fff;
+  width: 100%;
+  height: 76px;
+  line-height: 76px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0%;
+  margin: 0%;
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+  background-color: #177ee6;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.accbtn {
+  background-color: inherit;
+  color: #000;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin: 0px;
+}
+
+header .dropdown {
+  padding-top: 19px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  /* position: fixed; */
+  /* display: inline-block; */
+  display: inline-flexbox;
+  /* left: 300px; */
+  /* position: relative; */
+  /* vertical-align: middle; */
+
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+
+.dropdown-content form {
+  margin: 0px;
+  padding: 0px;
+}
+
+.accbtn:hover {
+  background-color: #b4adad
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+
+.dropdown-content a:hover {
+  background-color: #b4adad
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #177ee6;
+}
+
+
+
+input[type=text] {
+  border: none;
+  border-bottom: 1px solid #b1b1b1;
+  font-size: inherit;
+  height: 30px;
+}
+
+select {
+  border: none;
+  border-bottom: 1px solid #b1b1b1;
+  font-size: inherit;
+  height: auto;
+  line-height: inherit;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  background: #212427;
+  padding: 20px;
+  width: 275px;
+  height: 100%;
+
+  position: fixed;
+  top: 76px;
+  bottom: 4rem;
+  left: 0;
+  overflow-y: auto;
+}
+
+
+nav button.collapsible {
+  background-color: inherit;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin: 0px;
+}
+
+nav button.active, .collapsible:hover {
+  font-weight: bold;
+}
+
+nav button.collapsible:after {
+  content: '\002B';
+  color: white;
+  float: right;
+  margin-left: 5px;
+}
+
+nav button.active:after {
+  content: "\2212";
+  font-weight: bold;
+}
+
+nav div.content {
+  padding: 0px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  margin: 0px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0px;
+
+}
+
+nav ul li {
+  padding: 10px;
+}
+
+nav ul li:hover {
+  border-left: 3px solid #73bcf7;
+  background-color: #666;
+}
+
+nav ul li.active {
+  border-left: 3px solid #73bcf7;
+}
+
+nav a {
+
+  color: #177ee6;
+  text-decoration: none;
+
+}
+
+nav a:visited {
+
+  color: #177ee6;
+  text-decoration: none;
+
+}

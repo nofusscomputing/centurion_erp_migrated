@@ -1,0 +1,10 @@
+---
+
+role_git_conf:
+  gitlab:
+    submodule_branch: "development"
+    default_branch: development
+    mr_labels: ~"type::automation" ~"impact::0" ~"priority::0"
+    auto_merge: true
+    merge_request:
+      patch_labels: '~"code review::not started"'

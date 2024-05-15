@@ -1,0 +1,13 @@
+{% extends 'base.html.j2' %}
+
+{% block title %}{{ content_title }}{% endblock %}
+
+{% block body%}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Submit">
+</form>
+
+{% endblock %}

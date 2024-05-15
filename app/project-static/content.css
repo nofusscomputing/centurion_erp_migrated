@@ -1,0 +1,200 @@
+main section a {
+
+  color: #177ee6;
+  text-decoration: none;
+
+}
+
+main section a:visited {
+
+  color: #177ee6;
+  text-decoration: none;
+
+}
+
+article div {
+  /* background-color: #ff0000; */
+  justify-content: center;
+  width: 100%;
+  /* display: block; */
+  display: flex;
+  flex-wrap: wrap;
+}
+
+article div form {
+  /* background-color: #00ff00; */
+  display: block;
+  /* text-align: center; */
+  align-content: center;
+  align-items: center;
+  /* justify-content: center; */
+  /* display: block; */
+  /* flex-wrap: wrap; */
+  /* for horizontal aligning of child divs */
+  justify-content: center;
+  /* for vertical aligning */
+  /* align-items: center; */
+  width: 650px;
+}
+
+article div form div {
+  /* background-color: #0000ff; */
+  /* display:inline-flexbox; */
+  /* width: 100%; */
+  /* display: block; */
+  width: 650px;
+  line-height: 30px;
+  /* align-items: center; */
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: inline-block;
+
+}
+
+
+article div form div label {
+  width: 100px;
+  /* display: block; */
+}
+
+article div form div input {
+  width: 200px;
+  /* display: block; */
+}
+
+
+input[type=button] {
+  color: #fff;
+  background-color: blue;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+input[type=checkbox] {
+  visibility: hidden;
+  font-size: 25px;
+}
+
+input[type=checkbox]:after,
+input[type=checkbox]::after {
+  content: " ";
+  background-color: blue;
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  height: 30px;
+  line-height: 30px;
+  width: 30px;
+  visibility: visible;
+  border-radius: 15px;
+}
+
+input[type=checkbox]:checked:after,
+input[type=checkbox]:checked::after {
+  content: "\2714";
+}
+
+input[type=submit] {
+  color: #fff;
+  background-color: blue;
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+/* Style the tab */
+.tab {
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  /* background-color: #f1f1f1; */
+  width: 100%;
+  text-align: left;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  display: inline;
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: inherit;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  /* background-color: #ddd; */
+  border-bottom: 3px solid #ccc;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  /* background-color: #ccc; */
+  border-bottom: 3px solid #177ee6;
+}
+
+/* Style the tab content */
+.tabcontent {
+  width: 100%;
+  display: none;
+  padding: 6px 12px;
+  border: none;
+  border-top: none;
+}
+
+table {
+  width: 100%;
+  text-align: center;
+}
+
+tr {
+  height: 30px;
+}
+
+td {
+  border-bottom: 1px solid #ccc;
+  padding: 20px;
+}
+
+section .content-header {
+  display: flex;
+  /* background-color: #08f008; */
+  align-items: center;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 0px;
+  min-height: 120px;
+
+}
+
+section .content-header fieldset {
+  /* background-color: #0851f0; */
+  width: 350px;
+  padding: 0px;
+  border: none;
+
+}
+
+section .content-header fieldset label {
+  display: block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}
+
+
+section .content-header fieldset input {
+  display: block;
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+}

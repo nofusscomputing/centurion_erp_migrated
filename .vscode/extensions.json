@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "njpwerner.autodocstring",
+        "streetsidesoftware.code-spell-checker-australian-english",
+        "streetsidesoftware.code-spell-checker",
+        "qwtel.sqlite-viewer",
+        "jebbs.markdown-extended",
+    ]
+}
