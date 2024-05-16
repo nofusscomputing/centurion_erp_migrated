@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 
 from pathlib import Path
+from split_settings.tools import optional, include
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -56,19 +57,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-if DEBUG:
-    INSTALLED_APPS += [
-        'debug_toolbar',
-    ]
-
-    MIDDLEWARE += [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ]
-
-    INTERNAL_IPS = [
-        "127.0.0.1",
-    ]
 
 ROOT_URLCONF = 'app.urls'
 
@@ -199,3 +187,25 @@ if API_ENABLED:
         ),
         'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
     }
+
+
+
+if os.path.isdir(SETTINGS_DIR):
+
+    settings_files = os.path.join(SETTINGS_DIR, '*.py')
+    include(optional(settings_files))
+
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+
