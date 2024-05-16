@@ -55,6 +55,8 @@ COPY ./app/. app
 
 COPY --from=build /tmp/python_builds /tmp/python_builds
 
+COPY includes/ /
+
 RUN pip install /tmp/python_builds/*.*; \
     python /app/manage.py collectstatic --noinput; \
     rm -rf /tmp/python_builds;
@@ -64,6 +66,8 @@ WORKDIR /app
 
 
 EXPOSE 8000
+
+VOLUME [ "/data", "/etc/itsm" ]
 
 
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
