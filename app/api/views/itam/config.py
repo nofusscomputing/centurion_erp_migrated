@@ -8,9 +8,9 @@ from rest_framework.response import Response
 
 class View(views.APIView):
 
-    def get(self, request, device_name):
+    def get(self, request, slug):
 
-        device = Device.objects.get(slug=device_name)
+        device = Device.objects.get(slug=slug)
 
         return Response(device.get_configuration(device.id))
 

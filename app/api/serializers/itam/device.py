@@ -1,5 +1,7 @@
-from rest_framework import serializers
+from django.urls import reverse
+
 from itam.models.device import Device
+from rest_framework import serializers
 
 
 
@@ -11,11 +13,11 @@ class DeviceSerializer(serializers.ModelSerializer):
     )
 
     config = serializers.SerializerMethodField('get_device_config')
-
+    
     def get_device_config(self, device):
 
-        return device.get_configuration(device.id)
-
+        request = self.context.get('request')
+        return request.build_absolute_uri(reverse('_api_device_config', args=[device.slug]))
 
 
     class Meta:
@@ -23,6 +25,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
         read_only_fields = [
+            'is_global',
             'organization',
         ]
 

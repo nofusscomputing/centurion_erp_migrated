@@ -13,7 +13,7 @@ urlpatterns = [
     path("organization/team/", access.TeamList.as_view(), name='_api_teams'),
 
 
-    path("config/<str:device_name>/", itam_config.View.as_view(), name="_api_device_config"),
+    path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
 
     path("device/", itam_device.List.as_view(), name="_api_devices"), 
     path("device/<int:pk>/", itam_device.Detail.as_view(), name="_api_device_view"),
