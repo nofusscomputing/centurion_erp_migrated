@@ -68,7 +68,7 @@
       {% for version in software_versions %}
       <td>{{ version.name }}</td>
       <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
-      <td>&nbsp;</td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
       <td>&nbsp;</td>
       {% endfor %}
     </tr>
@@ -77,7 +77,7 @@
 
 <div id="Licences" class="tabcontent">
   <h3>Licences</h3>
-  Not Yet Implemented
+  {% include 'icons/issue_link.html.j2' with issue=4 %}
   <table>
     <thead>
       <th>Name</th>
@@ -108,7 +108,6 @@
 
 <div id="Installations" class="tabcontent">
   <h3>Installations</h3>
-  Dev Notes: This table will show joined tables installed software and device software action as a single row.
     <table>
     <thead>
       <th>Device</th>
@@ -118,6 +117,7 @@
       <th title="Date Software Installed">Installed</th>
       <th>&nbsp;</th>
     </thead>
+    {% if device_software %}
     {% for device in device_software %}
     <tr>
       <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
@@ -142,6 +142,11 @@
       <td>&nbsp;</td>
     </tr>
     {% endfor %}
+    {% else %}
+    <tr>
+    <td colspan="6">Nothing Found</td>
+    </tr>
+    {% endif %}
   </table>
 </div>
 
