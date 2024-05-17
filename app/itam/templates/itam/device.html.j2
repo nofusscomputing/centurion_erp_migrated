@@ -74,8 +74,11 @@
     <tr>
       <td><a href="{% url 'ITAM:_software_view' pk=software.id %}">{{ software.software }}</a></td>
       <td><a href="{% url 'ITAM:_device_software_view' device_id=device.id pk=software.id %}">{{ software.get_action_display }}</a></td>
+      <td>
+
+      {% include 'icons/success_text.html.j2' with icon_text='success' %}{% include 'icons/cross_text.html.j2' with icon_text='cross' %}{% include 'icons/change_text.html.j2' with icon_text='change' %}
+      </td>
       <td>&nbsp;</td>
-      <th>&nbsp;</th>
     </tr>
     {% endfor %}
   </table>
