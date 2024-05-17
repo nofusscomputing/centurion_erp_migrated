@@ -13,6 +13,7 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
     permission_required = 'itam.view_software'
     template_name = 'itam/software_index.html.j2'
     context_object_name = "softwares"
+    paginate_by = 10
 
 
     def get_queryset(self):
