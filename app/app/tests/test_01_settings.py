@@ -5,14 +5,14 @@ import unittest
 
 class Test_aa_settings_default(unittest.TestCase):
 
-    @pytest.mark.django_db
-    def test_setting_api_disabled_default(self):
-        """ As the API is only partially developed, it must be disabled.
+    # @pytest.mark.django_db
+    # def test_setting_api_disabled_default(self):
+    #     """ As the API is only partially developed, it must be disabled.
 
-            This test can be removed when the API has been fully developed and functioning as it should.
-        """
+    #         This test can be removed when the API has been fully developed and functioning as it should.
+    #     """
 
-        assert not settings.API_ENABLED
+    #     assert not settings.API_ENABLED
 
 
     @pytest.mark.django_db

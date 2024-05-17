@@ -28,6 +28,7 @@ urlpatterns = [
          name="change_password"),
     path("account/", include("django.contrib.auth.urls")),
     path("organization/", include("access.urls")),
+    path("itam/", include("itam.urls")),
 
 ]
 

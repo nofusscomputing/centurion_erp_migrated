@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 
 from pathlib import Path
+from split_settings.tools import optional, include
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'social_django',
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
+    'itam.apps.ItamConfig',
 ]
 
 MIDDLEWARE = [
@@ -55,19 +57,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-if DEBUG:
-    INSTALLED_APPS += [
-        'debug_toolbar',
-    ]
-
-    MIDDLEWARE += [
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    ]
-
-    INTERNAL_IPS = [
-        "127.0.0.1",
-    ]
 
 ROOT_URLCONF = 'app.urls'
 
@@ -108,18 +97,18 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    # },
-    # {
-    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    # },
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
 
 LOGIN_REDIRECT_URL = "home"
@@ -158,7 +147,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SITE_TITLE = "Site Title"
 
 
-API_ENABLED = False    # Disabled until setup and secure
+API_ENABLED = True
 
 if API_ENABLED:
 
@@ -179,10 +168,12 @@ if API_ENABLED:
             'rest_framework.parsers.FormParser',
             'rest_framework.parsers.MultiPartParser'
         ),
-        'DEFAULT_RENDERER_CLASSES': (
-            'rest_framework_json_api.renderers.JSONRenderer',
-            'rest_framework_json_api.renderers.BrowsableAPIRenderer',
-        ),
+        # leaving these uncommented, even though are the default renderers
+        # causes the api to output the fields under a 'attributes' key
+        # 'DEFAULT_RENDERER_CLASSES': (
+        #     'rest_framework_json_api.renderers.JSONRenderer',
+        #     'rest_framework_json_api.renderers.BrowsableAPIRenderer',
+        # ),
         'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
         'DEFAULT_FILTER_BACKENDS': (
             'rest_framework_json_api.filters.QueryParameterValidationFilter',
@@ -196,3 +187,25 @@ if API_ENABLED:
         ),
         'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
     }
+
+
+
+if os.path.isdir(SETTINGS_DIR):
+
+    settings_files = os.path.join(SETTINGS_DIR, '*.py')
+    include(optional(settings_files))
+
+
+if DEBUG:
+    INSTALLED_APPS += [
+        'debug_toolbar',
+    ]
+
+    MIDDLEWARE += [
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
+
+    INTERNAL_IPS = [
+        "127.0.0.1",
+    ]
+

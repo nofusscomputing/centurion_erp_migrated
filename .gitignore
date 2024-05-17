@@ -4,4 +4,4 @@ __pycache__
 **db.sqlite3
 **.coverage
 artifacts/
-**itam/
+**.tmp.*
