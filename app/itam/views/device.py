@@ -9,6 +9,7 @@ from access.models import Organization
 
 from ..models.device import Device, DeviceSoftware
 from itam.forms.device_softwareadd import SoftwareAdd
+from itam.forms.device_softwareupdate import SoftwareUpdate
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -16,6 +17,8 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
     permission_required = 'itam.view_device'
     template_name = 'itam/device_index.html.j2'
     context_object_name = "devices"
+
+    paginate_by = 10
 
     def get_queryset(self):
 
@@ -42,7 +45,6 @@ class View(OrganizationPermission, generic.UpdateView):
         'serial_number',
         'uuid',
         'device_type',
-        'is_global'
     ]
 
     context_object_name = "device"
@@ -74,12 +76,11 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
     ]
     template_name = 'form.html.j2'
 
-    fields = [
-        'action',
-    ]
 
 
     context_object_name = "devicesoftware"
+
+    form_class = SoftwareUpdate
 
 
     def form_valid(self, form):
@@ -108,8 +109,11 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'uuid',
         'device_type',
         'organization',
-        'is_global'
     ]
+
+    def form_valid(self, form):
+        form.instance.is_global = False
+        return super().form_valid(form)
 
 
     def get_success_url(self, **kwargs):

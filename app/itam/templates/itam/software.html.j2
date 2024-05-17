@@ -30,8 +30,10 @@
 </script>
 
 <div class="tab">
-  <button onclick="window.location='{% url 'ITAM:Software' %}';">
-    << Back to Software</button>
+  <button onclick="window.location='{% url 'ITAM:Software' %}';" style="vertical-align: middle; padding: auto; margin: 0px">
+    <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
+            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
+        </svg> Back to Software</button>
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
       <button class="tablinks" onclick="openCity(event, 'Licences')">Licences</button>
@@ -56,7 +58,7 @@
 
 <div id="Versions" class="tabcontent">
   <h3>Versions</h3>
-  Not Yet Implemented
+  <input type="button" value="New Software Version" onclick="window.location='{% url 'ITAM:_software_version_add' pk=software.id %}';">
   <table>
     <thead>
       <th>Version</th>
@@ -65,16 +67,19 @@
       <th>&nbsp;</th>
     </thead>
     <tr>
-      <td>1.0.0</td>
-      <td>5</td>
-      <td><input type="checkbox" checked disabled></td>
+      {% for version in software_versions %}
+      <td>{{ version.name }}</td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
+      <td>&nbsp;</td>
+      {% endfor %}
     </tr>
   </table>
 </div>
 
 <div id="Licences" class="tabcontent">
   <h3>Licences</h3>
-  Not Yet Implemented
+  {% include 'icons/issue_link.html.j2' with issue=4 %}
   <table>
     <thead>
       <th>Name</th>
@@ -105,24 +110,45 @@
 
 <div id="Installations" class="tabcontent">
   <h3>Installations</h3>
-  Dev Notes: This table will show joined tables installed software and device software action as a single row.
     <table>
     <thead>
       <th>Device</th>
       <th>Organization</th>
       <th title="Not Set/Install/Remove">Action</th>
+      <th>Version</th>
       <th title="Date Software Installed">Installed</th>
       <th>&nbsp;</th>
     </thead>
+    {% if device_software %}
     {% for device in device_software %}
     <tr>
       <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
       <td>{{ device.organization }}</td>
-      <td>{{ device.get_action_display }}</td>
-      <td>Not Implemented</td>
+      <td>
+      {% if device.get_action_display == 'Install' %}
+        {% include 'icons/success_text.html.j2' with icon_text=device.get_action_display %}
+      {% elif device.get_action_display == 'Remove'%}
+        {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
+      {% else %}
+        {{ device.get_action_display }}
+      {% endif %}
+      </td>
+      <td>
+      {% if device.version %}
+      {{ device.version }}
+      {% else %}
+      Any
+      {% endif %}
+      </td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
       <td>&nbsp;</td>
     </tr>
     {% endfor %}
+    {% else %}
+    <tr>
+    <td colspan="6">Nothing Found</td>
+    </tr>
+    {% endif %}
   </table>
 </div>
 

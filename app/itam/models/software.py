@@ -62,5 +62,15 @@ class SoftwareVersion(SoftwareCommonFields):
         on_delete=models.CASCADE,
     )
 
+    name = models.CharField(
+        blank = False,
+        max_length = 50,
+        unique = False,
+    )
+
+    def __str__(self):
+
+        return self.name
+
 
 

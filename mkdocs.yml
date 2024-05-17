@@ -35,6 +35,10 @@ nav:
 
       - projects/django-template/itam/software.md
 
+    - Development:
+
+      - projects/django-template/development/index.md
+
 - Operations: 
 
   - operations/index.md

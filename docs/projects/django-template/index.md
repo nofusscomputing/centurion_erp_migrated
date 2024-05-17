@@ -19,38 +19,4 @@ This template has built into it multi-tenancy which can easily added to your dja
 
 - Auto-Generated Navigation Menu
 
-
-## Adding an Application
-
-1. Install the django application with `pip <app-name>`
-
-1. Update `app.settings.py`
-
-    ``` python
-
-    INSTALLED_APPS = [
-
-        '<app name>.apps.<apps.py Class Name>', # Within project directory
-
-        '<app name>',                           # not in project directory
-
-    ]
-
-    ```
-
-1. Update `itsm/urls.py`
-
-    ``` python
-
-    urlpatterns = [
-
-        path("<url path>/", include("<app name>.urls")),
-
-    ]
-
-    ```
-
-!!! tip
-    No url from the application will be visible without including the `name` parameter when calling the `path` function within the applications `url.py`. i.e. `urlpatterns[].path(name='<Navigation Name>')`. This is by design and when combined with a prefix of `_` provides the option to limit what URL's are displayed within the navigation menu. A name beginning with an underscore `_` will not be displayed in the menu.
-
-Once you have completed the above list, your application will display collapsed within the navigation menu with the name of your application.
+- [Configuration ready for ansible](itam/device.md#configuration)

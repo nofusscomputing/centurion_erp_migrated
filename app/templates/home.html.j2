@@ -2,4 +2,13 @@
 
 {% block title %}Home{% endblock %}
 
-{% block body%}{% endblock %}
+
+{% block body%}
+
+To Do List:
+
+<ul>
+<li>{% include 'icons/issue_link.html.j2' with issue=5 %} - Item History</li>
+</ul>
+
+{% endblock %}

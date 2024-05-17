@@ -2,7 +2,7 @@ from django.db import models
 
 from access.fields import *
 from access.models import TenancyObject
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareVersion
 
 
 
@@ -98,11 +98,19 @@ class Device(DeviceCommonFieldsName):
 
                 state = 'absent'
 
-            software = {
+            print(f"here: {software.version}")
+
+
+            software_action = {
                 "name": software.software.slug,
                 "state": state
             }
-            config['software'] = config['software'] + [ software ]
+
+
+            if software.version:
+                software_action['version'] = software.version.name
+
+            config['software'] = config['software'] + [ software_action ]
 
         return config
 
@@ -139,4 +147,13 @@ class DeviceSoftware(DeviceCommonFields):
         max_length=1,
         choices=Actions,
         default=None,
+    )
+
+    version = models.ForeignKey(
+        SoftwareVersion,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+        
     )
