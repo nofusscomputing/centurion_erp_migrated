@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+# from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
@@ -9,7 +9,7 @@ from rest_framework.reverse import reverse
 
 
 
-class IndexView(PermissionRequiredMixin, LoginRequiredMixin, routers.APIRootView):
+class IndexView(routers.APIRootView):
 
     permission_required = 'access.view_organization'
 

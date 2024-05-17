@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_json_api',
+    'rest_framework.authtoken',
     'social_django',
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
@@ -158,7 +159,11 @@ if API_ENABLED:
     REST_FRAMEWORK = {
         'PAGE_SIZE': 10,
         'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
+        'DEFAULT_PERMISSION_CLASSES': (
+            'rest_framework.permissions.IsAuthenticated',
+        ),
         'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.TokenAuthentication',
             'rest_framework.authentication.SessionAuthentication',
         ],
         'DEFAULT_PAGINATION_CLASS':
