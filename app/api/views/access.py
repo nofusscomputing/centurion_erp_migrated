@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+# from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 from rest_framework import generics
 
@@ -7,7 +7,7 @@ from api.serializers.access import OrganizationSerializer, TeamSerializer
 
 
 
-class OrganizationList(PermissionRequiredMixin, LoginRequiredMixin, generics.ListCreateAPIView):
+class OrganizationList(generics.ListCreateAPIView):
     permission_required = 'access.view_organization'
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
@@ -18,7 +18,7 @@ class OrganizationList(PermissionRequiredMixin, LoginRequiredMixin, generics.Lis
 
 
 
-class OrganizationDetail(PermissionRequiredMixin, LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
+class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_required = 'access.view_organization'
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer

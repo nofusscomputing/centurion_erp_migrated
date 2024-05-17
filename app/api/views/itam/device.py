@@ -1,4 +1,4 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+# from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 from rest_framework import generics
 
@@ -6,7 +6,7 @@ from itam.models.device import Device
 from api.serializers.itam.device import DeviceSerializer
 
 
-class List(PermissionRequiredMixin, LoginRequiredMixin, generics.ListCreateAPIView):
+class List(generics.ListCreateAPIView):
     permission_required = 'itam.view_device'
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
@@ -15,7 +15,7 @@ class List(PermissionRequiredMixin, LoginRequiredMixin, generics.ListCreateAPIVi
         return "Devices"
 
 
-class Detail(PermissionRequiredMixin, LoginRequiredMixin, generics.RetrieveUpdateDestroyAPIView):
+class Detail(generics.RetrieveUpdateDestroyAPIView):
     permission_required = 'itam.view_device'
     queryset = Device.objects.all()
     serializer_class = DeviceSerializer
