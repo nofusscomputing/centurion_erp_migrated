@@ -45,7 +45,6 @@ class View(OrganizationPermission, generic.UpdateView):
         'serial_number',
         'uuid',
         'device_type',
-        'is_global'
     ]
 
     context_object_name = "device"
@@ -110,8 +109,11 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'uuid',
         'device_type',
         'organization',
-        'is_global'
     ]
+
+    def form_valid(self, form):
+        form.instance.is_global = False
+        return super().form_valid(form)
 
 
     def get_success_url(self, **kwargs):
