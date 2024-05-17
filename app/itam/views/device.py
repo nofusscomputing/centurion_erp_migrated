@@ -9,6 +9,7 @@ from access.models import Organization
 
 from ..models.device import Device, DeviceSoftware
 from itam.forms.device_softwareadd import SoftwareAdd
+from itam.forms.device_softwareupdate import SoftwareUpdate
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -76,12 +77,11 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
     ]
     template_name = 'form.html.j2'
 
-    fields = [
-        'action',
-    ]
 
 
     context_object_name = "devicesoftware"
+
+    form_class = SoftwareUpdate
 
 
     def form_valid(self, form):

@@ -68,5 +68,9 @@ class SoftwareVersion(SoftwareCommonFields):
         unique = False,
     )
 
+    def __str__(self):
+
+        return self.name
+
 
 

@@ -114,6 +114,7 @@
       <th>Device</th>
       <th>Organization</th>
       <th title="Not Set/Install/Remove">Action</th>
+      <th>Version</th>
       <th title="Date Software Installed">Installed</th>
       <th>&nbsp;</th>
     </thead>
@@ -128,6 +129,13 @@
         {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
       {% else %}
         {{ device.get_action_display }}
+      {% endif %}
+      </td>
+      <td>
+      {% if device.version %}
+      {{ device.version }}
+      {% else %}
+      Any
       {% endif %}
       </td>
       <td>Not Implemented</td>
