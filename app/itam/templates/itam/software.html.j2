@@ -56,7 +56,7 @@
 
 <div id="Versions" class="tabcontent">
   <h3>Versions</h3>
-  Not Yet Implemented
+  <input type="button" value="New Software Version" onclick="window.location='{% url 'ITAM:_software_version_add' pk=software.id %}';">
   <table>
     <thead>
       <th>Version</th>
@@ -65,9 +65,12 @@
       <th>&nbsp;</th>
     </thead>
     <tr>
-      <td>1.0.0</td>
-      <td>5</td>
-      <td><input type="checkbox" checked disabled></td>
+      {% for version in software_versions %}
+      <td>{{ version.name }}</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      {% endfor %}
     </tr>
   </table>
 </div>

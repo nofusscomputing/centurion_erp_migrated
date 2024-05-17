@@ -5,7 +5,7 @@ from django.views import generic
 from access.mixin import OrganizationPermission
 
 from itam.models.device import DeviceSoftware
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareVersion
 from itam.forms.software.update import Update as SoftwareUpdate_Form
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -42,6 +42,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        software_versions = SoftwareVersion.objects.filter(software=self.kwargs['pk'])
+
+        context['software_versions'] = software_versions
 
         context['content_title'] = self.object.name
 
