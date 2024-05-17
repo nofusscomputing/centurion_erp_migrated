@@ -128,6 +128,7 @@ input[type=submit] {
   padding: 14px 16px;
   transition: 0.3s;
   font-size: inherit;
+  color: #6a6e73;
 }
 
 /* Change background color of buttons on hover */
