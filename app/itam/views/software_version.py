@@ -20,6 +20,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     def form_valid(self, form):
         software = Software.objects.get(pk=self.kwargs['pk'])
 
+        form.instance.is_global = software.is_global
         form.instance.organization_id = software.organization.id
         form.instance.software_id = self.kwargs['pk']
         return super().form_valid(form)
