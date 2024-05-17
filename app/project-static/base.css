@@ -101,6 +101,21 @@ span.icon-change {
 }
 
 
+/* span.issue {
+  color: #fc6d26;
+} */
+
+span.icon-issue {
+  fill: #fc6d26;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  /* margin-bottom: -2px; */
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 /* .icon {
   display: block;
   content: none;

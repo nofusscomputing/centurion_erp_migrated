@@ -67,7 +67,7 @@
     <tr>
       {% for version in software_versions %}
       <td>{{ version.name }}</td>
-      <td>&nbsp;</td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
       <td>&nbsp;</td>
       <td>&nbsp;</td>
       {% endfor %}
@@ -138,7 +138,7 @@
       Any
       {% endif %}
       </td>
-      <td>Not Implemented</td>
+      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
       <td>&nbsp;</td>
     </tr>
     {% endfor %}
