@@ -17,6 +17,8 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
     template_name = 'itam/device_index.html.j2'
     context_object_name = "devices"
 
+    paginate_by = 10
+
     def get_queryset(self):
 
         if self.request.user.is_superuser:
