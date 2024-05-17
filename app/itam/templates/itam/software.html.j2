@@ -121,7 +121,15 @@
     <tr>
       <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
       <td>{{ device.organization }}</td>
-      <td>{{ device.get_action_display }}</td>
+      <td>
+      {% if device.get_action_display == 'Install' %}
+        {% include 'icons/success_text.html.j2' with icon_text=device.get_action_display %}
+      {% elif device.get_action_display == 'Remove'%}
+        {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
+      {% else %}
+        {{ device.get_action_display }}
+      {% endif %}
+      </td>
       <td>Not Implemented</td>
       <td>&nbsp;</td>
     </tr>
