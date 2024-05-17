@@ -1,0 +1,60 @@
+{% load settings_value %}
+<html>
+
+<head>
+  {% load static %}
+  <title>CSS Template</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="{% static 'base.css' %}">
+  <link rel="stylesheet" href="{% static 'content.css' %}">
+
+</head>
+
+<body>
+
+  <header>
+    
+    <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
+
+    <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
+      <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
+      <div class="dropdown-content">
+        <!-- <a href="#">Link 1</a> -->
+        {% if user.is_superuser or user.is_staff %}
+        <form action="{% url 'admin:index' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Admin Panel</button>
+        </form>
+        {% endif %}
+        <form action="{% url 'password_change' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Change Password</button>
+        </form>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Log Out</button>
+        </form>
+      </div>
+    </div>
+
+  </header>
+
+  <main>
+    <nav style="padding: 0px;">
+      {% include 'navigation.html.j2' %}
+    </nav>
+    <section>
+      <h2>{% block title %}Page Title{% endblock %}{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}</h2>
+      <article>
+        {% block body%}{% endblock %}
+      </article>
+      <footer>{% block footer%}{% endblock %}</footer>
+    </section>
+
+  </main>
+
+</body>
+
+</html>

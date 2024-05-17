@@ -1,0 +1,29 @@
+{% block navigation %}
+
+{% for group in nav_items %}
+<button class="collapsible{% if group.is_active %} active{% endif %}">{{ group.name }}</button>
+<div class="content"{% if group.is_active %} style="max-height:inherit" {% endif %}>
+  <ul>
+    {% for group_urls in group.urls %}
+    <li{% if group_urls.is_active %} class="active"{% endif %}><a href="{{ group_urls.url }}">{{ group_urls.name }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function () {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
+</script>
+{% endblock %}
