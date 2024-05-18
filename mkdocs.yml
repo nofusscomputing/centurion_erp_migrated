@@ -25,13 +25,13 @@ nav:
 
     - projects/django-template/permissions.md
 
-    - projects/django-template/template.md
-
     - ITAM:
 
       - projects/django-template/itam/index.md
 
       - projects/django-template/itam/device.md
+
+      - projects/django-template/itam/operating_system.md
 
       - projects/django-template/itam/software.md
 

@@ -7,9 +7,12 @@ from django.views import generic
 from access.mixin import OrganizationPermission
 from access.models import Organization
 
-from ..models.device import Device, DeviceSoftware
+from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
+
+from itam.forms.device.device import DeviceForm
+from itam.forms.device.operating_system import Update as OperatingSystemForm
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -32,36 +35,79 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 
 
 
+def _get_form(request, formcls, prefix, **kwargs):
+    data = request.POST if prefix in request.POST else None
+    return formcls(data, prefix=prefix, **kwargs)
+
 class View(OrganizationPermission, generic.UpdateView):
+
     model = Device
+
     permission_required = [
         'itam.view_device'
     ]
+
     template_name = 'itam/device.html.j2'
 
-    fields = [
-        'id',
-        'name',
-        'serial_number',
-        'uuid',
-        'device_type',
-    ]
+    form_class = DeviceForm
 
     context_object_name = "device"
+
 
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
 
-        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
+        try:
+            operating_system_version = DeviceOperatingSystem.objects.get(device=self.kwargs['pk'])
+        
+        except DeviceOperatingSystem.DoesNotExist:
 
-        context['content_title'] = self.object.name
+            operating_system_version = None
+
+        if operating_system_version:
+
+            context['operating_system'] = OperatingSystemForm(prefix='operating_system', instance=operating_system_version)
+
+        else:
+
+            context['operating_system'] = OperatingSystemForm(prefix='operating_system')
+
+
+        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
         context['softwares'] = softwares
 
         config = self.object.get_configuration(self.kwargs['pk'])
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
 
+        context['content_title'] = self.object.name
+
         return context
+
+
+    def post(self, request, *args, **kwargs):
+
+        device = Device.objects.get(pk=self.kwargs['pk'])
+
+        try:
+
+            existing_os = DeviceOperatingSystem.objects.get(device=self.kwargs['pk'])
+
+        except DeviceOperatingSystem.DoesNotExist:
+
+            existing_os = None
+
+        operating_system = OperatingSystemForm(request.POST, prefix='operating_system', instance=existing_os)
+
+        if operating_system.is_bound and operating_system.is_valid():
+
+            operating_system.instance.organization = device.organization
+            operating_system.instance.device = device
+
+            operating_system.save()
+
+        return super().post(request, *args, **kwargs)
+
 
     def get_success_url(self, **kwargs):
 
