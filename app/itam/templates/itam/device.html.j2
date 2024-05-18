@@ -47,7 +47,10 @@
 
 
   <div id="Details" class="tabcontent">
-    <h3>Details</h3>
+    <h3>
+      Details
+      <span style="font-weight: normal; float: right;">{% include 'icons/issue_link.html.j2' with issue=6 %}</span>
+    </h3>
     {{ form.as_p }}
     <input name="{{form.prefix}}" type="submit" value="Submit">
     <script>
