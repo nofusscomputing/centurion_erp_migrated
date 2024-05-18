@@ -41,6 +41,81 @@ span#content_header_icon {
   color: #177ee6;
 }
 
+
+span.icon-text {
+  vertical-align: middle;
+  border-radius: 25px;
+  font-size: inherit;
+  border: 1px solid #ccc;
+  line-height: 30px;
+  padding-left: 1px;
+  padding-right: 10px;
+  height: 30px;
+  display: inline-block;
+}
+
+span.success {
+  color: #319c3a;
+}
+
+span.icon-success {
+  fill: #319c3a;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  margin-bottom: -7px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+
+span.cross {
+  color: #9c3131;
+}
+
+span.icon-cross {
+  fill: #9c3131;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  margin-bottom: -7px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+span.change {
+  color: #cab706;
+}
+
+span.icon-change {
+  fill: #cab706;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  margin-bottom: -7px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+
+/* span.issue {
+  color: #fc6d26;
+} */
+
+span.icon-issue {
+  fill: #fc6d26;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  /* margin-bottom: -2px; */
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 /* .icon {
   display: block;
   content: none;

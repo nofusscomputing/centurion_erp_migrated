@@ -20,3 +20,12 @@ def test_software_update_is_global_no_change(user):
     """
 
     pass
+
+@pytest.mark.skip(reason="to be written")
+def test_software_prevent_delete_if_used(user):
+    """Any software in use by a device must not be deleted.
+
+        i.e. A device has an action set for the software.
+    """
+
+    pass

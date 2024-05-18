@@ -2,8 +2,8 @@ from django.db import models
 
 from access.fields import *
 from access.models import TenancyObject
-from itam.models.software import Software
-
+from itam.models.software import Software, SoftwareVersion
+from itam.models.operating_system import OperatingSystemVersion
 
 
 class DeviceCommonFields(TenancyObject, models.Model):
@@ -98,11 +98,16 @@ class Device(DeviceCommonFieldsName):
 
                 state = 'absent'
 
-            software = {
+            software_action = {
                 "name": software.software.slug,
                 "state": state
             }
-            config['software'] = config['software'] + [ software ]
+
+
+            if software.version:
+                software_action['version'] = software.version.name
+
+            config['software'] = config['software'] + [ software_action ]
 
         return config
 
@@ -139,4 +144,43 @@ class DeviceSoftware(DeviceCommonFields):
         max_length=1,
         choices=Actions,
         default=None,
+    )
+
+    version = models.ForeignKey(
+        SoftwareVersion,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+        
+    )
+
+
+
+class DeviceOperatingSystem(DeviceCommonFields):
+
+    device = models.ForeignKey(
+        Device,
+        on_delete = models.CASCADE,
+        default = None,
+        null = False,
+        blank = False,
+        
+    )
+
+    operating_system_version = models.ForeignKey(
+        OperatingSystemVersion,
+        verbose_name = 'Operating System/Version',
+        on_delete = models.CASCADE,
+        default = None,
+        null = False,
+        blank = False
+        
+    )
+
+    version = models.CharField(
+        verbose_name = 'Installed Version',
+        max_length = 15,
+        null = False,
+        blank = False,
     )

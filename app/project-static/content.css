@@ -115,6 +115,14 @@ input[type=submit] {
   /* background-color: #f1f1f1; */
   width: 100%;
   text-align: left;
+  padding: 0px;
+  margin: 0px
+}
+
+.tablinks {
+  border: 0px;
+  margin: none;
+  padding: none;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -125,9 +133,12 @@ input[type=submit] {
   border: none;
   outline: none;
   cursor: pointer;
+  margin: 0px;
+  padding: 0px;
   padding: 14px 16px;
   transition: 0.3s;
   font-size: inherit;
+  color: #6a6e73;
 }
 
 /* Change background color of buttons on hover */
@@ -146,7 +157,8 @@ input[type=submit] {
 .tabcontent {
   width: 100%;
   display: none;
-  padding: 6px 12px;
+  /* padding: 6px 12px; */
+  padding-bottom: 0px;
   border: none;
   border-top: none;
 }

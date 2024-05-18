@@ -1,28 +1,25 @@
 {% extends 'base.html.j2' %}
 
-{% block title %}{{ software.name }}{% endblock %}
+{% block title %}{{ operating_system.name }}{% endblock %}
 
 {% block body %}
 
 <script>
 
   function openCity(evt, cityName) {
-    // Declare all variables
+
     var i, tabcontent, tablinks;
 
-    // Get all elements with class="tabcontent" and hide them
     tabcontent = document.getElementsByClassName("tabcontent");
     for (i = 0; i < tabcontent.length; i++) {
       tabcontent[i].style.display = "none";
     }
 
-    // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
       tablinks[i].className = tablinks[i].className.replace(" active", "");
     }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(cityName).style.display = "block";
     evt.currentTarget.className += " active";
   }
@@ -30,17 +27,16 @@
 </script>
 
 <div class="tab">
-  <button onclick="window.location='{% url 'ITAM:Software' %}';" style="vertical-align: middle; padding: auto; margin: 0px">
+  <button onclick="window.location='{% url 'ITAM:Operating Systems' %}';" style="vertical-align: middle; padding: auto; margin: 0px">
     <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
             <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-        </svg> Back to Software</button>
+        </svg> Back to Operating Systems</button>
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-      <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
+      <button class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
       <button class="tablinks" onclick="openCity(event, 'Licences')">Licences</button>
       <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button>
 </div>
 
-<!-- Tab content -->
 <div id="Details" class="tabcontent">
   <h3>Details</h3>
   <form method="post">
@@ -50,7 +46,6 @@
   </form>
 
   <script>
-    // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
   </script>
 
@@ -58,7 +53,8 @@
 
 <div id="Versions" class="tabcontent">
   <h3>Versions</h3>
-  <input type="button" value="New Software Version" onclick="window.location='{% url 'ITAM:_software_version_add' pk=software.id %}';">
+  <input type="button" value="New Operating System Version" onclick="window.location='{% url 'ITAM:_operating_system_version_add' pk=operating_system.id %}';">
+  
   <table>
     <thead>
       <th>Version</th>
@@ -66,15 +62,16 @@
       <th>Vulnerable</th>
       <th>&nbsp;</th>
     </thead>
-    {% for version in software_versions %}
+    {% for version in operating_system_versions %}
     <tr>
-      <td><a href="{% url 'ITAM:_software_version_view' software_id=software.id pk=version.id %}">{{ version.name }}</a></td>
-      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
-      <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
+      <td><a href="{% url 'ITAM:_operating_system_version_view' operating_system_id=operating_system.id pk=version.id %}">{{ version.name }}</a></td>
+      <td>{% if version.installs == 0%}-{% else %}{{ version.installs }}{% endif %}</td>
       <td>&nbsp;</td>
+      <td><a href="{% url 'ITAM:_operating_system_version_delete' operating_system_id=operating_system.id pk=version.id %}">DELETE</a></td>
     </tr>
     {% endfor %}
   </table>
+
 </div>
 
 <div id="Licences" class="tabcontent">
@@ -106,6 +103,7 @@
       <th>&nbsp;</th>
     </tr>
   </table>
+  
 </div>
 
 <div id="Installations" class="tabcontent">
@@ -114,43 +112,20 @@
     <thead>
       <th>Device</th>
       <th>Organization</th>
-      <th title="Not Set/Install/Remove">Action</th>
       <th>Version</th>
       <th title="Date Software Installed">Installed</th>
       <th>&nbsp;</th>
     </thead>
-    {% if device_software %}
-    {% for device in device_software %}
+    {% for install in installs %}
     <tr>
-      <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
-      <td>{{ device.organization }}</td>
-      <td>
-      {% if device.get_action_display == 'Install' %}
-        {% include 'icons/success_text.html.j2' with icon_text=device.get_action_display %}
-      {% elif device.get_action_display == 'Remove'%}
-        {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
-      {% else %}
-        {{ device.get_action_display }}
-      {% endif %}
-      </td>
-      <td>
-      {% if device.version %}
-      {{ device.version }}
-      {% else %}
-      Any
-      {% endif %}
-      </td>
+      <td><a href="{% url 'ITAM:_device_view' pk=install.device_id %}">{{ install.device }}</a></td>
+      <td>{{ install.organization }}</td>
+      <td>{{ install.version }}</td>
       <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
       <td>&nbsp;</td>
     </tr>
     {% endfor %}
-    {% else %}
-    <tr>
-    <td colspan="6">Nothing Found</td>
-    </tr>
-    {% endif %}
   </table>
 </div>
-
 
 {% endblock %}
