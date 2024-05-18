@@ -1,3 +1,35 @@
+## 0.2.0 (2024-05-18)
+
+### Bug Fixes
+
+- **device**: [9e801fa9](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/9e801fa9eb0244d413d1555bff8e206b2ff6acd7) - correct software link [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+
+### Continious Integration
+
+- [ce18edaa](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/ce18edaa398bfca5f38ae9320a6a98d6a6338318) - correct junit collection to use wildcard name [ [!6](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/6) ]
+- [8b746bb9](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/8b746bb9ff607950a73850d3cb0432f3d5538c63) - correct junit report name [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+
+### Documentaton / Guides
+
+- [fa97286d](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/fa97286dc885dacbf2e56bab02cb42c67c70f9ab) - start to document features [ [!6](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/6) ]
+- [7d007f72](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/7d007f721af5e3a192c9a713069bec8c7a602d12) - update [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+
+### Features
+
+- **itam**: [a0b5a08f](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/a0b5a08f0d27f8676998eaf818c449961ccc42dd) - Add Operating System to ITAM models [ [!6](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/6) ]
+- **api**: [377c78d6](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/377c78d6b84398e2bbae01a91478a8ab8f94a0a2) - force content type to be JSON for req/resp [ [!1](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/1) ]
+- **software**: [95405283](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/95405283b98ec6b39faedd509619dcdc39b82fc0) - view software [ [!6](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/6) ]
+- **device**: [aade1e80](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/aade1e80d7d0b5bf5d45c7fe202a360d325bc396) - Prevent devices from being set global [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software**: [0e69a0ac](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/0e69a0accc32ea1513394da38e78066b0e09a5ed) - if no installations found, denote [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **device**: [b811eedb](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/b811eedb338712e1e8ddfba3b032dbdd3513dda5) - configurable software version [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software_version**: [b0e69ee6](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/b0e69ee64b929466a41d69b523641e17928188e7) - name does not need to be unique [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software_version**: [b1c4e570](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/b1c4e570cfb92ce6c72bd6df28f4c9d6d9eb30e6) - set is_global to match software [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software**: [b2e1a460](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/b2e1a460c853f57397c615707575f9b87b174e9c) - prettify device software action [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software**: [7f35292f](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/7f35292f64656830208b097388516b13e8b91613) - ability to add software versions [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **base**: [7302f997](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/7302f997530c9caba8e534877eba65dfa3659f9c) - add stylised action button/text [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **software**: [6f6031fb](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/6f6031fb1eb789e86afb7c9cbb8c12e7f1563f56) - add pagination for index [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+- **device**: [789b4a55](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/789b4a55d657c6c7a23af4c5d499b2be0a20481b) - add pagination for index [ [!5](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/5) ]
+
 ## 0.1.0 (2024-05-17)
 
 ### Bug Fixes
