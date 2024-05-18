@@ -217,3 +217,7 @@ if DEBUG:
         "127.0.0.1",
     ]
 
+    # Apps Under Development
+    INSTALLED_APPS += [
+        'information.apps.InformationConfig',
+    ]
