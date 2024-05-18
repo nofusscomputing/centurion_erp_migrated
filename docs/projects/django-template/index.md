@@ -1,22 +1,20 @@
 ---
-title: Django Template
-description: No Fuss Computings NetBox Django Site Template
+title: Django ITSM
+description: No Fuss Computings NetBox Django ITSM
 date: 2024-05-06
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-This Django Project is designed to be a base template for Django applications. It's intent is to contain only the minimal functionality that is/would be common to all Django applications. for instance: base templates, auth and the functions required to make the site navigable. Currently the template style is that of the Red Hat echo system (AWX, Foreman, EDA, Cockpit etc).
-
-This template has built into it multi-tenancy which can easily added to your django application if using this template.
+This Django Project is designed to be a tool that forms part of IT Service Management (ITSM). The goal is to provide a system that is not only an IT Information Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. Currently the template style is that of the Red Hat echo system (AWX, Foreman, EDA, Cockpit etc).
 
 
 ## Features
 
 - [API](api.md)
 
-- [Multi-Tenancy](permissions.md)
+- [Multi-Tenant](permissions.md)
 
-- Auto-Generated Navigation Menu
+- [IT Asset Management (ITAM)](itam/index.md)
 
 - [Configuration ready for ansible](itam/device.md#configuration)
