@@ -168,11 +168,13 @@ if API_ENABLED:
         ],
         'DEFAULT_PAGINATION_CLASS':
             'rest_framework_json_api.pagination.JsonApiPageNumberPagination',
-        'DEFAULT_PARSER_CLASSES': (
-            'rest_framework_json_api.parsers.JSONParser',
-            'rest_framework.parsers.FormParser',
-            'rest_framework.parsers.MultiPartParser'
-        ),
+        # leaving these uncommented, even though are the default renderers
+        # causes the api to require inputs the fields under an 'attributes' key
+        # 'DEFAULT_PARSER_CLASSES': (
+        #     'rest_framework_json_api.parsers.JSONParser',
+        #     'rest_framework.parsers.FormParser',
+        #     'rest_framework.parsers.MultiPartParser'
+        # ),
         # leaving these uncommented, even though are the default renderers
         # causes the api to output the fields under a 'attributes' key
         # 'DEFAULT_RENDERER_CLASSES': (
@@ -190,7 +192,8 @@ if API_ENABLED:
         'TEST_REQUEST_RENDERER_CLASSES': (
             'rest_framework_json_api.renderers.JSONRenderer',
         ),
-        'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+        # 'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
+        'TEST_REQUEST_DEFAULT_FORMAT': 'json'
     }
 
 
