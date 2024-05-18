@@ -196,7 +196,7 @@ if API_ENABLED:
         'TEST_REQUEST_DEFAULT_FORMAT': 'json'
     }
 
-
+DATETIME_FORMAT = 'j N Y H:i:s'
 
 if os.path.isdir(SETTINGS_DIR):
 

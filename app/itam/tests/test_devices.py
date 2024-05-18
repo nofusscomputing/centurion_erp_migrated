@@ -21,10 +21,18 @@ def test_device_software_action(user):
     """
     pass
 
+
 @pytest.mark.skip(reason="to be written")
 def test_device_not_global(user):
     """Devices are not global items.
 
         Ensure that a device can't be set to be global.
+    """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
+def test_device_operating_system_version_only_one(user):
+    """model deviceoperatingsystem must only contain one value per device
     """
     pass
