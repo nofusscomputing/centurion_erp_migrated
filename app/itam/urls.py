@@ -21,6 +21,7 @@ urlpatterns = [
     path("software/<int:pk>/", software.View.as_view(), name="_software_view"),
     path("software/<int:pk>/delete", software.Delete.as_view(), name="_software_delete"),
     path("software/<int:pk>/version/add", software_version.Add.as_view(), name="_software_version_add"),
+    path("software/<int:software_id>/version/<int:pk>", software_version.View.as_view(), name="_software_version_view"),
     path("software/add/", software.Add.as_view(), name="_software_add"),
 
     path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),

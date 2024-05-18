@@ -68,7 +68,7 @@
     </thead>
     <tr>
       {% for version in software_versions %}
-      <td>{{ version.name }}</td>
+      <td><a href="{% url 'ITAM:_software_version_view' software_id=software.id pk=version.id %}">{{ version.name }}</a></td>
       <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
       <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
       <td>&nbsp;</td>
