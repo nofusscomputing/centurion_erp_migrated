@@ -46,7 +46,7 @@
       {% include 'navigation.html.j2' %}
     </nav>
     <section>
-      <h2>{% block title %}Page Title{% endblock %}{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}</h2>
+      <h2>{% block title %}{{ content_title }}{% endblock %}{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}</h2>
       <article>
         {% block body%}{% endblock %}
       </article>
