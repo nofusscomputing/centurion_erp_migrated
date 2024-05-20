@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-IT Asset Management (ITAM) is a crucial area of IT Service Management (ITSM).
+IT Asset Management (ITAM) is a crucial area of IT Service Management (ITSM). Our ITAM module can be manually updated of you can inventory a device and upload the report to the [API endpoint](../api.md#inventory-reports).
 
 
 ## Features
