@@ -42,15 +42,6 @@ class Notes(NotesCommonFields):
         ]
 
 
-    serial_number = models.CharField(
-        verbose_name = 'Serial Number',
-        max_length = 50,
-        default = None,
-        null = True,
-        blank = True
-        
-    )
-
     note = models.TextField(
         verbose_name = 'Note',
         blank = False,
@@ -81,7 +72,7 @@ class Notes(NotesCommonFields):
 
     device = models.ForeignKey(
         Device,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         default = None,
         null = True,
         blank= True
@@ -89,7 +80,7 @@ class Notes(NotesCommonFields):
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         default = None,
         null = True,
         blank= True
@@ -97,7 +88,7 @@ class Notes(NotesCommonFields):
 
     operatingsystem = models.ForeignKey(
         OperatingSystem,
-        on_delete=models.SET_DEFAULT,
+        on_delete=models.CASCADE,
         default = None,
         null = True,
         blank= True
