@@ -5,6 +5,9 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
+
 from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.forms.operating_system.update import Update
@@ -51,9 +54,31 @@ class View(OrganizationPermission, generic.UpdateView):
         installs = DeviceOperatingSystem.objects.filter(operating_system_version__operating_system_id=self.kwargs['pk'])
         context['installs'] = installs
 
+        context['notes_form'] = AddNoteForm(prefix='note')
+
+        context['notes'] = Notes.objects.filter(operatingsystem=self.kwargs['pk'])
+
         context['content_title'] = self.object.name
 
         return context
+
+
+    def post(self, request, *args, **kwargs):
+
+        operatingsystem = OperatingSystem.objects.get(pk=self.kwargs['pk'])
+
+        notes = AddNoteForm(request.POST, prefix='note')
+
+        if notes.is_bound and notes.is_valid():
+
+            notes.instance.organization = operatingsystem.organization
+            notes.instance.operatingsystem = operatingsystem
+            notes.instance.usercreated = request.user
+
+            notes.save()
+
+        return super().post(request, *args, **kwargs)
+
 
     def get_success_url(self, **kwargs):
 
