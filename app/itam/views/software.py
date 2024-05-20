@@ -1,8 +1,11 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.views import generic
 
 from access.mixin import OrganizationPermission
+
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
@@ -40,21 +43,63 @@ class View(OrganizationPermission, generic.UpdateView):
 
     context_object_name = "software"
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        software_versions = SoftwareVersion.objects.filter(software=self.kwargs['pk'])
+        software_versions = SoftwareVersion.objects.filter(
+            software=self.kwargs['pk']
+        ).annotate(
+            installs=Count("installedversion")
+        )
 
         context['software_versions'] = software_versions
+
+        context['notes_form'] = AddNoteForm(prefix='note')
+        context['notes'] = Notes.objects.filter(software=self.kwargs['pk'])
 
         context['content_title'] = self.object.name
 
         if self.request.user.is_superuser:
-            context['device_software'] = DeviceSoftware.objects.filter(software=self.kwargs['pk']).order_by('device', 'organization')
+
+            context['device_software'] = DeviceSoftware.objects.filter(
+                software=self.kwargs['pk']
+            ).order_by(
+                'device',
+                'organization'
+            )
+
         elif not self.request.user.is_superuser:
-            context['device_software'] = DeviceSoftware.objects.filter(Q(device__in=self.user_organizations(), software=self.kwargs['pk'])).order_by('name', 'organization')
+            context['device_software'] = DeviceSoftware.objects.filter(
+                Q(device__in=self.user_organizations(),
+                software=self.kwargs['pk'])
+            ).order_by(
+                'name',
+                'organization'
+            )
 
         return context
+
+
+
+    def post(self, request, *args, **kwargs):
+
+        software = Software.objects.get(pk=self.kwargs['pk'])
+
+        notes = AddNoteForm(request.POST, prefix='note')
+
+        if notes.is_bound and notes.is_valid():
+
+            notes.instance.organization = software.organization
+            notes.instance.software = software
+            notes.instance.usercreated = request.user
+
+            notes.save()
+
+
+
+        return super().post(request, *args, **kwargs)
+
 
     def get_success_url(self, **kwargs):
 

@@ -61,7 +61,7 @@ def nav_items(context) -> list(dict()):
 
                     url = '/' + str(nav_group.pattern) + str(pattern.pattern)
 
-                    if str(context.path) == url:
+                    if str(context.path).startswith(url):
 
                         is_active = True
                     

@@ -20,8 +20,8 @@
     <tr>
         <td><a href="{% url 'ITAM:_device_view' pk=device.id %}">{{ device.name }}</a></td>
         <td>{{ device.device_type }}</td>
-        <td>manufacturer</td>
-        <td>model</td>
+        <td>{% include 'icons/issue_link.html.j2' with issue=12 %}</td>
+        <td>{% include 'icons/issue_link.html.j2' with issue=12 %}</td>
         <td>{% if software.is_global %}Global{% else %}{{ device.organization }}{% endif %}</td>
         <td><a href="{% url 'ITAM:_device_delete' pk=device.id %}">Delete</a></td>
     </tr>

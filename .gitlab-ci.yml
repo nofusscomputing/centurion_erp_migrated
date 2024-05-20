@@ -31,6 +31,60 @@ include:
       - template/automagic.gitlab-ci.yaml
 
 
+
+Docker Container:
+  extends: .build_docker_container
+  resource_group: build
+  needs: []
+  rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
+
+    # - if: # condition_master_branch_push
+    #     $CI_COMMIT_BRANCH == "master" && 
+    #     $CI_PIPELINE_SOURCE == "push"
+    #   exists:
+    #     - '{dockerfile,dockerfile.j2}'
+    #   when: always
+
+    - if: # condition_dev_branch_push
+        (
+          $CI_COMMIT_BRANCH == "development"
+            ||
+          $CI_COMMIT_BRANCH == "master"
+        )
+         && 
+        $CI_PIPELINE_SOURCE == "push"
+      exists:
+        - '{dockerfile,dockerfile.j2}'
+      allow_failure: true
+      when: on_success
+
+    - when: never
+
+
+Docker.Hub.Branch.Publish:
+  extends: .publish-docker-hub
+  needs: [ "Docker Container" ]
+  resource_group: build
+  rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
+
+    # - if: # condition_master_branch_push
+    #     $CI_COMMIT_BRANCH == "master" && 
+    #     $CI_PIPELINE_SOURCE == "push"
+    #   exists:
+    #     - '{dockerfile,dockerfile.j2}'
+    #   when: always
+
+    - if: # condition_dev_branch_push
+        $CI_COMMIT_BRANCH == "development" && 
+        $CI_PIPELINE_SOURCE == "push"
+      exists:
+        - '{dockerfile,dockerfile.j2}'
+      allow_failure: true
+      when: on_success
+
+    - when: never
+
+
 Website.Submodule.Deploy:
   extends: .submodule_update_trigger
   variables:

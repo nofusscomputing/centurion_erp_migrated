@@ -10,6 +10,7 @@
 <table class="data">
     <tr>
         <th>Name</th>
+        <th>Category</th>
         <th>Created</th>
         <th>Modified</th>
         <th>Organization</th>
@@ -18,6 +19,7 @@
     {% for software in softwares %}
     <tr>
         <td><a href="{% url 'ITAM:_software_view' pk=software.id %}">{{ software.name }}</a></td>
+        <td>{{ software.category }}</td>
         <td>{{ software.created }}</td>
         <td>{{ software.modified }}</td>
         <td>{% if software.is_global %}Global{% else %}{{ software.organization }}{% endif %}</td>

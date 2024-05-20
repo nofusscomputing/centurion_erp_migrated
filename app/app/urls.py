@@ -43,4 +43,6 @@ if settings.DEBUG:
     urlpatterns += [
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
+        # Apps Under Development
+        path("information/", include("information.urls")),
     ]
