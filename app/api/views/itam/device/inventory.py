@@ -226,13 +226,6 @@ class Collect(views.APIView):
                     device_software.save()
 
 
-                    if not device_software.installed: # Only update install date if blank
-
-                        device_software.installed = timezone.now()
-
-                        device_software.save()
-
-
             if device and operating_system and operating_system_version and device_operating_system:
 
                 # Remove software no longer installed
@@ -240,6 +233,10 @@ class Collect(views.APIView):
                     device = device,
                     software = software,
                 ).delete()
+
+                device.inventorydate = timezone.now()
+
+                device.save()
 
                 status = Http.Status.OK
 

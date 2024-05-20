@@ -76,9 +76,18 @@ class Device(DeviceCommonFieldsName):
         
     )
 
+
+    inventorydate = models.DateTimeField(
+        verbose_name = 'Last Inventory Date',
+        null = True,
+        blank = True
+    )
+
+
     def __str__(self):
 
         return self.name
+
 
     def get_configuration(self, id):
 
