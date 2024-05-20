@@ -1,4 +1,5 @@
 import json
+import markdown
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
@@ -10,6 +11,10 @@ from access.models import Organization
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from ..models.software import Software
+
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
+
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
 
@@ -84,6 +89,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['softwares'] = softwares
 
+        context['notes_form'] = AddNoteForm(prefix='note')
+
+        context['notes'] = Notes.objects.filter(device=self.kwargs['pk'])
+
         config = self.object.get_configuration(self.kwargs['pk'])
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
 
@@ -112,6 +121,19 @@ class View(OrganizationPermission, generic.UpdateView):
             operating_system.instance.device = device
 
             operating_system.save()
+
+
+        notes = AddNoteForm(request.POST, prefix='note')
+
+        if notes.is_bound and notes.is_valid():
+
+            notes.instance.organization = device.organization
+            notes.instance.device = device
+            notes.instance.usercreated = request.user
+
+            notes.save()
+
+
 
         return super().post(request, *args, **kwargs)
 

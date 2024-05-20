@@ -39,6 +39,7 @@
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'OperatingSystem')">Operating System</button>
   <button class="tablinks" onclick="openCity(event, 'Software')">Software</button>
+  <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
   <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
   <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
 </div>
@@ -126,6 +127,23 @@
       {% endif %}
     </table>
   </div>
+
+
+  <div id="Notes" class="tabcontent">
+    <h3>
+      Notes
+    </h3>
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+
+  </div>
+
 
   <div id="ConfigManagement" class="tabcontent">
     <h3>Configuration Management</h3>
