@@ -37,17 +37,17 @@
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
       <button class="tablinks" onclick="openCity(event, 'Licences')">Licences</button>
+      <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
       <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button>
 </div>
 
-<!-- Tab content -->
+<form method="post">
 <div id="Details" class="tabcontent">
   <h3>Details</h3>
-  <form method="post">
+  
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
-  </form>
 
   <script>
     // Get the element with id="defaultOpen" and click on it
@@ -108,6 +108,23 @@
   </table>
 </div>
 
+
+  <div id="Notes" class="tabcontent">
+    <h3>
+      Notes
+    </h3>
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+
+  </div>
+
+
 <div id="Installations" class="tabcontent">
   <h3>Installations</h3>
   <table>
@@ -157,6 +174,6 @@
     {% endif %}
   </table>
 </div>
-
+</form>
 
 {% endblock %}
