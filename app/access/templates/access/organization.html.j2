@@ -10,6 +10,7 @@
   <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
   <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
 </section>
+{% include 'icons/issue_link.html.j2' with issue=13 %}<br>
 
 <input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
 <input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
