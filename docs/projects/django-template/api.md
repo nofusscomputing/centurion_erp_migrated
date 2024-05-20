@@ -7,8 +7,6 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 ---
 
 
-## Access
-
 to access the api, it can be done with the following command:
 
 ``` bash
@@ -17,6 +15,48 @@ curl -X GET http://127.0.0.1:8000/api/ -H 'Authorization: Token <token>'
 
 ```
 
+
+## Features
+
+- Inventory Report Collection
+
+
+## Inventory Reports
+
+- url `/api/device/inventory/<device slug>`
+
+- method `POST`
+
+- content `application/json`
+
+Passing a valid inventory report to this endpoint will update the device within the app if the device already exists.
+
+Report Format
+
+``` json
+
+{
+    "details": {
+        "name": "string",
+        "serial_number": "string",
+        "uuid": "string"
+    },
+    "os": {
+        "name": "debian|ubuntu",
+        "version_major": "major version number",
+        "version": "as reported"
+    },
+    "software": [
+        {
+            "name": "string",
+            "category": "string",
+            "version": "string"
+        }
+    ]
+}
+
+
+```
 
 ## User Token
 
