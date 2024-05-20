@@ -58,6 +58,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['notes'] = Notes.objects.filter(operatingsystem=self.kwargs['pk'])
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = 'operating_system'
+
+
         context['content_title'] = self.object.name
 
         return context

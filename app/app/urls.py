@@ -29,6 +29,7 @@ urlpatterns = [
     path("account/", include("django.contrib.auth.urls")),
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
+    path("history/<str:model_name>/<int:model_pk>", HomeView.as_view(), name='_history'),
 
 ]
 
