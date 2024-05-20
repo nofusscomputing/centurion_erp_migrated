@@ -210,3 +210,63 @@ section .content-header fieldset input {
   height: 30px;
   line-height: 30px;
 }
+
+.comments {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin: 10px -20px -50px -20px;
+  width: auto;
+}
+
+.comment {
+  background-color: #fff;
+  margin: 10px 5px 10px 5px;
+  padding: 5px;
+  border-radius: 10px;
+  border: 1px solid #e6dcdc;
+}
+
+.comment-header {
+  text-align: left;
+  font-size: 12px;
+  color: #999;
+  margin: 0px;
+  padding: 2px;
+  height: 30px;
+}
+
+.comment-header svg {
+  fill: #999;
+  height: 100%;
+  margin: auto 0 auto 0;
+}
+
+.comment-header span {
+  line-height: auto;
+  margin: auto;
+  margin: auto 10px auto 2px;
+}
+
+.comment-body {
+  display:inline-block;
+  padding: 10px 5px 10px 20px;
+}
+
+.comment-footer {
+  color: #999;
+  font-size: 12px;
+  padding: 2px;
+  width: 100%;
+}
+
+.comment-footer svg {
+  fill: #999;
+  height: 100%;
+  margin: auto 0 auto 0;
+}
+
+.comment-footer span {
+  line-height: auto;
+  margin: auto 10px auto 2px;
+
+}
