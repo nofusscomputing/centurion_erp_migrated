@@ -21,6 +21,8 @@ For each device within your inventory, the following fields/tabs are available t
 
 - Configuration
 
+- Inventory
+
 
 ### Operating System
 
@@ -39,3 +41,37 @@ Configuration for this tab is shown as a `list` of `dict` under the configuratio
 Although, configuration is generally part of config management. This tab displays in `JSON` format configuration that is ready for use. The intended audience is Ansible users with the fields provided matching established Ansible modules, if they exist.
 
 This configuration can also be obtained from API endpoint `/api/config/<machine-slug>` where `<machine-slug>` would match the Ansible `inventory_hostname`.
+
+
+### Inventory
+
+It's possible for a machine to be inventoried and have the report passed to the [inventory endpoint](../api.md#inventory+endpoint). This report will update the device within the interface and provides the option to use scheduled inventory gathering to keep the device up to date.
+
+The report can contain the following information:
+
+- device:
+
+    - `name` Device name
+
+    - `serial number` Device serial number
+
+    - `GUID/UUID` Device GUID/UUID
+
+- operating System
+
+    - `name` Operating system name
+
+    - `version major` Operating system Major version number
+
+    - `installed version` Full [semver](https://semver.org/) of the installed operating system
+
+- software
+
+    - `name` Software Name
+
+    - `category` Software Category
+
+    - `version` Software version
+
+        !!! info
+            When the software is added to the inventory, a regex search is done to return the [semver](https://semver.org/) of the software. if no semver is found, the version number provided is used.

@@ -121,7 +121,13 @@
       <td><a href="{% url 'ITAM:_device_view' pk=install.device_id %}">{{ install.device }}</a></td>
       <td>{{ install.organization }}</td>
       <td>{{ install.version }}</td>
-      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
+      <td>
+      {% if install.installdate %}
+        {{ install.installdate }}
+      {% else %}
+        -
+      {% endif %}
+      </td>
       <td>&nbsp;</td>
     </tr>
     {% endfor %}

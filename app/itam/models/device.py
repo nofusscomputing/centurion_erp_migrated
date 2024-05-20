@@ -89,25 +89,27 @@ class Device(DeviceCommonFieldsName):
         }
 
         for software in softwares:
+
+            if software.action:
             
-            if int(software.action) == 1:
+                if int(software.action) == 1:
 
-                state = 'present'
+                    state = 'present'
 
-            elif int(software.action) == 0:
+                elif int(software.action) == 0:
 
-                state = 'absent'
+                    state = 'absent'
 
-            software_action = {
-                "name": software.software.slug,
-                "state": state
-            }
+                software_action = {
+                    "name": software.software.slug,
+                    "state": state
+                }
 
 
-            if software.version:
-                software_action['version'] = software.version.name
+                if software.version:
+                    software_action['version'] = software.version.name
 
-            config['software'] = config['software'] + [ software_action ]
+                config['software'] = config['software'] + [ software_action ]
 
         return config
 
@@ -115,6 +117,12 @@ class Device(DeviceCommonFieldsName):
 
 class DeviceSoftware(DeviceCommonFields):
     """ A way for the device owner to configure software to install/remove """
+
+    class Meta:
+        ordering = [
+            '-action',
+            'software'
+        ]
 
 
     class Actions(models.TextChoices):
@@ -128,7 +136,6 @@ class DeviceSoftware(DeviceCommonFields):
         default = None,
         null = False,
         blank= False
-        
     )
 
     software = models.ForeignKey(
@@ -137,13 +144,14 @@ class DeviceSoftware(DeviceCommonFields):
         default = None,
         null = False,
         blank= False
-        
     )
 
     action = models.CharField(
         max_length=1,
         choices=Actions,
         default=None,
+        null=True,
+        blank = True,
     )
 
     version = models.ForeignKey(
@@ -152,7 +160,22 @@ class DeviceSoftware(DeviceCommonFields):
         default = None,
         null = True,
         blank= True
-        
+    )
+
+
+    installedversion = models.ForeignKey(
+        SoftwareVersion,
+        related_name = 'installedversion',
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+    )
+
+    installed = models.DateTimeField(
+        verbose_name = 'Install Date',
+        null = True,
+        blank = True
     )
 
 
@@ -183,4 +206,11 @@ class DeviceOperatingSystem(DeviceCommonFields):
         max_length = 15,
         null = False,
         blank = False,
+    )
+
+    installdate = models.DateTimeField(
+        verbose_name = 'Install Date',
+        null = True,
+        blank = True,
+        default = None,
     )

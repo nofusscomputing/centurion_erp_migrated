@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -43,16 +43,33 @@ class View(OrganizationPermission, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        software_versions = SoftwareVersion.objects.filter(software=self.kwargs['pk'])
+        software_versions = SoftwareVersion.objects.filter(
+            software=self.kwargs['pk']
+        ).annotate(
+            installs=Count("installedversion")
+        )
 
         context['software_versions'] = software_versions
 
         context['content_title'] = self.object.name
 
         if self.request.user.is_superuser:
-            context['device_software'] = DeviceSoftware.objects.filter(software=self.kwargs['pk']).order_by('device', 'organization')
+
+            context['device_software'] = DeviceSoftware.objects.filter(
+                software=self.kwargs['pk']
+            ).order_by(
+                'device',
+                'organization'
+            )
+
         elif not self.request.user.is_superuser:
-            context['device_software'] = DeviceSoftware.objects.filter(Q(device__in=self.user_organizations(), software=self.kwargs['pk'])).order_by('name', 'organization')
+            context['device_software'] = DeviceSoftware.objects.filter(
+                Q(device__in=self.user_organizations(),
+                software=self.kwargs['pk'])
+            ).order_by(
+                'name',
+                'organization'
+            )
 
         return context
 

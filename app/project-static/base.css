@@ -54,6 +54,33 @@ span.icon-text {
   display: inline-block;
 }
 
+span.icon-text a {
+  text-decoration: unset;
+  color: inherit;
+  
+}
+
+span.icon-text a:visited {
+  text-decoration: unset;
+  color: inherit;
+  
+}
+
+span.add {
+  color: #315f9c;
+}
+
+span.icon-add {
+  fill: #315f9c;
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  margin-bottom: -7px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 span.success {
   color: #319c3a;
 }
@@ -68,7 +95,6 @@ span.icon-success {
   vertical-align: middle;
   display: inline-block;
 }
-
 
 span.cross {
   color: #9c3131;
@@ -101,9 +127,9 @@ span.icon-change {
 }
 
 
-/* span.issue {
+span.issue {
   color: #fc6d26;
-} */
+}
 
 span.icon-issue {
   fill: #fc6d26;

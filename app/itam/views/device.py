@@ -2,12 +2,14 @@ import json
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.views import generic
 
 from access.mixin import OrganizationPermission
 from access.models import Organization
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
+from ..models.software import Software
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
 
@@ -53,6 +55,9 @@ class View(OrganizationPermission, generic.UpdateView):
 
     context_object_name = "device"
 
+    paginate_by = 10
+
+
 
     def get_context_data(self, **kwargs):
 
@@ -74,7 +79,9 @@ class View(OrganizationPermission, generic.UpdateView):
             context['operating_system'] = OperatingSystemForm(prefix='operating_system')
 
 
-        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
+        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])[:50]
+        context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
+
         context['softwares'] = softwares
 
         config = self.object.get_configuration(self.kwargs['pk'])
@@ -134,12 +141,21 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
         form.instance.organization_id = device.organization.id
         form.instance.device_id = self.kwargs['device_id']
+
         return super().form_valid(form)
 
 
     def get_success_url(self, **kwargs):
 
         return f"/itam/device/{self.kwargs['device_id']}/"
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit Software Action'
+
+        return context
 
 
 
@@ -194,7 +210,25 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
         device = Device.objects.get(pk=self.kwargs['pk'])
         form.instance.organization_id = device.organization.id
         form.instance.device_id = self.kwargs['pk']
-        return super().form_valid(form)
+
+        software = Software.objects.get(pk=form.instance.software.id)
+
+        if DeviceSoftware.objects.get(device=device, software=software):
+
+
+            software_version = DeviceSoftware.objects.get(
+                device=device,
+                software=software
+            )
+
+            software_version.action = form.instance.action
+            software_version.save()
+
+            return HttpResponseRedirect(self.get_success_url())
+        
+        else:
+
+            return super().form_valid(form)
 
 
     def get_form_kwargs(self):
@@ -212,7 +246,7 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = 'Add Device'
+        context['content_title'] = 'Add Software Action'
 
         return context
 
