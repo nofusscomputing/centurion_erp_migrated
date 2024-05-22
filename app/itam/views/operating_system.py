@@ -59,7 +59,7 @@ class View(OrganizationPermission, generic.UpdateView):
         context['notes'] = Notes.objects.filter(operatingsystem=self.kwargs['pk'])
 
         context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = 'operating_system'
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
 
         context['content_title'] = self.object.name
@@ -73,7 +73,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         notes = AddNoteForm(request.POST, prefix='note')
 
-        if notes.is_bound and notes.is_valid():
+        if notes.is_bound and notes.is_valid() and notes.instance.note != '':
 
             notes.instance.organization = operatingsystem.organization
             notes.instance.operatingsystem = operatingsystem

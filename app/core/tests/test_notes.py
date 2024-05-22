@@ -8,6 +8,33 @@ import requests
 
 
 @pytest.mark.skip(reason="to be written")
+def test_note_device_no_blank_note():
+    """ The field is set to blank=true, ensure that a blank note cant be saved
+    
+        field had to be set blank=true so that other forms on same page could be saved.
+    """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
+def test_note_operating_system_no_blank_note():
+    """ The field is set to blank=true, ensure that a blank note cant be saved
+    
+        field had to be set blank=true so that other forms on same page could be saved.
+    """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
+def test_note_software_no_blank_note():
+    """ The field is set to blank=true, ensure that a blank note cant be saved
+    
+        field had to be set blank=true so that other forms on same page could be saved.
+    """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
 def test_note_new_correct_usercreated():
     """ The user who added the note must be added to the note """
     pass

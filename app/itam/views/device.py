@@ -125,7 +125,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         notes = AddNoteForm(request.POST, prefix='note')
 
-        if notes.is_bound and notes.is_valid():
+        if notes.is_bound and notes.is_valid() and notes.instance.note != '':
 
             notes.instance.organization = device.organization
             notes.instance.device = device
