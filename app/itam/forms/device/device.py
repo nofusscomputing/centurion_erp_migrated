@@ -27,5 +27,6 @@ class DeviceForm(forms.ModelForm):
             label="Last Inventory Date",
             input_formats=settings.DATETIME_FORMAT,
             initial=kwargs['instance'].inventorydate,
-            disabled=True
+            disabled=True,
+            required=False,
         )
