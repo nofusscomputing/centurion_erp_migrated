@@ -44,7 +44,7 @@ class Notes(NotesCommonFields):
 
     note = models.TextField(
         verbose_name = 'Note',
-        blank = False,
+        blank = True,
         default = None,
         null = True
     )
