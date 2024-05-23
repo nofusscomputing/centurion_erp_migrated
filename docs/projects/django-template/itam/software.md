@@ -11,7 +11,7 @@ This component within ITAM is intended to display information about software wit
 
 ## Features
 
-- details
+- Details
 
 - Versions
 
@@ -19,11 +19,14 @@ This component within ITAM is intended to display information about software wit
 
 - [Change History](../index.md#history)
 
+
 ## Details
 
 This tab displays the details of the software, in particular:
 
 - name
+
+- Publisher
 
 - slug
 

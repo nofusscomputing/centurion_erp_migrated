@@ -50,6 +50,8 @@ class TenancyObject(models.Model):
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
+        blank = False,
+        null = True,
     )
 
     is_global = models.BooleanField(

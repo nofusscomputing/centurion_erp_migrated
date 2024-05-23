@@ -43,7 +43,7 @@ class Collect(views.APIView):
 
                 device = Device.objects.create(
                     name = data['details']['name'],
-                    device_type = DeviceType.objects.get(pk=1),
+                    device_type = None,
                     serial_number = data['details']['serial_number'],
                     uuid = data['details']['uuid'],
                     organization = organization,

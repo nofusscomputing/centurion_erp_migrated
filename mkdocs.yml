@@ -25,6 +25,10 @@ nav:
 
     - projects/django-template/permissions.md
 
+    - Core:
+
+      - projects/django-template/core/index.md
+
     - ITAM:
 
       - projects/django-template/itam/index.md

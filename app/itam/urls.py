@@ -15,9 +15,6 @@ urlpatterns = [
     path("device/add/", device.Add.as_view(), name="_device_add"),
 
 
-    path("device_type/add/", device_type.Add.as_view(), name="_device_type_add"),
-
-
     path("operating_system", operating_system.IndexView.as_view(), name="Operating Systems"),
     path("operating_system/<int:pk>", operating_system.View.as_view(), name="_operating_system_view"),
     path("operating_system/add", operating_system.Add.as_view(), name="_operating_system_add"),
@@ -36,7 +33,5 @@ urlpatterns = [
     path("software/<int:pk>/version/add", software_version.Add.as_view(), name="_software_version_add"),
     path("software/<int:software_id>/version/<int:pk>", software_version.View.as_view(), name="_software_version_view"),
     path("software/add/", software.Add.as_view(), name="_software_add"),
-
-    path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),
 
 ]

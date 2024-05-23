@@ -14,6 +14,7 @@ class DeviceForm(forms.ModelForm):
         fields = [
             'id',
             'name',
+            'device_model',
             'serial_number',
             'uuid',
             'device_type',

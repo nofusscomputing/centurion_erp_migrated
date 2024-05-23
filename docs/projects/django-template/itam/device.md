@@ -15,6 +15,8 @@ For each device within your inventory, the following fields/tabs are available t
 
 - Name
 
+- Model / Manufacturer
+
 - Operating System
 
 - Software
@@ -25,6 +27,12 @@ For each device within your inventory, the following fields/tabs are available t
 
 - [Change History](../index.md#history)
 
+
+### Details
+
+This tab display the details of the device.
+
+To add a new model navigate to `settings -> ITAM -> Device Models`
 
 ### Operating System
 

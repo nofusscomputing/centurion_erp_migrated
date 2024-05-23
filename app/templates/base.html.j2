@@ -3,7 +3,7 @@
 
 <head>
   {% load static %}
-  <title>CSS Template</title>
+  <title>{{ content_title }} - {% settings_value "SITE_TITLE" %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -69,9 +69,11 @@ section h2 span svg {
         {% endblock %}
         {% endif %}
         </h2>
+      {% block content %}
       <article>
         {% block body%}{% endblock %}
       </article>
+      {% endblock %}
       <footer>{% block footer%}{% endblock %}</footer>
     </section>
 
