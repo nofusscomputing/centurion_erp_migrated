@@ -10,6 +10,7 @@ class Update(forms.ModelForm):
         model = Software
         fields = [
             "name",
+            'publisher',
             'slug',
             'id',
             'organization',

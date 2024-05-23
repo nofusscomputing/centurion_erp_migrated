@@ -118,6 +118,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     template_name = 'form.html.j2'
     fields = [
         'name',
+        'publisher',
         'category',
         'organization',
         'is_global'

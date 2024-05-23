@@ -6,10 +6,10 @@
 {% block body %}
 
 <input type="button" value="New Software" onclick="window.location='{% url 'ITAM:_software_add' %}';">
-<input type="button" value="New Category" onclick="window.location='{% url 'ITAM:_software_category_add' %}';">
 <table class="data">
     <tr>
         <th>Name</th>
+        <th>Publisher</th>
         <th>Category</th>
         <th>Created</th>
         <th>Modified</th>
@@ -19,6 +19,13 @@
     {% for software in softwares %}
     <tr>
         <td><a href="{% url 'ITAM:_software_view' pk=software.id %}">{{ software.name }}</a></td>
+        <td>
+        {% if software.publisher %}
+            <a href="{% url 'Settings:_manufacturer_view' pk=software.publisher.id %}">{{ software.publisher }}</a>
+        {% else %}
+            -
+        {% endif %}
+        </td>
         <td>{{ software.category }}</td>
         <td>{{ software.created }}</td>
         <td>{{ software.modified }}</td>

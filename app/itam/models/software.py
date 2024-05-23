@@ -4,6 +4,7 @@ from access.fields import *
 from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
+from core.models.manufacturer import Manufacturer
 
 
 class SoftwareCommonFields(TenancyObject, models.Model):
@@ -40,6 +41,14 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
 
 class Software(SoftwareCommonFields, SaveHistory):
+
+    publisher = models.ForeignKey(
+        Manufacturer,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+    )
 
     category = models.ForeignKey(
         SoftwareCategory,
