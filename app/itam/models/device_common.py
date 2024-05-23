@@ -1,12 +1,10 @@
-from django.contrib.auth.models import User
 from django.db import models
 
 from access.fields import *
 from access.models import TenancyObject
 
-from core.mixin.history_save import SaveHistory
 
-class ManufacturerCommonFields(models.Model):
+class DeviceCommonFields(TenancyObject, models.Model):
 
     class Meta:
         abstract = True
@@ -19,18 +17,14 @@ class ManufacturerCommonFields(models.Model):
 
     created = AutoCreatedField()
 
-    modified = AutoCreatedField()
+    modified = AutoLastModifiedField()
 
 
 
-class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
-
+class DeviceCommonFieldsName(DeviceCommonFields):
 
     class Meta:
-
-        ordering = [
-            'name'
-        ]
+        abstract = True
 
     name = models.CharField(
         blank = False,
@@ -38,10 +32,4 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
         unique = True,
     )
 
-
     slug = AutoSlugField()
-
-
-    def __str__(self):
-
-        return self.name

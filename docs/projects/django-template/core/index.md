@@ -16,4 +16,4 @@ The core module contains items that are relevant across multiple modules.
 
 ## Manufacturers
 
-A manufacturer is an entity that creates an item. Within the IT world a manufacturer can also be known as a publisher, this is in the case of software.
+A manufacturer is an entity that creates an item. Within the IT world a manufacturer can also be known as a publisher, this is in the case of software. To add a new manufacturer navigate to `settings -> Common -> Manufacturers / Publishers`

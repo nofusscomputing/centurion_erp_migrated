@@ -5,39 +5,11 @@ from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 
+
+from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
+from itam.models.device_models import DeviceModel
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
-
-
-class DeviceCommonFields(TenancyObject, models.Model):
-
-    class Meta:
-        abstract = True
-
-    id = models.AutoField(
-        primary_key=True,
-        unique=True,
-        blank=False
-    )
-
-    created = AutoCreatedField()
-
-    modified = AutoLastModifiedField()
-
-
-
-class DeviceCommonFieldsName(DeviceCommonFields):
-
-    class Meta:
-        abstract = True
-
-    name = models.CharField(
-        blank = False,
-        max_length = 50,
-        unique = True,
-    )
-
-    slug = AutoSlugField()
 
 
 
@@ -69,6 +41,14 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         
     )
 
+    device_model = models.ForeignKey(
+        DeviceModel,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+        
+    )
 
     device_type = models.ForeignKey(
         DeviceType,

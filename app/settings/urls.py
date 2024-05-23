@@ -1,13 +1,18 @@
 from django.urls import path
 
-from .views import home, device_types, manufacturer, software_categories
+from .views import home, device_models, device_types, manufacturer, software_categories
 
-from itam.views import device_type, software_category
+from itam.views import device_type, device_model, software_category
 
 app_name = "Settings"
 urlpatterns = [
 
     path("", home.View.as_view(), name="Settings"),
+
+    path("device_models", device_models.Index.as_view(), name="_device_models"),
+    path("device_model/<int:pk>", device_model.View.as_view(), name="_device_model_view"),
+    path("device_model/add/", device_model.Add.as_view(), name="_device_model_add"),
+    path("device_model/<int:pk>/delete", device_model.Delete.as_view(), name="_device_model_delete"),
 
     path("device_type/", device_types.Index.as_view(), name="_device_types"),
     path("device_type/<int:pk>", device_type.View.as_view(), name="_device_type_view"),
