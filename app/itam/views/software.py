@@ -58,6 +58,9 @@ class View(OrganizationPermission, generic.UpdateView):
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(software=self.kwargs['pk'])
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         context['content_title'] = self.object.name
 
         if self.request.user.is_superuser:
