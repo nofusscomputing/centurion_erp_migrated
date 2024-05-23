@@ -23,6 +23,8 @@ For each device within your inventory, the following fields/tabs are available t
 
 - Inventory
 
+- [Change History](../index.md#history)
+
 
 ### Operating System
 

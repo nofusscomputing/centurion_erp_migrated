@@ -11,6 +11,8 @@ This Django Project is designed to be a tool that forms part of IT Service Manag
 
 ## Features
 
+This application contains the following module:
+
 - [API](api.md)
 
 - [Multi-Tenant](permissions.md)
@@ -18,3 +20,23 @@ This Django Project is designed to be a tool that forms part of IT Service Manag
 - [IT Asset Management (ITAM)](itam/index.md)
 
 - [Configuration ready for ansible](itam/device.md#configuration)
+
+- History
+
+Specific features for a module can be found on the module's documentation un the features heading
+
+
+### History
+
+Effort is placed upon all database items having a history. The items that specifically track history can be found on the items documentation page under its features heading. The history Module tracks the following:
+
+- What Item Type
+
+- What the change was
+
+- Who made the change
+
+- When the change was made
+
+Once a history entry has been made for an item, no one including a `super_admin` can edit or delete a history entry. The only time a history entry is removed, is when an item is removed from the database.
+

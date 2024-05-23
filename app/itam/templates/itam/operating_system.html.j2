@@ -44,6 +44,7 @@
   
   {% csrf_token %}
   {{ form }}
+    {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
   <input type="submit" value="Submit">
 
   <script>

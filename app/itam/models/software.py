@@ -3,6 +3,7 @@ from django.db import models
 from access.fields import *
 from access.models import TenancyObject
 
+from core.mixin.history_save import SaveHistory
 
 
 class SoftwareCommonFields(TenancyObject, models.Model):
@@ -30,7 +31,7 @@ class SoftwareCommonFields(TenancyObject, models.Model):
 
 
 
-class SoftwareCategory(SoftwareCommonFields):
+class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
     def __str__(self):
 
@@ -38,7 +39,7 @@ class SoftwareCategory(SoftwareCommonFields):
 
 
 
-class Software(SoftwareCommonFields):
+class Software(SoftwareCommonFields, SaveHistory):
 
     category = models.ForeignKey(
         SoftwareCategory,
@@ -55,7 +56,7 @@ class Software(SoftwareCommonFields):
 
 
 
-class SoftwareVersion(SoftwareCommonFields):
+class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     software = models.ForeignKey(
         Software,

@@ -1,0 +1,60 @@
+{% extends 'base.html.j2' %}
+{% load json %}
+
+{% block body %}
+
+<script>
+
+$('.clicker').click(function(){
+  $(this).nextUntil('.clicker').slideToggle('normal');
+});
+
+</script>
+
+<style>
+
+.hidden {
+    /*display: none;*/
+}
+.down {
+    display: unset;
+}
+</style>
+<table style="max-width: 100%;">
+    <thead>
+        <th style="width: 25%;">Created</th>
+        <th style="width: 25%;">Action</th>
+        <th style="width: 25%;">Item</th>
+        <th style="width: 25%;">User</th>
+    </thead>
+    {% for entry in history %}
+    <tr class="clicker">
+        <td>{{ entry.created }}</td>
+        <td>
+        {% if entry.action == 1 %}
+            Create
+        {% elif entry.action == 2 %}
+            Update
+        {% elif entry.action == 3 %}
+            Delete
+        {% else %}
+            fuck knows
+        {% endif %}
+        </td>
+        <td>
+        {{ entry.item_class}}
+        </td>
+        <td>{{ entry.user }}</td>
+        <tr class="hidden">
+        <th colspan="2">Before</th>
+        <th colspan="2">Changed</th>
+        </tr>
+        <tr class="hidden">
+        <td colspan="2"><pre style="text-align: left; max-width: 300px;">{{ entry.before | json_pretty }}</pre></td>
+        <td colspan="2"><pre style="text-align: left; max-width: 300px;">{{ entry.after | json_pretty }}</pre></td>
+        </tr>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

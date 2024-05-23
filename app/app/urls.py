@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 from .views import HomeView
+from core.views import history
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -29,6 +30,7 @@ urlpatterns = [
     path("account/", include("django.contrib.auth.urls")),
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
+    path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
 
 ]
 

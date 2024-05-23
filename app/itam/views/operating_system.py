@@ -58,6 +58,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['notes'] = Notes.objects.filter(operatingsystem=self.kwargs['pk'])
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+
         context['content_title'] = self.object.name
 
         return context
@@ -69,7 +73,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         notes = AddNoteForm(request.POST, prefix='note')
 
-        if notes.is_bound and notes.is_valid():
+        if notes.is_bound and notes.is_valid() and notes.instance.note != '':
 
             notes.instance.organization = operatingsystem.organization
             notes.instance.operatingsystem = operatingsystem
@@ -107,6 +111,9 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         context['content_title'] = 'Add Operating System'
 
         return context
@@ -131,6 +138,9 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Delete ' + self.object.name
 

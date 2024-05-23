@@ -17,6 +17,7 @@ This component within ITAM is intended to display information about software wit
 
 - Installations
 
+- [Change History](../index.md#history)
 
 ## Details
 
