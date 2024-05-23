@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import home, device_types, software_categories
+from .views import home, device_types, manufacturer, software_categories
 
 from itam.views import device_type, software_category
 
@@ -18,5 +18,10 @@ urlpatterns = [
     path("software_category/<int:pk>", software_category.View.as_view(), name="_software_category_view"),
     path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),
     path("software_category/<int:pk>/delete", software_category.Delete.as_view(), name="_software_category_delete"),
+
+    path("manufacturers", manufacturer.Index.as_view(), name="_manufacturers"),
+    path("manufacturer/<int:pk>", manufacturer.View.as_view(), name="_manufacturer_view"),
+    path("manufacturer/add/", manufacturer.Add.as_view(), name="_manufacturer_add"),
+    path("manufacturer/<int:pk>/delete", manufacturer.Delete.as_view(), name="_manufacturer_delete"),
 
 ]

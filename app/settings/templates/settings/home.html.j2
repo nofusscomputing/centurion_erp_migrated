@@ -32,13 +32,17 @@ div#content article h3 {
 </style>
 
 <div id="content" style="">
+    <article style="">
+        <h3>Common</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_manufacturers' %}">Manufacturers / Publishers</a></li>
+        </ul>
+    </article>
 
     <article style="">
         <h3>ITAM</h3>
         <ul>
             <li><a href="{% url 'Settings:_device_types' %}">Device Types</a></li>
-            <li><a href="">Manufacturers / Publishers</a></li>
-            <li><a href="">Models</a></li>
             <li><a href="{% url 'Settings:_software_categories' %}">Software Categories</a></li>
         </ul>
     </article>
