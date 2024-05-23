@@ -115,6 +115,16 @@ class SaveHistory(models.Model):
             item_parent_pk = self.software.pk
             item_parent_class = self.software._meta.model_name
 
+        if self._meta.model_name == 'team':
+
+            item_parent_pk = self.organization.pk
+            item_parent_class = self.organization._meta.model_name
+
+        if self._meta.model_name == 'teamusers':
+
+            item_parent_pk = self.team.pk
+            item_parent_class = self.team._meta.model_name
+
 
         if not before:
 
@@ -131,8 +141,6 @@ class SaveHistory(models.Model):
 
         if before != after and after != '{}':
             entry = History.objects.create(
-                organization = self.organization,
-                is_global = False,
                 before = before_json,
                 after = after,
                 user = get_request().user,

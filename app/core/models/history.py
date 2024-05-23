@@ -2,11 +2,9 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from access.fields import *
-from access.models import TenancyObject
 
 
-
-class NotesCommonFields(models.Model):
+class HistoryCommonFields(models.Model):
 
     class Meta:
         abstract = True
@@ -21,7 +19,7 @@ class NotesCommonFields(models.Model):
 
 
 
-class History(TenancyObject, NotesCommonFields):
+class History(HistoryCommonFields):
 
 
     class Meta:

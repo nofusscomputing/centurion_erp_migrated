@@ -46,6 +46,9 @@ class View(LoginRequiredMixin, OrganizationPermission, generic.UpdateView):
 
         context['teams'] = Team.objects.filter(organization=self.kwargs['pk'])
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         return context
 
 

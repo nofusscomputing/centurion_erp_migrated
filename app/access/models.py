@@ -4,8 +4,10 @@ from django.contrib.auth.models import Group, Permission
 
 from .fields import *
 
+from core.mixin.history_save import SaveHistory
 
-class Organization(models.Model):
+
+class Organization(SaveHistory):
 
     class Meta:
         verbose_name_plural = "Organizations"
@@ -56,7 +58,7 @@ class TenancyObject(models.Model):
     )
 
 
-class Team(Group, TenancyObject):
+class Team(Group, TenancyObject, SaveHistory):
     class Meta:
         # proxy = True
         verbose_name_plural = "Teams"
@@ -86,7 +88,7 @@ class Team(Group, TenancyObject):
     modified = AutoLastModifiedField()
 
 
-class TeamUsers(models.Model):
+class TeamUsers(SaveHistory):
 
     class Meta:
         # proxy = True

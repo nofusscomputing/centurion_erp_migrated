@@ -37,6 +37,9 @@ class View(OrganizationPermission, generic.UpdateView):
         context['teamusers'] = teamusers
         context['permissions'] = Permission.objects.filter()
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         return context
 
     def get_success_url(self, **kwargs):
@@ -66,6 +69,9 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         context['content_title'] = 'Add Team'
 
         return context
@@ -88,6 +94,9 @@ class Change(PermissionRequiredMixin, OrganizationPermission, generic.UpdateView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Edit Team'
 
@@ -114,6 +123,9 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Delete Team'
 
