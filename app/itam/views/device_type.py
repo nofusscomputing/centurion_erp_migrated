@@ -33,7 +33,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/itam/device/{self.kwargs['pk']}/"
+        return f"/settings/device_type/{self.kwargs['pk']}"
 
 
 
@@ -52,12 +52,37 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/itam/device/"
+        return f"/settings/device_type/"
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context['content_title'] = 'Add Device Type'
+
+        return context
+
+class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+    model = DeviceType
+    permission_required = [
+        'access.delete_device_type',
+    ]
+    template_name = 'form.html.j2'
+    # fields = [
+    #     'name',
+    #     'organization',
+    #     'is_global'
+    # ]
+
+
+    def get_success_url(self, **kwargs):
+
+        return f"/settings/device_type/"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete ' + self.object.name
 
         return context

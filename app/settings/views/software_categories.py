@@ -1,23 +1,20 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.db.models import Q
 from django.views import generic
 
-
 from access.mixin import OrganizationPermission
-from itam.models.device import DeviceType
 
+from itam.models.software import SoftwareCategory
 
 
 class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
-    model = DeviceType
 
-    permission_required = 'itam.view_devicetype'
+    model = SoftwareCategory
 
-    template_name = 'settings/device_types.html.j2'
+    permission_required = 'itam.view_software'
+
+    template_name = 'settings/software_categories.html.j2'
 
     context_object_name = "list"
-
-    paginate_by = 10
 
 
     def get_queryset(self):
@@ -28,12 +25,12 @@ class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
 
         else:
 
-            return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return self.model.objects.filter(organization=self.user_organizations()).order_by('name')
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = 'Device Types'
+        context['content_title'] = 'Software Categories'
 
         return context

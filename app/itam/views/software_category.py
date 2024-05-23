@@ -51,7 +51,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/itam/software/{self.kwargs['pk']}/"
+        return f"/settings/software_category/{self.kwargs['pk']}/"
 
 
 
@@ -70,7 +70,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/itam/software/"
+        return f"/settings/software_category"
 
 
     def get_context_data(self, **kwargs):
@@ -81,7 +81,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         return context
 
 class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
-    model = Software
+    model = SoftwareCategory
     permission_required = [
         'access.delete_software',
     ]
@@ -95,7 +95,7 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_success_url(self, **kwargs):
 
-        return f"/itam/software/"
+        return f"/settings/software_category"
 
 
     def get_context_data(self, **kwargs):
