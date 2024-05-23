@@ -17,6 +17,7 @@ This ITAM component tracks Operating systems within your inventory.
 
 - Installations
 
+- [Change History](../index.md#history)
 
 ### Versions
 
