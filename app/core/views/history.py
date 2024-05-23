@@ -17,7 +17,7 @@ from itam.models.software import Software
 class View(OrganizationPermission, generic.View):
 
     permission_required = [
-        'itam.view_softwareversion'
+        'itam.view_history'
     ]
 
     template_name = 'history.html.j2'
