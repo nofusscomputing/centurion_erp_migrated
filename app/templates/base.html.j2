@@ -69,9 +69,11 @@ section h2 span svg {
         {% endblock %}
         {% endif %}
         </h2>
+      {% block content %}
       <article>
         {% block body%}{% endblock %}
       </article>
+      {% endblock %}
       <footer>{% block footer%}{% endblock %}</footer>
     </section>
 

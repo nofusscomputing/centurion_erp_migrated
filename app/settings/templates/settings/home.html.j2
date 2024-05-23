@@ -1,0 +1,49 @@
+{% extends 'base.html.j2' %}
+
+
+{% block content%}
+<style>
+
+div#content {
+    /*background-color: blue;*/
+    vertical-align: top;
+    width: auto;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+}
+
+div#content article {
+    /*background-color: brown;*/
+    width: 47%;
+    display: flexbox;
+    position: relative;
+    text-align: left;
+    align-self: top;
+}
+
+div#content article h3 {
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+</style>
+
+<div id="content" style="">
+
+    <article style="">
+        <h3>ITAM</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_device_types' %}">Device Types</a></li>
+            <li><a href="">Manufacturers / Publishers</a></li>
+            <li><a href="">Models</a></li>
+            <li><a href="{% url 'Settings:_software_categories' %}">Software Categories</a></li>
+        </ul>
+    </article>
+
+</div>
+
+
+{% endblock %}

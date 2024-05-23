@@ -19,11 +19,11 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
-from .views import HomeView
+from .views import home
 from core.views import history
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
+    path('', home.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls, name='_administration'),
     path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"),
          name="change_password"),
@@ -48,3 +48,10 @@ if settings.DEBUG:
         # Apps Under Development
         path("information/", include("information.urls")),
     ]
+
+# must be after above
+urlpatterns += [
+
+    path("settings/", include("settings.urls")),
+
+]

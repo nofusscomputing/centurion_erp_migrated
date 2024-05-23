@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
     'itam.apps.ItamConfig',
+    'settings.apps.SettingsConfig',
 ]
 
 MIDDLEWARE = [
