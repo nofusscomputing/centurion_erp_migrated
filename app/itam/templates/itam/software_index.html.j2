@@ -11,8 +11,6 @@
         <th>Name</th>
         <th>Publisher</th>
         <th>Category</th>
-        <th>Created</th>
-        <th>Modified</th>
         <th>Organization</th>
         <th>&nbsp;</th>
     </tr>
@@ -27,8 +25,6 @@
         {% endif %}
         </td>
         <td>{{ software.category }}</td>
-        <td>{{ software.created }}</td>
-        <td>{{ software.modified }}</td>
         <td>{% if software.is_global %}Global{% else %}{{ software.organization }}{% endif %}</td>
         <td><a href="{% url 'ITAM:_software_delete' pk=software.id %}">Delete</a></td>
     </tr>
