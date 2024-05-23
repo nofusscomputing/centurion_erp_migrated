@@ -16,6 +16,8 @@ class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
 
     context_object_name = "list"
 
+    paginate_by = 10
+
 
     def get_queryset(self):
 
