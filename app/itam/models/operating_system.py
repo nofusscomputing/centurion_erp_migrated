@@ -4,6 +4,7 @@ from access.fields import *
 from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
+from core.models.manufacturer import Manufacturer
 
 
 
@@ -40,6 +41,14 @@ class OperatingSystemFieldsName(OperatingSystemCommonFields):
 
 
 class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
+
+    publisher = models.ForeignKey(
+        Manufacturer,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+    )
 
     def __str__(self):
 

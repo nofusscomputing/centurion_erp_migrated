@@ -9,16 +9,20 @@
 <table class="data">
     <tr>
         <th>Name</th>
-        <th>Created</th>
-        <th>Modified</th>
+        <th>Publisher</th>
         <th>Organization</th>
         <th>&nbsp;</th>
     </tr>
     {% for operating_system in operating_systems %}
     <tr>
         <td><a href="{% url 'ITAM:_operating_system_view' pk=operating_system.id %}">{{ operating_system.name }}</a></td>
-        <td>{{ operating_system.created }}</td>
-        <td>{{ operating_system.modified }}</td>
+        <td>
+        {% if operating_system.publisher %}
+            <a href="{% url 'Settings:_manufacturer_view' pk=operating_system.publisher.id %}">{{ operating_system.publisher }}</a>
+        {% else %}
+            -
+        {% endif %}
+        </td>
         <td>{% if operating_system.is_global %}Global{% else %}{{ operating_system.organization }}{% endif %}</td>
         <td><a href="{% url 'ITAM:_operating_system_delete' pk=operating_system.id %}">Delete</a></td>
     </tr>

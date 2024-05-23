@@ -47,7 +47,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         default = None,
         null = True,
         blank= True
-        
     )
 
     device_type = models.ForeignKey(

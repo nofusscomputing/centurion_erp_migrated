@@ -98,6 +98,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     template_name = 'form.html.j2'
     fields = [
         'name',
+        'publisher',
         'organization',
         'is_global'
     ]
@@ -110,9 +111,6 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Add Operating System'
 
