@@ -2,6 +2,9 @@ from django.db import models
 
 from access.fields import *
 from access.models import TenancyObject
+
+from core.mixin.history_save import SaveHistory
+
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
@@ -46,7 +49,7 @@ class DeviceType(DeviceCommonFieldsName):
 
 
 
-class Device(DeviceCommonFieldsName):
+class Device(DeviceCommonFieldsName, SaveHistory):
 
     serial_number = models.CharField(
         verbose_name = 'Serial Number',
@@ -123,8 +126,7 @@ class Device(DeviceCommonFieldsName):
         return config
 
 
-
-class DeviceSoftware(DeviceCommonFields):
+class DeviceSoftware(DeviceCommonFields, SaveHistory):
     """ A way for the device owner to configure software to install/remove """
 
     class Meta:
@@ -189,7 +191,7 @@ class DeviceSoftware(DeviceCommonFields):
 
 
 
-class DeviceOperatingSystem(DeviceCommonFields):
+class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,

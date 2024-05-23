@@ -96,6 +96,9 @@ class View(OrganizationPermission, generic.UpdateView):
         config = self.object.get_configuration(self.kwargs['pk'])
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         context['content_title'] = self.object.name
 
         return context
