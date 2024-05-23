@@ -3,6 +3,8 @@ from django.db import models
 from access.fields import *
 from access.models import TenancyObject
 
+from core.mixin.history_save import SaveHistory
+
 
 
 class OperatingSystemCommonFields(TenancyObject, models.Model):
@@ -37,14 +39,14 @@ class OperatingSystemFieldsName(OperatingSystemCommonFields):
 
 
 
-class OperatingSystem(OperatingSystemFieldsName):
+class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
     def __str__(self):
 
         return self.name
 
 
-class OperatingSystemVersion(OperatingSystemCommonFields):
+class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
 
     operating_system = models.ForeignKey(
         OperatingSystem,

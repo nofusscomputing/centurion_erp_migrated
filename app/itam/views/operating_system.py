@@ -111,6 +111,9 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
         context['content_title'] = 'Add Operating System'
 
         return context
@@ -135,6 +138,9 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Delete ' + self.object.name
 
