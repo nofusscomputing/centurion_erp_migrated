@@ -17,7 +17,8 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import include, path
+from django.views.static import serve
+from django.urls import include, path, re_path
 
 from .views import home
 from core.views import history
@@ -31,7 +32,7 @@ urlpatterns = [
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
     path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
-
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT})
 ]
 
 if settings.API_ENABLED:
