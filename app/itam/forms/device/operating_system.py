@@ -21,10 +21,14 @@ class Update(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['_created'] = forms.DateTimeField(
-            label="Install Date",
-            input_formats=settings.DATETIME_FORMAT,
-            initial=kwargs['instance'].installdate,
-            disabled=True
-        )
+        if 'instance' in kwargs.keys():
+
+            if kwargs['instance'] is not None:
+
+                self.fields['_created'] = forms.DateTimeField(
+                    label="Install Date",
+                    input_formats=settings.DATETIME_FORMAT,
+                    initial=kwargs['instance'].installdate,
+                    disabled=True
+                )
 
