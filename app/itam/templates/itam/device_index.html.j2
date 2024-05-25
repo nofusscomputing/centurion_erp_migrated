@@ -40,7 +40,7 @@
         {% endif %}
         </td>
         <td>{% if software.is_global %}Global{% else %}{{ device.organization }}{% endif %}</td>
-        <td><a href="{% url 'ITAM:_device_delete' pk=device.id %}">Delete</a></td>
+        <td>&nbsp;</td>
     </tr>
     {% endfor %}
 

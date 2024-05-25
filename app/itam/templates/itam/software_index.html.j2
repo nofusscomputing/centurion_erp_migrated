@@ -26,7 +26,7 @@
         </td>
         <td>{{ software.category }}</td>
         <td>{% if software.is_global %}Global{% else %}{{ software.organization }}{% endif %}</td>
-        <td><a href="{% url 'ITAM:_software_delete' pk=software.id %}">Delete</a></td>
+        <td>&nbsp;</td>
     </tr>
     {% endfor %}
 

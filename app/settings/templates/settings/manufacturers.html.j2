@@ -17,7 +17,7 @@
     <tr>
         <td><a href="{% url 'Settings:_manufacturer_view' pk=item.id %}">{{ item.name }}</a></td>
         <td>{% if item.is_global %}Global{% else %}{{ item.organization }}{% endif %}</td>
-        <td><a href="{% url 'Settings:_manufacturer_delete' pk=item.id %}">Delete</a></td>
+        <td>&nbsp;</td>
     </tr>
     {% endfor %}
 

@@ -62,6 +62,7 @@ class View(OrganizationPermission, generic.UpdateView):
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
+        context['model_delete_url'] = reverse('ITAM:_operating_system_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 

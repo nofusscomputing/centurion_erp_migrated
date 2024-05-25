@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count, Q
+from django.urls import reverse
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -64,6 +65,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('ITAM:_software_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
