@@ -5,6 +5,8 @@ from access.mixin import OrganizationPermission
 
 from itam.models.device_models import DeviceModel
 
+from settings.models.user_settings import UserSettings
+
 
 
 class View(OrganizationPermission, generic.UpdateView):
@@ -53,6 +55,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):
