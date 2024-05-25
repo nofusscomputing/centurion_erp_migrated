@@ -20,26 +20,45 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         
         if kwargs['global']:
-            for software in Software.objects.filter(is_global = False):
+
+            softwares = Software.objects.filter(is_global = False)
+
+            self.stdout.write('Running global')
+
+            self.stdout.write(f'found {str(len(softwares))} software to set as global')
+
+            for software in softwares:
 
                 software.clean()
                 software.save()
             
                 self.stdout.write(f"Setting {software} as global")
 
+            self.stdout.write('Global finished')
+
+
         if kwargs['migrate']:
 
             app_settings = AppSettings.objects.get(owner_organization=None)
 
-            for software in Software.objects.filter(
+            self.stdout.write('Running Migrate')
+            self.stdout.write(f'Global organization: {app_settings.global_organization}')
+
+            softwares = Software.objects.filter(
                 ~Q(organization = app_settings.global_organization)
                 |
                 Q(is_global = False)
                 &
                 Q(organization=app_settings.global_organization),
-            ):
+            )
+
+            self.stdout.write(f'found {str(len(softwares))} software to migrate')
+
+            for software in softwares:
 
                 software.clean()
                 software.save()
-            
+
                 self.stdout.write(f"Migrating {software} to organization {app_settings.global_organization.name}")
+
+            self.stdout.write('Migrate finished')
