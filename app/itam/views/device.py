@@ -21,6 +21,7 @@ from itam.forms.device_softwareupdate import SoftwareUpdate
 from itam.forms.device.device import DeviceForm
 from itam.forms.device.operating_system import Update as OperatingSystemForm
 
+from settings.models.user_settings import UserSettings
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Device
@@ -197,6 +198,11 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'device_type',
         'organization',
     ]
+
+    def get_initial(self):
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
     def form_valid(self, form):
         form.instance.is_global = False
