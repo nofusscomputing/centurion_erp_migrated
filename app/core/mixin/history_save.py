@@ -138,12 +138,17 @@ class SaveHistory(models.Model):
 
             action = History.Actions.DELETE
 
+        current_user = None
+        if get_request() is not None:
+
+            current_user = get_request().user
+
 
         if before != after and after != '{}':
             entry = History.objects.create(
                 before = before_json,
                 after = after,
-                user = get_request().user,
+                user = current_user,
                 action = action,
                 item_pk = self.pk,
                 item_class = self._meta.model_name,

@@ -62,6 +62,7 @@ class History(HistoryCommonFields):
     user = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
+        null = True,
         blank= False,
     )
 

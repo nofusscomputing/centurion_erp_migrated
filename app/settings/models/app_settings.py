@@ -26,7 +26,17 @@ class AppSettingsCommonFields(models.Model):
 
 
 class AppSettings(AppSettingsCommonFields, SaveHistory):
+    """ Application Settings
 
+    This model is for storing settings for the application as a whole
+
+    This class contains field `owner_organization` which exists so that in the future
+    if there is a requirement for orgnizational settings, that this table can be used by
+    specifying the `owner_organization`
+
+    Raises:
+        ValidationError: When software set as global and no organization has been specified 
+    """
 
     owner_organization = models.ForeignKey(
         Organization,
@@ -65,4 +75,3 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         'software_is_global',
         'global_organization',
     ]
-    
