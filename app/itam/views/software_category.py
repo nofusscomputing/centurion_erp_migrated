@@ -5,6 +5,9 @@ from access.mixin import OrganizationPermission
 
 from ..models.software import Software, SoftwareCategory
 
+from settings.models.user_settings import UserSettings
+
+
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Software
@@ -66,6 +69,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):
