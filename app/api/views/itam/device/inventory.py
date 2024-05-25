@@ -16,6 +16,9 @@ from itam.models.device import Device, DeviceType, DeviceOperatingSystem, Device
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
+from settings.models.app_settings import AppSettings
+from settings.models.user_settings import UserSettings
+
 
 
 class Collect(views.APIView):
@@ -31,9 +34,11 @@ class Collect(views.APIView):
         operating_system = None
         operating_system_version = None
 
-        organization = Organization.objects.get(pk=1)
-
         try:
+
+            default_organization = UserSettings.objects.get(user=request.user).default_organization
+
+            app_settings = AppSettings.objects.get(owner_organization = None)
 
             if Device.objects.filter(name=data['details']['name']).exists():
 
@@ -46,7 +51,7 @@ class Collect(views.APIView):
                     device_type = None,
                     serial_number = data['details']['serial_number'],
                     uuid = data['details']['uuid'],
-                    organization = organization,
+                    organization = default_organization,
                 )
 
                 status = Http.Status.CREATED
@@ -60,7 +65,7 @@ class Collect(views.APIView):
 
                 operating_system = OperatingSystem.objects.create(
                     name = data['os']['name'],
-                    organization = device.organization,
+                    organization = default_organization,
                     is_global = True
                 )
 
@@ -68,7 +73,7 @@ class Collect(views.APIView):
             if OperatingSystemVersion.objects.filter( name=data['os']['version_major'], operating_system=operating_system ).exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
-                    organization = device.organization,
+                    organization = default_organization,
                     is_global = True,
                     name = data['os']['version_major'],
                     operating_system = operating_system
@@ -77,7 +82,7 @@ class Collect(views.APIView):
             else: # Create Operating System Version
 
                 operating_system_version = OperatingSystemVersion.objects.create(
-                    organization = device.organization,
+                    organization = default_organization,
                     is_global = True,
                     name = data['os']['version_major'],
                     operating_system = operating_system,
@@ -101,12 +106,21 @@ class Collect(views.APIView):
             else: # Create Operating System Version
 
                 device_operating_system = DeviceOperatingSystem.objects.create(
-                    organization = device.organization,
+                    organization = default_organization,
                     device=device,
                     version = data['os']['version'],
                     operating_system_version = operating_system_version,
                     installdate = timezone.now()
                 )
+
+
+            if app_settings.software_is_global:
+
+                software_organization = app_settings.global_organization
+
+            else:
+
+                software_organization = device.organization
 
 
             for inventory in list(data['software']):
@@ -127,7 +141,7 @@ class Collect(views.APIView):
                 else: # Create Software Category
 
                     software_category = SoftwareCategory.objects.create(
-                        organization = device.organization,
+                        organization = default_organization,
                         is_global = True,
                         name = inventory['category'],
                     )
@@ -147,7 +161,7 @@ class Collect(views.APIView):
                 else: # Create Software
 
                     software = Software.objects.create(
-                        organization = device.organization,
+                        organization = software_organization,
                         is_global = True,
                         name = inventory['name'],
                         category = software_category,
@@ -177,7 +191,7 @@ class Collect(views.APIView):
                 else: # Create Software Category
 
                     software_version = SoftwareVersion.objects.create(
-                        organization = device.organization,
+                        organization = default_organization,
                         is_global = True,
                         name = semver,
                         software = software,
@@ -194,7 +208,7 @@ class Collect(views.APIView):
                 else: # Create Software
 
                     device_software = DeviceSoftware.objects.create(
-                        organization = device.organization,
+                        organization = default_organization,
                         is_global = True,
                         installedversion = software_version,
                         software = software,

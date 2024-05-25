@@ -23,6 +23,12 @@ def test_device_model_software_action(user):
 
 
 @pytest.mark.skip(reason="to be written")
+def test_device_model_must_have_organization(user):
+    """ Device Model must have organization set """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
 def test_device_model_not_global(user):
     """Devices are not global items.
 
