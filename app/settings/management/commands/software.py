@@ -34,7 +34,8 @@ class Command(BaseCommand):
             for software in Software.objects.filter(
                 ~Q(organization = app_settings.global_organization)
                 |
-                Q(is_global = False),
+                Q(is_global = False)
+                &
                 Q(organization=app_settings.global_organization),
             ):
 
