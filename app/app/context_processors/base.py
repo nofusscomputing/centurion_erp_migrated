@@ -4,9 +4,27 @@ from app.urls import urlpatterns
 
 from django.urls import URLPattern, URLResolver
 
+from settings.models.user_settings import UserSettings
+
 
 def request(request):
     return request.get_full_path()
+
+
+def user_settings(context) -> int:
+    """ Provides the settings ID for the current user
+
+    Returns:
+        int: model usersettings Primary Key
+    """
+    if context.user.is_authenticated:
+
+        settings = UserSettings.objects.filter(user=context.user)
+
+        return settings[0].pk
+
+    return None
+
 
 def nav_items(context) -> list(dict()):
     """ Fetch All Project URLs
@@ -98,4 +116,5 @@ def common(context):
 
     return {
         'nav_items': nav_items(context),
+        'user_settings': user_settings(context),
     }

@@ -21,14 +21,21 @@ from django.views.static import serve
 from django.urls import include, path, re_path
 
 from .views import home
+
 from core.views import history
+
+from settings.views import user_settings
+
+
 
 urlpatterns = [
     path('', home.HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls, name='_administration'),
-    path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"),
-         name="change_password"),
+
+    path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"), name="change_password"),
+    path('account/settings/<int:pk>', user_settings.View.as_view(), name="_settings_user"),
     path("account/", include("django.contrib.auth.urls")),
+
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
     path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),

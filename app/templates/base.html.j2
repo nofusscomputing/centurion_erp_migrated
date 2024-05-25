@@ -15,9 +15,10 @@
 <body>
 
   <header>
-    
+
     <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
+    {%if user.is_authenticated %}
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
       <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
       <div class="dropdown-content">
@@ -28,6 +29,10 @@
           <button class="accbtn">Admin Panel</button>
         </form>
         {% endif %}
+        <form action="{% url '_settings_user' pk=user_settings %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Settings</button>
+        </form>
         <form action="{% url 'password_change' %}" method="post">
           {% csrf_token %}
           <button class="accbtn">Change Password</button>
@@ -38,6 +43,7 @@
         </form>
       </div>
     </div>
+    {% endif %}
 
   </header>
 
