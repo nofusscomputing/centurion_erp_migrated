@@ -2,9 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from access.fields import *
-from access.models import TenancyObject, Organization
-
-from core.mixin.history_save import SaveHistory
+from access.models import Organization
 
 
 class UserSettingsCommonFields(models.Model):
