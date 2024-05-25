@@ -1,32 +1,16 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.urls import reverse
 from django.views import generic
 
 from access.mixin import OrganizationPermission
 
 from ..models.software import Software, SoftwareCategory
 
-
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
-    model = Software
-    permission_required = 'itam.view_software'
-    template_name = 'itam/software_index.html.j2'
-    context_object_name = "softwares"
-
-
-    def get_queryset(self):
-
-        if self.request.user.is_superuser:
-
-            return Software.objects.filter().order_by('name')
-
-        else:
-
-            return Software.objects.filter(organization=self.user_organizations()).order_by('name')
-
+from settings.models.user_settings import UserSettings
 
 
 class View(OrganizationPermission, generic.UpdateView):
-    model = Software
+    model = SoftwareCategory
     permission_required = [
         'itam.view_software'
     ]
@@ -44,6 +28,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_delete_url'] = reverse('Settings:_software_category_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
@@ -66,6 +52,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):

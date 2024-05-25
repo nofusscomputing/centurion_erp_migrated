@@ -18,6 +18,7 @@ class DeviceForm(forms.ModelForm):
             'serial_number',
             'uuid',
             'device_type',
+            'organization'
         ]
 
 

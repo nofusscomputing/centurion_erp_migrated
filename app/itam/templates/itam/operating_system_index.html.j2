@@ -24,7 +24,7 @@
         {% endif %}
         </td>
         <td>{% if operating_system.is_global %}Global{% else %}{{ operating_system.organization }}{% endif %}</td>
-        <td><a href="{% url 'ITAM:_operating_system_delete' pk=operating_system.id %}">Delete</a></td>
+        <td>&nbsp;</td>
     </tr>
     {% endfor %}
 

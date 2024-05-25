@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count, Q
+from django.urls import reverse
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -10,6 +11,10 @@ from core.models.notes import Notes
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
 from itam.forms.software.update import Update as SoftwareUpdate_Form
+
+from settings.models.user_settings import UserSettings
+
+
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Software
@@ -60,6 +65,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('ITAM:_software_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
@@ -123,6 +130,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):

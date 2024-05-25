@@ -15,9 +15,10 @@
 <body>
 
   <header>
-    
+
     <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
+    {%if user.is_authenticated %}
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
       <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
       <div class="dropdown-content">
@@ -28,6 +29,10 @@
           <button class="accbtn">Admin Panel</button>
         </form>
         {% endif %}
+        <form action="{% url '_settings_user' pk=user_settings %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Settings</button>
+        </form>
         <form action="{% url 'password_change' %}" method="post">
           {% csrf_token %}
           <button class="accbtn">Change Password</button>
@@ -38,6 +43,7 @@
         </form>
       </div>
     </div>
+    {% endif %}
 
   </header>
 
@@ -53,13 +59,25 @@ section h2 span svg {
   margin: auto 0 auto 0;
   fill: #666;
   cursor: pointer;
+  width: 30px;
+  /*height: 30px;*/
 }
+
+.icon-delete svg {
+  fill: #ff0000;
+}
+
 </style>
 
 
     <section>
       <h2>{% block title %}{{ content_title }}{% endblock %}
-        {% if model_name and model_pk%}
+        {% if model_delete_url %}
+        <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
+          {% include 'icons/delete.svg' %}
+        </span>
+        {% endif %}
+        {% if model_name and model_pk %}
         {% block content_header_icon %}
         <span title="View History" id="content_header_icon" onclick="window.location='{% url '_history' model_name=model_name model_pk=model_pk %}';">
           <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px">

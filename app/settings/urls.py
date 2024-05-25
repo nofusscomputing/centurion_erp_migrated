@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import home, device_models, device_types, manufacturer, software_categories
+from .views import app_settings, home, device_models, device_types, manufacturer, software_categories
 
 from itam.views import device_type, device_model, software_category
 
@@ -8,6 +8,9 @@ app_name = "Settings"
 urlpatterns = [
 
     path("", home.View.as_view(), name="Settings"),
+
+    path('application', app_settings.View.as_view(), name="_settings_application"),
+    
 
     path("device_models", device_models.Index.as_view(), name="_device_models"),
     path("device_model/<int:pk>", device_model.View.as_view(), name="_device_model_view"),

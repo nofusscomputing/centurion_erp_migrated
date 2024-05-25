@@ -4,6 +4,7 @@ import markdown
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -21,6 +22,7 @@ from itam.forms.device_softwareupdate import SoftwareUpdate
 from itam.forms.device.device import DeviceForm
 from itam.forms.device.operating_system import Update as OperatingSystemForm
 
+from settings.models.user_settings import UserSettings
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Device
@@ -98,6 +100,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
@@ -197,6 +201,11 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'device_type',
         'organization',
     ]
+
+    def get_initial(self):
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
     def form_valid(self, form):
         form.instance.is_global = False

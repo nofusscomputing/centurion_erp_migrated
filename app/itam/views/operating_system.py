@@ -12,6 +12,7 @@ from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.forms.operating_system.update import Update
 
+from settings.models.user_settings import UserSettings
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -61,6 +62,7 @@ class View(OrganizationPermission, generic.UpdateView):
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
+        context['model_delete_url'] = reverse('ITAM:_operating_system_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
@@ -102,6 +104,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):

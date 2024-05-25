@@ -6,6 +6,8 @@ from access.models import TenancyObject
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
 
+from settings.models.app_settings import AppSettings
+
 
 class SoftwareCommonFields(TenancyObject, models.Model):
 
@@ -56,8 +58,19 @@ class Software(SoftwareCommonFields, SaveHistory):
         default = None,
         null = True,
         blank= True
-        
+
     )
+
+
+    def clean(self):
+
+        app_settings = AppSettings.objects.get(owner_organization=None)
+
+        if app_settings.software_is_global:
+
+            self.organization = app_settings.global_organization
+            self.is_global = app_settings.software_is_global
+
 
     def __str__(self):
 
