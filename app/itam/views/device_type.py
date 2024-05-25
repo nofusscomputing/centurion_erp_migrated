@@ -5,6 +5,8 @@ from access.mixin import OrganizationPermission
 
 from ..models.device import DeviceType
 
+from settings.models.user_settings import UserSettings
+
 
 
 class View(OrganizationPermission, generic.UpdateView):
@@ -23,6 +25,7 @@ class View(OrganizationPermission, generic.UpdateView):
     ]
 
     context_object_name = "device_category"
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,6 +51,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):
