@@ -1,6 +1,6 @@
 import re
 
-from .urls import urlpatterns
+from app.urls import urlpatterns
 
 from django.urls import URLPattern, URLResolver
 
@@ -94,7 +94,8 @@ def nav_items(context) -> list(dict()):
     return dnav
 
 
-def navigation(context):
+def common(context):
+
     return {
-        'nav_items': nav_items(context)
+        'nav_items': nav_items(context),
     }
