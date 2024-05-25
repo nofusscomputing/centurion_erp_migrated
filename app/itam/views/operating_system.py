@@ -12,6 +12,7 @@ from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.forms.operating_system.update import Update
 
+from settings.models.user_settings import UserSettings
 
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
@@ -102,6 +103,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):

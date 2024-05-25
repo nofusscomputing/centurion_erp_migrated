@@ -32,6 +32,12 @@ def test_device_not_global(user):
 
 
 @pytest.mark.skip(reason="to be written")
+def test_device_must_have_organization(user):
+    """ Devices must have organization set """
+    pass
+
+
+@pytest.mark.skip(reason="to be written")
 def test_device_operating_system_version_only_one(user):
     """model deviceoperatingsystem must only contain one value per device
     """

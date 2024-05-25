@@ -12,6 +12,12 @@ import requests
 
 # class Test_app_structure_auth(unittest.TestCase):
 
+
+@pytest.mark.skip(reason="to be written")
+def test_operating_system_must_have_organization(user):
+    """ Operating_system must have organization set """
+    pass
+
 @pytest.mark.skip(reason="to be written")
 def test_operating_system_update_is_global_no_change(user):
     """Once operating_system is set to global it can't be changed.
