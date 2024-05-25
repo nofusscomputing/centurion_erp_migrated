@@ -11,6 +11,10 @@ from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
 from itam.forms.software.update import Update as SoftwareUpdate_Form
 
+from settings.models.user_settings import UserSettings
+
+
+
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Software
     permission_required = 'itam.view_software'
@@ -123,6 +127,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):
