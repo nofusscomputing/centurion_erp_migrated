@@ -36,6 +36,17 @@ class SoftwareCommonFields(TenancyObject, models.Model):
 
 class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
+
+    def clean(self):
+
+        app_settings = AppSettings.objects.get(owner_organization=None)
+
+        if app_settings.software_categories_is_global:
+
+            self.organization = app_settings.global_organization
+            self.is_global = app_settings.software_categories_is_global
+
+
     def __str__(self):
 
         return self.name

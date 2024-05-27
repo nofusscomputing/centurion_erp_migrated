@@ -54,9 +54,15 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         default = False,
     )
 
+    software_categories_is_global = models.BooleanField (
+        verbose_name = 'All Software Categories are global',
+        blank= False,
+        default = False,
+    )
+
     global_organization = models.ForeignKey(
         Organization,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_DEFAULT,
         blank= True,
         default = None,
         null = True,
@@ -73,5 +79,6 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
     __all__ = [
         'software_is_global',
+        'software_categories_is_global',
         'global_organization',
     ]
