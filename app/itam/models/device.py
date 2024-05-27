@@ -11,9 +11,20 @@ from itam.models.device_models import DeviceModel
 from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
-
+from settings.models.app_settings import AppSettings
 
 class DeviceType(DeviceCommonFieldsName):
+
+
+    def clean(self):
+
+        app_settings = AppSettings.objects.get(owner_organization=None)
+
+        if app_settings.device_type_is_global:
+
+            self.organization = app_settings.global_organization
+            self.is_global = app_settings.device_type_is_global
+
 
     def __str__(self):
 

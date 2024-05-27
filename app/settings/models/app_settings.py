@@ -54,6 +54,12 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         default = False,
     )
 
+    device_type_is_global = models.BooleanField (
+        verbose_name = 'All Device Types is global',
+        blank= False,
+        default = False,
+    )
+
     software_is_global = models.BooleanField (
         verbose_name = 'All Software is global',
         blank= False,
@@ -85,6 +91,7 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
     __all__ = [
         'device_model_is_global',
+        'device_type_is_global',
         'software_is_global',
         'software_categories_is_global',
         'global_organization',
