@@ -42,7 +42,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/device_model/{self.kwargs['pk']}"
+        return reverse('Settings:_device_model_view', args=(self.kwargs['pk'],))
 
 
 
@@ -69,7 +69,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/device_models"
+        return reverse('Settings:_device_models')
 
 
     def get_context_data(self, **kwargs):
@@ -89,7 +89,7 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/device_models"
+        return reverse('Settings:_device_models')
 
 
     def get_context_data(self, **kwargs):

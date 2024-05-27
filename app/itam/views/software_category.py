@@ -37,7 +37,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/software_category/{self.kwargs['pk']}/"
+        return reverse('Settings:_software_category_view', args=(self.kwargs['pk'],))
 
 
 
@@ -63,7 +63,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/software_category"
+        return reverse('Settings:_software_categories')
 
 
     def get_context_data(self, **kwargs):
@@ -88,7 +88,7 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_success_url(self, **kwargs):
 
-        return f"/settings/software_category"
+        return reverse('Settings:_software_categories')
 
 
     def get_context_data(self, **kwargs):

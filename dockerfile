@@ -1,3 +1,7 @@
+ARG CI_PROJECT_URL=''
+ARG CI_COMMIT_SHA=''
+ARG CI_COMMIT_TAG=''
+
 FROM python:3.11-alpine3.19 as build
 
 
@@ -42,10 +46,15 @@ RUN cd /tmp/python_modules \
 
 
 
-
-
-
 FROM python:3.11-alpine3.19
+
+ARG CI_PROJECT_URL
+ARG CI_COMMIT_SHA
+ARG CI_COMMIT_TAG
+
+ENV CI_PROJECT_URL=${CI_PROJECT_URL}
+ENV CI_COMMIT_SHA=${CI_COMMIT_SHA}
+ENV CI_COMMIT_TAG=${CI_COMMIT_TAG}
 
 COPY requirements.txt requirements.txt
 COPY requirements_test.txt requirements_test.txt
@@ -59,7 +68,8 @@ COPY includes/ /
 
 RUN pip install /tmp/python_builds/*.*; \
     python /app/manage.py collectstatic --noinput; \
-    rm -rf /tmp/python_builds;
+    rm -rf /tmp/python_builds; \
+    export
 
 
 WORKDIR /app

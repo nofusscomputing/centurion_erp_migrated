@@ -122,6 +122,16 @@ class Collect(views.APIView):
 
                 software_organization = device.organization
 
+            
+            if app_settings.software_categories_is_global:
+
+                software_category_organization = app_settings.global_organization
+
+            else:
+
+                software_category_organization = device.organization
+
+
 
             for inventory in list(data['software']):
 
@@ -141,7 +151,7 @@ class Collect(views.APIView):
                 else: # Create Software Category
 
                     software_category = SoftwareCategory.objects.create(
-                        organization = default_organization,
+                        organization = software_category_organization,
                         is_global = True,
                         name = inventory['category'],
                     )

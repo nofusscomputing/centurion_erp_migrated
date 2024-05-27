@@ -6,6 +6,8 @@ from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 
+from settings.models.app_settings import AppSettings
+
 class ManufacturerCommonFields(models.Model):
 
     class Meta:
@@ -40,6 +42,16 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
 
 
     slug = AutoSlugField()
+
+
+    def clean(self):
+
+        app_settings = AppSettings.objects.get(owner_organization=None)
+
+        if app_settings.manufacturer_is_global:
+
+            self.organization = app_settings.global_organization
+            self.is_global = app_settings.manufacturer_is_global
 
 
     def __str__(self):

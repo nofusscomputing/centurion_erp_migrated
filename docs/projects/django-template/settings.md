@@ -18,3 +18,14 @@ There is a management command available to manage software globally called `soft
 - make all software global `python manage.py software -g [--global]`
 
 - Migrate all software to the global organization `python manage.py software -m [--migrate]`
+
+
+## Global Software Categories
+
+Like global software, a super admin can enforce that all softwre categories be set as global and for it to only be created within the global organization.
+
+There is a management command available to manage software globally called `software_categories`. This command enables you to set all software categories within the application as `global` and to migrate all global software catgeories to the global organization, if set. If the application setting `All Software Categories is global` is set as false, any changes to the global status of the software will not move it to the global organization.
+
+- make all software global `python manage.py software_categories -g [--global]`
+
+- Migrate all software to the global organization `python manage.py software_categories -m [--migrate]`
