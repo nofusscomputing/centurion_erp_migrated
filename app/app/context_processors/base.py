@@ -2,9 +2,19 @@ import re
 
 from app.urls import urlpatterns
 
+from django.conf import settings
 from django.urls import URLPattern, URLResolver
 
 from settings.models.user_settings import UserSettings
+
+
+def build_details(context) -> dict:
+
+    return {
+        'project_url': settings.BUILD_REPO,
+        'sha': settings.BUILD_SHA,
+        'version': settings.BUILD_VERSION,
+    }
 
 
 def request(request):
@@ -115,6 +125,7 @@ def nav_items(context) -> list(dict()):
 def common(context):
 
     return {
+        'build_details': build_details(context),
         'nav_items': nav_items(context),
         'user_settings': user_settings(context),
     }

@@ -92,7 +92,20 @@ section h2 span svg {
         {% block body%}{% endblock %}
       </article>
       {% endblock %}
-      <footer>{% block footer%}{% endblock %}</footer>
+      <footer>
+      <span style="position:relative; font-size: 12px">
+        Build details: 
+        {% if build_details.version %}
+        version: {{ build_details.version }} 
+        {% else %}
+          development
+        {% endif %}
+        ({% if build_details.url%}(<a href="{{ build_details.url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
+        {{ build_details.sha }}
+        {% if build_details.url%}</a>{% endif %})
+      </span>
+      <span></span>
+      </footer>
     </section>
 
   </main>
