@@ -56,6 +56,7 @@ if settings.DEBUG:
         # Apps Under Development
         path("information/", include("information.urls")),
         path("config_management/", include("config_management.urls")),
+        path("project_management/", include("project_management.urls")),
     ]
 
 # must be after above
