@@ -60,6 +60,12 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         default = False,
     )
 
+    manufacturer_is_global = models.BooleanField (
+        verbose_name = 'All Manufacturer / Publishers are global',
+        blank= False,
+        default = False,
+    )
+
     software_is_global = models.BooleanField (
         verbose_name = 'All Software is global',
         blank= False,
@@ -92,6 +98,7 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
     __all__ = [
         'device_model_is_global',
         'device_type_is_global',
+        'manufacturer_is_global',
         'software_is_global',
         'software_categories_is_global',
         'global_organization',
