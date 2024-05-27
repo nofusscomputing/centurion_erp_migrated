@@ -55,6 +55,7 @@ if settings.DEBUG:
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
         # Apps Under Development
         path("information/", include("information.urls")),
+        path("config_management/", include("config_management.urls")),
     ]
 
 # must be after above
