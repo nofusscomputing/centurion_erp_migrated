@@ -48,6 +48,12 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         related_name = 'owner_organization'
     )
 
+    device_model_is_global = models.BooleanField (
+        verbose_name = 'All Device Models are global',
+        blank= False,
+        default = False,
+    )
+
     software_is_global = models.BooleanField (
         verbose_name = 'All Software is global',
         blank= False,
@@ -78,6 +84,7 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
             raise ValidationError("Global Software must have a global organization")
 
     __all__ = [
+        'device_model_is_global',
         'software_is_global',
         'software_categories_is_global',
         'global_organization',
