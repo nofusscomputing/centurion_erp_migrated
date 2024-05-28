@@ -49,7 +49,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         max_length = 50,
         default = None,
         null = True,
-        blank = True
+        blank = True,
+        unique = True,
         
     )
 

@@ -15,4 +15,9 @@ class Migration(migrations.Migration):
             name='serial_number',
             field=models.CharField(blank=True, default=None, max_length=50, null=True, unique=True, verbose_name='Serial Number'),
         ),
+        migrations.AlterField(
+            model_name='device',
+            name='uuid',
+            field=models.CharField(blank=True, default=None, max_length=50, null=True, unique=True, verbose_name='UUID'),
+        ),
     ]
