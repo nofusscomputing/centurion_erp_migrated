@@ -1,6 +1,7 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 
@@ -9,7 +10,7 @@ from core.models.manufacturer import Manufacturer
 
 
 
-class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class Index(OrganizationPermission, generic.ListView):
 
     context_object_name = "list"
 
@@ -17,7 +18,9 @@ class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
 
     paginate_by = 10
 
-    permission_required = 'itam.view_devicetype'
+    permission_required = [
+        'core.view_devicetype'
+    ]
 
     template_name = 'settings/manufacturers.html.j2'
 
@@ -58,7 +61,8 @@ class View(OrganizationPermission, generic.UpdateView):
     model = Manufacturer
 
     permission_required = [
-        'itam.view_manufacturer'
+        'core.view_manufacturer',
+        'core.change_manufacturer',
     ]
 
     template_name = 'form.html.j2'
@@ -81,6 +85,10 @@ class View(OrganizationPermission, generic.UpdateView):
         return f"/settings/manufacturer/{self.kwargs['pk']}"
 
 
+    @method_decorator(auth_decorator.permission_required("core.change_manufacturer", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
 
 class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
