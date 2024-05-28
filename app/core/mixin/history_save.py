@@ -144,7 +144,7 @@ class SaveHistory(models.Model):
             current_user = get_request().user
 
 
-        if before != after and after != '{}':
+        if before != after and after != '{}' and not current_user.is_anonymous:
             entry = History.objects.create(
                 before = before_json,
                 after = after,
