@@ -143,17 +143,18 @@ class SaveHistory(models.Model):
 
             current_user = get_request().user
 
+        if current_user:
 
-        if before != after and after != '{}' and not current_user.is_anonymous:
-            entry = History.objects.create(
-                before = before_json,
-                after = after,
-                user = current_user,
-                action = action,
-                item_pk = self.pk,
-                item_class = self._meta.model_name,
-                item_parent_pk = item_parent_pk,
-                item_parent_class = item_parent_class,
-            )
+            if before != after and after != '{}' and not current_user.is_anonymous:
+                entry = History.objects.create(
+                    before = before_json,
+                    after = after,
+                    user = current_user,
+                    action = action,
+                    item_pk = self.pk,
+                    item_class = self._meta.model_name,
+                    item_parent_pk = item_parent_pk,
+                    item_parent_class = item_parent_class,
+                )
 
-            entry.save()
+                entry.save()
