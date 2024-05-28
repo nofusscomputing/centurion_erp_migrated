@@ -1,5 +1,7 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.models import Permission
+from django.utils.decorators import method_decorator
+from django.urls import reverse
 from django.views import generic
 
 from access.models import Team, TeamUsers, Organization
@@ -10,7 +12,7 @@ from access.mixin import *
 class View(OrganizationPermission, generic.UpdateView):
     model = Team
     permission_required = [
-        'access.add_team',
+        'access.view_team',
         'access.change_team',
     ]
     template_name = 'access/team.html.j2'
@@ -43,7 +45,13 @@ class View(OrganizationPermission, generic.UpdateView):
         return context
 
     def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['pk']}/"
+        return reverse('Access:_team_view', args=(self.kwargs['organization_id'], self.kwargs['pk'],))
+
+
+    @method_decorator(auth_decorator.permission_required("access.change_team", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
 
 
 
