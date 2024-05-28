@@ -49,10 +49,12 @@ class View(OrganizationPermission, generic.UpdateView):
 
         return super().post(request, *args, **kwargs)
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+
+
+class Add(OrganizationPermission, generic.CreateView):
     model = SoftwareCategory
     permission_required = [
-        'access.add_software',
+        'itam.add_softwarecategory',
     ]
     template_name = 'form.html.j2'
     fields = [
