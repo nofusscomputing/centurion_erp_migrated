@@ -1,7 +1,6 @@
 import json
 import markdown
 
-# from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q

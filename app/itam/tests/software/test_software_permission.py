@@ -171,7 +171,7 @@ class SoftwarePermissions(TestCase):
 
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_software_auth_view_no_permission_denied(self):
@@ -235,11 +235,7 @@ class SoftwarePermissions(TestCase):
 
         response = client.put(url, data={'software': 'software'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
     # @pytest.mark.skip(reason="ToDO: figure out why fails")
     def test_software_auth_add_no_permission_denied(self):
@@ -320,11 +316,7 @@ class SoftwarePermissions(TestCase):
 
         response = client.patch(url, data={'software': 'software'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_software_auth_change_no_permission_denied(self):
@@ -420,11 +412,7 @@ class SoftwarePermissions(TestCase):
 
         response = client.delete(url, data={'software': 'software'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_software_auth_delete_no_permission_denied(self):

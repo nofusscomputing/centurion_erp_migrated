@@ -171,7 +171,7 @@ class DevicePermissions(TestCase):
 
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_device_auth_view_no_permission_denied(self):
@@ -235,11 +235,7 @@ class DevicePermissions(TestCase):
 
         response = client.put(url, data={'device': 'device'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
     # @pytest.mark.skip(reason="ToDO: figure out why fails")
     def test_device_auth_add_no_permission_denied(self):
@@ -320,11 +316,7 @@ class DevicePermissions(TestCase):
 
         response = client.patch(url, data={'device': 'device'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_device_auth_change_no_permission_denied(self):
@@ -420,11 +412,7 @@ class DevicePermissions(TestCase):
 
         response = client.delete(url, data={'device': 'device'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_device_auth_delete_no_permission_denied(self):

@@ -1,5 +1,5 @@
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
@@ -148,12 +148,15 @@ class OrganizationMixin():
 
 
 
-class OrganizationPermission(OrganizationMixin):
+class OrganizationPermission(AccessMixin, OrganizationMixin):
     """checking organization membership"""
 
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+
+        if not request.user.is_authenticated:
+                return self.handle_no_permission()
 
         if hasattr(self, 'get_object'):
 

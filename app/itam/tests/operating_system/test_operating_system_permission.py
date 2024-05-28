@@ -171,7 +171,7 @@ class OperatingSystemPermissions(TestCase):
 
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_operating_system_auth_view_no_permission_denied(self):
@@ -235,11 +235,7 @@ class OperatingSystemPermissions(TestCase):
 
         response = client.put(url, data={'operating_system': 'operating_system'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
     # @pytest.mark.skip(reason="ToDO: figure out why fails")
     def test_operating_system_auth_add_no_permission_denied(self):
@@ -320,12 +316,7 @@ class OperatingSystemPermissions(TestCase):
 
         response = client.patch(url, data={'operating_system': 'operating_system'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
-
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
     def test_operating_system_auth_change_no_permission_denied(self):
         """ Ensure permission view cant make change
@@ -420,11 +411,7 @@ class OperatingSystemPermissions(TestCase):
 
         response = client.delete(url, data={'operating_system': 'operating_system'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_operating_system_auth_delete_no_permission_denied(self):

@@ -1,5 +1,4 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views import generic
 
@@ -9,7 +8,9 @@ from access.models import *
 
 
 class IndexView(OrganizationPermission, generic.ListView):
-    permission_required = 'access.view_organization'
+    permission_required = [
+        'access.view_organization'
+    ]
     template_name = 'access/index.html.j2'
     context_object_name = "organization_list"
 
@@ -64,12 +65,12 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Change(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
+class Change(OrganizationPermission, generic.DetailView):
     pass
 
 
 
-class Delete(LoginRequiredMixin, OrganizationPermission, generic.DetailView):
+class Delete(OrganizationPermission, generic.DetailView):
     pass
 
 

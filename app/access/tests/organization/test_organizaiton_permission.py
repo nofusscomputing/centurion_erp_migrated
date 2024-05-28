@@ -172,7 +172,7 @@ class OrganizationPermissions(TestCase):
 
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_organization_auth_view_no_permission_denied(self):
@@ -326,11 +326,7 @@ class OrganizationPermissions(TestCase):
 
         response = client.patch(url, data={'device': 'device'})
 
-        assert (
-            response.status_code == 302
-            or
-            response.status_code == 403
-        )
+        assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
     def test_organization_auth_change_no_permission_denied(self):

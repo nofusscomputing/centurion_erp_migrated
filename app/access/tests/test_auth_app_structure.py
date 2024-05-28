@@ -34,30 +34,7 @@ def test_require_login_organizations():
 
     response = client.get(url)
 
-    assert response.status_code == 302
-
-@pytest.mark.skip(reason="to be re-written for orgmixin")
-@pytest.mark.django_db
-def test_require_login_organization_pk(organization):
-    """Ensure login is required to view an organization"""
-    client = Client()
-    url = reverse('Access:_organization', kwargs={'organization_id': 1})
-
-    response = client.get(url)
-
-    assert response.status_code == 302
-
-
-@pytest.mark.django_db
-def test_login_view_organizations_no_permission(user):
-    """Some docstring defining what the test is checking."""
-    client = Client()
-    url = reverse('Access:Organizations')
-    client.force_login(user)
-
-    response = client.get(url)
-
-    assert response.status_code == 403
+    assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
 @pytest.mark.skip(reason="to be written")
