@@ -140,7 +140,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required()[0] and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
+                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
 
                         return True
 
