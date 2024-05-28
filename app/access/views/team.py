@@ -85,32 +85,6 @@ class Add(OrganizationPermission, generic.CreateView):
         return context
 
 
-class Change(PermissionRequiredMixin, OrganizationPermission, generic.UpdateView):
-    model = Team
-    permission_required = [
-        'access.change_team',
-    ]
-    template_name = 'form.html.j2'
-    fields = [
-        'team_name',
-        'permissions',
-        'organization'
-    ]
-
-    def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['pk']}/"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
-
-        context['content_title'] = 'Edit Team'
-
-        return context
-
-
 
 class Delete(OrganizationPermission, generic.DeleteView):
     model = Team
