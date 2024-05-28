@@ -22,7 +22,9 @@ def request(request):
 
 
 def user_settings(context) -> int:
-    """ Provides the settings ID for the current user
+    """ Provides the settings ID for the current user.
+
+    If user settings object doesn't exist, it's probably a new user. So create their settings row.
 
     Returns:
         int: model usersettings Primary Key
@@ -30,6 +32,12 @@ def user_settings(context) -> int:
     if context.user.is_authenticated:
 
         settings = UserSettings.objects.filter(user=context.user)
+
+        if not settings.exists():
+
+            UserSettings.objects.create(user=context.user)
+
+            settings = UserSettings.objects.filter(user=context.user)
 
         return settings[0].pk
 
