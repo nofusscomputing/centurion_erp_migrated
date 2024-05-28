@@ -24,10 +24,6 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         team = Team.objects.get(pk=self.kwargs['pk'])
         form.instance.team = team
 
-        group = Group.objects.get(pk=team.group_ptr_id)
-        user = User.objects.get(pk=self.request.POST['user'][0])
-        user.groups.add(group)  
-
         return super().form_valid(form)
 
 
@@ -50,20 +46,6 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
         'access.delete_teamusers'
     ]
     template_name = 'form.html.j2'
-
-
-    def form_valid(self, form):
-
-        team = Team.objects.get(pk=self.kwargs['team_id'])
-        teamuser = TeamUsers.objects.get(pk=self.kwargs['pk'])
-
-        group = Group.objects.get(pk=team.group_ptr_id)
-
-        user = User.objects.get(pk=teamuser.user_id)
-        
-        user.groups.remove(group)  
-
-        return super().form_valid(form)
 
 
     def get_success_url(self, **kwargs):
