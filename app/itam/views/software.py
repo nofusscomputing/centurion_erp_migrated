@@ -154,10 +154,10 @@ class Add(OrganizationPermission, generic.CreateView):
 
         return context
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = Software
     permission_required = [
-        'access.delete_software',
+        'itam.delete_software',
     ]
     template_name = 'form.html.j2'
 
