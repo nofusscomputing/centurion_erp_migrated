@@ -47,7 +47,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = Team
     permission_required = [
         'access.add_team',
