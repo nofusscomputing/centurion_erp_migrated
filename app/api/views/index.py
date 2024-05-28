@@ -27,9 +27,9 @@ class IndexView(routers.APIRootView):
     def get(self, request, *args, **kwargs):
         return Response(
         {
-            "organizations": reverse("_api_orgs", request=request),
-            "teams": reverse("_api_teams", request=request),
+            # "teams": reverse("_api_teams", request=request),
             "devices": reverse("_api_devices", request=request),
+            "organizations": reverse("_api_orgs", request=request),
             "software": reverse("_api_softwares", request=request),
         }
     )
