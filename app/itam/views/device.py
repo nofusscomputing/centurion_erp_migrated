@@ -1,10 +1,13 @@
 import json
 import markdown
 
+# from django.contrib.auth.decorators import permission_required
+from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -54,6 +57,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     permission_required = [
         'itam.view_device'
+        'itam.change_device'
     ]
 
     template_name = 'itam/device.html.j2'
@@ -107,7 +111,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         return context
 
-
+    @method_decorator(auth_decorator.permission_required("itam.change_device", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         device = Device.objects.get(pk=self.kwargs['pk'])
