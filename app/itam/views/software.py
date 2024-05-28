@@ -120,10 +120,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = Software
     permission_required = [
-        'access.add_software',
+        'itam.add_software',
     ]
     template_name = 'form.html.j2'
     fields = [
