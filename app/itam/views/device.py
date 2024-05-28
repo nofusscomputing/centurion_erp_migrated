@@ -192,7 +192,7 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = Device
     permission_required = [
         'itam.add_device',
@@ -290,7 +290,7 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = Device
     permission_required = [
         'itam.delete_device',

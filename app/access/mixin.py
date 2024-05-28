@@ -16,17 +16,33 @@ class OrganizationMixin():
 
     def object_organization(self) -> int:
 
-        if 'access.models.Organization' in str(type(self.get_object())):
+        id = None
 
-            id = self.get_object().id
+        try:
 
-        else:
+            self.get_queryset()
 
-            id = self.get_object().organization.id
+            self.get_object()
 
-            if self.get_object().is_global:
+            if 'access.models.Organization' in str(type(self.get_object())):
 
-                id = 0
+                id = self.get_object().id
+
+            else:
+
+                id = self.get_object().organization.id
+
+                if self.get_object().is_global:
+
+                    id = 0
+
+        except AttributeError:
+
+            if self.request.method == 'POST':
+
+                if self.request.POST.get("organization", ""):
+
+                    id = int(self.request.POST.get("organization", ""))
 
         return id
 
