@@ -51,10 +51,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = DeviceType
     permission_required = [
-        'access.add_device_type',
+        'itam.add_devicetype',
     ]
     template_name = 'form.html.j2'
     fields = [
