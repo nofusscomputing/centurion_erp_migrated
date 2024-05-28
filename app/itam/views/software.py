@@ -1,6 +1,8 @@
+from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count, Q
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -40,7 +42,8 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 class View(OrganizationPermission, generic.UpdateView):
     model = Software
     permission_required = [
-        'itam.view_software'
+        'itam.view_software',
+        'itam.change_software'
     ]
     template_name = 'itam/software.html.j2'
 
@@ -91,7 +94,7 @@ class View(OrganizationPermission, generic.UpdateView):
         return context
 
 
-
+    @method_decorator(auth_decorator.permission_required("itam.change_software", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         software = Software.objects.get(pk=self.kwargs['pk'])
