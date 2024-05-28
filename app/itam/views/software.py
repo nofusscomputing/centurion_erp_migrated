@@ -87,7 +87,7 @@ class View(OrganizationPermission, generic.UpdateView):
                 Q(device__in=self.user_organizations(),
                 software=self.kwargs['pk'])
             ).order_by(
-                'name',
+                'device',
                 'organization'
             )
 
