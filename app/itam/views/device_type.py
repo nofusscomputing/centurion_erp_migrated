@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -13,7 +14,8 @@ from settings.models.user_settings import UserSettings
 class View(OrganizationPermission, generic.UpdateView):
     model = DeviceType
     permission_required = [
-        'itam.view_device_type'
+        'itam.view_devicetype',
+        'itam.change_devicetype'
     ]
     template_name = 'form.html.j2'
 
@@ -40,6 +42,12 @@ class View(OrganizationPermission, generic.UpdateView):
     def get_success_url(self, **kwargs):
 
         return reverse('Settings:_device_type_view', args=(self.kwargs['pk'],))
+
+
+    @method_decorator(auth_decorator.permission_required("itam.change_devicetype", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
 
 
 
