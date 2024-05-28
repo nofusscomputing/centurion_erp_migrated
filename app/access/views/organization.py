@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import *
@@ -6,7 +8,7 @@ from access.models import *
 
 
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class IndexView(OrganizationPermission, generic.ListView):
     permission_required = 'access.view_organization'
     template_name = 'access/index.html.j2'
     context_object_name = "organization_list"
@@ -24,9 +26,12 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 
 
 
-class View(LoginRequiredMixin, OrganizationPermission, generic.UpdateView):
+class View(OrganizationPermission, generic.UpdateView):
     model = Organization
-    permission_required = 'access.view_organization'
+    permission_required = [
+        'access.view_organization',
+        'access.change_organization',
+    ]
     template_name = "access/organization.html.j2"
     fields = ["name", 'id']
 
@@ -50,6 +55,12 @@ class View(LoginRequiredMixin, OrganizationPermission, generic.UpdateView):
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         return context
+
+
+    @method_decorator(auth_decorator.permission_required("access.change_organization", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
 
 
 
