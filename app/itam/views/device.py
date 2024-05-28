@@ -56,7 +56,7 @@ class View(OrganizationPermission, generic.UpdateView):
     model = Device
 
     permission_required = [
-        'itam.view_device'
+        'itam.view_device',
         'itam.change_device'
     ]
 
