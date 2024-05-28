@@ -54,9 +54,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
+class Add(OrganizationPermission, generic.CreateView):
     model = DeviceModel
     permission_required = [
-        'access.add_device_type',
+        'itam.add_devicemodel',
     ]
     template_name = 'form.html.j2'
     fields = [
