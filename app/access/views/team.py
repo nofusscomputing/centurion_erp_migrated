@@ -104,7 +104,7 @@ class Change(PermissionRequiredMixin, OrganizationPermission, generic.UpdateView
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = Team
     permission_required = [
         'access.delete_team'
