@@ -130,12 +130,12 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
 
     model = OperatingSystem
 
     permission_required = [
-        'access.delete_operating_system',
+        'itam.delete_operatingsystem',
     ]
 
     template_name = 'form.html.j2'
