@@ -90,7 +90,9 @@ class View(OrganizationPermission, generic.UpdateView):
 
         return super().post(request, *args, **kwargs)
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+
+
+class Add(OrganizationPermission, generic.CreateView):
 
     fields = [
         'name',
@@ -101,7 +103,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
     model = Manufacturer
 
     permission_required = [
-        'access.add_manufacturere',
+        'core.add_manufacturer',
     ]
 
     template_name = 'form.html.j2'
