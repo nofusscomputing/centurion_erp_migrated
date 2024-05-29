@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import decorators as auth_decorator
+from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -7,7 +8,7 @@ from access.models import Team, TeamUsers
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = TeamUsers
     permission_required = [
         'access.view_team',
@@ -28,7 +29,13 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 
     def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['pk']}"
+
+        return reverse('Access:_team_view', 
+            kwargs={
+                'organization_id': self.kwargs['organization_id'],
+                'pk': self.kwargs['pk']
+            }
+        )
 
 
     def get_context_data(self, **kwargs):
