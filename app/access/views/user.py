@@ -46,17 +46,22 @@ class Add(OrganizationPermission, generic.CreateView):
         return context
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = TeamUsers
     permission_required = [
-        'access.view_team',
         'access.delete_teamusers'
     ]
     template_name = 'form.html.j2'
 
 
     def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['team_id']}"
+
+        return reverse('Access:_team_view', 
+            kwargs={
+                'organization_id': self.kwargs['organization_id'],
+                'pk': self.kwargs['team_id']
+            }
+        )
 
 
     def get_context_data(self, **kwargs):
