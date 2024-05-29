@@ -138,3 +138,29 @@ your content here
 {% endblock %}
 
 ```
+
+
+## Add history to model
+
+The tracking of changes can be added to a model by including the `SaveHistory` mixin from `core.mixin.history_save` to the model.
+
+``` python
+
+from core.mixin.history_save import SaveHistory
+
+class MyModel(SaveHistory):
+
+    .....
+
+```
+
+for items that have a parent item, modification will need to be made to the mixin by adding the relevant check and setting the relevant keys.
+
+``` python
+
+if self._meta.model_name == 'deviceoperatingsystem':
+
+    item_parent_pk = self.device.pk
+    item_parent_class = self.device._meta.model_name
+
+```

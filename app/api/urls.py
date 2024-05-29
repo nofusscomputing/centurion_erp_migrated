@@ -3,7 +3,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import access, index
 
-from .views.itam import device as itam_device, software as itam_software, config as itam_config
+from .views.itam import software as itam_software, config as itam_config
+from .views.itam.device import detail as itam_device
+from .views.itam.device import inventory
 
 urlpatterns = [
     path("", index.IndexView.as_view(), name='_api_home'),
@@ -20,6 +22,8 @@ urlpatterns = [
 
     path("software/", itam_software.List.as_view(), name="_api_softwares"),
     path("software/<int:pk>/", itam_software.Detail.as_view(), name="_api_software_view"),
+
+    path("device/inventory/<slug:slug>", inventory.Collect.as_view(), name="_api_device_inventory"), 
 
 ]
 

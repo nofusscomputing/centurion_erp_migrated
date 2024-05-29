@@ -11,11 +11,28 @@ This ITAM component tracks Operating systems within your inventory.
 
 ## Features
 
-- Name
+- Details
+
+- Publisher
 
 - Versions
 
 - Installations
+
+- [Change History](../index.md#history)
+
+
+## Details
+
+This tab displays the details of the Operating System, in particular:
+
+- name
+
+- Publisher
+
+- slug
+
+- Organization
 
 
 ### Versions

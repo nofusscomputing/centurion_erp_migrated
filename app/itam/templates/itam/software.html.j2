@@ -37,17 +37,18 @@
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
       <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
       <button class="tablinks" onclick="openCity(event, 'Licences')">Licences</button>
+      <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
       <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button>
 </div>
 
-<!-- Tab content -->
+<form method="post">
 <div id="Details" class="tabcontent">
   <h3>Details</h3>
-  <form method="post">
+  
     {% csrf_token %}
     {{ form }}
+    {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
     <input type="submit" value="Submit">
-  </form>
 
   <script>
     // Get the element with id="defaultOpen" and click on it
@@ -69,7 +70,7 @@
     {% for version in software_versions %}
     <tr>
       <td><a href="{% url 'ITAM:_software_version_view' software_id=software.id pk=version.id %}">{{ version.name }}</a></td>
-      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
+      <td>{{ version.installs }}</td>
       <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
       <td>&nbsp;</td>
     </tr>
@@ -108,6 +109,24 @@
   </table>
 </div>
 
+
+  <div id="Notes" class="tabcontent">
+    <h3>
+      Notes
+    </h3>
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+  </div>
+
+
 <div id="Installations" class="tabcontent">
   <h3>Installations</h3>
   <table>
@@ -115,8 +134,8 @@
       <th>Device</th>
       <th>Organization</th>
       <th title="Not Set/Install/Remove">Action</th>
-      <th>Version</th>
-      <th title="Date Software Installed">Installed</th>
+      <th>Installed Version</th>
+      <th title="Date Software Installed">Install Date</th>
       <th>&nbsp;</th>
     </thead>
     {% if device_software %}
@@ -130,17 +149,23 @@
       {% elif device.get_action_display == 'Remove'%}
         {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
       {% else %}
-        {{ device.get_action_display }}
+        -
       {% endif %}
       </td>
       <td>
-      {% if device.version %}
-      {{ device.version }}
+      {% if device.installedversion %}
+        {{ device.installedversion }}
       {% else %}
-      Any
+        -
       {% endif %}
       </td>
-      <td>{% include 'icons/issue_link.html.j2' with issue=2 %}</td>
+      <td>
+        {% if device.installed %}
+          {{ device.installed }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
       <td>&nbsp;</td>
     </tr>
     {% endfor %}
@@ -151,6 +176,6 @@
     {% endif %}
   </table>
 </div>
-
+</form>
 
 {% endblock %}

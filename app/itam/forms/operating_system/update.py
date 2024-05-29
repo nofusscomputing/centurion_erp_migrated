@@ -11,6 +11,7 @@ class Update(forms.ModelForm):
         model = OperatingSystem
         fields = [
             "name",
+            'publisher',
             'slug',
             'id',
             'organization',

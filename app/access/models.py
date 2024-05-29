@@ -1,11 +1,14 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import User, Group, Permission
 
 from .fields import *
 
+from core.middleware.get_request import get_request
+from core.mixin.history_save import SaveHistory
 
-class Organization(models.Model):
+
+class Organization(SaveHistory):
 
     class Meta:
         verbose_name_plural = "Organizations"
@@ -40,6 +43,10 @@ class Organization(models.Model):
     modified = AutoLastModifiedField()
 
 
+    def get_organization(self):
+        return self
+
+
 class TenancyObject(models.Model):
 
     class Meta:
@@ -48,6 +55,8 @@ class TenancyObject(models.Model):
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
+        blank = False,
+        null = True,
     )
 
     is_global = models.BooleanField(
@@ -55,8 +64,11 @@ class TenancyObject(models.Model):
         blank = False
     )
 
+    def get_organization(self) -> Organization:
+        return self.organization
 
-class Team(Group, TenancyObject):
+
+class Team(Group, TenancyObject, SaveHistory):
     class Meta:
         # proxy = True
         verbose_name_plural = "Teams"
@@ -66,7 +78,6 @@ class Team(Group, TenancyObject):
         return self.name
 
     def save(self, *args, **kwargs):
-
 
         self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
 
@@ -86,7 +97,7 @@ class Team(Group, TenancyObject):
     modified = AutoLastModifiedField()
 
 
-class TeamUsers(models.Model):
+class TeamUsers(SaveHistory):
 
     class Meta:
         # proxy = True
@@ -118,3 +129,40 @@ class TeamUsers(models.Model):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    def delete(self, using=None, keep_parents=False):
+        """ Delete Team
+
+        Overrides, post-action
+            As teams are an extension of Groups, remove the user to the team.
+        """
+
+        super().delete(using=using, keep_parents=keep_parents)
+
+        group = Group.objects.get(pk=self.team.id)
+
+        user = User.objects.get(pk=self.user_id)
+        
+        user.groups.remove(group)
+
+
+    def get_organization(self) -> Organization:
+        return self.team.organization
+
+
+    def save(self, *args, **kwargs):
+        """ Save Team
+
+        Overrides, post-action
+            As teams are an extension of groups, add the user to the matching group.
+        """
+
+        super().save(*args, **kwargs)
+
+        group = Group.objects.get(pk=self.team.id)
+
+        user = User.objects.get(pk=self.user_id)
+
+        user.groups.add(group) 
+

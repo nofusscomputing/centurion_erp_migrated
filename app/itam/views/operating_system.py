@@ -1,17 +1,22 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Q, Count
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
+
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
 
 from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.forms.operating_system.update import Update
 
+from settings.models.user_settings import UserSettings
 
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class IndexView(OrganizationPermission, generic.ListView):
     model = OperatingSystem
     permission_required = 'itam.view_operating_system'
     template_name = 'itam/operating_system_index.html.j2'
@@ -34,7 +39,8 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 class View(OrganizationPermission, generic.UpdateView):
     model = OperatingSystem
     permission_required = [
-        'itam.view_operating_system'
+        'itam.view_operatingsystem',
+        'itam.change_operatingsystem',
     ]
     template_name = 'itam/operating_system.html.j2'
 
@@ -51,9 +57,37 @@ class View(OrganizationPermission, generic.UpdateView):
         installs = DeviceOperatingSystem.objects.filter(operating_system_version__operating_system_id=self.kwargs['pk'])
         context['installs'] = installs
 
+        context['notes_form'] = AddNoteForm(prefix='note')
+
+        context['notes'] = Notes.objects.filter(operatingsystem=self.kwargs['pk'])
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('ITAM:_operating_system_delete', args=(self.kwargs['pk'],))
+
         context['content_title'] = self.object.name
 
         return context
+
+
+    @method_decorator(auth_decorator.permission_required("itam.change_operatingsystem", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        operatingsystem = OperatingSystem.objects.get(pk=self.kwargs['pk'])
+
+        notes = AddNoteForm(request.POST, prefix='note')
+
+        if notes.is_bound and notes.is_valid() and notes.instance.note != '':
+
+            notes.instance.organization = operatingsystem.organization
+            notes.instance.operatingsystem = operatingsystem
+            notes.instance.usercreated = request.user
+
+            notes.save()
+
+        return super().post(request, *args, **kwargs)
+
 
     def get_success_url(self, **kwargs):
 
@@ -61,17 +95,25 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = OperatingSystem
     permission_required = [
-        'access.add_operating_system',
+        'itam.add_operatingsystem',
     ]
     template_name = 'form.html.j2'
     fields = [
         'name',
+        'publisher',
         'organization',
         'is_global'
     ]
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
     def get_success_url(self, **kwargs):
@@ -88,12 +130,12 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
 
     model = OperatingSystem
 
     permission_required = [
-        'access.delete_operating_system',
+        'itam.delete_operatingsystem',
     ]
 
     template_name = 'form.html.j2'
@@ -106,6 +148,9 @@ class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Delete ' + self.object.name
 

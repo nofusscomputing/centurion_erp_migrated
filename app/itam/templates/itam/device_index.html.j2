@@ -6,7 +6,6 @@
 {% block body %}
 
 <input type="button" value="New Device" onclick="window.location='{% url 'ITAM:_device_add' %}';">
-<input type="button" value="New Device Type" onclick="window.location='{% url 'ITAM:_device_type_add' %}';">
 <table class="data">
     <tr>
         <th>Name</th>
@@ -19,11 +18,29 @@
     {% for device in devices %}
     <tr>
         <td><a href="{% url 'ITAM:_device_view' pk=device.id %}">{{ device.name }}</a></td>
-        <td>{{ device.device_type }}</td>
-        <td>manufacturer</td>
-        <td>model</td>
+        <td>
+        {% if device.device_type %}
+            {{ device.device_type }}
+        {% else %}
+            -
+        {% endif %}
+        </td>
+        <td>
+        {% if device.device_model.manufacturer %}
+            <a href="{% url 'Settings:_manufacturer_view' pk=device.device_model.manufacturer.id %}">{{ device.device_model.manufacturer }}</a>
+        {% else %}
+            -
+        {% endif %}
+        </td>
+        <td>
+        {% if device.device_model.name %}
+            <a href="{% url 'Settings:_device_model_view' pk=device.device_model.id %}">{{ device.device_model.name }}</a>
+        {% else %}
+            -
+        {% endif %}
+        </td>
         <td>{% if software.is_global %}Global{% else %}{{ device.organization }}{% endif %}</td>
-        <td><a href="{% url 'ITAM:_device_delete' pk=device.id %}">Delete</a></td>
+        <td>&nbsp;</td>
     </tr>
     {% endfor %}
 

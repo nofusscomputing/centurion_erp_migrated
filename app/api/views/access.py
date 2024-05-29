@@ -21,6 +21,7 @@ class OrganizationList(generics.ListCreateAPIView):
 class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_required = 'access.view_organization'
     queryset = Organization.objects.all()
+    lookup_field = 'pk'
     serializer_class = OrganizationSerializer
 
 

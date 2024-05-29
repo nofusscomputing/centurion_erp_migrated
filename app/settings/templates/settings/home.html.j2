@@ -1,0 +1,64 @@
+{% extends 'base.html.j2' %}
+
+
+{% block content%}
+<style>
+
+div#content {
+    /*background-color: blue;*/
+    vertical-align: top;
+    width: auto;
+    margin: 10px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-wrap:wrap;
+}
+
+div#content article {
+    /*background-color: brown;*/
+    width: auto;
+    min-width: 30%;
+    max-width: 47%;
+    display: flexbox;
+    position: relative;
+    text-align: left;
+    align-self: top;
+}
+
+div#content article h3 {
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+}
+
+</style>
+
+<div id="content" style="">
+    <article style="">
+        <h3>Application</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_settings_application' %}">Settings</a></li>
+        </ul>
+    </article>
+
+    <article style="">
+        <h3>Common</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_manufacturers' %}">Manufacturers / Publishers</a></li>
+        </ul>
+    </article>
+
+    <article style="">
+        <h3>ITAM</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_device_types' %}">Device Types</a></li>
+            <li><a href="{% url 'Settings:_device_models' %}">Device Models</a></li>
+            <li><a href="{% url 'Settings:_software_categories' %}">Software Categories</a></li>
+        </ul>
+    </article>
+
+</div>
+
+
+{% endblock %}

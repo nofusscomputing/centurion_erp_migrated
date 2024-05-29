@@ -3,7 +3,7 @@
 
 <head>
   {% load static %}
-  <title>CSS Template</title>
+  <title>{{ content_title }} - {% settings_value "SITE_TITLE" %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,9 +15,10 @@
 <body>
 
   <header>
-    
+
     <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
+    {%if user.is_authenticated %}
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
       <button class="dropbtn">{% block user_name %}{%if user.username %}{{ user.username }}{% else %}My Account{% endif %}{% endblock %}</button>
       <div class="dropdown-content">
@@ -28,6 +29,10 @@
           <button class="accbtn">Admin Panel</button>
         </form>
         {% endif %}
+        <form action="{% url '_settings_user' pk=user_settings %}" method="post">
+          {% csrf_token %}
+          <button class="accbtn">Settings</button>
+        </form>
         <form action="{% url 'password_change' %}" method="post">
           {% csrf_token %}
           <button class="accbtn">Change Password</button>
@@ -38,6 +43,7 @@
         </form>
       </div>
     </div>
+    {% endif %}
 
   </header>
 
@@ -45,12 +51,61 @@
     <nav style="padding: 0px;">
       {% include 'navigation.html.j2' %}
     </nav>
+
+<style>
+
+section h2 span svg {
+  height: 100%;
+  margin: auto 0 auto 0;
+  fill: #666;
+  cursor: pointer;
+  width: 30px;
+  /*height: 30px;*/
+}
+
+.icon-delete svg {
+  fill: #ff0000;
+}
+
+</style>
+
+
     <section>
-      <h2>{% block title %}Page Title{% endblock %}{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}</h2>
+      <h2>{% block title %}{{ content_title }}{% endblock %}
+        {% if model_delete_url %}
+        <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
+          {% include 'icons/delete.svg' %}
+        </span>
+        {% endif %}
+        {% if model_name and model_pk %}
+        {% block content_header_icon %}
+        <span title="View History" id="content_header_icon" onclick="window.location='{% url '_history' model_name=model_name model_pk=model_pk %}';">
+          <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px">
+            <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/>
+          </svg>
+        </span>
+        {% endblock %}
+        {% endif %}
+        </h2>
+      {% block content %}
       <article>
         {% block body%}{% endblock %}
       </article>
-      <footer>{% block footer%}{% endblock %}</footer>
+      {% endblock %}
+      <footer>
+      <span style="position:relative; font-size: 12px">
+        Build details: 
+        {% if build_details.version %}
+        version: {{ build_details.version }} 
+        {% else %}
+          development
+        {% endif %}
+        ({% if build_details.project_url %}(<a href="{{ build_details.project_url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
+        {{ build_details.sha }}
+        {% if build_details.url%}</a>{% endif %})
+      </span>
+      <span></span>
+      </footer>
     </section>
 
   </main>

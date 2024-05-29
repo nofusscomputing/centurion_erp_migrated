@@ -39,6 +39,7 @@
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'OperatingSystem')">Operating System</button>
   <button class="tablinks" onclick="openCity(event, 'Software')">Software</button>
+  <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
   <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
   <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
 </div>
@@ -52,6 +53,7 @@
       <span style="font-weight: normal; float: right;">{% include 'icons/issue_link.html.j2' with issue=6 %}</span>
     </h3>
     {{ form.as_p }}
+    {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
     <input name="{{form.prefix}}" type="submit" value="Submit">
     <script>
       // Get the element with id="defaultOpen" and click on it
@@ -68,13 +70,16 @@
 
   <div id="Software" class="tabcontent">
     <h3>Software</h3>
-
+    <hr>
+    Installed Software: {{ installed_software }}
     <input type="button" value="Add Software Action" onclick="window.location='{% url 'ITAM:_device_software_add' device.id %}';">
     <table>
       <thead>
         <th>Name</th>
+        <th>Category</th>
         <th>Action</th>
-        <th>Version</th>
+        <th>Desired Version</th>
+        <th>Installed Version</th>
         <th>Installed</th>
         <th>&nbsp;</th>
       </thead>
@@ -82,25 +87,65 @@
       {% for software in softwares %}
       <tr>
         <td><a href="{% url 'ITAM:_software_view' pk=software.software_id %}">{{ software.software }}</a></td>
-        <td><a href="{% url 'ITAM:_device_software_view' device_id=device.id pk=software.id %}">{{ software.get_action_display }}</a></td>
+        <td>{{ software.software.category }}</td>
         <td>
-          {% if software.version %}
-          {{ software.version }}
+          {% url 'ITAM:_device_software_view' device_id=device.id pk=software.id as icon_link %}
+          {% if software.get_action_display == 'Install' %}
+            {% include 'icons/success_text.html.j2' with icon_text=software.get_action_display icon_link=icon_link %}
+          {% elif software.get_action_display == 'Remove'%}
+            {% include 'icons/cross_text.html.j2' with icon_text=software.get_action_display icon_link=icon_link %}
           {% else %}
-          Any
+            
+            {% include 'icons/add_link.html.j2' with icon_text='Add' icon_link=icon_link %}
           {% endif %}
         </td>
         <td>
-          {% include 'icons/issue_link.html.j2' with issue=2 %}
+          {% if software.version %}
+            {{ software.version }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          {% if software.installedversion %}
+            {{ software.installedversion }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>
+          {% if software.installed %}
+            {{ software.installed }}
+          {% else %}
+            -
+          {% endif %}
         </td>
         <td>&nbsp;</td>
       </tr>
       {% endfor %}
       {% else %}
-      <td colspan="5">Nothing Found {% include 'icons/issue_link.html.j2' with issue=2 %}</td>
+      <td colspan="5">Nothing Found</td>
       {% endif %}
     </table>
   </div>
+
+
+  <div id="Notes" class="tabcontent">
+    <h3>
+      Notes
+    </h3>
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+  </div>
+
 
   <div id="ConfigManagement" class="tabcontent">
     <h3>Configuration Management</h3>

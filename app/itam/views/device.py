@@ -1,19 +1,30 @@
 import json
+import markdown
 
+from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
 from access.models import Organization
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
+from ..models.software import Software
+
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
+
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
 
 from itam.forms.device.device import DeviceForm
 from itam.forms.device.operating_system import Update as OperatingSystemForm
 
+from settings.models.user_settings import UserSettings
 
 class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
     model = Device
@@ -44,7 +55,8 @@ class View(OrganizationPermission, generic.UpdateView):
     model = Device
 
     permission_required = [
-        'itam.view_device'
+        'itam.view_device',
+        'itam.change_device'
     ]
 
     template_name = 'itam/device.html.j2'
@@ -52,6 +64,9 @@ class View(OrganizationPermission, generic.UpdateView):
     form_class = DeviceForm
 
     context_object_name = "device"
+
+    paginate_by = 10
+
 
 
     def get_context_data(self, **kwargs):
@@ -74,17 +89,28 @@ class View(OrganizationPermission, generic.UpdateView):
             context['operating_system'] = OperatingSystemForm(prefix='operating_system')
 
 
-        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
+        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])[:50]
+        context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
+
         context['softwares'] = softwares
+
+        context['notes_form'] = AddNoteForm(prefix='note')
+
+        context['notes'] = Notes.objects.filter(device=self.kwargs['pk'])
 
         config = self.object.get_configuration(self.kwargs['pk'])
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
 
         context['content_title'] = self.object.name
 
         return context
 
-
+    @method_decorator(auth_decorator.permission_required("itam.change_device", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         device = Device.objects.get(pk=self.kwargs['pk'])
@@ -105,6 +131,19 @@ class View(OrganizationPermission, generic.UpdateView):
             operating_system.instance.device = device
 
             operating_system.save()
+
+
+        notes = AddNoteForm(request.POST, prefix='note')
+
+        if notes.is_bound and notes.is_valid() and notes.instance.note != '':
+
+            notes.instance.organization = device.organization
+            notes.instance.device = device
+            notes.instance.usercreated = request.user
+
+            notes.save()
+
+
 
         return super().post(request, *args, **kwargs)
 
@@ -134,6 +173,7 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
         form.instance.organization_id = device.organization.id
         form.instance.device_id = self.kwargs['device_id']
+
         return super().form_valid(form)
 
 
@@ -141,9 +181,17 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
         return f"/itam/device/{self.kwargs['device_id']}/"
 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit Software Action'
+
+        return context
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+
+class Add(OrganizationPermission, generic.CreateView):
     model = Device
     permission_required = [
         'itam.add_device',
@@ -156,6 +204,11 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         'device_type',
         'organization',
     ]
+
+    def get_initial(self):
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
     def form_valid(self, form):
         form.instance.is_global = False
@@ -194,7 +247,25 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
         device = Device.objects.get(pk=self.kwargs['pk'])
         form.instance.organization_id = device.organization.id
         form.instance.device_id = self.kwargs['pk']
-        return super().form_valid(form)
+
+        software = Software.objects.get(pk=form.instance.software.id)
+
+        if DeviceSoftware.objects.get(device=device, software=software):
+
+
+            software_version = DeviceSoftware.objects.get(
+                device=device,
+                software=software
+            )
+
+            software_version.action = form.instance.action
+            software_version.save()
+
+            return HttpResponseRedirect(self.get_success_url())
+        
+        else:
+
+            return super().form_valid(form)
 
 
     def get_form_kwargs(self):
@@ -212,13 +283,13 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = 'Add Device'
+        context['content_title'] = 'Add Software Action'
 
         return context
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = Device
     permission_required = [
         'itam.delete_device',
