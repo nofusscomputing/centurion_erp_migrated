@@ -143,6 +143,9 @@ class SaveHistory(models.Model):
 
             current_user = get_request().user
 
+            if current_user.is_anonymous:
+                current_user = None
+
 
         if before != after and after != '{}':
             entry = History.objects.create(

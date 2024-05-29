@@ -1,5 +1,5 @@
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import AccessMixin, PermissionRequiredMixin
 from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
@@ -16,17 +16,27 @@ class OrganizationMixin():
 
     def object_organization(self) -> int:
 
-        if 'access.models.Organization' in str(type(self.get_object())):
+        id = None
 
-            id = self.get_object().id
+        try:
 
-        else:
+            self.get_queryset()
 
-            id = self.get_object().organization.id
+            self.get_object()
+
+            id = self.get_object().get_organization().id
 
             if self.get_object().is_global:
 
                 id = 0
+
+        except AttributeError:
+
+            if self.request.method == 'POST':
+
+                if self.request.POST.get("organization", ""):
+
+                    id = int(self.request.POST.get("organization", ""))
 
         return id
 
@@ -124,7 +134,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required()[0] and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
+                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
 
                         return True
 
@@ -132,12 +142,15 @@ class OrganizationMixin():
 
 
 
-class OrganizationPermission(OrganizationMixin):
+class OrganizationPermission(AccessMixin, OrganizationMixin):
     """checking organization membership"""
 
 
     def dispatch(self, request, *args, **kwargs):
         self.request = request
+
+        if not request.user.is_authenticated:
+                return self.handle_no_permission()
 
         if hasattr(self, 'get_object'):
 

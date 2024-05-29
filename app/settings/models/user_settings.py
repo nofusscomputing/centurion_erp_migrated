@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from access.fields import *
 from access.models import Organization
@@ -40,6 +42,18 @@ class UserSettings(UserSettingsCommonFields):
         default = None,
         null = True,
     )
+
+
+    @receiver(post_save, sender=User)
+    def new_user_callback(sender, **kwargs):
+        settings = UserSettings.objects.filter(user=kwargs['instance'])
+
+        if not settings.exists():
+
+            UserSettings.objects.create(user=kwargs['instance'])
+
+            # settings = UserSettings.objects.filter(user=context.user)
+
 
     def is_owner(self, user: int) -> bool:
 

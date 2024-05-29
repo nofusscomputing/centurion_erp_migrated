@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import decorators as auth_decorator
+from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -7,7 +8,7 @@ from access.models import Team, TeamUsers
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = TeamUsers
     permission_required = [
         'access.view_team',
@@ -24,15 +25,17 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         team = Team.objects.get(pk=self.kwargs['pk'])
         form.instance.team = team
 
-        group = Group.objects.get(pk=team.group_ptr_id)
-        user = User.objects.get(pk=self.request.POST['user'][0])
-        user.groups.add(group)  
-
         return super().form_valid(form)
 
 
     def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['pk']}"
+
+        return reverse('Access:_team_view', 
+            kwargs={
+                'organization_id': self.kwargs['organization_id'],
+                'pk': self.kwargs['pk']
+            }
+        )
 
 
     def get_context_data(self, **kwargs):
@@ -43,31 +46,22 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
         return context
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = TeamUsers
     permission_required = [
-        'access.view_team',
         'access.delete_teamusers'
     ]
     template_name = 'form.html.j2'
 
 
-    def form_valid(self, form):
-
-        team = Team.objects.get(pk=self.kwargs['team_id'])
-        teamuser = TeamUsers.objects.get(pk=self.kwargs['pk'])
-
-        group = Group.objects.get(pk=team.group_ptr_id)
-
-        user = User.objects.get(pk=teamuser.user_id)
-        
-        user.groups.remove(group)  
-
-        return super().form_valid(form)
-
-
     def get_success_url(self, **kwargs):
-        return f"/organization/{self.kwargs['organization_id']}/team/{self.kwargs['team_id']}"
+
+        return reverse('Access:_team_view', 
+            kwargs={
+                'organization_id': self.kwargs['organization_id'],
+                'pk': self.kwargs['team_id']
+            }
+        )
 
 
     def get_context_data(self, **kwargs):

@@ -1,6 +1,7 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Q, Count
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -15,7 +16,7 @@ from itam.forms.operating_system.update import Update
 from settings.models.user_settings import UserSettings
 
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class IndexView(OrganizationPermission, generic.ListView):
     model = OperatingSystem
     permission_required = 'itam.view_operating_system'
     template_name = 'itam/operating_system_index.html.j2'
@@ -38,7 +39,8 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 class View(OrganizationPermission, generic.UpdateView):
     model = OperatingSystem
     permission_required = [
-        'itam.view_operating_system'
+        'itam.view_operatingsystem',
+        'itam.change_operatingsystem',
     ]
     template_name = 'itam/operating_system.html.j2'
 
@@ -69,6 +71,7 @@ class View(OrganizationPermission, generic.UpdateView):
         return context
 
 
+    @method_decorator(auth_decorator.permission_required("itam.change_operatingsystem", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         operatingsystem = OperatingSystem.objects.get(pk=self.kwargs['pk'])
@@ -92,10 +95,10 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = OperatingSystem
     permission_required = [
-        'access.add_operating_system',
+        'itam.add_operatingsystem',
     ]
     template_name = 'form.html.j2'
     fields = [
@@ -127,12 +130,12 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
 
     model = OperatingSystem
 
     permission_required = [
-        'access.delete_operating_system',
+        'itam.delete_operatingsystem',
     ]
 
     template_name = 'form.html.j2'

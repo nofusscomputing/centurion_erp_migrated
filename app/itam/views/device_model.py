@@ -1,5 +1,6 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -13,7 +14,8 @@ from settings.models.user_settings import UserSettings
 class View(OrganizationPermission, generic.UpdateView):
     model = DeviceModel
     permission_required = [
-        'itam.view_device_type'
+        'itam.view_devicemodel',
+        'itam.change_devicemodel',
     ]
     template_name = 'form.html.j2'
 
@@ -45,11 +47,17 @@ class View(OrganizationPermission, generic.UpdateView):
         return reverse('Settings:_device_model_view', args=(self.kwargs['pk'],))
 
 
+    @method_decorator(auth_decorator.permission_required("itam.change_devicemodel", raise_exception=True))
+    def post(self, request, *args, **kwargs):
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+        return super().post(request, *args, **kwargs)
+
+
+
+class Add(OrganizationPermission, generic.CreateView):
     model = DeviceModel
     permission_required = [
-        'access.add_device_type',
+        'itam.add_devicemodel',
     ]
     template_name = 'form.html.j2'
     fields = [
@@ -79,10 +87,12 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
         return context
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+
+
+class Delete(OrganizationPermission, generic.DeleteView):
     model = DeviceModel
     permission_required = [
-        'access.delete_device_type',
+        'itam.delete_devicemodel',
     ]
     template_name = 'form.html.j2'
 

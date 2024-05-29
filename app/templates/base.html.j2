@@ -100,7 +100,7 @@ section h2 span svg {
         {% else %}
           development
         {% endif %}
-        ({% if build_details.url%}(<a href="{{ build_details.url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
+        ({% if build_details.project_url %}(<a href="{{ build_details.project_url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
         {{ build_details.sha }}
         {% if build_details.url%}</a>{% endif %})
       </span>

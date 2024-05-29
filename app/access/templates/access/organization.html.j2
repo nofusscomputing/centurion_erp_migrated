@@ -26,7 +26,7 @@
   </thead>
   {% for field in teams %}
   <tr>
-    <td><a href="{% url 'Access:_team' organization_id=organization.id pk=field.id %}">{{ field.team_name }}</a></td>
+    <td><a href="{% url 'Access:_team_view' organization_id=organization.id pk=field.id %}">{{ field.team_name }}</a></td>
     <td>{{ field.created }}</td>
     <td>{{ field.modified }}</td>
   </tr>
