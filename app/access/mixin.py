@@ -24,17 +24,11 @@ class OrganizationMixin():
 
             self.get_object()
 
-            if 'access.models.Organization' in str(type(self.get_object())):
+            id = self.get_object().get_organization().id
 
-                id = self.get_object().id
+            if self.get_object().is_global:
 
-            else:
-
-                id = self.get_object().organization.id
-
-                if self.get_object().is_global:
-
-                    id = 0
+                id = 0
 
         except AttributeError:
 

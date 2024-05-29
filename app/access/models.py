@@ -43,6 +43,10 @@ class Organization(SaveHistory):
     modified = AutoLastModifiedField()
 
 
+    def get_organization(self):
+        return self
+
+
 class TenancyObject(models.Model):
 
     class Meta:
@@ -59,6 +63,9 @@ class TenancyObject(models.Model):
         default = False,
         blank = False
     )
+
+    def get_organization(self) -> Organization:
+        return self.organization
 
 
 class Team(Group, TenancyObject, SaveHistory):
@@ -138,6 +145,10 @@ class TeamUsers(SaveHistory):
         user = User.objects.get(pk=self.user_id)
         
         user.groups.remove(group)
+
+
+    def get_organization(self) -> Organization:
+        return self.team.organization
 
 
     def save(self, *args, **kwargs):
