@@ -97,6 +97,21 @@ class Team(Group, TenancyObject, SaveHistory):
     modified = AutoLastModifiedField()
 
 
+    def permission_list(self) -> list:
+
+        permission_list = []
+
+        for permission in self.permissions.all():
+
+            if str(permission.content_type.app_label + '.' + permission.codename) in permission_list:
+                continue
+
+            permission_list += [ str(permission.content_type.app_label + '.' + permission.codename) ]
+
+        return [permission_list, self.permissions.all()]
+
+
+
 class TeamUsers(SaveHistory):
 
     class Meta:
