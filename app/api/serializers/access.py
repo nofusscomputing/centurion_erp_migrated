@@ -17,7 +17,7 @@ class TeamSerializerBase(serializers.ModelSerializer):
         model = Team
         fields = (
             "id",
-            "name",
+            "team_name",
             'organization',
             'url',
         )
@@ -66,7 +66,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
         view_name="_api_organization", format="html"
     )
 
-    teams = TeamSerializerBase(source='team_set', many=True, read_only=False)
+    teams = serializers.SerializerMethodField('get_url')
+
+    def get_url(self, obj):
+
+        request = self.context.get('request')
+
+        team = Team.objects.get(pk=obj.id)
+
+        return request.build_absolute_uri(reverse('_api_organization_teams', args=[team.organization_id]))
 
     view_name="_api_organization"
 

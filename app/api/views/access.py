@@ -33,8 +33,16 @@ class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TeamList(generics.ListCreateAPIView):
-    queryset = Team.objects.all()
+    queryset = Team.objects.filter()
     serializer_class = TeamSerializer
+
+    def get_queryset(self):
+
+        return Team.objects.filter(organization=self.kwargs['organization_id'])
+
+
+    def get_view_name(self):
+        return "Organization Teams"
 
 
 
