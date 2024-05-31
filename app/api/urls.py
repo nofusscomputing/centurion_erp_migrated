@@ -7,6 +7,7 @@ from .views.itam import software as itam_software, config as itam_config
 from .views.itam.device import detail as itam_device
 from .views.itam.device import inventory
 
+app_name = "API"
 urlpatterns = [
     path("", index.IndexView.as_view(), name='_api_home'),
     path("organization/", access.OrganizationList.as_view(), name='_api_orgs'),

@@ -1,18 +1,78 @@
 from django.contrib.auth.models import Permission
 
-from rest_framework import generics, routers, serializers
+from rest_framework import generics, routers, serializers, views
+from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.response import Response
 
+from access.mixin import OrganizationMixin
 from access.models import Organization, Team
 
-from api.serializers.access import OrganizationSerializer, TeamSerializer
+from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer
+
+
+class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
+    """checking organization membership"""
+
+    def has_permission(self, request, view):
+
+        self.request = request
+
+        return True
+
+
+    def has_object_permission(self, request, view, obj):
+
+        self.request = request
+
+        self.obj = obj
+
+        self.view = view
+
+        method = self.request.method.lower()
+
+        if method == 'get':
+
+            action = 'view'
+        
+        elif method == 'post':
+
+            action = 'add'
+        
+        elif method == 'patch':
+
+            action = 'change'
+
+        elif method == 'put':
+
+            action = 'change'
+
+        elif method == 'delete':
+
+            action = 'delete'
+        
+        else:
+
+            action = 'view'
+
+        permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
+
+        self.permission_required = [ permission ]
+
+        if not self.has_organization_permission() and not request.user.is_superuser:
+            return False
+
+        return True
+
 
 
 
 class OrganizationList(generics.ListCreateAPIView):
-    permission_required = 'access.view_organization'
+
+    permission_classes = [OrganizationPermissionAPI]
+
     queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+    lookup_field = 'pk'
+    serializer_class = OrganizationListSerializer
 
 
     def get_view_name(self):
@@ -21,8 +81,10 @@ class OrganizationList(generics.ListCreateAPIView):
 
 
 class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_required = 'access.view_organization'
-    queryset = Organization.objects.all()
+
+    permission_classes = [OrganizationPermissionAPI]
+
+    queryset = Organization.objects.filter()
     lookup_field = 'pk'
     serializer_class = OrganizationSerializer
 
@@ -38,7 +100,9 @@ class TeamList(generics.ListCreateAPIView):
 
     def get_queryset(self):
 
-        return Team.objects.filter(organization=self.kwargs['organization_id'])
+        self.queryset = Team.objects.filter(organization=self.kwargs['organization_id'])
+
+        return self.queryset
 
 
     def get_view_name(self):

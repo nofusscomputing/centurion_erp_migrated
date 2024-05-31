@@ -28,8 +28,8 @@ class IndexView(routers.APIRootView):
         return Response(
         {
             # "teams": reverse("_api_teams", request=request),
-            "devices": reverse("_api_devices", request=request),
-            "organizations": reverse("_api_orgs", request=request),
-            "software": reverse("_api_softwares", request=request),
+            "devices": reverse("API:_api_devices", request=request),
+            "organizations": reverse("API:_api_orgs", request=request),
+            "software": reverse("API:_api_softwares", request=request),
         }
     )

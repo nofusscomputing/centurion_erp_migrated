@@ -8,7 +8,7 @@ from django.contrib.auth.models import Permission
 
 class TeamSerializerBase(serializers.ModelSerializer):
 
-    view_name="_api_team"
+    view_name="API:_api_team"
 
     url = serializers.SerializerMethodField('get_url')
 
@@ -41,7 +41,16 @@ class TeamSerializer(TeamSerializerBase):
 
         team = Team.objects.get(pk=obj.id)
 
-        return request.build_absolute_uri(reverse('_api_team_permission', args=[team.organization_id,team.id]))
+        return request.build_absolute_uri(reverse('API:_api_team_permission', args=[team.organization_id,team.id]))
+
+
+    url = serializers.SerializerMethodField('team_url')
+
+    def team_url(self, obj):
+
+        request = self.context.get('request')
+
+        return request.build_absolute_uri(reverse('API:_api_team', args=[obj.organization_id,obj.id]))
 
 
     class Meta:
@@ -60,10 +69,27 @@ class TeamSerializer(TeamSerializerBase):
 
 
 
+class OrganizationListSerializer(serializers.ModelSerializer):
+
+    url = serializers.HyperlinkedIdentityField(
+        view_name="API:_api_organization", format="html"
+    )
+
+
+    class Meta:
+        model = Organization
+        fields = (
+            "id",
+            "name",
+            'url',
+        )
+
+
+
 class OrganizationSerializer(serializers.ModelSerializer):
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="_api_organization", format="html"
+        view_name="API:_api_organization", format="html"
     )
 
     teams = serializers.SerializerMethodField('get_url')
@@ -74,9 +100,9 @@ class OrganizationSerializer(serializers.ModelSerializer):
 
         team = Team.objects.get(pk=obj.id)
 
-        return request.build_absolute_uri(reverse('_api_organization_teams', args=[team.organization_id]))
+        return request.build_absolute_uri(reverse('API:_api_organization_teams', args=[team.organization_id]))
 
-    view_name="_api_organization"
+    view_name="API:_api_organization"
 
 
     class Meta:
