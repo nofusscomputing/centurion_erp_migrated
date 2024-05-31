@@ -33,17 +33,30 @@ class TeamSerializerBase(serializers.ModelSerializer):
 
 class TeamSerializer(TeamSerializerBase):
 
+    permissions = serializers.SerializerMethodField('get_url')
+
+    def get_url(self, obj):
+
+        request = self.context.get('request')
+
+        team = Team.objects.get(pk=obj.id)
+
+        return request.build_absolute_uri(reverse('_api_team_permission', args=[team.organization_id,team.id]))
+
 
     class Meta:
         model = Team
         depth = 1
         fields = (
             "id",
-            "name",
+            "team_name",
             'organization',
             'permissions',
             'url',
         )
+        read_only_fields = [
+            'permissions'
+        ]
 
 
 

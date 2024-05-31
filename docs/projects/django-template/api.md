@@ -61,3 +61,12 @@ Report Format
 ## User Token
 
 To generate a user token to access the api, use command `python3 manage.py drf_create_token <username>`
+
+
+## Team Permissions
+
+- url `/api/organization/<organization id>/team/<team id>/permissions`, `HTTP/POST` = replace permissions with those in body
+- url `/api/organization/<organization id>/team/<team id>/permissions`, `HTTP/PATCH` = amend permissions to include those in body
+- url `/api/organization/<organization id>/team/<team id>/permissions`, `HTTP/DELETE` = delete ALL permissions
+
+HTTP/POST or HTTP/PATCH with list of permission in format `<module name>.<permission>_<model>`. i.e for adding a itam device permission would be `itam.add_device`. if the method is post only the permissions in the post request will remain, the others will be deleted. If method is patch, those in request body will be added.

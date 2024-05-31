@@ -12,6 +12,7 @@ urlpatterns = [
     path("organization/", access.OrganizationList.as_view(), name='_api_orgs'),
     path("organization/<int:pk>/", access.OrganizationDetail.as_view(), name='_api_organization'),
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/", access.TeamDetail.as_view(), name='_api_team'),
+    path("organization/<int:organization_id>/team/<int:group_ptr_id>/permissions", access.TeamPermissionDetail.as_view(), name='_api_team_permission'),
     path("organization/team/", access.TeamList.as_view(), name='_api_teams'),
 
 
