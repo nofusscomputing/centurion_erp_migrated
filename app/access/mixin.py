@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
+
+
 from .models import Team
 
 
@@ -20,15 +22,26 @@ class OrganizationMixin():
 
         try:
 
-            self.get_queryset()
+            if hasattr(self, 'get_queryset'):
+                self.get_queryset()
 
-            self.get_object()
 
-            id = self.get_object().get_organization().id
+            if hasattr(self, 'get_object'):
+                self.get_object()
 
-            if self.get_object().is_global:
+                id = self.get_object().get_organization().id
 
-                id = 0
+                if self.get_object().is_global:
+
+                    id = 0
+
+            if hasattr(self, 'obj'):
+
+                id = self.obj.get_organization().id
+
+                if self.obj.is_global:
+
+                    id = 0
 
         except AttributeError:
 
@@ -117,7 +130,7 @@ class OrganizationMixin():
 
 
     # ToDo: Ensure that the group has access to item
-    def has_permission(self) -> bool:
+    def has_organization_permission(self) -> bool:
 
         has_permission = False
 
@@ -154,7 +167,7 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
 
         if hasattr(self, 'get_object'):
 
-            if not self.has_permission() and not request.user.is_superuser:
+            if not self.has_organization_permission() and not request.user.is_superuser:
                 raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)
