@@ -2,19 +2,17 @@
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
-from rest_framework import generics, permissions, routers
+from rest_framework import generics, permissions, routers, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
+class Index(viewsets.ViewSet):
 
-
-class IndexView(routers.APIRootView):
-
-    permission_required = 'access.view_organization'
+    # permission_required = 'access.view_organization'
 
     def get_view_name(self):
-        return "My API"
+        return "API Index"
 
     def get_view_description(self, html=False) -> str:
         text = "My REST API"
@@ -24,12 +22,12 @@ class IndexView(routers.APIRootView):
             return text
 
 
-    def get(self, request, *args, **kwargs):
+    def list(self, request, pk=None):
         return Response(
         {
             # "teams": reverse("_api_teams", request=request),
-            "devices": reverse("_api_devices", request=request),
-            "organizations": reverse("_api_orgs", request=request),
-            "software": reverse("_api_softwares", request=request),
+            "devices": reverse("API:device-list", request=request),
+            "organizations": reverse("API:_api_orgs", request=request),
+            "software": reverse("API:software-list", request=request),
         }
     )

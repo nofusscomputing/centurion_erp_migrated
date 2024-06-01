@@ -1,18 +1,26 @@
 from django.contrib.auth.models import Permission
 
-from rest_framework import generics, routers, serializers
+from rest_framework import generics, routers, serializers, views
+from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.response import Response
 
+from access.mixin import OrganizationMixin
 from access.models import Organization, Team
 
-from api.serializers.access import OrganizationSerializer, TeamSerializer
+from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer
+from api.views.mixin import OrganizationPermissionAPI
 
 
 
 class OrganizationList(generics.ListCreateAPIView):
-    permission_required = 'access.view_organization'
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+    lookup_field = 'pk'
+    serializer_class = OrganizationListSerializer
 
 
     def get_view_name(self):
@@ -21,7 +29,11 @@ class OrganizationList(generics.ListCreateAPIView):
 
 
 class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_required = 'access.view_organization'
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Organization.objects.all()
     lookup_field = 'pk'
     serializer_class = OrganizationSerializer
@@ -33,19 +45,46 @@ class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TeamList(generics.ListCreateAPIView):
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
 
+    def get_queryset(self):
+
+        self.queryset = Team.objects.filter(organization=self.kwargs['organization_id'])
+
+        return self.queryset
+
+
+    def get_view_name(self):
+        return "Organization Teams"
+
+
 
 class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
     lookup_field = 'group_ptr_id'
 
 
+
 class TeamPermissionDetail(routers.APIRootView):
+
+    # temp disabled until permission checker updated
+    # permission_classes = [
+    #     OrganizationPermissionAPI
+    # ]
 
 
     def get(self, request, *args, **kwargs):
