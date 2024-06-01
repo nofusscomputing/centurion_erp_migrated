@@ -9,7 +9,7 @@ from rest_framework import serializers
 class DeviceSerializer(serializers.ModelSerializer):
     
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_device_view", format="html"
+        view_name="API:device-detail", format="html"
     )
 
     config = serializers.SerializerMethodField('get_device_config')

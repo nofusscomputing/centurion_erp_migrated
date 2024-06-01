@@ -167,7 +167,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
         response = client.get(url)
 
@@ -181,7 +181,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -197,7 +197,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -213,7 +213,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.view_user)
@@ -230,7 +230,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_softwares')
+        url = reverse('API:software-list')
 
 
         response = client.post(url, data={'software': 'software'})
@@ -245,7 +245,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_softwares')
+        url = reverse('API:software-list')
 
 
         client.force_login(self.no_permissions_user)
@@ -262,7 +262,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_softwares')
+        url = reverse('API:software-list')
 
 
         client.force_login(self.different_organization_user)
@@ -278,7 +278,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_softwares')
+        url = reverse('API:software-list')
 
 
         client.force_login(self.view_user)
@@ -294,7 +294,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_softwares')
+        url = reverse('API:software-list')
 
 
         client.force_login(self.add_user)
@@ -311,7 +311,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         response = client.patch(url, data={'software': 'software'})
@@ -326,7 +326,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -342,7 +342,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -358,7 +358,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.view_user)
@@ -374,7 +374,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.add_user)
@@ -390,7 +390,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.change_user)
@@ -407,7 +407,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         response = client.delete(url, data={'software': 'software'})
@@ -422,7 +422,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -438,7 +438,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -454,7 +454,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.view_user)
@@ -470,7 +470,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.add_user)
@@ -486,7 +486,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.change_user)
@@ -502,7 +502,7 @@ class SoftwarePermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_software_view', kwargs={'pk': self.item.id})
+        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.delete_user)
