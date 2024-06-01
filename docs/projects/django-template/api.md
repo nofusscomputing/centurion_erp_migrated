@@ -6,7 +6,6 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-
 to access the api, it can be done with the following command:
 
 ``` bash
@@ -58,12 +57,31 @@ Report Format
 
 ```
 
+
 ## User Token
 
 To generate a user token to access the api, use command `python3 manage.py drf_create_token <username>`
 
 
-## Team Permissions
+## Organizations
+
+- url `/api/organization`, `HTTP/GET` view organizations
+- url `/api/organization`, `HTTP/POST` create an organization
+- url `/api/organization/<organization id>`, `HTTP/GET` view an organization
+- url `/api/organization/<organization id>`, `HTTP/PATCH` edit an organization
+- url `/api/organization/<organization id>`, `HTTP/DELETE` delete an organization
+
+
+## Teams
+
+- url `/api/organization/<organization id>/team`, `HTTP/GET` view teams within org
+- url `/api/organization/<organization id>/team`, `HTTP/POST` create team in org
+- url `/api/organization/<organization id>/team/<team id>`, `HTTP/GET` view a team in org
+- url `/api/organization/<organization id>/team/<team id>`, `HTTP/PATCH` edit team in org
+- url `/api/organization/<organization id>/team/<team id>`, `HTTP/DELETE` delete team in org
+
+
+### Team Permissions
 
 - url `/api/organization/<organization id>/team/<team id>/permissions`, `HTTP/POST` = replace permissions with those in body
 - url `/api/organization/<organization id>/team/<team id>/permissions`, `HTTP/PATCH` = amend permissions to include those in body
