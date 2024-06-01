@@ -30,7 +30,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
             if view.queryset.model._meta:
                 self.obj = view.queryset.model
 
-        method = self.request.method.lower()
+        method = self.request._request.method.lower()
 
         object_organization = None
 
@@ -103,7 +103,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                     self.obj = view.queryset.get()
 
 
-        if hasattr(self, 'obj') and not object_organization:
+        if hasattr(self, 'obj') and not object_organization and 'pk' in view.kwargs:
 
             if self.obj.get_organization():
 
@@ -114,6 +114,13 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                     if self.obj.is_global:
 
                         object_organization = 0
+
+
+        # ToDo: implement proper checking of listview as this if allows ALL.
+        if 'pk' not in view.kwargs and method == 'get' and not object_organization:
+
+            return True
+
 
         if not object_organization:
 
