@@ -74,7 +74,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                     object_organization = view.kwargs['organization_id']
 
-            if not object_organization and 'pk' in view.kwargs:
+            if object_organization is None and 'pk' in view.kwargs:
 
                 self.obj = view.queryset.get(pk=view.kwargs['pk'])
 
@@ -94,16 +94,16 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             if 'pk' in view.kwargs:
 
-                if not object_organization and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
+                if object_organization is None and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
 
                     object_organization = view.kwargs['pk']
 
-                if not object_organization:
+                if object_organization is None:
 
                     self.obj = view.queryset.get()
 
 
-        if hasattr(self, 'obj') and not object_organization and 'pk' in view.kwargs:
+        if hasattr(self, 'obj') and object_organization is None and 'pk' in view.kwargs:
 
             if self.obj.get_organization():
 
@@ -117,12 +117,12 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
 
         # ToDo: implement proper checking of listview as this if allows ALL.
-        if 'pk' not in view.kwargs and method == 'get' and not object_organization:
+        if 'pk' not in view.kwargs and method == 'get' and object_organization is None:
 
             return True
 
 
-        if not object_organization:
+        if object_organization is None:
 
             raise Exception("unable to determine object organization")
 
