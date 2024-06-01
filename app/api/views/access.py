@@ -15,18 +15,24 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
     def has_permission(self, request, view):
 
-        self.request = request
-
-        return True
+        return self.permission_check(request, view)
 
 
     def has_object_permission(self, request, view, obj):
 
+        return self.permission_check(request, view, obj)
+
+
+    def permission_check(self, request, view, obj=None) -> bool:
+
         self.request = request
 
-        self.obj = obj
+        if hasattr(view, 'queryset'):
+            if view.queryset.model._meta:
+                self.obj = view.queryset.model
 
-        self.view = view
+        if obj and not self.obj:
+            self.obj = obj
 
         method = self.request.method.lower()
 
@@ -49,26 +55,61 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
         elif method == 'delete':
 
             action = 'delete'
-        
+
         else:
 
             action = 'view'
+
+        object_organization = None
 
         permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
 
         self.permission_required = [ permission ]
 
-        if not self.has_organization_permission() and not request.user.is_superuser:
+
+        if view:
+            if 'organization_id' in view.kwargs:
+
+                if view.kwargs['organization_id']:
+
+                    object_organization = view.kwargs['organization_id']
+
+            if 'pk' in view.kwargs:
+
+                if not object_organization and view.queryset.model._meta.model_name == 'organization' and view.kwargs['pk']:
+
+                    object_organization = view.kwargs['pk']
+
+        if obj:
+
+            if hasattr(self, 'obj') and not id:
+
+                if isinstance(self.obj, type):
+
+                    boo = self.obj.organization.get_object()
+
+                    if self.obj.get_organization():
+
+                        object_organization = self.obj.get_organization().id
+
+                        if self.obj.is_global:
+
+                            object_organization = 0
+
+
+
+        if not self.has_organization_permission(object_organization) and not request.user.is_superuser:
             return False
 
         return True
 
 
 
-
 class OrganizationList(generics.ListCreateAPIView):
 
-    permission_classes = [OrganizationPermissionAPI]
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
 
     queryset = Organization.objects.all()
     lookup_field = 'pk'
@@ -82,9 +123,11 @@ class OrganizationList(generics.ListCreateAPIView):
 
 class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
 
-    permission_classes = [OrganizationPermissionAPI]
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
 
-    queryset = Organization.objects.filter()
+    queryset = Organization.objects.all()
     lookup_field = 'pk'
     serializer_class = OrganizationSerializer
 
@@ -95,8 +138,14 @@ class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TeamList(generics.ListCreateAPIView):
-    queryset = Team.objects.filter()
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
+    queryset = Team.objects.all()
     serializer_class = TeamSerializer
+
 
     def get_queryset(self):
 
@@ -111,13 +160,24 @@ class TeamList(generics.ListCreateAPIView):
 
 
 class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Team.objects.all()
     serializer_class = TeamSerializer
 
     lookup_field = 'group_ptr_id'
 
 
+
 class TeamPermissionDetail(routers.APIRootView):
+
+    # temp disabled until permission checker updated
+    # permission_classes = [
+    #     OrganizationPermissionAPI
+    # ]
 
 
     def get(self, request, *args, **kwargs):

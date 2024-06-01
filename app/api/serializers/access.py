@@ -42,6 +42,16 @@ class TeamSerializer(TeamSerializerBase):
         return request.build_absolute_uri(reverse('API:_api_team_permission', args=[team.organization_id,team.id]))
 
 
+    def validate(self, data):
+        """
+        Check that start is before finish.
+        """
+
+        data['organization_id'] = self._context['view'].kwargs['organization_id']
+
+        return data
+
+
     url = serializers.SerializerMethodField('team_url')
 
     def team_url(self, obj):
@@ -62,7 +72,8 @@ class TeamSerializer(TeamSerializerBase):
             'url',
         )
         read_only_fields = [
-            'permissions'
+            'permissions',
+            'url'
         ]
 
 
@@ -90,15 +101,17 @@ class OrganizationSerializer(serializers.ModelSerializer):
         view_name="API:_api_organization", format="html"
     )
 
-    teams = serializers.SerializerMethodField('get_url')
+    team_url = serializers.SerializerMethodField('get_url')
 
     def get_url(self, obj):
 
         request = self.context.get('request')
 
-        team = Team.objects.get(pk=obj.id)
+        team = Team.objects.filter(pk=obj.id)
 
-        return request.build_absolute_uri(reverse('API:_api_organization_teams', args=[team.organization_id]))
+        return request.build_absolute_uri(reverse('API:_api_organization_teams', args=[obj.id]))
+
+    teams = TeamSerializerBase(source='team_set', many=True, read_only=False)
 
     view_name="API:_api_organization"
 
@@ -110,4 +123,5 @@ class OrganizationSerializer(serializers.ModelSerializer):
             "name",
             'teams',
             'url',
+            'team_url',
         )
