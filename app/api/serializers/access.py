@@ -8,8 +8,6 @@ from django.contrib.auth.models import Permission
 
 class TeamSerializerBase(serializers.ModelSerializer):
 
-    view_name="API:_api_team"
-
     url = serializers.SerializerMethodField('get_url')
 
 
@@ -27,7 +25,7 @@ class TeamSerializerBase(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        return request.build_absolute_uri(reverse(self.view_name, args=[obj.organization.id,obj.pk]))
+        return request.build_absolute_uri(reverse("API:_api_team", args=[obj.organization.id,obj.pk]))
 
 
 
