@@ -35,13 +35,6 @@ class OrganizationMixin():
 
                     id = 0
 
-            if hasattr(self, 'obj'):
-
-                id = self.obj.get_organization().id
-
-                if self.obj.is_global:
-
-                    id = 0
 
         except AttributeError:
 
@@ -130,11 +123,15 @@ class OrganizationMixin():
 
 
     # ToDo: Ensure that the group has access to item
-    def has_organization_permission(self) -> bool:
+    def has_organization_permission(self, organization=None) -> bool:
 
         has_permission = False
 
-        if self.is_member(self.object_organization()) or self.object_organization() == 0:
+        if not organization:
+
+            organization = self.object_organization()
+
+        if self.is_member(organization) or organization == 0:
 
             groups = Group.objects.filter(pk__in=self.user_groups)
 
@@ -147,7 +144,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
+                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == organization or organization == 0):
 
                         return True
 
