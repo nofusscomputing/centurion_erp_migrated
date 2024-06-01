@@ -28,5 +28,6 @@ class DeviceSerializer(serializers.ModelSerializer):
             'inventorydate',
             'is_global',
             'organization',
+            'slug',
         ]
 
