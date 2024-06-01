@@ -13,3 +13,7 @@ class SoftwareSerializer(serializers.ModelSerializer):
     class Meta:
         model = Software
         fields = '__all__'
+
+        read_only_fields = [
+            'slug',
+        ]
