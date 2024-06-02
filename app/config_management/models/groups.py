@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 from access.fields import *
@@ -73,6 +75,22 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             count += child.count_children()
 
         return count
+
+
+
+    def render_config(self) -> str:
+
+        config: dict = dict()
+
+        if self.parent:
+
+            config.update(json.loads(ConfigGroups.objects.get(id=self.parent.id).render_config()))
+
+        if self.config:
+
+            config.update(self.config)
+
+        return json.dumps(config)
 
 
 

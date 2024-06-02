@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import decorators as auth_decorator
 
 from django.db.models import Count, Q
@@ -113,6 +115,9 @@ class GroupView(OrganizationPermission, generic.UpdateView):
         context = super().get_context_data(**kwargs)
 
         context['child_groups'] = ConfigGroups.objects.filter(parent=self.kwargs['pk'])
+
+        context['config'] = json.dumps(json.loads(self.object.render_config()), indent=4, sort_keys=True)
+
 
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(config_group=self.kwargs['pk'])

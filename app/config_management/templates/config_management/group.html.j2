@@ -24,16 +24,19 @@
 </script>
 
 <div class="tab">
-    <button onclick="window.location='{% if group.parent %}{% url 'Config Management:_group_view' pk=group.parent.id %}{% else %}{% url 'Config Management:_group_index' %}{% endif %}';"
+    <button
+        onclick="window.location='{% if group.parent %}{% url 'Config Management:_group_view' pk=group.parent.id %}{% else %}{% url 'Config Management:_group_index' %}{% endif %}';"
         style="vertical-align: middle; padding: auto; margin: 0px">
         <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
             style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
-            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+            <path
+                d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
         </svg>Back to {% if group.parent %}Parent{% else %}Groups{% endif %}</button>
-    
+
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Children')">Child Groups</button>
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Software')">Software</button>
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Configuration')">Configuration</button>
     <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
 
 </div>
@@ -84,6 +87,15 @@
             Software
         </h3>
 
+        
+
+    </div>
+
+    <div id="Configuration" class="tabcontent">
+        <h3>Configuration</h3>
+        <div>
+            <textarea cols="90" rows="30" readonly>{{ config }}</textarea>
+        </div>
     </div>
 
     <div id="Notes" class="tabcontent">
