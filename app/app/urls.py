@@ -20,6 +20,8 @@ from django.contrib.auth import views as auth_views
 from django.views.static import serve
 from django.urls import include, path, re_path
 
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
 from .views import home
 
 from core.views import history
@@ -46,6 +48,8 @@ if settings.API_ENABLED:
     urlpatterns += [
 
         path("api/", include("api.urls")),
+        path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+        path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     ]
 
 if settings.DEBUG:

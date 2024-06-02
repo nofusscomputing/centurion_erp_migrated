@@ -1,6 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework import generics, viewsets
 
 from access.mixin import OrganizationMixin
@@ -23,6 +25,18 @@ class DeviceViewSet(OrganizationMixin, viewsets.ModelViewSet):
     serializer_class = DeviceSerializer
 
 
+    @extend_schema( description='Fetch devices that are from the users assigned organization(s)', methods=["GET"])
+    def list(self, request):
+
+        return super().list(request)
+
+
+    @extend_schema( description='Fetch the selected device', methods=["GET"])
+    def retrieve(self, request, *args, **kwargs):
+
+        return super().retrieve(request, *args, **kwargs)
+
+
     def get_queryset(self):
 
         if self.request.user.is_superuser:
@@ -35,4 +49,7 @@ class DeviceViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
 
     def get_view_name(self):
-        return "Device"
+        if self.detail:
+            return "Device"
+        
+        return 'Devices'
