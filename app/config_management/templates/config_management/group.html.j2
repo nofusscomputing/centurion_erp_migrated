@@ -1,0 +1,107 @@
+{% extends 'base.html.j2' %}
+
+{% block body %}
+
+<script>
+
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+</script>
+
+<div class="tab">
+    <button onclick="window.location='{% if group.parent %}{% url 'Config Management:_group_view' pk=group.parent.id %}{% else %}{% url 'Config Management:_group_index' %}{% endif %}';"
+        style="vertical-align: middle; padding: auto; margin: 0px">
+        <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
+            style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
+            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+        </svg>Back to {% if group.parent %}Parent{% else %}Groups{% endif %}</button>
+    
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Children')">Child Groups</button>
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Software')">Software</button>
+    <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
+
+</div>
+
+<form method="post">
+    <div id="Details" class="tabcontent">
+        <h3>Details</h3>
+
+        {% csrf_token %}
+        {{ form }}
+        {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
+        <input type="submit" value="Submit">
+
+        <script>
+            document.getElementById("defaultOpen").click();
+        </script>
+
+    </div>
+
+    <div id="Children" class="tabcontent">
+        <h3>Child Groups</h3>
+        <table class="data">
+            <tr>
+                <th>Name</th>
+                <th>Sub-Groups</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% if child_groups %}
+            {% for group in child_groups %}
+            <tr>
+                <td><a href="{% url 'Config Management:_group_view' pk=group.id %}">{{ group.name }}</a></td>
+                <td>{{ group.count_children }}</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="4">Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
+
+
+    <div id="Software" class="tabcontent">
+        <h3>
+            Software
+        </h3>
+
+    </div>
+
+    <div id="Notes" class="tabcontent">
+        <h3>
+            Notes
+        </h3>
+        {{ notes_form }}
+        <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+        <div class="comments">
+            {% if notes %}
+            {% for note in notes %}
+            {% include 'note.html.j2' %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+
+</form>
+
+{% endblock %}

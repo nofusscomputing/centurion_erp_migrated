@@ -6,7 +6,7 @@ class ConfigIndex(generic.View):
 
     permission_required = 'itam.view_device'
 
-    template_name = 'form.html.j2'
+    template_name = 'config_management/index.html.j2'
 
 
     def get(self, request):
