@@ -1,6 +1,7 @@
 import json
 
 from django.db import models
+from django.forms import ValidationError
 
 from access.fields import *
 from access.models import TenancyObject
@@ -32,6 +33,20 @@ class GroupsCommonFields(TenancyObject, models.Model):
 
 class ConfigGroups(GroupsCommonFields, SaveHistory):
 
+    reserved_config_keys: list = [
+        'software'
+    ]
+
+
+    def validate_config_keys(self):
+
+        value: dict = self
+
+        for invalid_key in ConfigGroups.reserved_config_keys:
+
+            if invalid_key in value.keys():
+                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+
 
     parent = models.ForeignKey(
         'self',
@@ -53,6 +68,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         blank = True,
         default = None,
         null = True,
+        validators=[validate_config_keys]
     )
 
 
@@ -102,5 +118,3 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
 
         super().save(*args, **kwargs)
-
-
