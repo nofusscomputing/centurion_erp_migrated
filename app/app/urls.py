@@ -40,6 +40,8 @@ urlpatterns = [
 
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
+    path("config_management/", include("config_management.urls")),
+
     path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT})
 ]
@@ -59,7 +61,6 @@ if settings.DEBUG:
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
         # Apps Under Development
         path("information/", include("information.urls")),
-        path("config_management/", include("config_management.urls")),
         path("project_management/", include("project_management.urls")),
     ]
 
