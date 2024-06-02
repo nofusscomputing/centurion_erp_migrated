@@ -28,7 +28,7 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
     paginate_by = 10
 
-    permission_required = 'config_management.view_groups'
+    permission_required = 'config_management.view_configgroups'
 
     template_name = 'config_management/group_index.html.j2'
 
@@ -66,7 +66,7 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
     model = ConfigGroups
 
     permission_required = [
-        'config_management.add_groups',
+        'config_management.add_configgroups',
     ]
 
     template_name = 'form.html.j2'
@@ -100,7 +100,8 @@ class GroupView(OrganizationPermission, generic.UpdateView):
     model = ConfigGroups
 
     permission_required = [
-        'config_management.view_groups',
+        'config_management.view_configgroups',
+        'config_management.change_configgroups',
     ]
 
     template_name = 'config_management/group.html.j2'
@@ -153,7 +154,7 @@ class GroupView(OrganizationPermission, generic.UpdateView):
         return context
 
 
-    @method_decorator(auth_decorator.permission_required("itam.change_software", raise_exception=True))
+    @method_decorator(auth_decorator.permission_required("config_management.change_configgroups", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         item = ConfigGroups.objects.get(pk=self.kwargs['pk'])
@@ -182,7 +183,7 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
     model = ConfigGroups
 
     permission_required = [
-        'config_management.delete_groups',
+        'config_management.delete_configgroups',
     ]
 
     template_name = 'form.html.j2'
