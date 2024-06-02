@@ -95,7 +95,6 @@
           {% elif software.get_action_display == 'Remove'%}
             {% include 'icons/cross_text.html.j2' with icon_text=software.get_action_display icon_link=icon_link %}
           {% else %}
-            
             {% include 'icons/add_link.html.j2' with icon_text='Add' icon_link=icon_link %}
           {% endif %}
         </td>
@@ -152,6 +151,29 @@
     <div>
       <textarea cols="90" rows="30" readonly>{{ config }}</textarea>
     </div>
+    <br />
+    <hr />
+    <table class="data">
+      <tr>
+        <th>Group</th>
+        <th>Added</th>
+        <th>&nbsp;</th>
+      </tr>
+      {% if config_groups %}
+      {% for group in config_groups %}
+      <tr>
+        <td><a href="{% url 'Config Management:_group_view' pk=group.id %}">{{ group.group }}</a></td>
+        <td>{{ group.created }}</td>
+        <td>&nbsp;</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td colspan="3">Nothing Found</td>
+      </tr>
+      {% endif %}
+    </table>
   </div>
+
 </form>
 {% endblock %}

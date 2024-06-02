@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth import decorators as auth_decorator
-
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -12,9 +11,12 @@ from access.mixin import OrganizationPermission
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
 
+from itam.models.device import Device
+
 from settings.models.user_settings import UserSettings
 
-from config_management.models.groups import ConfigGroups
+from config_management.forms.group_hosts import ConfigGroupHostsForm
+from config_management.models.groups import ConfigGroups, ConfigGroupHosts
 
 
 
@@ -118,6 +120,7 @@ class GroupView(OrganizationPermission, generic.UpdateView):
 
         context['config'] = json.dumps(json.loads(self.object.render_config()), indent=4, sort_keys=True)
 
+        context['config_group_hosts'] = ConfigGroupHosts.objects.filter(group_id = self.kwargs['pk']).order_by('-host')
 
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(config_group=self.kwargs['pk'])
@@ -129,23 +132,23 @@ class GroupView(OrganizationPermission, generic.UpdateView):
 
         context['content_title'] = self.object.name
 
-#         if self.request.user.is_superuser:
+        # if self.request.user.is_superuser:
 
-#             context['device_software'] = DeviceSoftware.objects.filter(
-#                 software=self.kwargs['pk']
-#             ).order_by(
-#                 'device',
-#                 'organization'
-#             )
+        #     context['device_software'] = DeviceSoftware.objects.filter(
+        #         software=self.kwargs['pk']
+        #     ).order_by(
+        #         'device',
+        #         'organization'
+        #     )
 
-#         elif not self.request.user.is_superuser:
-#             context['device_software'] = DeviceSoftware.objects.filter(
-#                 Q(device__in=self.user_organizations(),
-#                 software=self.kwargs['pk'])
-#             ).order_by(
-#                 'device',
-#                 'organization'
-#             )
+        # elif not self.request.user.is_superuser:
+        #     context['device_software'] = DeviceSoftware.objects.filter(
+        #         Q(device__in=self.user_organizations(),
+        #         software=self.kwargs['pk'])
+        #     ).order_by(
+        #         'device',
+        #         'organization'
+        #     )
 
         return context
 
@@ -184,10 +187,6 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
 
     template_name = 'form.html.j2'
 
-    def get_success_url(self, **kwargs):
-
-        return reverse('Config Management:_group_index')
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -195,3 +194,53 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
         context['content_title'] = 'Delete ' + self.object.name
 
         return context
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Config Management:_group_index')
+
+
+
+class GroupHostAdd(OrganizationPermission, generic.CreateView):
+
+    model = ConfigGroupHosts
+
+    permission_required = [
+        'config_management.add_hosts',
+    ]
+
+    template_name = 'form.html.j2'
+
+    form_class = ConfigGroupHostsForm
+
+
+    def form_valid(self, form):
+
+        form.instance.group_id = self.kwargs['group_id']
+
+        return super().form_valid(form)
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Add Host to Group'
+
+        return context
+
+
+    def get_form(self, form_class=None):
+
+        form_class = super().get_form(form_class=None)
+
+        group = ConfigGroups.objects.get(pk=self.kwargs['group_id'])
+
+        form_class.fields["host"].queryset = Device.objects.filter(organization=group.organization.id)
+
+        return form_class
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])

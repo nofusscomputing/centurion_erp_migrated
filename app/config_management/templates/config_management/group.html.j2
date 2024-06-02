@@ -35,6 +35,7 @@
 
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Children')">Child Groups</button>
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Hosts')">Hosts</button>
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Software')">Software</button>
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Configuration')">Configuration</button>
     <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
@@ -58,6 +59,7 @@
 
     <div id="Children" class="tabcontent">
         <h3>Child Groups</h3>
+
         <table class="data">
             <tr>
                 <th>Name</th>
@@ -81,13 +83,40 @@
 
     </div>
 
+    <div id="Hosts" class="tabcontent">
+        <h3>
+            Hosts
+        </h3>
+
+        <input type="button" value="Add Host" onclick="window.location='{% url 'Config Management:_group_add_host' group.id %}';">
+
+        <table class="data">
+            <tr>
+                <th>Name</th>
+                <th>Organization</th>
+                <th>&nbsp;</th>
+            </tr>
+            {% if config_group_hosts %}
+            {% for host in config_group_hosts %}
+            <tr>
+                <td><a href="{% url 'ITAM:_device_view' pk=host.host.id %}">{{ host.host }}</a></td>
+                <td>{{ host.host.organization }}</td>
+                <td><a href="{% url 'Config Management:_group_delete_host' group_id=group.id pk=host.id %}">Delete</a></td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="3">Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
 
     <div id="Software" class="tabcontent">
         <h3>
             Software
         </h3>
-
-        
 
     </div>
 

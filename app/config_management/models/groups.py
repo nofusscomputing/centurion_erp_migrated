@@ -8,6 +8,8 @@ from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 
+from itam.models.device import Device
+
 
 
 class GroupsCommonFields(TenancyObject, models.Model):
@@ -24,10 +26,6 @@ class GroupsCommonFields(TenancyObject, models.Model):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
-
-    def __str__(self):
-
-        return self.name
 
 
 
@@ -118,3 +116,39 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             self.organization = ConfigGroups.objects.get(id=self.parent.id).organization
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+
+        return self.name
+
+
+
+class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
+
+
+    def validate_host_no_parent_group(self):
+        """ Ensure that the host is not within any parent group
+
+        Raises:
+            ValidationError: host exists within group chain
+        """
+
+        if False:
+            raise ValidationError(f'host {self} is already a member of this chain as it;s a member of group ""')
+
+
+    host = models.ForeignKey(
+        Device,
+        on_delete=models.CASCADE,
+        null = False,
+        blank= False,
+        validators = [ validate_host_no_parent_group ]
+    )
+
+
+    group = models.ForeignKey(
+        ConfigGroups,
+        on_delete=models.CASCADE,
+        null = False,
+        blank= False
+    )
