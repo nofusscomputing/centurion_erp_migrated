@@ -244,3 +244,28 @@ class GroupHostAdd(OrganizationPermission, generic.CreateView):
     def get_success_url(self, **kwargs):
 
         return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])
+
+
+
+class GroupHostDelete(OrganizationPermission, generic.DeleteView):
+
+    model = ConfigGroupHosts
+
+    permission_required = [
+        'config_management.delete_hosts',
+    ]
+
+    template_name = 'form.html.j2'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete ' + self.object.host.name
+
+        return context
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])
