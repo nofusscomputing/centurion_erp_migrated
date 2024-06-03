@@ -19,6 +19,8 @@ curl -X GET http://127.0.0.1:8000/api/ -H 'Authorization: Token <token>'
 
 - Inventory Report Collection
 
+- Swagger UI
+
 
 ## Inventory Reports
 

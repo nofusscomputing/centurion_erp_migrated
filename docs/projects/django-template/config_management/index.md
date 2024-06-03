@@ -17,6 +17,8 @@ This module contains the following features:
 
 - Assign host to multiple groups
 
+- **Planned** Assign software action to group _See [issue #43](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/43)_
+
 - History
 
 
