@@ -40,7 +40,7 @@ This tab displays the details of the software, in particular:
     If a super admin sets [application setting](../settings.md#global-software) `software is global`, when any software is created, regardless of what organization you set. The software will be created in the "global" organization.
 
 
-# Versions
+## Versions
 
 This tab displays the different software versions and how many of each version are installed on devices within your inventory.
 
