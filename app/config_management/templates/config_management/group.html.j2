@@ -60,6 +60,8 @@
     <div id="Children" class="tabcontent">
         <h3>Child Groups</h3>
 
+        <input type="button" value="Add Child Group" onclick="window.location='{% url 'Config Management:_group_add_child' group.id %}';">
+
         <table class="data">
             <tr>
                 <th>Name</th>

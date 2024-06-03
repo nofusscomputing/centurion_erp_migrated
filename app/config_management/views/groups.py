@@ -54,7 +54,6 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
 
 
-
 class GroupAdd(OrganizationPermission, generic.CreateView):
 
     fields = [
@@ -74,12 +73,26 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
 
     def get_initial(self):
 
-        return {
+        initial: dict = {
             'organization': UserSettings.objects.get(user = self.request.user).default_organization
         }
 
+        if 'group_id' in self.kwargs:
+
+            if self.kwargs['group_id']:
+
+                initial.update({'parent': self.kwargs['group_id']})
+
+                self.model.parent.field.hidden = True
+
+        return initial
+
 
     def get_success_url(self, **kwargs):
+
+        if self.kwargs['group_id']:
+
+            return reverse('Config Management:_group_view', args=(self.kwargs['group_id'],))
 
         return reverse('Config Management:Groups')
 
