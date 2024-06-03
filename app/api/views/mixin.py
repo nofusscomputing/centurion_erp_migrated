@@ -1,4 +1,6 @@
 
+from django.forms import ValidationError
+
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.mixin import OrganizationMixin
@@ -43,6 +45,9 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
             action = 'add'
 
             if 'organization' in request.data:
+
+                if not request.data['organization']:
+                    raise ValidationError('you must provide an organization')
 
                 object_organization = int(request.data['organization'])
         
