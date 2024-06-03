@@ -1,6 +1,5 @@
 from django.urls import path
 
-from config_management.views.index import ConfigIndex
 from config_management.views.groups import GroupIndexView, GroupAdd, GroupDelete, GroupView, GroupHostAdd, GroupHostDelete
 
 app_name = "Config Management"

@@ -508,4 +508,4 @@ class ConfigGroupPermissions(TestCase):
         client.force_login(self.delete_user)
         response = client.delete(url, data={'device': 'device'})
 
-        assert response.status_code == 302 and response.url == reverse('Config Management:_group_index')
+        assert response.status_code == 302 and response.url == reverse('Config Management:Groups')
