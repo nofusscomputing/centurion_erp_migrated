@@ -17,13 +17,13 @@ This application contains the following module:
 
 - [Application wide settings](settings.md)
 
-- [Multi-Tenant](permissions.md)
+- [Configuration Management](config_management/index.md)
+
+- History
 
 - [IT Asset Management (ITAM)](itam/index.md)
 
-- [Configuration ready for ansible](itam/device.md#configuration)
-
-- History
+- [Multi-Tenant](permissions.md)
 
 Specific features for a module can be found on the module's documentation un the features heading
 
