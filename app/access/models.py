@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User, Group, Permission
+from django.forms import ValidationError
 
 from .fields import *
 
@@ -52,11 +53,19 @@ class TenancyObject(models.Model):
     class Meta:
         abstract = True
 
+
+    def validatate_organization_exists(self):
+
+        if not self:
+            raise ValidationError('You must provide an organization')
+
+
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
         blank = False,
         null = True,
+        validators = [validatate_organization_exists],
     )
 
     is_global = models.BooleanField(

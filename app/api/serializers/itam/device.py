@@ -27,7 +27,6 @@ class DeviceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'inventorydate',
             'is_global',
-            'organization',
             'slug',
         ]
 

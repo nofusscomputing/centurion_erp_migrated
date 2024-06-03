@@ -9,7 +9,7 @@ from access.models import Organization
 
 from core.models.history import History
 
-from itam.models.device import Device
+from config_management.models.groups import ConfigGroups
 
 
 # @pytest.mark.skip(reason="to be written")
@@ -94,11 +94,11 @@ from itam.models.device import Device
 
 
 
-class DeviceHistory(TestCase):
+class ConfigGroupsHistory(TestCase):
 
-    model = Device
+    model = ConfigGroups
 
-    model_name = 'device'
+    model_name = 'configgroups'
 
 
     @classmethod

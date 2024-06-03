@@ -4,6 +4,8 @@ from django.db import models
 from access.fields import *
 from access.models import TenancyObject
 
+from config_management.models.groups import ConfigGroups
+
 from itam.models.device import Device
 from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
@@ -65,6 +67,14 @@ class Notes(NotesCommonFields):
         verbose_name = 'Edited By',
         related_name = 'usermodified',
         on_delete=models.SET_DEFAULT,
+        default = None,
+        null = True,
+        blank= True
+    )
+
+    config_group = models.ForeignKey(
+        ConfigGroups,
+        on_delete=models.CASCADE,
         default = None,
         null = True,
         blank= True

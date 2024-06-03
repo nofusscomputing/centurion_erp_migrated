@@ -8,6 +8,7 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 This page contains different items related to the development of this application.
 
+
 ## Icons
 
 To locate additional icons for use see [material icons](https://fonts.google.com/icons).
@@ -116,7 +117,7 @@ Using a filter `pk__in=self.user_organizations()` for the queryset using the mix
 
 ### Templates
 
-The base template includes blocks that are designed to assist in rendering your content. The following blocks are available: 
+The base template includes blocks that are designed to assist in rendering your content. The following blocks are available:
 
 - `title` - The page and title
 

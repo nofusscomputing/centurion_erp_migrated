@@ -23,6 +23,8 @@ nav:
 
     - projects/django-template/api.md
 
+    - projects/django-template/config_management/index.md
+
     - projects/django-template/permissions.md
 
     - Core:

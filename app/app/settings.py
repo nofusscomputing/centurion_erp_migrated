@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'access.apps.AccessConfig',
     'itam.apps.ItamConfig',
     'settings.apps.SettingsConfig',
+    'drf_spectacular',
+    'drf_spectacular_sidecar',
+    'config_management.apps.ConfigManagementConfig',
 ]
 
 MIDDLEWARE = [
@@ -201,7 +204,19 @@ if API_ENABLED:
         #     'rest_framework_json_api.renderers.JSONRenderer',
         # ),
         # 'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
-        'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+        'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+        'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    }
+
+    SPECTACULAR_SETTINGS = {
+        'TITLE': 'Your Project API',
+        'DESCRIPTION': 'Your project description',
+        'VERSION': '1.0.0',
+        'SERVE_INCLUDE_SCHEMA': False,
+
+        'SWAGGER_UI_DIST': 'SIDECAR',
+        'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+        'REDOC_DIST': 'SIDECAR',
     }
 
 DATETIME_FORMAT = 'j N Y H:i:s'
@@ -228,6 +243,5 @@ if DEBUG:
     # Apps Under Development
     INSTALLED_APPS += [
         'information.apps.InformationConfig',
-        'config_management.apps.ConfigManagementConfig',
         'project_management.apps.ProjectManagementConfig',
     ]
