@@ -25,7 +25,7 @@
 
 <div class="tab">
     <button
-        onclick="window.location='{% if group.parent %}{% url 'Config Management:_group_view' pk=group.parent.id %}{% else %}{% url 'Config Management:_group_index' %}{% endif %}';"
+        onclick="window.location='{% if group.parent %}{% url 'Config Management:_group_view' pk=group.parent.id %}{% else %}{% url 'Config Management:Groups' %}{% endif %}';"
         style="vertical-align: middle; padding: auto; margin: 0px">
         <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
             style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">

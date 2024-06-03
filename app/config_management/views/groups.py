@@ -81,7 +81,7 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Config Management:_group_index')
+        return reverse('Config Management:Groups')
 
 
     def get_context_data(self, **kwargs):
@@ -199,7 +199,7 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Config Management:_group_index')
+        return reverse('Config Management:Groups')
 
 
 
