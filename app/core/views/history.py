@@ -34,9 +34,11 @@ class View(OrganizationPermission, generic.View):
         """
         from access.models import Organization, Team
 
-        from itam.models.device import Device, DeviceSoftware, DeviceModel, DeviceOperatingSystem
+        from itam.models.device import Device, DeviceSoftware, DeviceModel, DeviceType, DeviceOperatingSystem
         from itam.models.operating_system import OperatingSystem
-        from itam.models.software import Software
+        from itam.models.software import Software, SoftwareCategory
+
+        from core.models.manufacturer import Manufacturer
 
         from config_management.models.groups import ConfigGroups
 
@@ -56,9 +58,21 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = DeviceModel
 
+                case 'devicetype':
+
+                    self.model = DeviceType
+
+                case 'manufacturer':
+
+                    self.model = Manufacturer
+
                 case 'software':
 
                     self.model = Software
+
+                case 'softwarecategory':
+
+                    self.model = SoftwareCategory
 
                 case 'operatingsystem':
 
