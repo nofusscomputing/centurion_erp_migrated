@@ -9,7 +9,7 @@ from rest_framework import serializers
 class DeviceSerializer(serializers.ModelSerializer):
     
     url = serializers.HyperlinkedIdentityField(
-        view_name="_api_device_view", format="html"
+        view_name="API:device-detail", format="html"
     )
 
     config = serializers.SerializerMethodField('get_device_config')
@@ -17,7 +17,7 @@ class DeviceSerializer(serializers.ModelSerializer):
     def get_device_config(self, device):
 
         request = self.context.get('request')
-        return request.build_absolute_uri(reverse('_api_device_config', args=[device.slug]))
+        return request.build_absolute_uri(reverse('API:_api_device_config', args=[device.slug]))
 
 
     class Meta:
@@ -27,6 +27,6 @@ class DeviceSerializer(serializers.ModelSerializer):
         read_only_fields = [
             'inventorydate',
             'is_global',
-            'organization',
+            'slug',
         ]
 

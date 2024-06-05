@@ -4,6 +4,8 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
+
+
 from .models import Team
 
 
@@ -20,15 +22,20 @@ class OrganizationMixin():
 
         try:
 
-            self.get_queryset()
+            if hasattr(self, 'get_queryset'):
+                self.get_queryset()
 
-            self.get_object()
 
-            id = self.get_object().get_organization().id
+            if hasattr(self, 'get_object'):
 
-            if self.get_object().is_global:
+                obj = self.get_object()
 
-                id = 0
+                id = obj.get_organization().id
+
+                if obj.is_global:
+
+                    id = 0
+
 
         except AttributeError:
 
@@ -117,11 +124,15 @@ class OrganizationMixin():
 
 
     # ToDo: Ensure that the group has access to item
-    def has_permission(self) -> bool:
+    def has_organization_permission(self, organization=None) -> bool:
 
         has_permission = False
 
-        if self.is_member(self.object_organization()) or self.object_organization() == 0:
+        if not organization:
+
+            organization = self.object_organization()
+
+        if self.is_member(organization) or organization == 0:
 
             groups = Group.objects.filter(pk__in=self.user_groups)
 
@@ -134,7 +145,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == self.object_organization() or self.object_organization() == 0):
+                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == organization or organization == 0):
 
                         return True
 
@@ -154,7 +165,7 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
 
         if hasattr(self, 'get_object'):
 
-            if not self.has_permission() and not request.user.is_superuser:
+            if not self.has_organization_permission() and not request.user.is_superuser:
                 raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)

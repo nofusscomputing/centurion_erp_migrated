@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 from access.fields import *
@@ -13,7 +15,7 @@ from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
 
-class DeviceType(DeviceCommonFieldsName):
+class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 
     def clean(self):
@@ -114,6 +116,22 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     software_action['version'] = software.version.name
 
                 config['software'] = config['software'] + [ software_action ]
+
+        config: dict = config
+
+        from config_management.models.groups import ConfigGroupHosts
+
+        if self.id:
+
+            config_groups = ConfigGroupHosts.objects.filter(host=self.id).order_by('group')
+
+            for group in config_groups:
+
+                rendered_config = group.group.render_config()
+
+                if rendered_config:
+
+                    config.update(json.loads(group.group.render_config()))
 
         return config
 

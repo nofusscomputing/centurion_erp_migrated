@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User, Group, Permission
+from django.forms import ValidationError
 
 from .fields import *
 
@@ -52,11 +53,19 @@ class TenancyObject(models.Model):
     class Meta:
         abstract = True
 
+
+    def validatate_organization_exists(self):
+
+        if not self:
+            raise ValidationError('You must provide an organization')
+
+
     organization = models.ForeignKey(
         Organization,
         on_delete=models.CASCADE,
         blank = False,
         null = True,
+        validators = [validatate_organization_exists],
     )
 
     is_global = models.BooleanField(
@@ -95,6 +104,21 @@ class Team(Group, TenancyObject, SaveHistory):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    def permission_list(self) -> list:
+
+        permission_list = []
+
+        for permission in self.permissions.all():
+
+            if str(permission.content_type.app_label + '.' + permission.codename) in permission_list:
+                continue
+
+            permission_list += [ str(permission.content_type.app_label + '.' + permission.codename) ]
+
+        return [permission_list, self.permissions.all()]
+
 
 
 class TeamUsers(SaveHistory):

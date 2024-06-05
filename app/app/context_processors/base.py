@@ -73,6 +73,7 @@ def nav_items(context) -> list(dict()):
         ignored_apps = [
             'admin',
             'djdt',     # Debug application
+            'api',
         ] 
 
         nav_items = []
@@ -87,7 +88,7 @@ def nav_items(context) -> list(dict()):
             isinstance(nav_group, URLResolver)
         ):
 
-            if nav_group.app_name is not None and nav_group.app_name not in ignored_apps:
+            if nav_group.app_name is not None and str(nav_group.app_name).lower() not in ignored_apps:
 
                 group_name = str(nav_group.app_name)
 

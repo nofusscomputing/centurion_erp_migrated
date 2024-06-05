@@ -21,6 +21,9 @@ Unit:
         - artifacts/*.JUnit.xml
     paths:
       - artifacts/
+  environment: 
+    name: PyTest Coverage Report
+    url: https://nofusscomputing.gitlab.io/-/projects/django_template/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html 
   rules:
 
     - if: # Occur on merge

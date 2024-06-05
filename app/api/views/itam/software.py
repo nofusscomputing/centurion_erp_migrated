@@ -1,24 +1,41 @@
-# from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
-from rest_framework import generics
+from rest_framework import generics, viewsets
+
+from api.serializers.itam.software import SoftwareSerializer
+from api.views.mixin import OrganizationPermissionAPI
 
 from itam.models.software import Software
-from api.serializers.itam.software import SoftwareSerializer
 
 
-class List(generics.ListCreateAPIView):
-    permission_required = 'itam.view_software'
+
+class SoftwareViewSet(viewsets.ModelViewSet):
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
     queryset = Software.objects.all()
+
     serializer_class = SoftwareSerializer
 
-    def get_view_name(self):
-        return "Softwares"
+
+    def get_object(self, queryset=None, **kwargs):
+        item = self.kwargs.get('pk')
+        return get_object_or_404(Software, pk=item)
 
 
-class Detail(generics.RetrieveUpdateDestroyAPIView):
-    permission_required = 'itam.view_software'
-    queryset = Software.objects.all()
-    serializer_class = SoftwareSerializer
+    def get_queryset(self):
+
+        if self.request.user.is_superuser:
+
+            return self.queryset.filter().order_by('name')
+
+        else:
+
+            return self.queryset.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+
 
     def get_view_name(self):
         return "Software"
