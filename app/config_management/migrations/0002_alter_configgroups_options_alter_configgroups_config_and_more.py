@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='configgroups',
             name='config',
-            field=models.JSONField(blank=True, default=None, null=True, validators=[config_management.models.groups.ConfigGroups.validate_config_keys]),
+            field=models.JSONField(blank=True, default=None, null=True, validators=[config_management.models.groups.ConfigGroups.validate_config_keys_not_reserved]),
         ),
         migrations.CreateModel(
             name='ConfigGroupHosts',

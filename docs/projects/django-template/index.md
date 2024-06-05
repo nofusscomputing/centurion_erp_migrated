@@ -42,3 +42,20 @@ Effort is placed upon all database items having a history. The items that specif
 
 Once a history entry has been made for an item, no one including a `super_admin` can edit or delete a history entry. The only time a history entry is removed, is when an item is removed from the database.
 
+
+## Installation
+
+To install this application you must have a container engine installed, both docker and kubernetes are supported. The container image is available on [Docker Hub](https://hub.docker.com/r/nofusscomputing/django-template) and can be pulled with `docker pull nofusscomputing/django-template:latest`.
+
+Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. SQLLite and MariaDB/MySQL are supported.
+
+
+### Settings file
+
+The settings file is a python file `.py` and must remain a valid python file for the application to work. 
+
+``` py title="settings.py"
+
+--8<-- "includes/etc/itsm/settings.py"
+
+```

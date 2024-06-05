@@ -15,7 +15,7 @@ from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
 
-class DeviceType(DeviceCommonFieldsName):
+class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 
     def clean(self):

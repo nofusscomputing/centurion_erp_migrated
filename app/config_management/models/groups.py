@@ -1,4 +1,5 @@
 import json
+import re
 
 from django.db import models
 from django.forms import ValidationError
@@ -36,7 +37,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
     ]
 
 
-    def validate_config_keys(self):
+    def validate_config_keys_not_reserved(self):
 
         value: dict = self
 
@@ -66,9 +67,29 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         blank = True,
         default = None,
         null = True,
-        validators=[validate_config_keys]
+        validators=[ validate_config_keys_not_reserved ]
     )
 
+
+    def config_keys_ansible_variable(self, value: dict):
+
+        clean_value = {}
+
+        for key, value in value.items():
+
+            key: str = str(key).lower()
+            
+            key = re.sub('\s|\.|\-', '_', key) # make an '_' char
+
+            if type(value) is dict:
+
+                clean_value[key] = self.config_keys_ansible_variable(value)
+
+            else:
+
+                clean_value[key] = value
+
+        return clean_value
 
 
     def count_children(self) -> int:
@@ -111,6 +132,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
     def save(self, *args, **kwargs):
 
         self.is_global = False
+
+        if self.config:
+
+            self.config = self.config_keys_ansible_variable(self.config)
 
         if self.parent:
             self.organization = ConfigGroups.objects.get(id=self.parent.id).organization

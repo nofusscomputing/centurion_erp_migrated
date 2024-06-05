@@ -90,9 +90,11 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
 
     def get_success_url(self, **kwargs):
 
-        if self.kwargs['group_id']:
+        if 'group_id' in self.kwargs:
 
-            return reverse('Config Management:_group_view', args=(self.kwargs['group_id'],))
+            if self.kwargs['group_id']:
+
+                return reverse('Config Management:_group_view', args=(self.kwargs['group_id'],))
 
         return reverse('Config Management:Groups')
 

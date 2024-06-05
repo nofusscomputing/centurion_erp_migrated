@@ -13,7 +13,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from settings.models.user_settings import UserSettings
 
-class UserSettings(TestCase):
+class UserSettingsPermissions(TestCase):
 
 
     model = UserSettings
@@ -38,8 +38,6 @@ class UserSettings(TestCase):
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.different_organization = different_organization
 
 
         view_permissions = Permission.objects.get(
@@ -93,64 +91,63 @@ class UserSettings(TestCase):
 
 
 
-    def test_user_settings_exist(self):
-        """ User Settings must exist for user
+    def test_user_settings_auth_view_user_anon_denied(self):
+        """ Check correct permission for view
 
-        User settings a created if they dont exist on attempting to access
+        Attempt to view as anon user
         """
 
-        assert self.item
+        client = Client()
+        url = reverse('_settings_user', kwargs={'pk': self.view_user.id})
+
+        response = client.get(url)
+
+        assert response.status_code == 403
 
 
-    def test_user_settings_organization_is_none(self):
-        """ User Settings value 'organization' is none
+    def test_user_settings_auth_view_no_permission_denied(self):
+        """ Check correct permission for view
 
-        When row is created the organization must not be set
+        Attempt to view with user missing permission
         """
 
-        assert self.item.default_organization_id is None
+        client = Client()
+        url = reverse('_settings_user', kwargs={'pk': self.view_user.id})
 
 
-    def test_user_settings_organization_edit_correct(self):
-        """ User Settings value 'organization' is none
+        client.force_login(self.no_permissions_user)
+        response = client.get(url)
 
-        When row is created the organization must not be set
+        assert response.status_code == 403
+
+
+    def test_device_auth_view_different_organizaiton_denied(self):
+        """ Check correct permission for view
+
+        Attempt to view with user from different organization
         """
 
-        self.item.default_organization_id = self.different_organization.id
-
-        self.item.save()
-
-        assert self.item.default_organization_id == self.different_organization.id
+        client = Client()
+        url = reverse('_settings_user', kwargs={'pk': self.view_user.id})
 
 
-    # @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_of_user_settings_removed(self):
-        """ On Delete of a user their settings are removed """
-        
-        test_user = User.objects.create_user(username="test_user_single_use", password="password")
+        client.force_login(self.different_organization_user)
+        response = client.get(url)
 
-        assert self.model.objects.get(
-            user=test_user,
-        )
-
-        test_user.delete()
+        assert response.status_code == 403
 
 
-        settings = self.model.objects.filter(
-            user_id=test_user.id,
-        )
+    def test_device_auth_view_has_permission(self):
+        """ Check correct permission for view
 
-        assert settings.exists() == False
+        Attempt to view as user with view permission
+        """
 
-
-    @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_organization_default_organization(self):
-        """ On Delete of an organization, users default organization set to null """
-        pass
+        client = Client()
+        url = reverse('_settings_user', kwargs={'pk': self.view_user.id})
 
 
-    @pytest.mark.skip(reason="to be written")
-    def test_user_settings_on_delete_organization_user_settings_not_deleted(self):
-        """ On Delete of an organization, users settings are not deleted """
-        pass
+        client.force_login(self.view_user)
+        response = client.get(url)
+
+        assert response.status_code == 200
