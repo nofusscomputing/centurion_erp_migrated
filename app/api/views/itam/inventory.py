@@ -8,7 +8,10 @@ from django.utils import timezone
 from rest_framework import generics, views
 from rest_framework.response import Response
 
+from access.mixin import OrganizationMixin
 from access.models import Organization
+
+from api.views.mixin import OrganizationPermissionAPI
 
 from core.http.common import Http
 
@@ -21,7 +24,26 @@ from settings.models.user_settings import UserSettings
 
 
 
-class Collect(views.APIView):
+class InventoryPermissions(OrganizationPermissionAPI):
+
+    def permission_check(self, request, view, obj=None) -> bool:
+
+        data = view.request.data
+
+        self.obj = Device.objects.get(slug=str(data['details']['name']).lower())
+
+        return super().permission_check(request, view, obj=None)
+
+
+
+class Collect(OrganizationMixin, views.APIView):
+
+    permission_classes = [
+        InventoryPermissions
+    ]
+
+    queryset = Device.objects.all()
+
 
     def post(self, request, *args, **kwargs):
 
