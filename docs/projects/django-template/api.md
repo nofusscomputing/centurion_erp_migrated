@@ -24,7 +24,7 @@ curl -X GET http://127.0.0.1:8000/api/ -H 'Authorization: Token <token>'
 
 ## Inventory Reports
 
-- url `/api/device/inventory/<device slug>`
+- url `/api/device/inventory`
 
 - method `POST`
 

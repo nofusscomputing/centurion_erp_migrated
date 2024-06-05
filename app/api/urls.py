@@ -24,7 +24,7 @@ router.register('software', software.SoftwareViewSet, basename='software')
 urlpatterns = [
     path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
 
-    path("device/inventory/<slug:slug>", inventory.Collect.as_view(), name="_api_device_inventory"),
+    path("device/inventory", inventory.Collect.as_view(), name="_api_device_inventory"),
 
     path("organization/", access.OrganizationList.as_view(), name='_api_orgs'),
     path("organization/<int:pk>/", access.OrganizationDetail.as_view(), name='_api_organization'),
