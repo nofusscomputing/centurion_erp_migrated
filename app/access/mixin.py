@@ -27,11 +27,12 @@ class OrganizationMixin():
 
 
             if hasattr(self, 'get_object'):
-                self.get_object()
 
-                id = self.get_object().get_organization().id
+                obj = self.get_object()
 
-                if self.get_object().is_global:
+                id = obj.get_organization().id
+
+                if obj.is_global:
 
                     id = 0
 
