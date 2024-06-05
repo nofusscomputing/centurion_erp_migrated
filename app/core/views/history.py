@@ -15,7 +15,7 @@ from core.models.history import History
 class View(OrganizationPermission, generic.View):
 
     permission_required = [
-        'itam.view_history'
+        'core.view_history'
     ]
 
     template_name = 'history.html.j2'
