@@ -1,0 +1,2 @@
+# mysql support
+mysqlclient==2.2.4

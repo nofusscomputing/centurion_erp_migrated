@@ -7,3 +7,16 @@ DATABASES = {
     }
 }
 
+#
+# Example MariaDB/MySQL setup
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'itsm',
+#         'USER': '<db username>',
+#         'PASSWORD': '<db password>',
+#         'HOST': '<db host/ip address>',
+#         'PORT': '',
+#     }
+# }
