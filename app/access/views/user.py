@@ -10,6 +10,7 @@ from access.models import Team, TeamUsers
 
 class Add(OrganizationPermission, generic.CreateView):
     model = TeamUsers
+    parent_model = Team
     permission_required = [
         'access.view_team',
         'access.add_teamusers'

@@ -16,6 +16,21 @@ class OrganizationMixin():
 
     user_groups = []
 
+
+    def get_parent_obj(self):
+        """ Get the Parent Model Object
+
+        Use in views where the the model has no organization and the organization should be fetched from the parent model.
+
+        Requires attribute `parent_model` within the view with the value of the parent's model class
+
+        Returns:
+            parent_model: with PK from kwargs['pk']
+        """
+
+        return self.parent_model.objects.get(pk=self.kwargs['pk'])
+
+
     def object_organization(self) -> int:
 
         id = None
@@ -26,7 +41,17 @@ class OrganizationMixin():
                 self.get_queryset()
 
 
-            if hasattr(self, 'get_object'):
+            if hasattr(self, 'parent_model'):
+                obj = self.get_parent_obj()
+
+                id = obj.get_organization().id
+
+                if obj.is_global:
+
+                    id = 0
+
+
+            if hasattr(self, 'get_object') and id is None:
 
                 obj = self.get_object()
 
