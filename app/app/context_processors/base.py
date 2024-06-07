@@ -102,6 +102,7 @@ def nav_items(context) -> list(dict()):
             'admin',
             'djdt',     # Debug application
             'api',
+            'social',
         ] 
 
         nav_items = []
