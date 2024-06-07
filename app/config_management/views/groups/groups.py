@@ -16,7 +16,7 @@ from itam.models.device import Device
 from settings.models.user_settings import UserSettings
 
 from config_management.forms.group_hosts import ConfigGroupHostsForm
-from config_management.models.groups import ConfigGroups, ConfigGroupHosts
+from config_management.models.groups import ConfigGroups, ConfigGroupHosts, ConfigGroupSoftware
 
 
 
@@ -145,6 +145,9 @@ class GroupView(OrganizationPermission, generic.UpdateView):
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['model_delete_url'] = reverse('Config Management:_group_delete', args=(self.kwargs['pk'],))
+
+        softwares = ConfigGroupSoftware.objects.filter(config_group=self.kwargs['pk'])[:50]
+        context['softwares'] = softwares
 
         context['content_title'] = self.object.name
 
