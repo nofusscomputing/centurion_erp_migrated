@@ -126,7 +126,7 @@ class GroupSoftwareDelete(OrganizationPermission, generic.DeleteView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Config Management:_group_view', args=(self.kwargs['pk'],))
+        return reverse('Config Management:_group_view', args=(self.kwargs['group_id'],))
 
 
     def get_context_data(self, **kwargs):
