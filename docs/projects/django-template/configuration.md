@@ -54,11 +54,13 @@ Below are the available configuration values along with their default value.
 
 ``` py
 
-ALLOWED_HOSTS = [ '*' ]
+ALLOWED_HOSTS = [ '*' ]          # Site host to serve
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
-SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the URL to access the site
+SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
+SECRET_KEY = None                # You need to generate this
 SSO_ENABLED = False              # Enable SSO
 SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
 TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
+
 
 ```

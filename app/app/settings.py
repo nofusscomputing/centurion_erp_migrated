@@ -27,8 +27,6 @@ BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk'
 
 #
 # Defaults
@@ -36,6 +34,7 @@ SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk
 ALLOWED_HOSTS = [ '*' ]          # Site host to serve
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
+SECRET_KEY = None                # You need to generate this
 SSO_ENABLED = False              # Enable SSO
 SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
 TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
@@ -43,6 +42,13 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
 
 # Application definition
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS =    # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECURE_HSTS_SECONDS
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
+# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_HOST =        # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-host
+# SESSION_COOKIE_SECURE = True
+# USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -234,6 +240,10 @@ if os.path.isdir(SETTINGS_DIR):
 
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
+
+    if SECRET_KEY is None:
+
+        raise Exception("You must define a SECRET_KEY. one can be created with echo $(head /dev/urandom | tr -dc A-Za-z0-9\&\8\!\@\#\$\%\^\*\(\)\-\_\=\+\[\{\]\}\,\. | head -c 256 ; echo '')")
 
 #
 # Settings to reset to prevent user from over-riding
