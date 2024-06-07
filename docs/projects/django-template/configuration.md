@@ -13,7 +13,7 @@ This page details the configuration for setting up the application.
 
 - `SSO_ENABLED`, boolean
 
-Single Sign on (SSO) is made possible through the [social django application](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html). Specific configuration for the backend that you would like to configure can be viewed within it's [documentation](https://python-social-auth.readthedocs.io/en/latest/backends/index.html). In most cases the only configuration will need to be done for the following attributes: `SSO_ENABLED`, `SSO_BACKENDS` and `SOCIAL_AUTH_`.
+Single Sign on (SSO) is made possible through the [social django application](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html). Specific configuration for the backend that you would like to configure can be viewed within it's [documentation](https://python-social-auth.readthedocs.io/en/latest/backends/index.html). In most cases the only configuration that will need to be defined are for the following attributes: `SSO_ENABLED`, optionally `SSO_BACKENDS` and those with prefix `SOCIAL_AUTH_`.
 
 !!! danger
     Within the social django documentation, it will state the the configuration key for the backends is within attribute `AUTHENTICATION_BACKENDS`, don't use this attribute. Instead use attribute `SSO_BACKENDS` so as not to effect the authentication of the ITSM application.
@@ -26,6 +26,8 @@ Attributes with prefix `SSO_` are specifically for this application.
 ``` py
 
 SSO_ENABLED = True             # Optional, boolean. Enable SSO Authentication
+
+SSO_LOGIN_ONLY_BACKEND = 'oidc'    # Optional, string. To only use SSO authentication, specify the backend name here
 
 SSO_BACKENDS = (               # this attribute replaces `AUTHENTICATION_BACKENDS` and must be used instead of.
     "social_core.backends.open_id_connect.OpenIdConnectAuth",

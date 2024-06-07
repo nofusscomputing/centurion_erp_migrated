@@ -1,3 +1,5 @@
+{% load settings_value %}
+{% settings_value "SSO_LOGIN_ONLY_BACKEND" as SSO_LOGIN_ONLY_BACKEND %}
 <html>
 
 <head>
@@ -6,14 +8,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    {% if SSO_LOGIN_ONLY_BACKEND %}
+    <meta http-equiv="refresh" content="0; url=/{{ settings.LOGIN_URL }}" />
+    {% else %}
     <link rel="stylesheet" href="{% static 'base.css' %}">
     <link rel="stylesheet" href="{% static 'content.css' %}">
     <link rel="stylesheet" href="{% static 'data.css' %}">
-
+    {% endif %}
 </head>
 
 <body style="background-color: #393f44">
-    
+
+    {% if not SSO_LOGIN_ONLY_BACKEND %}
     <div style="height: 100%; width: 100%;">
 
         <div style="display: block; text-align: center; inline-size: auto;  margin: auto; background-color: #26292d; margin-top: -185px; height: 370px; margin-left: -272px; width: 544px; position: absolute; top: 50%; left: 50%; padding: 40px">
@@ -29,8 +35,8 @@
                 {% endfor %}
             </form>
         </div>
-
     </div>
+    {% endif %}
 
 </body>
 

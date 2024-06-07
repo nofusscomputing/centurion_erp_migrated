@@ -35,6 +35,7 @@ SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk
 #
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SSO_ENABLED = False              # Enable SSO
+SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
 
 ALLOWED_HOSTS = [ '*' ]
 
@@ -257,6 +258,9 @@ if DEBUG:
 
 
 if SSO_ENABLED:
+
+    if SSO_LOGIN_ONLY_BACKEND:
+        LOGIN_URL = f'/sso/login/{SSO_LOGIN_ONLY_BACKEND}/'
 
     AUTHENTICATION_BACKENDS += (
         *SSO_BACKENDS,
