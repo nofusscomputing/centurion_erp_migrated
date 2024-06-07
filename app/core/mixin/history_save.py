@@ -130,6 +130,11 @@ class SaveHistory(models.Model):
             item_parent_pk = self.group.id
             item_parent_class = self.group._meta.model_name
 
+        if self._meta.model_name == 'configgroupsoftware':
+
+            item_parent_pk = self.config_group.id
+            item_parent_class = self.config_group._meta.model_name
+
 
         if not before:
 
