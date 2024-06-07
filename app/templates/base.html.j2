@@ -1,4 +1,5 @@
 {% load settings_value %}
+{% settings_value "SSO_LOGIN_ONLY_BACKEND" as SSO_LOGIN_ONLY_BACKEND %}
 <html>
 
 <head>
@@ -7,8 +8,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  {% if SSO_LOGIN_ONLY_BACKEND %}
+  <meta http-equiv="refresh" content="0; url=/{{ settings.LOGIN_URL }}" />
+  {% else %}
   <link rel="stylesheet" href="{% static 'base.css' %}">
   <link rel="stylesheet" href="{% static 'content.css' %}">
+  {% endif %}
 
 </head>
 
