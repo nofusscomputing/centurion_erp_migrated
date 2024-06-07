@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import sys
 
 from pathlib import Path
 from split_settings.tools import optional, include
@@ -113,7 +114,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -233,6 +234,14 @@ if API_ENABLED:
     }
 
 DATETIME_FORMAT = 'j N Y H:i:s'
+#
+# Settings for unit tests
+#
+
+RUNNING_TESTS = 'test' in str(sys.argv)
+
+if RUNNING_TESTS:
+    SECRET_KEY = 'django-insecure-tests_are_being_run'
 
 #
 # Load user settings files
