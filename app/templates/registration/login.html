@@ -22,6 +22,11 @@
                 <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_username" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;" >User Name</label><input name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="text" /></fieldset>
                 <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_password" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;">Password</label><input name="password" autocomplete="current-password" required id="id_password" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="password" /></fieldset>
                 <button style="border-radius: 5px; background-color: #4CAF50; border: none; display: unset; width: 100%; padding: 0px; margin: 0px; margin-top: 30px; font-size: inherit; height: 35px;;" type="submit">Login</button>
+                {% for backend in social_backends %}
+                <span style="padding: 5px; margin: 10px; background-color: aqua; display: inline-block; width: auto;">
+                    <a href="/sso/login/{{ backend }}/">{{ backend }}</a>
+                </span>
+                {% endfor %}
             </form>
         </div>
 

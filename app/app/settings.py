@@ -30,8 +30,11 @@ BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#
+# Defaults
+#
+DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
+SSO_ENABLED = False              # Enable SSO
 
 ALLOWED_HOSTS = [ '*' ]
 
@@ -226,6 +229,12 @@ if os.path.isdir(SETTINGS_DIR):
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
 
+#
+# Settings to reset to prevent user from over-riding
+#
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 if DEBUG:
     INSTALLED_APPS += [
@@ -245,3 +254,22 @@ if DEBUG:
         'information.apps.InformationConfig',
         'project_management.apps.ProjectManagementConfig',
     ]
+
+
+if SSO_ENABLED:
+
+    AUTHENTICATION_BACKENDS += (
+        *SSO_BACKENDS,
+    )
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social_core.pipeline.social_auth.social_details',
+        'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.social_user',
+        'social_core.pipeline.user.get_username',
+        'social_core.pipeline.social_auth.associate_by_email',
+        'social_core.pipeline.user.create_user',
+        'social_core.pipeline.social_auth.associate_user',
+        'social_core.pipeline.social_auth.load_extra_data',
+        'social_core.pipeline.user.user_details',
+    )
