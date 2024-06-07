@@ -39,3 +39,8 @@ Configuration has been setup in such a way that it replicates the Ansible invent
 
 !!! tip
     If you add a dictionary key to the group config and it be an invalid Ansible variable, the key will be automagically changed so that it is valid. A `space`, `.` or `-` will be set as an underscore `_` and capitol letters will be reset to be lower case.
+
+
+## Software
+
+Just like [devices](../itam/device.md#software) you can apply a software action to a config group. Software actions are recursive with the child-group obtaining the software actions of all parent groups. If a software action assigned to a group is also assigned to a device, the devices software configuration that is the same will take precedence to the extant of the difference.
