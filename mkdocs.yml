@@ -21,6 +21,8 @@ nav:
 
     - projects/django-template/index.md
 
+    - projects/django-template/configuration.md
+
     - projects/django-template/api.md
 
     - projects/django-template/config_management/index.md

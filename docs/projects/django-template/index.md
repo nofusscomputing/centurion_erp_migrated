@@ -52,7 +52,7 @@ Settings for the application are stored within a docker volume at path `/etc/its
 
 ### Settings file
 
-The settings file is a python file `.py` and must remain a valid python file for the application to work. 
+The settings file is a python file `.py` and must remain a valid python file for the application to work.
 
 ``` py title="settings.py"
 
