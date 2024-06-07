@@ -9,6 +9,11 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 This page details the configuration for setting up the application.
 
 
+## Config file
+
+Configuration for this application is stored within a python file `.py` in directory `/etc/istm/`. Any python file placed within this directory will be dynamically loaded at runtime. It's important to ensure that the file remains a valid python file. Failing to do so will prevent the application from restarting.
+
+
 ## Single Sign-On
 
 - `SSO_ENABLED`, boolean
@@ -43,13 +48,17 @@ SOCIAL_AUTH_OIDC_SECRET = '<client secret>'
 ```
 
 
-## Available Settings
+## Available Configuration Settings
 
 Below are the available configuration values along with their default value.
 
 ``` py
 
+ALLOWED_HOSTS = [ '*' ]
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
+SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the URL to access the site
 SSO_ENABLED = False              # Enable SSO
+SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
+TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
 ```

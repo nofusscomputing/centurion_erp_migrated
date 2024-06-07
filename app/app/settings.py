@@ -33,11 +33,13 @@ SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk
 #
 # Defaults
 #
+ALLOWED_HOSTS = [ '*' ]          # Site host to serve
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
+SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
 SSO_ENABLED = False              # Enable SSO
 SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
+TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
-ALLOWED_HOSTS = [ '*' ]
 
 
 # Application definition
@@ -225,6 +227,9 @@ if API_ENABLED:
 
 DATETIME_FORMAT = 'j N Y H:i:s'
 
+#
+# Load user settings files
+#
 if os.path.isdir(SETTINGS_DIR):
 
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
@@ -236,6 +241,11 @@ if os.path.isdir(SETTINGS_DIR):
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
+
+CSRF_TRUSTED_ORIGINS = [
+    SITE_URL,
+    *TRUSTED_ORIGINS
+]
 
 if DEBUG:
     INSTALLED_APPS += [
