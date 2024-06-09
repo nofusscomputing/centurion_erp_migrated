@@ -11,18 +11,17 @@ class SaveHistory(models.Model):
     class Meta:
         abstract = True
 
+
     @property
     def fields(self):
         return [ f.name for f in self._meta.fields + self._meta.many_to_many ]
 
+    def save_history(self, before: dict, after: dict):
+        """ Save a Models Changes
 
-    def save(self, *args, **kwargs):
-        """ OverRides save for keeping model history.
-
-        Not a Full-Override as this is just to add to existing.
-
-        Before to fetch from DB to ensure the changed value is the actual changed value and the after
-        is the data that was saved to the DB.
+        Args:
+            before (dict): model before saving (model.objects.get().__dict__)
+            after (dict): model after saving and refetched from DB (model.objects.get().__dict__)
         """
 
         remove_keys = [
@@ -30,12 +29,6 @@ class SaveHistory(models.Model):
             'created',
             'modified'
         ]
-        before = {}
-
-        try:
-            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
-        except Exception:
-            pass
 
         clean = {}
         for entry in before:
@@ -57,11 +50,6 @@ class SaveHistory(models.Model):
                 clean[entry] = value
 
         before_json = json.dumps(clean)
-
-        # Process the save
-        super().save(*args, **kwargs)
-
-        after = self.__dict__.copy()
 
         clean = {}
         for entry in after:
@@ -89,7 +77,7 @@ class SaveHistory(models.Model):
                 clean[entry] = value
 
 
-        after = json.dumps(clean)
+        after_json = json.dumps(clean)
 
         item_parent_pk = None
         item_parent_class = None
@@ -101,17 +89,22 @@ class SaveHistory(models.Model):
             item_parent_class = self.parent_object._meta.model_name
 
 
+        item_pk = self.pk
+
         if not before:
 
             action = History.Actions.ADD
 
-        elif before != after:
+        elif before_json != after_json and self.pk:
 
             action = History.Actions.UPDATE
 
-        elif not after:
+        elif self.pk is None:
 
             action = History.Actions.DELETE
+            item_pk = before['id']
+            after_json = None
+
 
         current_user = None
         if get_request() is not None:
@@ -122,16 +115,63 @@ class SaveHistory(models.Model):
                 current_user = None
 
 
-        if before != after and after != '{}':
+        # if before != after_json and after_json != '{}':
+        if before_json != after_json:
             entry = History.objects.create(
                 before = before_json,
-                after = after,
+                after = after_json,
                 user = current_user,
                 action = action,
-                item_pk = self.pk,
+                item_pk = item_pk,
                 item_class = self._meta.model_name,
                 item_parent_pk = item_parent_pk,
                 item_parent_class = item_parent_class,
             )
 
             entry.save()
+
+
+    def save(self, *args, **kwargs):
+        """ OverRides save for keeping model history.
+
+        Not a Full-Override as this is just to add to existing.
+
+        Before to fetch from DB to ensure the changed value is the actual changed value and the after
+        is the data that was saved to the DB.
+        """
+
+        before = {}
+
+        try:
+            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
+
+        # Process the save
+        super().save(*args, **kwargs)
+
+        after = self.__dict__.copy()
+
+        self.save_history(before, after)
+
+
+    def delete(self, using=None, keep_parents=False):
+        """ OverRides delete for keeping model history and on parent object ONLY!.
+
+        Not a Full-Override as this is just to add to existing.
+        """
+
+        before = {}
+
+        try:
+            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
+
+        # Process the save
+        super().delete(using=using, keep_parents=keep_parents)
+
+        after = self.__dict__.copy()
+
+        if hasattr(self, 'parent_object'):
+            self.save_history(before, after)
