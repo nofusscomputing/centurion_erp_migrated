@@ -35,3 +35,21 @@ class History(TestCase):
         fields required `parent_item_pk` and `parent_item_class
         """
         pass
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_history_save_calls_save_history():
+        """ During model save, self.save_history is called
+
+        This method saves the history to the database
+        """
+        pass
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_history_delete_calls_save_history():
+        """ During model delete, self.save_history is called
+
+        This method saves the delete history to the database for parent objects
+        """
+        pass

@@ -102,6 +102,14 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         unique = False,
     )
 
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.software
+
+
     def __str__(self):
 
         return self.name

@@ -5,8 +5,9 @@ from django.db import models
 from access.fields import *
 from access.models import TenancyObject
 
-from core.mixin.history_save import SaveHistory
+from app.helpers.merge_software import merge_software
 
+from core.mixin.history_save import SaveHistory
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
 from itam.models.device_models import DeviceModel
@@ -94,6 +95,9 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             "software": []
         }
 
+        host_software = []
+        group_software = []
+
         for software in softwares:
 
             if software.action:
@@ -115,7 +119,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                 if software.version:
                     software_action['version'] = software.version.name
 
-                config['software'] = config['software'] + [ software_action ]
+                host_software += [ software_action ]
 
         config: dict = config
 
@@ -131,7 +135,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
                 if rendered_config:
 
-                    config.update(json.loads(group.group.render_config()))
+                    config.update(json.loads(rendered_config))
+
+                    rendered_config: dict = json.loads(rendered_config)
+
+                    if 'software' in rendered_config.keys():
+                        
+                        group_software = group_software + rendered_config['software']
+
+            config['software'] = merge_software(group_software, host_software)
 
         return config
 
@@ -200,6 +212,13 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     )
 
 
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device
+
+
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
@@ -235,3 +254,10 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         blank = True,
         default = None,
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device

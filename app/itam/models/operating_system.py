@@ -69,6 +69,14 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         unique = False,
     )
 
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.operating_system
+
+
     def __str__(self):
 
         return self.operating_system.name + ' ' + self.name

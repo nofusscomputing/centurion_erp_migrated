@@ -48,12 +48,12 @@ _example structure for the device model that relies upon access app model organi
 ``` text
 
 ├── tests
-│   ├── device
-│   │   ├── test_device_access_organization.py
-│   │   ├── test_device_api_permission.py
-│   │   ├── test_device_core_history.py
-│   │   ├── test_device_core_notes.py
-│   │   ├── test_device_permission.py
+│   ├── <model name>
+│   │   ├── test_<model name>_access_organization.py
+│   │   ├── test_<model name>_api_permission.py
+│   │   ├── test_<model name>_core_history.py
+│   │   ├── test_<model name>_core_notes.py
+│   │   ├── test_<model name>_permission.py
 │   │   └── test_device.py
 
 
@@ -71,7 +71,24 @@ Items to test include but are not limited to:
 
 - can access global object (still to require model CRUD permission)
 
-- parent models
+- model
+
+- history
+
+    - saves history with parent pk and parent class
+
+        add to model class the following
+        ``` py
+        @property
+        def parent_object(self):
+            """ Fetch the parent object """
+            
+            return self.<item that is the parent>
+        ```
+
+        history should now be auto saved as long as class `core.mixin.history_save.SaveHistory` is inherited by model.
+
+    - history is deleted when item deleted if `parent_pk=None` or if has `parent_pk` deletes history on parent pk being deleted.
 
 
 ### Running Tests

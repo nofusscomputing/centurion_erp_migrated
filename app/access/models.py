@@ -106,6 +106,13 @@ class Team(Group, TenancyObject, SaveHistory):
     modified = AutoLastModifiedField()
 
 
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.organization
+
+
     def permission_list(self) -> list:
 
         permission_list = []
@@ -189,4 +196,11 @@ class TeamUsers(SaveHistory):
         user = User.objects.get(pk=self.user_id)
 
         user.groups.add(group) 
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.team
 
