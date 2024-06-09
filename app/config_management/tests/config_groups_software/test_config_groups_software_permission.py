@@ -10,14 +10,20 @@ import unittest
 import requests
 
 from access.models import Organization, Team, TeamUsers, Permission
-from config_management.models.groups import ConfigGroups
+
+from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
+
+from itam.models.device import DeviceSoftware
+from itam.models.software import Software
+
 
 
 class ConfigGroupSoftwarePermissions(TestCase):
 
-    model = ConfigGroups
+    model = ConfigGroupSoftware
+    parent_model = ConfigGroups
 
-    model_name = 'configgroups'
+    model_name = 'configgroupsoftware'
     app_label = 'config_management'
 
     @classmethod
@@ -25,10 +31,12 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """Setup Test
 
         1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
+        2. create an organization that is different to item
+        3. Create the parent item
+        4. create a software item
+        5. create the item
+        6. create teams with each permission: view, add, change, delete
+        7. create a user per team
         """
 
         organization = Organization.objects.create(name='test_org')
@@ -38,9 +46,21 @@ class ConfigGroupSoftwarePermissions(TestCase):
         different_organization = Organization.objects.create(name='test_different_organization')
 
 
-        self.item = self.model.objects.create(
+        self.parent_item = self.parent_model.objects.create(
             organization=organization,
-            name = 'deviceone'
+            name = 'group_one'
+        )
+
+        self.software_item = Software.objects.create(
+            organization=organization,
+            name = 'softwareone',
+        )
+
+        self.item = self.model.objects.create(
+            organization = organization,
+            software = self.software_item,
+            config_group = self.parent_item,
+            action = DeviceSoftware.Actions.INSTALL
         )
 
         view_permissions = Permission.objects.get(
@@ -226,7 +246,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
 
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_add_user_anon_denied(self):
         """ Check correct permission for add 
 
@@ -234,15 +253,14 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_add')
+        url = reverse('Config Management:_group_software_add', kwargs={'pk': self.parent_item.id,})
 
 
         response = client.put(url, data={'device': 'device'})
 
         assert response.status_code == 302 and response.url.startswith('/account/login')
 
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    @pytest.mark.skip(reason="figure out best way to test")
+
     def test_config_groups_auth_add_no_permission_denied(self):
         """ Check correct permission for add
 
@@ -250,7 +268,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_add')
+        url = reverse('Config Management:_group_software_add', kwargs={'pk': self.parent_item.id,})
 
 
         client.force_login(self.no_permissions_user)
@@ -259,7 +277,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_add_different_organization_denied(self):
         """ Check correct permission for add
 
@@ -267,7 +284,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_add')
+        url = reverse('Config Management:_group_software_add', kwargs={'pk': self.parent_item.id,})
 
 
         client.force_login(self.different_organization_user)
@@ -276,7 +293,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_add_permission_view_denied(self):
         """ Check correct permission for add
 
@@ -284,7 +300,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_add')
+        url = reverse('Config Management:_group_software_add', kwargs={'pk': self.parent_item.id,})
 
 
         client.force_login(self.view_user)
@@ -293,7 +309,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_add_has_permission(self):
         """ Check correct permission for add 
 
@@ -301,7 +316,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_add')
+        url = reverse('Config Management:_group_software_add', kwargs={'pk': self.parent_item.id,})
 
 
         client.force_login(self.add_user)
@@ -311,7 +326,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
 
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_user_anon_denied(self):
         """ Check correct permission for change
 
@@ -319,7 +333,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         response = client.patch(url, data={'device': 'device'})
@@ -327,7 +341,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_no_permission_denied(self):
         """ Ensure permission view cant make change
 
@@ -335,7 +348,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -344,7 +357,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_different_organization_denied(self):
         """ Ensure permission view cant make change
 
@@ -352,7 +364,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -361,7 +373,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_permission_view_denied(self):
         """ Ensure permission view cant make change
 
@@ -369,7 +380,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.view_user)
@@ -378,7 +389,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_permission_add_denied(self):
         """ Ensure permission view cant make change
 
@@ -386,7 +396,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.add_user)
@@ -395,7 +405,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_change_has_permission(self):
         """ Check correct permission for change
 
@@ -403,17 +412,15 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_view', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_change', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.change_user)
         response = client.post(url, data={'device': 'device'})
 
-        assert response.status_code == 200
+        assert response.status_code == 302 and response.url == reverse('Config Management:_group_view', kwargs={'pk': self.parent_item.id})
 
 
-
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_user_anon_denied(self):
         """ Check correct permission for delete
 
@@ -421,7 +428,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         response = client.delete(url, data={'device': 'device'})
@@ -429,7 +436,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 302 and response.url.startswith('/account/login')
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_no_permission_denied(self):
         """ Check correct permission for delete
 
@@ -437,7 +443,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -446,7 +452,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_different_organization_denied(self):
         """ Check correct permission for delete
 
@@ -454,7 +459,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -463,7 +468,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_permission_view_denied(self):
         """ Check correct permission for delete
 
@@ -471,7 +475,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.view_user)
@@ -480,7 +484,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_permission_add_denied(self):
         """ Check correct permission for delete
 
@@ -488,7 +491,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.add_user)
@@ -497,7 +500,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_permission_change_denied(self):
         """ Check correct permission for delete
 
@@ -505,7 +507,7 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.change_user)
@@ -514,7 +516,6 @@ class ConfigGroupSoftwarePermissions(TestCase):
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="figure out best way to test")
     def test_config_groups_auth_delete_has_permission(self):
         """ Check correct permission for delete
 
@@ -522,10 +523,10 @@ class ConfigGroupSoftwarePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('Config Management:_group_delete', kwargs={'pk': self.item.id})
+        url = reverse('Config Management:_group_software_delete', kwargs={'pk': self.item.id, 'group_id': self.parent_item.id})
 
 
         client.force_login(self.delete_user)
         response = client.delete(url, data={'device': 'device'})
 
-        assert response.status_code == 302 and response.url == reverse('Config Management:Groups')
+        assert response.status_code == 302 and response.url == reverse('Config Management:_group_view', kwargs={'pk': self.parent_item.id})
