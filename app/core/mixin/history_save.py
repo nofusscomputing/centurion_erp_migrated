@@ -94,46 +94,11 @@ class SaveHistory(models.Model):
         item_parent_pk = None
         item_parent_class = None
 
-        if self._meta.model_name == 'deviceoperatingsystem':
 
-            item_parent_pk = self.device.pk
-            item_parent_class = self.device._meta.model_name
+        if hasattr(self, 'parent_object'):
 
-        if self._meta.model_name == 'devicesoftware':
-
-            item_parent_pk = self.device.pk
-            item_parent_class = self.device._meta.model_name
-
-        if self._meta.model_name == 'operatingsystemversion':
-
-            item_parent_pk = self.operating_system_id
-            item_parent_class = self.operating_system._meta.model_name
-
-
-        if self._meta.model_name == 'softwareversion':
-
-            item_parent_pk = self.software.pk
-            item_parent_class = self.software._meta.model_name
-
-        if self._meta.model_name == 'team':
-
-            item_parent_pk = self.organization.pk
-            item_parent_class = self.organization._meta.model_name
-
-        if self._meta.model_name == 'teamusers':
-
-            item_parent_pk = self.team.pk
-            item_parent_class = self.team._meta.model_name
-
-        if self._meta.model_name == 'configgrouphosts':
-
-            item_parent_pk = self.group.id
-            item_parent_class = self.group._meta.model_name
-
-        if self._meta.model_name == 'configgroupsoftware':
-
-            item_parent_pk = self.config_group.id
-            item_parent_class = self.config_group._meta.model_name
+            item_parent_pk = self.parent_object.pk
+            item_parent_class = self.parent_object._meta.model_name
 
 
         if not before:

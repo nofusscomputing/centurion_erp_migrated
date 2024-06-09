@@ -219,6 +219,14 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
     )
 
 
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.group
+
+
+
 
 
 class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
@@ -263,5 +271,12 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         null = True,
         blank= True
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.config_group
 
 

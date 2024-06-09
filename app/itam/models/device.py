@@ -212,6 +212,13 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     )
 
 
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device
+
+
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
@@ -247,3 +254,10 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         blank = True,
         default = None,
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device
