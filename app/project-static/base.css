@@ -268,22 +268,6 @@ header .dropdown {
 }
 
 
-
-input[type=text] {
-  border: none;
-  border-bottom: 1px solid #b1b1b1;
-  font-size: inherit;
-  height: 30px;
-}
-
-select {
-  border: none;
-  border-bottom: 1px solid #b1b1b1;
-  font-size: inherit;
-  height: auto;
-  line-height: inherit;
-}
-
 nav {
   display: flex;
   flex-direction: column;

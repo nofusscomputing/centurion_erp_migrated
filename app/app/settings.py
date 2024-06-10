@@ -251,10 +251,6 @@ if os.path.isdir(SETTINGS_DIR):
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
 
-    if SECRET_KEY is None:
-
-        raise Exception("You must define a SECRET_KEY. one can be created with echo $(head /dev/urandom | tr -dc A-Za-z0-9\&\8\!\@\#\$\%\^\*\(\)\-\_\=\+\[\{\]\}\,\. | head -c 256 ; echo '')")
-
 #
 # Settings to reset to prevent user from over-riding
 #
