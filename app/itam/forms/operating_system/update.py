@@ -16,6 +16,7 @@ class Update(forms.ModelForm):
             'id',
             'organization',
             'is_global',
+            'model_notes',
         ]
 
 
