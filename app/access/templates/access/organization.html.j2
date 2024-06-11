@@ -4,12 +4,10 @@
 
 {% block content %}
 
+<form>
+  <div>{{ form.as_p }}</div>
+</form>
 
-<section class="content-header">
-  <fieldset><label>Name</label><!-- <input type="text" value="{{ organization.name }}" /> -->{{form.name}}</fieldset>
-  <fieldset><label>Created</label><input type="text" value="{{ organization.created }}" readonly /></fieldset>
-  <fieldset><label>Modified</label><input type="text" value="{{ organization.modified }}" readonly /></fieldset>
-</section>
 {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
 
 <input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
