@@ -72,6 +72,10 @@ section h2 span svg {
   fill: #ff0000;
 }
 
+.icon-help svg {
+  fill: #177ee6;
+}
+
 </style>
 
     <section>
@@ -79,6 +83,11 @@ section h2 span svg {
         {% if model_delete_url %}
         <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
           {% include 'icons/delete.svg' %}
+        </span>
+        {% endif %}
+        {% if model_docs_path %}
+        <span title="Documentation" id="content_header_icon" class="icon-help" onclick="window.open('{% settings_value 'DOCS_ROOT' %}{{ model_docs_path }}', '_blank')">
+          {% include 'icons/help.svg' %}
         </span>
         {% endif %}
         {% if model_name and model_pk %}
