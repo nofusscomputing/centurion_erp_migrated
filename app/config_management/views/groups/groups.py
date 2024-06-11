@@ -37,6 +37,8 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
         context = super().get_context_data(**kwargs)
 
+        context['model_docs_path'] = self.model._meta.app_label + '/'
+
         context['content_title'] = 'Config Groups'
 
         return context
