@@ -16,6 +16,7 @@ class Update(forms.ModelForm):
             'organization',
             'is_global',
             'category',
+            'model_notes',
         ]
 
     def __init__(self, *args, **kwargs):
