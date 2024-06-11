@@ -6,65 +6,24 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-to access the api, it can be done with the following command:
-
-``` bash
-
-curl -X GET http://127.0.0.1:8000/api/ -H 'Authorization: Token <token>'
-
-```
+An api is available for this application and can be viewed at endpoint `/api/`. Documentation specific to each of the endpoints can be found within the swagger UI at endpoint `api/swagger/`.
 
 
 ## Features
 
-- Inventory Report Collection
+- Device Inventory upload
 
 - Swagger UI
 
 
-## Inventory Reports
+## Device Inventory
 
-- url `/api/device/inventory`
-
-- method `POST`
-
-- content `application/json`
-
-- permission `itam.add_device`
-
-Passing a valid inventory report to this endpoint will update the device within the app. If the device doesn't exist it will be created.
-
-Report Format
-
-``` json
-
-{
-    "details": {
-        "name": "string",
-        "serial_number": "string",
-        "uuid": "string"
-    },
-    "os": {
-        "name": "name of os",
-        "version_major": "major version number",
-        "version": "as reported"
-    },
-    "software": [
-        {
-            "name": "string",
-            "category": "string",
-            "version": "string"
-        }
-    ]
-}
+You can [inventory](itam/device.md#inventory) your devices and upload them to the inventory endpoint.
 
 
-```
+## Swagger UI
 
-
-## User Token
-
-To generate a user token to access the api, use command `python3 manage.py drf_create_token <username>`
+The swagger UI is included within this application and can be found at endpoint `/api/swagger` on your server. This UI has been used to document the API.
 
 
 ## Organizations

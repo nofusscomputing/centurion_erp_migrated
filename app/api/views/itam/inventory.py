@@ -5,6 +5,8 @@ import re
 from django.http import Http404, JsonResponse
 from django.utils import timezone
 
+from drf_spectacular.utils import extend_schema, OpenApiExample, OpenApiTypes, OpenApiResponse, OpenApiParameter
+
 from rest_framework import generics, views
 from rest_framework.response import Response
 
@@ -12,6 +14,7 @@ from access.mixin import OrganizationMixin
 from access.models import Organization
 
 from api.views.mixin import OrganizationPermissionAPI
+from api.serializers.itam.inventory import InventorySerializer
 
 from core.http.common import Http
 
@@ -38,19 +41,43 @@ class InventoryPermissions(OrganizationPermissionAPI):
 
 class Collect(OrganizationPermissionAPI, views.APIView):
 
-    # permission_classes = [
-    #     InventoryPermissions
-    # ]
-
     queryset = Device.objects.all()
 
 
+    @extend_schema(
+        summary = "Upload a device's inventory",
+        description = """After inventorying a device, it's inventory file, `.json` is uploaded to this endpoint.
+If the device does not exist, it will be created. If the device does exist the existing
+device will be updated with the information within the inventory.
+
+matching for an existing device is by slug which is the hostname converted to lower case
+letters. This conversion is automagic.
+
+**NOTE:** _for device creation, the API user must have user setting 'Default Organization'. Without
+this setting populated, no device will be created and the endpoint will return HTTP/403_
+
+## Permissions
+
+- `itam.add_device` Required to upload inventory
+        """,
+
+        methods=["POST"],
+        parameters = None,
+        tags = ['device', 'inventory',],
+        request = InventorySerializer,
+        responses = {
+            200: OpenApiResponse(description='Inventory updated an existing device'),
+            201: OpenApiResponse(description='Inventory created a new device'),
+            400: OpenApiResponse(description='Inventory is invalid'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+            500: OpenApiResponse(description='Exception occured. View server logs for the Stack Trace'),
+        }
+    )
     def post(self, request, *args, **kwargs):
 
 
         data = json.loads(request.body)
-
-        # data = self.request.data
 
         device = None
 
