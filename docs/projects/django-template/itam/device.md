@@ -97,3 +97,30 @@ The report can contain the following information:
 
         !!! info
             When the software is added to the inventory, a regex search is done to return the [semver](https://semver.org/) of the software. if no semver is found, the version number provided is used.
+
+Example Report
+
+``` json
+
+{
+    "details": {
+        "name": "string",
+        "serial_number": "string",
+        "uuid": "string"
+    },
+    "os": {
+        "name": "name of os",
+        "version_major": "major version number",
+        "version": "as reported"
+    },
+    "software": [
+        {
+            "name": "string",
+            "category": "string",
+            "version": "string"
+        }
+    ]
+}
+
+
+```

@@ -223,8 +223,33 @@ if API_ENABLED:
     }
 
     SPECTACULAR_SETTINGS = {
-        'TITLE': 'Your Project API',
-        'DESCRIPTION': 'Your project description',
+        'TITLE': 'ITSM API',
+        'DESCRIPTION': """This UI is intended to serve as the API documentation.
+
+## Authentication
+
+Authentication with the api is via Token. The token is placed in header `Authorization` with a value of `Token <Your Token>`.
+
+## Token Generation
+
+To generate a token, run `python3 manage.py drf_create_token <username>` from the CLI.
+
+## Examples
+
+curl:
+- Simple API Request: `curl -X GET <url>/api/ -H 'Authorization: Token <token>'`
+
+- Post an Inventory File:
+
+    ``` bash
+    curl --header "Content-Type: application/json" \\
+    --header "Authorization: Token <token>" \\
+    --request POST \\
+    --data @<path to inventory file>/<file name>.json \\
+    <url>/api/device/inventory
+    ```
+
+        """,
         'VERSION': '1.0.0',
         'SERVE_INCLUDE_SCHEMA': False,
 

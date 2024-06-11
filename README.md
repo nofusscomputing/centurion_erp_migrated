@@ -6,3 +6,5 @@
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/django-template?style=plastic&logo=docker&color=0db7ed)
 
+![Gitlab Code Coverage](https://img.shields.io/gitlab/pipeline-coverage/nofusscomputing%2Fprojects%2Fdjango_template?branch=master&style=plastic&logo=gitlab&label=Test%20Coverage)
+

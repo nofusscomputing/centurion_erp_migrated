@@ -150,7 +150,7 @@ class OrganizationMixin():
 
 
     # ToDo: Ensure that the group has access to item
-    def has_organization_permission(self, organization=None) -> bool:
+    def has_organization_permission(self, organization: int=None) -> bool:
 
         has_permission = False
 
