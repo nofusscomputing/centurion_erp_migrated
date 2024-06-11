@@ -26,6 +26,7 @@ class TeamForm(forms.ModelForm):
         fields = [
             'name',
             'permissions',
+            'model_notes',
         ]
 
 
