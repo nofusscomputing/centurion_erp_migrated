@@ -30,6 +30,8 @@ curl -X GET http://127.0.0.1:8000/api/ -H 'Authorization: Token <token>'
 
 - content `application/json`
 
+- permission `itam.add_device`
+
 Passing a valid inventory report to this endpoint will update the device within the app. If the device doesn't exist it will be created.
 
 Report Format
