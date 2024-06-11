@@ -56,6 +56,7 @@ class View(OrganizationPermission, generic.UpdateView):
         'id',
         'organization',
         'is_global',
+        'model_notes',
     ]
 
     model = Manufacturer
