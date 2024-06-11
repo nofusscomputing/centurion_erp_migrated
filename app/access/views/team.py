@@ -4,25 +4,27 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import generic
 
+from access.forms.team import TeamForm
+# from access.forms.team_users import TeamUsersForm
 from access.models import Team, TeamUsers, Organization
 from access.mixin import *
 
 
 
 class View(OrganizationPermission, generic.UpdateView):
+
+    context_object_name = "team"
+
+    form_class = TeamForm
+
     model = Team
+
     permission_required = [
         'access.view_team',
         'access.change_team',
     ]
-    template_name = 'access/team.html.j2'
 
-    fields = [
-        "name",
-        'id',
-        'organization',
-        'permissions'
-    ]
+    template_name = 'access/team.html.j2'
 
 
     def get_context_data(self, **kwargs):
@@ -37,7 +39,6 @@ class View(OrganizationPermission, generic.UpdateView):
         teamusers = TeamUsers.objects.filter(team=self.kwargs['pk'])
 
         context['teamusers'] = teamusers
-        context['permissions'] = Permission.objects.filter()
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
