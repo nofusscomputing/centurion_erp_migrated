@@ -1,17 +1,18 @@
-# from django.conf import settings
+import pytest
+import unittest
+import requests
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-import pytest
-import unittest
-import requests
-
 from access.models import Organization, Team, TeamUsers, Permission
+
 from itam.models.device import Device
 
+from settings.models.user_settings import UserSettings
 
 class InventoryPermissionsAPI(TestCase):
 
@@ -140,6 +141,13 @@ class InventoryPermissionsAPI(TestCase):
         )
 
         self.add_user = User.objects.create_user(username="test_user_add", password="password")
+
+        add_user_settings = UserSettings.objects.get(user=self.add_user)
+
+        add_user_settings.default_organization = organization
+
+        add_user_settings.save()
+
         teamuser = TeamUsers.objects.create(
             team = add_team,
             user = self.add_user
@@ -180,7 +188,6 @@ class InventoryPermissionsAPI(TestCase):
 
 
 
-    @pytest.mark.skip(reason="test to be written")
     def test_device_auth_add_user_anon_denied(self):
         """ Check correct permission for add 
 
@@ -191,12 +198,11 @@ class InventoryPermissionsAPI(TestCase):
         url = reverse('API:_api_device_inventory')
 
 
-        response = client.put(url, data=self.inventory)
+        response = client.put(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 401
 
 
-    @pytest.mark.skip(reason="test to be written")
     def test_device_auth_add_no_permission_denied(self):
         """ Check correct permission for add
 
@@ -208,12 +214,11 @@ class InventoryPermissionsAPI(TestCase):
 
 
         client.force_login(self.no_permissions_user)
-        response = client.post(url, data=self.inventory)
+        response = client.post(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="test to be written")
     def test_device_auth_add_different_organization_denied(self):
         """ Check correct permission for add
 
@@ -225,12 +230,11 @@ class InventoryPermissionsAPI(TestCase):
 
 
         client.force_login(self.different_organization_user)
-        response = client.post(url, data=self.inventory)
+        response = client.post(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="test to be written")
     def test_device_auth_add_permission_view_denied(self):
         """ Check correct permission for add
 
@@ -242,12 +246,11 @@ class InventoryPermissionsAPI(TestCase):
 
 
         client.force_login(self.view_user)
-        response = client.post(url, data=self.inventory)
+        response = client.post(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 403
 
 
-    @pytest.mark.skip(reason="test to be written")
     def test_device_auth_add_has_permission(self):
         """ Check correct permission for add 
 
@@ -259,7 +262,7 @@ class InventoryPermissionsAPI(TestCase):
 
 
         client.force_login(self.add_user)
-        response = client.post(url, data=self.inventory)
+        response = client.post(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 201
 
