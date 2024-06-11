@@ -73,6 +73,12 @@ class TenancyObject(models.Model):
         blank = False
     )
 
+    model_notes = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
+
     def get_organization(self) -> Organization:
         return self.organization
 
