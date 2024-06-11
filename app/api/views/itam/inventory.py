@@ -2,7 +2,7 @@
 import json
 import re
 
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.utils import timezone
 
 from rest_framework import generics, views
@@ -36,44 +36,57 @@ class InventoryPermissions(OrganizationPermissionAPI):
 
 
 
-class Collect(OrganizationMixin, views.APIView):
+class Collect(OrganizationPermissionAPI, views.APIView):
 
-    permission_classes = [
-        InventoryPermissions
-    ]
+    # permission_classes = [
+    #     InventoryPermissions
+    # ]
 
     queryset = Device.objects.all()
 
 
     def post(self, request, *args, **kwargs):
 
+
         data = json.loads(request.body)
 
-        status = Http.Status.BAD_REQUEST
-        
+        # data = self.request.data
+
         device = None
+
+        self.default_organization = UserSettings.objects.get(user=request.user).default_organization
+
+        if Device.objects.filter(slug=str(data['details']['name']).lower()).exists():
+
+            self.obj = Device.objects.get(slug=str(data['details']['name']).lower())
+
+            device = self.obj
+
+
+        if not self.permission_check(request=request, view=self, obj=device):
+
+            raise Http404
+
+
+
+        status = Http.Status.BAD_REQUEST
+
         device_operating_system = None
         operating_system = None
         operating_system_version = None
 
         try:
 
-            default_organization = UserSettings.objects.get(user=request.user).default_organization
-
             app_settings = AppSettings.objects.get(owner_organization = None)
 
-            if Device.objects.filter(name=data['details']['name']).exists():
-
-                device = Device.objects.get(name=data['details']['name'])
-    
-            else: # Create the device
+            if not device: # Create the device
 
                 device = Device.objects.create(
                     name = data['details']['name'],
                     device_type = None,
                     serial_number = data['details']['serial_number'],
                     uuid = data['details']['uuid'],
-                    organization = default_organization,
+                    organization = self.default_organization,
                 )
 
                 status = Http.Status.CREATED
@@ -87,7 +100,7 @@ class Collect(OrganizationMixin, views.APIView):
 
                 operating_system = OperatingSystem.objects.create(
                     name = data['os']['name'],
-                    organization = default_organization,
+                    organization = self.default_organization,
                     is_global = True
                 )
 
@@ -95,7 +108,7 @@ class Collect(OrganizationMixin, views.APIView):
             if OperatingSystemVersion.objects.filter( name=data['os']['version_major'], operating_system=operating_system ).exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
-                    organization = default_organization,
+                    organization = self.default_organization,
                     is_global = True,
                     name = data['os']['version_major'],
                     operating_system = operating_system
@@ -104,7 +117,7 @@ class Collect(OrganizationMixin, views.APIView):
             else: # Create Operating System Version
 
                 operating_system_version = OperatingSystemVersion.objects.create(
-                    organization = default_organization,
+                    organization = self.default_organization,
                     is_global = True,
                     name = data['os']['version_major'],
                     operating_system = operating_system,
@@ -128,7 +141,7 @@ class Collect(OrganizationMixin, views.APIView):
             else: # Create Operating System Version
 
                 device_operating_system = DeviceOperatingSystem.objects.create(
-                    organization = default_organization,
+                    organization = self.default_organization,
                     device=device,
                     version = data['os']['version'],
                     operating_system_version = operating_system_version,
@@ -223,7 +236,7 @@ class Collect(OrganizationMixin, views.APIView):
                 else: # Create Software Category
 
                     software_version = SoftwareVersion.objects.create(
-                        organization = default_organization,
+                        organization = self.default_organization,
                         is_global = True,
                         name = semver,
                         software = software,
@@ -240,7 +253,7 @@ class Collect(OrganizationMixin, views.APIView):
                 else: # Create Software
 
                     device_software = DeviceSoftware.objects.create(
-                        organization = default_organization,
+                        organization = self.default_organization,
                         is_global = True,
                         installedversion = software_version,
                         software = software,
@@ -284,7 +297,9 @@ class Collect(OrganizationMixin, views.APIView):
 
                 device.save()
 
-                status = Http.Status.OK
+                if status != Http.Status.CREATED:
+
+                    status = Http.Status.OK
 
 
         except Exception as e:
