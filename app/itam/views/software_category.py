@@ -24,6 +24,7 @@ class View(OrganizationPermission, generic.UpdateView):
         'id',
         'organization',
         'is_global',
+        'model_notes',
     ]
 
     context_object_name = "software"
