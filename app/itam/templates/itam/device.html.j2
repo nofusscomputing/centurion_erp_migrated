@@ -1,5 +1,7 @@
 {% extends 'base.html.j2' %}
 
+{% load markdown %}
+
 {% block title %}{{ device.name }}{% endblock %}
 
 {% block content %}
@@ -52,7 +54,59 @@
       Details
       <span style="font-weight: normal; float: right;">{% include 'icons/issue_link.html.j2' with issue=6 %}</span>
     </h3>
-    {{ form.as_p }}
+    <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+      <div style="display: inline; width: 40%; margin: 30px;">
+
+        <div>
+          <label>{{ form.name.label }}</label>
+          {{ form.name }}
+        </div>
+
+        <div>
+          <label>{{ form.device_model.label }}</label>
+          {{ form.device_model }}
+        </div>
+
+        <div>
+          <label>{{ form.serial_number.label }}</label>
+          {{ form.serial_number }}
+        </div>
+
+        <div>
+          <label>{{ form.uuid.label }}</label>
+          {{ form.uuid }}
+        </div>
+
+        <div>
+          <label>{{ form.device_type.label }}</label>
+          {{ form.device_type }}
+        </div>
+
+        <div>
+          <label>{{ form.organization.label }}</label>
+          {{ form.organization }}
+        </div>
+
+        <div>
+          <label>{{ form.lastinventory.label }}</label>
+          {{ form.lastinventory }}
+        </div>
+
+      </div>
+
+      <div style="display: inline; width: 40%; margin: 30px;">
+        <div>
+          <label>{{ form.model_notes.label }}</label>
+          {{ form.model_notes }}
+        </div>
+        <hr />
+        {{ form.model_notes.value | markdown | safe }}
+      </div>
+
+    </div>
+
+
     {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
     <input name="{{form.prefix}}" type="submit" value="Submit">
     <script>
