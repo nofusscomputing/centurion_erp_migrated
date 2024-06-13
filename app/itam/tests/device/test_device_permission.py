@@ -311,7 +311,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         response = client.patch(url, data={'device': 'device'})
@@ -326,7 +326,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.no_permissions_user)
@@ -342,7 +342,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.different_organization_user)
@@ -358,7 +358,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.view_user)
@@ -374,7 +374,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.add_user)
@@ -390,7 +390,7 @@ class DevicePermissions(TestCase):
         """
 
         client = Client()
-        url = reverse('ITAM:_device_view', kwargs={'pk': self.item.id})
+        url = reverse('ITAM:_device_change', kwargs={'pk': self.item.id})
 
 
         client.force_login(self.change_user)

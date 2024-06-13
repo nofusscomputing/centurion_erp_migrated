@@ -46,6 +46,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank = True,
         unique = True,
+        help_text = 'Serial number of the device.',
         
     )
 
@@ -56,7 +57,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank = True,
         unique = True,
-        
+        help_text = 'System GUID/UUID.',
     )
 
     device_model = models.ForeignKey(
@@ -64,7 +65,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.CASCADE,
         default = None,
         null = True,
-        blank= True
+        blank= True,
+        help_text = 'Model of the device.',
     )
 
     device_type = models.ForeignKey(
@@ -72,7 +74,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.CASCADE,
         default = None,
         null = True,
-        blank= True
+        blank= True,
+        help_text = 'Type of device.',
         
     )
 
@@ -80,7 +83,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     inventorydate = models.DateTimeField(
         verbose_name = 'Last Inventory Date',
         null = True,
-        blank = True
+        blank = True,
     )
 
 

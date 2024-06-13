@@ -45,6 +45,37 @@
   <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
   <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
 </div>
+<style>
+
+.detail-view-field {
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  /*padding: 10px;*/
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline;
+  width: 350px;
+  margin: 10px;
+  /*padding: 10px;*/
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+</style>
 <form action="" method="post">
   {% csrf_token %}
 
@@ -58,57 +89,56 @@
 
       <div style="display: inline; width: 40%; margin: 30px;">
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.name.label }}</label>
-          {{ form.name }}
+          <span>{{ form.name.value }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.device_model.label }}</label>
-          {{ form.device_model }}
+          <span>{{ form.device_model.value }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.serial_number.label }}</label>
-          {{ form.serial_number }}
+          <span>{{ form.serial_number.value }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.uuid.label }}</label>
-          {{ form.uuid }}
+          <span>{{ form.uuid.value }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.device_type.label }}</label>
-          {{ form.device_type }}
+          <span>{{ device.device_type }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.organization.label }}</label>
-          {{ form.organization }}
+          <span>{{ device.organization }}</span>
         </div>
 
-        <div>
+        <div class="detail-view-field">
           <label>{{ form.lastinventory.label }}</label>
-          {{ form.lastinventory }}
+          <span>{{ form.lastinventory.value }}</span>
         </div>
 
       </div>
 
-      <div style="display: inline; width: 40%; margin: 30px;">
+      <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
         <div>
-          <label>{{ form.model_notes.label }}</label>
-          {{ form.model_notes }}
+          <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
+          
+          <div style="display: inline-block; text-align: left;">{{ form.model_notes.value | markdown | safe }}</div>
+          {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
         </div>
-        <hr />
-        {{ form.model_notes.value | markdown | safe }}
       </div>
-
     </div>
 
 
-    {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
-    <input name="{{form.prefix}}" type="submit" value="Submit">
+    <input type="button" value="Edit" onclick="window.location='{% url 'ITAM:_device_change' device.id %}';">
+
     <script>
       // Get the element with id="defaultOpen" and click on it
       document.getElementById("defaultOpen").click();

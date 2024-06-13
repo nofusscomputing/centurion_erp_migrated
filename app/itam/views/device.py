@@ -332,3 +332,26 @@ class Delete(OrganizationPermission, generic.DeleteView):
         context['content_title'] = 'Delete ' + self.object.name
 
         return context
+
+
+class Change(OrganizationPermission, generic.UpdateView):
+    model = Device
+    permission_required = [
+        'itam.change_device',
+    ]
+    template_name = 'form.html.j2'
+
+    form_class = DeviceForm
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('ITAM:_device_view', args=(self.kwargs['pk'],))
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit ' + self.object.name
+
+        return context
