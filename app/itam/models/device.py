@@ -1,5 +1,7 @@
 import json
 
+from datetime import timedelta
+
 from django.db import models
 
 from access.fields import *
@@ -85,6 +87,36 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     def __str__(self):
 
         return self.name
+
+    @property
+    def status(self) -> str:
+        """ Fetch Device status
+
+        Returns:
+            str: Current status of the item
+        """
+
+        if self.inventorydate:
+
+            check_date = self.inventorydate
+
+        else:
+
+            check_date = now() + timedelta(days=99)
+
+        one = (now() - check_date).days
+
+        if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
+
+            return 'OK'
+
+        elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
+
+            return 'WARN'
+
+        else:
+
+            return 'UNK'
 
 
     def get_configuration(self, id):

@@ -28,6 +28,11 @@ For each device within your inventory, the following fields/tabs are available t
 - [Change History](../index.md#history)
 
 
+### Status at a glance
+
+On the devices list page you can quickly gauge the status of a device. It's a simple colour system: green=OK, Orange=Warning and Grey=Unknown. This status icon denotes the age of the last inventory report, being: within 24-hours, within 48-hours and unknown.
+
+
 ### Details
 
 This tab display the details of the device.
