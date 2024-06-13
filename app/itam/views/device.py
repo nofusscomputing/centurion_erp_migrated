@@ -3,6 +3,7 @@ import markdown
 
 from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -79,7 +80,6 @@ class View(OrganizationPermission, generic.UpdateView):
     paginate_by = 10
 
 
-
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
@@ -100,10 +100,21 @@ class View(OrganizationPermission, generic.UpdateView):
             context['operating_system'] = OperatingSystemForm(prefix='operating_system')
 
 
-        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])[:50]
+        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
+        softwares = Paginator(softwares, 10)
+
         context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
 
-        context['softwares'] = softwares
+        if hasattr(self.request.GET, 'page'):
+
+            context['page_number'] = int(self.request.GET.get("page"))
+
+        else:
+             context['page_number'] = 1
+
+        context['page_obj'] = softwares.get_page(context['page_number'])
+
+        context['softwares'] = softwares.page(context['page_number']).object_list
 
         context['notes_form'] = AddNoteForm(prefix='note')
 
