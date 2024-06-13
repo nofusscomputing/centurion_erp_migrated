@@ -30,7 +30,7 @@ For each device within your inventory, the following fields/tabs are available t
 
 ### Status at a glance
 
-On the devices list page you can quickly gauge the status of a device. It's a simple colour system: green=OK, Orange=Warning and Grey=Unknown. This status icon denotes the age of the last inventory report, being: within 24-hours, within 48-hours and unknown.
+On the devices list page you can quickly gauge the status of a device. It's a simple colour system: green=OK, red=bad, Orange=Warning and Grey=Unknown. This status icon denotes the age of the last inventory report, being: within 24-hours, within 72-hours, more than 72-hours and unknown. The latter generally indicates that no inventory has been performed.
 
 
 ### Details

@@ -114,6 +114,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
             return 'WARN'
 
+        elif (now() - check_date).days >= 3:
+
+            return 'BAD'
+
         else:
 
             return 'UNK'

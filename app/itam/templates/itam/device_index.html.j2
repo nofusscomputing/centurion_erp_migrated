@@ -49,6 +49,18 @@ span.status_icon {
     /*background-color: #ffefc5;*/
 }
 
+.status_icon_bad svg {
+    fill: #cf3025;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 11px;
+    /*background-color: #ffefc5;*/
+}
+
 .status_icon_ukn svg {
     fill: #999;
     width: 22px;
@@ -81,6 +93,10 @@ span.status_icon {
             {% elif device.status == 'WARN' %}
             <span class="status_icon status_icon_warn">
                 {% include 'icons/status_ok.svg' %}
+            </span>
+            {% elif device.status == 'BAD' %}
+            <span class="status_icon status_icon_bad">
+                {% include 'icons/status_bad.svg' %}
             </span>
             {% else %}
             <span class="status_icon status_icon_ukn">
