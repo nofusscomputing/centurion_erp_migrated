@@ -70,6 +70,7 @@ if settings.DEBUG:
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
         # Apps Under Development
+        path("itim/", include("itim.urls")),
         path("information/", include("information.urls")),
         path("project_management/", include("project_management.urls")),
     ]
