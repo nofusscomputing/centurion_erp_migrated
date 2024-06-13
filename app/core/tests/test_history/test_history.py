@@ -53,3 +53,12 @@ class History(TestCase):
         This method saves the delete history to the database for parent objects
         """
         pass
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_history_delete_calls_delete_history():
+        """ During model delete, self.delete_history is called
+
+        This method deletes the item and child-item history from the database
+        """
+        pass
