@@ -155,6 +155,38 @@ class SaveHistory(models.Model):
         self.save_history(before, after)
 
 
+    def delete_history(self, item_pk, item_class):
+        """ Delete the objects history
+
+        When an object is no longer in the database, delete the objects history and
+        that of the child objects. Only caveat is that if the history has a parent_pk
+        the object history is not to be deleted.
+
+        Args:
+            item_pk (int): Primary key of the object to be deleted
+            item_class (str): Object class of the object to be deleted
+        """
+
+        object_history = History.objects.filter(
+            item_pk = item_pk,
+            item_class = item_class,
+            item_parent_pk = None,
+        )
+
+        if object_history.exists():
+
+            object_history.delete()
+
+        child_object_history = History.objects.filter(
+            item_parent_pk = item_pk,
+            item_parent_class = item_class,
+        )
+
+        if child_object_history.exists():
+
+            child_object_history.delete()
+
+
     def delete(self, using=None, keep_parents=False):
         """ OverRides delete for keeping model history and on parent object ONLY!.
 
@@ -162,16 +194,26 @@ class SaveHistory(models.Model):
         """
 
         before = {}
+        item_pk = self.pk
+        item_class = self._meta.model_name
 
         try:
+
             before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+
         except Exception:
+
             pass
 
-        # Process the save
+        # Process the delete
         super().delete(using=using, keep_parents=keep_parents)
 
         after = self.__dict__.copy()
 
         if hasattr(self, 'parent_object'):
+
             self.save_history(before, after)
+
+        else:
+
+            self.delete_history(item_pk, item_class)
