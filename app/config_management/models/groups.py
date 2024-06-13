@@ -180,7 +180,12 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
         super().save(*args, **kwargs)
 
+
     def __str__(self):
+
+        if self.parent:
+
+            return f'{self.parent.name} > {self.name}'
 
         return self.name
 
