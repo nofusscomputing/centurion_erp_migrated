@@ -16,6 +16,7 @@ from itam.models.device import Device
 from settings.models.user_settings import UserSettings
 
 from config_management.forms.group_hosts import ConfigGroupHostsForm
+from config_management.forms.group.group import ConfigGroupForm
 from config_management.models.groups import ConfigGroups, ConfigGroupHosts, ConfigGroupSoftware
 
 
@@ -114,6 +115,8 @@ class GroupView(OrganizationPermission, generic.UpdateView):
 
     context_object_name = "group"
 
+    form_class = ConfigGroupForm
+
     model = ConfigGroups
 
     permission_required = [
@@ -122,12 +125,6 @@ class GroupView(OrganizationPermission, generic.UpdateView):
     ]
 
     template_name = 'config_management/group.html.j2'
-
-    fields = [
-        'name',
-        'parent',
-        'config',
-    ]
 
 
     def get_context_data(self, **kwargs):
@@ -259,9 +256,20 @@ class GroupHostAdd(OrganizationPermission, generic.CreateView):
 
         exsting_group_hosts = ConfigGroupHosts.objects.filter(group=group)
 
-        form_class.fields["host"].queryset = Device.objects.filter(
-            organization=group.organization.id,
-        ).exclude(id__in=exsting_group_hosts.values_list('host', flat=True))
+        form_class.fields["host"].queryset = None
+
+        if group.is_global:
+
+            form_class.fields["host"].queryset = Device.objects.filter(
+            ).exclude(
+                id__in=exsting_group_hosts.values_list('host', flat=True)
+            )
+
+        if form_class.fields["host"].queryset is None:
+
+            form_class.fields["host"].queryset = Device.objects.filter(
+                organization=group.organization.id,
+            ).exclude(id__in=exsting_group_hosts.values_list('host', flat=True))
 
         return form_class
 

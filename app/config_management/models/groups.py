@@ -171,8 +171,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     def save(self, *args, **kwargs):
 
-        self.is_global = False
-
         if self.config:
 
             self.config = self.config_keys_ansible_variable(self.config)
