@@ -84,6 +84,14 @@ nav:
 
         - projects/django-template/development/api/index.md
 
+        - Models:
+
+          - projects/django-template/development/api/models/index.md
+
+          - projects/django-template/development/api/models/core_history_save.md
+
+          - projects/django-template/development/api/models/itam_device.md
+
         - Unit Testing:
 
           - projects/django-template/development/api/tests/index.md

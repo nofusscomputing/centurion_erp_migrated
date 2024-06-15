@@ -18,6 +18,7 @@ naming of test classes is in `CamelCase` in format `<Model Name><what's being te
 Test setup is written in a method called `setUpTestData` and is to contain the setup for all tests within the test class.
 
 Example of a model history test class.
+
 ``` py
 
 import pytest
@@ -81,6 +82,7 @@ Items to test include, and are not limited to:
     - saves history with parent pk and parent class
 
         add to model class the following
+
         ``` py
 
         @property
