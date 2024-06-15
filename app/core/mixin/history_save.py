@@ -85,8 +85,10 @@ class SaveHistory(models.Model):
 
         if hasattr(self, 'parent_object'):
 
-            item_parent_pk = self.parent_object.pk
-            item_parent_class = self.parent_object._meta.model_name
+            if self.parent_object:
+
+                item_parent_pk = self.parent_object.pk
+                item_parent_class = self.parent_object._meta.model_name
 
 
         item_pk = self.pk
