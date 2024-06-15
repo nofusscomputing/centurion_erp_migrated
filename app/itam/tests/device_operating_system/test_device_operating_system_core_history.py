@@ -9,14 +9,14 @@ from access.models import Organization
 
 from core.models.history import History
 
-from itam.models.device import Device, DeviceSoftware
+from itam.models.device import Device, DeviceOperatingSystem
 
-from itam.models.software import Software, SoftwareVersion
+from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
-class DeviceSoftwareHistory(TestCase):
+class DeviceOperatingSystemHistory(TestCase):
 
 
-    model = DeviceSoftware
+    model = DeviceOperatingSystem
 
 
     @classmethod
@@ -32,21 +32,20 @@ class DeviceSoftwareHistory(TestCase):
             organization = self.organization,
         )
 
-        self.item_software = Software.objects.create(
+        self.item_operating_system = OperatingSystem.objects.create(
             name = 'test_item_' + self.model._meta.model_name,
             organization = self.organization,
         )
 
-        self.item_software_version = SoftwareVersion.objects.create(
+        self.item_operating_system_version = OperatingSystemVersion.objects.create(
             name = 'test_item_' + self.model._meta.model_name,
             organization = self.organization,
-            software = self.item_software,
+            operating_system = self.item_operating_system,
         )
 
         self.item_create = self.model.objects.create(
-            installedversion = self.item_software_version,
             organization = self.organization,
-            software = self.item_software,
+            operating_system_version = self.item_operating_system_version,
             device = self.item_parent,
         )
 
@@ -58,14 +57,14 @@ class DeviceSoftwareHistory(TestCase):
         )
 
 
-        self.item_software_version_changed = SoftwareVersion.objects.create(
-            name = 'test_item_changed' + self.model._meta.model_name,
+        self.item_operating_system_version_changed = OperatingSystemVersion.objects.create(
+            name = 'test_item_changed_' + self.model._meta.model_name,
             organization = self.organization,
-            software = self.item_software,
+            operating_system = self.item_operating_system,
         )
 
         self.item_change = self.item_create
-        self.item_change.installedversion = self.item_software_version_changed
+        self.item_change.operating_system_version = self.item_operating_system_version_changed
         self.item_change.save()
 
         self.history_change = History.objects.get(
@@ -75,23 +74,20 @@ class DeviceSoftwareHistory(TestCase):
         )
 
 
-
-
-        self.item_software_delete = Software.objects.create(
+        self.item_operating_system_delete = OperatingSystem.objects.create(
             name = 'test_item_delete_' + self.model._meta.model_name,
             organization = self.organization,
         )
 
-        self.item_software_version_delete = SoftwareVersion.objects.create(
+        self.item_operating_system_version_delete = OperatingSystemVersion.objects.create(
             name = 'test_item_delete_' + self.model._meta.model_name,
             organization = self.organization,
-            software = self.item_software,
+            operating_system = self.item_operating_system,
         )
 
         self.item_delete = self.model.objects.create(
-            installedversion = self.item_software_version_delete,
+            operating_system_version = self.item_operating_system_version_delete,
             organization = self.organization,
-            software = self.item_software_delete,
             device = self.item_parent,
         )
 
@@ -197,7 +193,7 @@ class DeviceSoftwareHistory(TestCase):
 
         history = self.history_change.__dict__
 
-        assert history['after'] == str('{"installedversion_id": ' + str(self.item_software_version_changed.pk) + '}')
+        assert history['after'] == str('{"operating_system_version_id": ' + str(self.item_operating_system_version_changed.pk) + '}')
         # assert type(history['after']) is str
 
 
