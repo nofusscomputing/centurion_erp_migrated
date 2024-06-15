@@ -1,6 +1,6 @@
 ---
 title: Django Template Devlopment
-description: No Fuss Computings NetBox Django Site Template Development
+description: No Fuss Computings Django Site Template Development
 date: 2024-05-17
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app

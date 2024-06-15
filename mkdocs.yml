@@ -6,6 +6,34 @@ repo_name: Django Template
 repo_url: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 edit_uri: '/-/ide/project/nofusscomputing/infrastructure/configuration-management/django_app/edit/development/-/docs/'
 
+plugins:
+  mkdocstrings:
+    enabled: true
+    handlers:
+      python:
+        setup_commands:
+          - import os
+          - import django
+          - os.chdir('app/')
+          - os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
+          - django.setup()
+        options:
+          find_stubs_package: true
+          heading_level: 3
+          inherited_members: false
+          members_order: source
+          paths: [ '.' ]
+          parameter_headings: false
+          show_if_no_docstring: true
+          show_labels: false
+          show_root_heading: false
+          show_root_full_path: true
+          show_root_toc_entry: false
+          show_source: false
+          show_submodules: true
+          summary: true
+
+
 nav:
 - Home: index.md
 
@@ -48,6 +76,28 @@ nav:
     - Development:
 
       - projects/django-template/development/index.md
+
+      - Application API:
+
+        - projects/django-template/development/api/index.md
+
+        - Unit Testing:
+
+          - projects/django-template/development/api/tests/index.md
+
+          - projects/django-template/development/api/tests/model_permission_add.md
+
+          - projects/django-template/development/api/tests/model_permission_change.md
+
+          - projects/django-template/development/api/tests/model_permission_delete.md
+
+          - projects/django-template/development/api/tests/model_permission_view.md
+
+          - projects/django-template/development/api/tests/model_history.md
+
+          - projects/django-template/development/api/tests/model_history_child_item.md
+
+          - projects/django-template/development/api/tests/model_history_parent_item.md
 
 - Operations: 
 
