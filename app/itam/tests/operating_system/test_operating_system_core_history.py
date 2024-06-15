@@ -131,6 +131,24 @@ class OperatingSystemHistory(TestCase):
             item_class = self.model._meta.model_name,
         )
 
+        self.item_delete = self.model.objects.create(
+            name = 'test_item_delete_' + self.model_name,
+            organization = self.organization
+        )
+
+        self.item_delete.delete()
+
+        self.history_delete = History.objects.filter(
+            item_pk = self.item_delete.pk,
+            item_class = self.model._meta.model_name,
+        )
+
+        self.history_delete_children = History.objects.filter(
+            item_parent_pk = self.item_delete.pk,
+            item_parent_class = self.model._meta.model_name,
+        )
+
+
 
     # field type testing to be done as part of model testing
     def test_history_entry_item_add_field_action(self):
@@ -233,3 +251,20 @@ class OperatingSystemHistory(TestCase):
         # assert type(history['item_class']) is str
 
 
+
+
+################################## Delete ##################################
+
+
+
+
+    def test_device_history_entry_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete.exists() is False
+
+
+    def test_device_history_entry_children_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete_children.exists() is False
