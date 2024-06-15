@@ -12,33 +12,9 @@ from core.models.history import History
 from itam.models.device import Device
 
 
-# @pytest.mark.skip(reason="to be written")
-# def test_history_auth_view():
-#     """ User requires Permission view_history """
-#     pass
-
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_create():
-#     """ History row must be added to history table on create """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_update():
-#     """ History row must be added to history table on updatej """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_delete():
-#     """ History row must be added to history table on delete """
-#     pass
-
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_create():
+# def test_history_operating_system_create():
 #     """ History row must be added to history table on create 
     
 #     Must also have populated parent_item_pk and parent_item_class columns
@@ -47,7 +23,7 @@ from itam.models.device import Device
 
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_update():
+# def test_history_operating_system_update():
 #     """ History row must be added to history table on update
     
 #     Must also have populated parent_item_pk and parent_item_class columns
@@ -56,7 +32,7 @@ from itam.models.device import Device
 
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_delete():
+# def test_history_operating_system_delete():
 #     """ History row must be added to history table on delete
     
 #     Must also have populated parent_item_pk and parent_item_class columns
@@ -66,7 +42,7 @@ from itam.models.device import Device
 
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_create():
+# def test_history_software_create():
 #     """ History row must be added to history table on create
 
 #     Must also have populated parent_item_pk and parent_item_class columns
@@ -75,7 +51,7 @@ from itam.models.device import Device
 
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_update():
+# def test_history_software_update():
 #     """ History row must be added to history table on update
     
 #     Must also have populated parent_item_pk and parent_item_class columns
@@ -84,14 +60,12 @@ from itam.models.device import Device
 
 
 # @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_delete():
+# def test_history_software_delete():
 #     """ History row must be added to history table on delete
     
 #     Must also have populated parent_item_pk and parent_item_class columns
 #     """
 #     pass
-
-
 
 
 class DeviceHistory(TestCase):
@@ -121,6 +95,7 @@ class DeviceHistory(TestCase):
             item_class = self.model._meta.model_name,
         )
 
+
         self.item_change = self.item_create
         self.item_change.name = 'test_item_' + self.model_name + '_changed'
         self.item_change.save()
@@ -131,9 +106,26 @@ class DeviceHistory(TestCase):
             item_class = self.model._meta.model_name,
         )
 
+        self.item_delete = self.model.objects.create(
+            name = 'test_item_delete_' + self.model_name,
+            organization = self.organization
+        )
+
+        self.item_delete.delete()
+
+        self.history_delete = History.objects.filter(
+            item_pk = self.item_delete.pk,
+            item_class = self.model._meta.model_name,
+        )
+
+        self.history_delete_children = History.objects.filter(
+            item_parent_pk = self.item_delete.pk,
+            item_parent_class = self.model._meta.model_name,
+        )
+
 
     # field type testing to be done as part of model testing
-    def test_device_history_entry_item_add_field_action(self):
+    def test_history_entry_item_add_field_action(self):
         """ Ensure action is "add" for item creation """
 
         history = self.history_create.__dict__
@@ -143,7 +135,7 @@ class DeviceHistory(TestCase):
 
 
     @pytest.mark.skip(reason="to be written")
-    def test_device_history_entry_item_add_field_after(self):
+    def test_history_entry_item_add_field_after(self):
         """ Ensure after field contains correct value """
 
         history = self.history_create.__dict__
@@ -152,7 +144,7 @@ class DeviceHistory(TestCase):
         # assert type(history['after']) is str
 
 
-    def test_device_history_entry_item_add_field_before(self):
+    def test_history_entry_item_add_field_before(self):
         """ Ensure before field is an empty JSON string for create """
 
         history = self.history_create.__dict__
@@ -161,7 +153,7 @@ class DeviceHistory(TestCase):
         # assert type(history['before']) is str
 
 
-    def test_device_history_entry_item_add_field_item_pk(self):
+    def test_history_entry_item_add_field_item_pk(self):
         """ Ensure history entry field item_pk is the created items pk """
 
         history = self.history_create.__dict__
@@ -170,7 +162,7 @@ class DeviceHistory(TestCase):
         # assert type(history['item_pk']) is int
 
 
-    def test_device_history_entry_item_add_field_item_class(self):
+    def test_history_entry_item_add_field_item_class(self):
         """ Ensure history entry field item_class is the model name """
 
         history = self.history_create.__dict__
@@ -187,7 +179,7 @@ class DeviceHistory(TestCase):
 
 
     # field type testing to be done as part of model testing
-    def test_device_history_entry_item_change_field_action(self):
+    def test_history_entry_item_change_field_action(self):
         """ Ensure action is "add" for item creation """
 
         history = self.history_change.__dict__
@@ -196,7 +188,7 @@ class DeviceHistory(TestCase):
         # assert type(history['action']) is int
 
 
-    def test_device_history_entry_item_change_field_after(self):
+    def test_history_entry_item_change_field_after(self):
         """ Ensure after field contains correct value """
 
         history = self.history_change.__dict__
@@ -206,7 +198,7 @@ class DeviceHistory(TestCase):
 
 
     @pytest.mark.skip(reason="to be written")
-    def test_device_history_entry_item_change_field_before(self):
+    def test_history_entry_item_change_field_before(self):
         """ Ensure before field is an empty JSON string for create """
 
         history = self.history_change.__dict__
@@ -215,7 +207,7 @@ class DeviceHistory(TestCase):
         # assert type(history['before']) is str
 
 
-    def test_device_history_entry_item_change_field_item_pk(self):
+    def test_history_entry_item_change_field_item_pk(self):
         """ Ensure history entry field item_pk is the created items pk """
 
         history = self.history_change.__dict__
@@ -224,7 +216,7 @@ class DeviceHistory(TestCase):
         # assert type(history['item_pk']) is int
 
 
-    def test_device_history_entry_item_change_field_item_class(self):
+    def test_history_entry_item_change_field_item_class(self):
         """ Ensure history entry field item_class is the model name """
 
         history = self.history_change.__dict__
@@ -233,3 +225,20 @@ class DeviceHistory(TestCase):
         # assert type(history['item_class']) is str
 
 
+
+
+################################## Delete ##################################
+
+
+
+
+    def test_history_entry_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete.exists() is False
+
+
+    def test_history_entry_children_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete_children.exists() is False
