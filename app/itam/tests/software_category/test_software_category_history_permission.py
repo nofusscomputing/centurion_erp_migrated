@@ -4,21 +4,20 @@ import requests
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-
 from django.test import TestCase, Client
 
 from access.models import Organization, Team, TeamUsers, Permission
 
 from core.tests.abstract.history_permissions import HistoryPermissions
 
-from itam.models.operating_system import OperatingSystem
+from itam.models.software import SoftwareCategory
 
 
 
-class OperatingSystemHistoryPermissions(TestCase, HistoryPermissions):
+class SoftwareCategoryHistoryPermissions(TestCase, HistoryPermissions):
 
 
-    item_model = OperatingSystem
+    item_model = SoftwareCategory
 
 
     @classmethod

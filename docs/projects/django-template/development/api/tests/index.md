@@ -124,3 +124,5 @@ Models are tested using the following test cases:
 - [History Entry (Child Item)](./model_history_child_item.md)
 
 - [History Entry (Parent Item)](./model_history_parent_item.md)
+
+- [History Entry Permissions](./model_history_permissions.md)
