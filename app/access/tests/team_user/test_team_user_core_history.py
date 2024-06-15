@@ -3,97 +3,17 @@ import pytest
 import unittest
 import requests
 
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
 
 from access.models import Organization
 
 from core.models.history import History
 
-from access.models import TeamUsers
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_auth_view():
-#     """ User requires Permission view_history """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_create():
-#     """ History row must be added to history table on create """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_update():
-#     """ History row must be added to history table on updatej """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_delete():
-#     """ History row must be added to history table on delete """
-#     pass
+from access.models import Team, TeamUsers
 
 
 
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_create():
-#     """ History row must be added to history table on create 
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_update():
-#     """ History row must be added to history table on update
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_delete():
-#     """ History row must be added to history table on delete
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_create():
-#     """ History row must be added to history table on create
-
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_update():
-#     """ History row must be added to history table on update
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_delete():
-#     """ History row must be added to history table on delete
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-
-@pytest.mark.skip(reason="to do")
 class TeamUsersHistory(TestCase):
 
     model = TeamUsers
@@ -109,9 +29,19 @@ class TeamUsersHistory(TestCase):
 
         self.organization = organization
 
-        self.item_create = self.model.objects.create(
-            name = 'test_item_' + self.model_name,
+        self.item_parent = Team.objects.create(
+            team_name = 'test_item_' + self.model_name,
             organization = self.organization
+        )
+
+        self.user = User.objects.create(
+            username = 'test_item_' + self.model_name,
+            password = 'a random password'
+        )
+
+        self.item_create = self.model.objects.create(
+            user = self.user,
+            team = self.item_parent
         )
 
 
@@ -122,7 +52,7 @@ class TeamUsersHistory(TestCase):
         )
 
         self.item_change = self.item_create
-        self.item_change.name = 'test_item_' + self.model_name + '_changed'
+        self.item_change.manager = True
         self.item_change.save()
 
         self.history_change = History.objects.get(
@@ -132,8 +62,34 @@ class TeamUsersHistory(TestCase):
         )
 
 
-    @pytest.mark.skip(reason="to do")
-    # field type testing to be done as part of model testing
+        self.user_delete = User.objects.create(
+            username = 'test_item_delete' + self.model_name,
+            password = 'a random password'
+        )
+
+        self.item_delete = self.model.objects.create(
+            user = self.user_delete,
+            team = self.item_parent
+        )
+
+        self.deleted_pk = self.item_delete.pk
+
+        self.item_delete.delete()
+
+        self.history_delete = History.objects.get(
+            action = History.Actions.DELETE[0],
+            item_pk = self.deleted_pk,
+            item_class = self.model._meta.model_name,
+        )
+
+        self.history_delete_children = History.objects.filter(
+            item_parent_pk = self.deleted_pk,
+            item_parent_class = self.item_parent._meta.model_name,
+        )
+
+
+
+
     def test_history_entry_item_add_field_action(self):
         """ Ensure action is "add" for item creation """
 
@@ -143,7 +99,7 @@ class TeamUsersHistory(TestCase):
         # assert type(history['action']) is int
 
 
-    @pytest.mark.skip(reason="to be written")
+    @pytest.mark.skip(reason="figure out best way to test")
     def test_history_entry_item_add_field_after(self):
         """ Ensure after field contains correct value """
 
@@ -153,7 +109,6 @@ class TeamUsersHistory(TestCase):
         # assert type(history['after']) is str
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_add_field_before(self):
         """ Ensure before field is an empty JSON string for create """
 
@@ -163,7 +118,6 @@ class TeamUsersHistory(TestCase):
         # assert type(history['before']) is str
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_add_field_item_pk(self):
         """ Ensure history entry field item_pk is the created items pk """
 
@@ -173,13 +127,30 @@ class TeamUsersHistory(TestCase):
         # assert type(history['item_pk']) is int
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_add_field_item_class(self):
         """ Ensure history entry field item_class is the model name """
 
         history = self.history_create.__dict__
 
         assert history['item_class'] == self.model._meta.model_name
+        # assert type(history['item_class']) is str
+
+
+    def test_history_entry_item_add_field_parent_pk(self):
+        """ Ensure history entry field parent_pk is the created parents pk """
+
+        history = self.history_create.__dict__
+
+        assert history['item_parent_pk'] == self.item_parent.pk
+        # assert type(history['parentpk']) is int
+
+
+    def test_history_entry_item_add_field_parent_class(self):
+        """ Ensure history entry field parent_class is the model name """
+
+        history = self.history_create.__dict__
+
+        assert history['item_parent_class'] == self.item_parent._meta.model_name
         # assert type(history['item_class']) is str
 
 
@@ -190,8 +161,6 @@ class TeamUsersHistory(TestCase):
 
 
 
-    @pytest.mark.skip(reason="to do")
-    # field type testing to be done as part of model testing
     def test_history_entry_item_change_field_action(self):
         """ Ensure action is "add" for item creation """
 
@@ -201,17 +170,16 @@ class TeamUsersHistory(TestCase):
         # assert type(history['action']) is int
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_change_field_after(self):
         """ Ensure after field contains correct value """
 
         history = self.history_change.__dict__
 
-        assert history['after'] == str('{"name": "test_item_' + self.model_name + '_changed"}')
+        assert history['after'] == str('{"manager": true}')
         # assert type(history['after']) is str
 
 
-    @pytest.mark.skip(reason="to be written")
+    @pytest.mark.skip(reason="figure out best way to test")
     def test_history_entry_item_change_field_before(self):
         """ Ensure before field is an empty JSON string for create """
 
@@ -221,7 +189,6 @@ class TeamUsersHistory(TestCase):
         # assert type(history['before']) is str
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_change_field_item_pk(self):
         """ Ensure history entry field item_pk is the created items pk """
 
@@ -231,7 +198,6 @@ class TeamUsersHistory(TestCase):
         # assert type(history['item_pk']) is int
 
 
-    @pytest.mark.skip(reason="to do")
     def test_history_entry_item_change_field_item_class(self):
         """ Ensure history entry field item_class is the model name """
 
@@ -241,3 +207,97 @@ class TeamUsersHistory(TestCase):
         # assert type(history['item_class']) is str
 
 
+    def test_history_entry_item_change_field_parent_pk(self):
+        """ Ensure history entry field parent_pk is the created parent pk """
+
+        history = self.history_change.__dict__
+
+        assert history['item_parent_pk'] == self.item_parent.pk
+        # assert type(history['item_pk']) is int
+
+
+    def test_history_entry_item_change_field_parent_class(self):
+        """ Ensure history entry field parent_class is the model name """
+
+        history = self.history_change.__dict__
+
+        assert history['item_parent_class'] == self.item_parent._meta.model_name
+        # assert type(history['item_class']) is str
+
+
+
+
+################################## Delete ##################################
+
+
+
+
+    def test_history_entry_item_delete_children_entries_still_exist(self):
+        """ When an item is deleted, it's children history entries must be removed """
+
+        assert self.history_delete_children.exists() is False
+
+
+    def test_history_entry_item_delete_field_action(self):
+        """ Ensure action is "add" for item creation """
+
+        history = self.history_delete.__dict__
+
+        assert history['action'] == int(History.Actions.DELETE[0])
+        # assert type(history['action']) is int
+
+
+    def test_history_entry_item_delete_field_after(self):
+        """ Ensure after field contains correct value """
+
+        history = self.history_delete.__dict__
+
+        assert history['after'] == None
+        # assert type(history['after']) is str
+
+
+    @pytest.mark.skip(reason="figure out best way to test")
+    def test_history_entry_item_delete_field_before(self):
+        """ Ensure before field is an empty JSON string for create """
+
+        history = self.history_delete.__dict__
+
+        assert history['before'] == str('{}')
+        # assert type(history['before']) is str
+
+
+    def test_history_entry_item_delete_field_item_pk(self):
+        """ Ensure history entry field item_pk is the created items pk """
+
+        history = self.history_delete.__dict__
+
+        assert history['item_pk'] == self.deleted_pk
+        # assert type(history['item_pk']) is int
+
+
+    def test_history_entry_item_delete_item_class(self):
+        """ Ensure history entry field item_class is the model name """
+
+        history = self.history_delete.__dict__
+
+        assert history['item_class'] == self.model._meta.model_name
+        # assert type(history['item_class']) is str
+
+
+
+    def test_history_entry_item_delete_field_parent_pk(self):
+        """ Ensure history entry field item_pk is the created parents pk """
+
+        history = self.history_delete.__dict__
+
+        assert history['item_parent_pk'] == self.item_parent.pk
+        # assert type(history['item_pk']) is int
+
+
+    def test_history_entry_item_delete_field_parent_class(self):
+        """ Ensure history entry field parent_class is the model name """
+
+        history = self.history_delete.__dict__
+
+        assert history['item_parent_class'] == self.item_parent._meta.model_name
+        # assert type(history['item_class']) is str
