@@ -91,6 +91,8 @@ class ConfigGroupSoftwareHistory(TestCase):
         )
 
 
+
+
     def test_configgroup_software_history_entry_item_add_field_action(self):
         """ Ensure action is "add" for item creation """
 
@@ -302,6 +304,3 @@ class ConfigGroupSoftwareHistory(TestCase):
 
         assert history['item_parent_class'] == self.parent_model._meta.model_name
         # assert type(history['item_class']) is str
-
-
-
