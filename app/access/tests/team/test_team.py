@@ -45,3 +45,12 @@ class TeamModel(TestCase):
         """
 
         assert self.item.parent_object is self.parent_item
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_function_save_attributes():
+        """ Ensure save Attributes function match django default
+
+        the save method is overridden. the function attributes must match default django method
+        """
+        pass
