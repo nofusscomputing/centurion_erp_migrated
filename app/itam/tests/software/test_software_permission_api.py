@@ -1,24 +1,33 @@
-# from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AnonymousUser, User
-from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import TestCase, Client
-
 import pytest
 import unittest
 import requests
 
+from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.contenttypes.models import ContentType
+from django.test import TestCase
+
 from access.models import Organization, Team, TeamUsers, Permission
+
+from api.tests.abstract.api_permissions import APIPermissions
+
 from itam.models.software import Software
 
 
-class SoftwarePermissionsAPI(TestCase):
+class SoftwarePermissionsAPI(TestCase, APIPermissions):
+
 
     model = Software
 
-    model_name = 'software'
-    app_label = 'itam'
+    app_namespace = 'API'
+    
+    url_name = 'software-detail'
+
+    url_list = 'software-list'
+
+    change_data = {'name': 'software'}
+
+    delete_data = {'name': 'software'}
+
 
     @classmethod
     def setUpTestData(self):
@@ -43,11 +52,19 @@ class SoftwarePermissionsAPI(TestCase):
             name = 'softwareone'
         )
 
+
+        # self.url_kwargs = {'pk': self.item.id}
+
+        self.url_view_kwargs = {'pk': self.item.id}
+
+        self.add_data = {'name': 'software', 'organization': self.organization.id}
+
+
         view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model_name,
+                codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -61,10 +78,10 @@ class SoftwarePermissionsAPI(TestCase):
 
 
         add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model_name,
+                codename = 'add_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -78,10 +95,10 @@ class SoftwarePermissionsAPI(TestCase):
 
 
         change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model_name,
+                codename = 'change_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -95,10 +112,10 @@ class SoftwarePermissionsAPI(TestCase):
 
 
         delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model_name,
+                codename = 'delete_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -157,355 +174,3 @@ class SoftwarePermissionsAPI(TestCase):
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-    def test_software_auth_view_user_anon_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view as anon user
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-        response = client.get(url)
-
-        assert response.status_code == 401
-
-
-    def test_software_auth_view_no_permission_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user missing permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_view_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_view_has_permission(self):
-        """ Check correct permission for view
-
-        Attempt to view as user with view permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        assert response.status_code == 200
-
-
-
-    def test_software_auth_add_user_anon_denied(self):
-        """ Check correct permission for add 
-
-        Attempt to add as anon user
-        """
-
-        client = Client()
-        url = reverse('API:software-list')
-
-
-        response = client.post(url, data={'software': 'software'})
-
-        assert response.status_code == 401
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_software_auth_add_no_permission_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add as user with no permissions
-        """
-
-        client = Client()
-        url = reverse('API:software-list')
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.post(url, data={'name': 'software', 'organization': self.organization.id})
-
-        assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_software_auth_add_different_organization_denied(self):
-        """ Check correct permission for add
-
-        attempt to add as user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:software-list')
-
-
-        client.force_login(self.different_organization_user)
-        response = client.post(url, data={'name': 'software', 'organization': self.organization.id})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_add_permission_view_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add a user with view permission
-        """
-
-        client = Client()
-        url = reverse('API:software-list')
-
-
-        client.force_login(self.view_user)
-        response = client.post(url, data={'name': 'software', 'organization': self.organization.id})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_add_has_permission(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with no permission
-        """
-
-        client = Client()
-        url = reverse('API:software-list')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data={'name': 'software', 'organization': self.organization.id})
-
-        assert response.status_code == 201
-
-
-
-    def test_software_auth_change_user_anon_denied(self):
-        """ Check correct permission for change
-
-        Attempt to change as anon
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        response = client.patch(url, data={'software': 'software'})
-
-        assert response.status_code == 401
-
-
-    def test_software_auth_change_no_permission_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user without permissions
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.patch(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_change_different_organization_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.patch(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_change_permission_view_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with view permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.patch(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_change_permission_add_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with add permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.patch(url, data={'name': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_change_has_permission(self):
-        """ Check correct permission for change
-
-        Make change with user who has change permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.patch(url, data={'name': 'software'}, content_type='application/json')
-
-        assert response.status_code == 200
-
-
-
-    def test_software_auth_delete_user_anon_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete item as anon user
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 401
-
-
-    def test_software_auth_delete_no_permission_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with no permissons
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_delete_different_organization_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_delete_permission_view_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with veiw permission only
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_delete_permission_add_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with add permission only
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_delete_permission_change_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with change permission only
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 403
-
-
-    def test_software_auth_delete_has_permission(self):
-        """ Check correct permission for delete
-
-        Delete item as user with delete permission
-        """
-
-        client = Client()
-        url = reverse('API:software-detail', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.delete_user)
-        response = client.delete(url, data={'software': 'software'})
-
-        assert response.status_code == 204

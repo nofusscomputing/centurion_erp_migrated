@@ -111,6 +111,8 @@ If your developing using VSCode/VSCodium the testing is available as is the abil
 
 Models are tested using the following test cases:
 
+- [ALL Model Permission](./model_permissions.md)
+
 - [Add Permission](./model_permission_add.md)
 
 - [Change Permission](./model_permission_change.md)
@@ -118,6 +120,16 @@ Models are tested using the following test cases:
 - [Delete Permission](./model_permission_delete.md)
 
 - [View Permission](./model_permission_view.md)
+
+- [ALL API Model Permission](./model_permissions_api.md)
+
+- [API Add Permission](./model_permission_api_add.md)
+
+- [API Change Permission](./model_permission_api_change.md)
+
+- [API Delete Permission](./model_permission_api_delete.md)
+
+- [API View Permission](./model_permission_api_view.md)
 
 - [History Entry](./model_history.md)
 

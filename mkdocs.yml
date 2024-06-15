@@ -88,6 +88,8 @@ nav:
 
           - projects/django-template/development/api/tests/index.md
 
+          - projects/django-template/development/api/tests/model_permissions.md
+
           - projects/django-template/development/api/tests/model_permission_add.md
 
           - projects/django-template/development/api/tests/model_permission_change.md
@@ -95,6 +97,16 @@ nav:
           - projects/django-template/development/api/tests/model_permission_delete.md
 
           - projects/django-template/development/api/tests/model_permission_view.md
+
+          - projects/django-template/development/api/tests/model_permissions_api.md
+
+          - projects/django-template/development/api/tests/model_permission_api_add.md
+
+          - projects/django-template/development/api/tests/model_permission_api_change.md
+
+          - projects/django-template/development/api/tests/model_permission_api_delete.md
+
+          - projects/django-template/development/api/tests/model_permission_api_view.md
 
           - projects/django-template/development/api/tests/model_history.md
 

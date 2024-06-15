@@ -1,11 +1,11 @@
 ---
-title: Model Permissions Add Test Cases
+title: API Model Permission add Test Cases
 description: No Fuss Computings model permissions add unit tests
-date: 2024-06-15
+date: 2024-06-16
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-::: app.app.tests.abstract.model_permissions.ModelPermissionsAdd
+::: app.api.tests.abstract.api_permissions.APIPermissionAdd
     options:
         show_source: true
