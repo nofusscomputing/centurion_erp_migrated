@@ -131,7 +131,7 @@ class SaveHistory(models.Model):
             entry.save()
 
 
-    def save(self, *args, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         """ OverRides save for keeping model history.
 
         Not a Full-Override as this is just to add to existing.
@@ -148,7 +148,7 @@ class SaveHistory(models.Model):
             pass
 
         # Process the save
-        super().save(*args, **kwargs)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
         after = self.__dict__.copy()
 
