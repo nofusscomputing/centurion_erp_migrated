@@ -11,15 +11,26 @@ import requests
 
 from access.models import Organization, Team, TeamUsers, Permission
 
+from app.tests.abstract.model_permissions import ModelPermissions
+
 from core.models.manufacturer import Manufacturer
 
 
-class ManufacturerPermissions(TestCase):
+class ManufacturerPermissions(TestCase, ModelPermissions):
 
     model = Manufacturer
 
-    model_name = 'manufacturer'
-    app_label = 'core'
+    app_namespace = 'Settings'
+
+    url_name_view = '_manufacturer_view'
+
+    url_name_add = '_manufacturer_add'
+
+    url_name_change = '_manufacturer_view'
+
+    url_name_delete = '_manufacturer_delete'
+
+    url_delete_response = reverse('Settings:_manufacturers')
 
     @classmethod
     def setUpTestData(self):
@@ -44,11 +55,27 @@ class ManufacturerPermissions(TestCase):
             name = 'manufacturerone'
         )
 
+
+        self.url_view_kwargs = {'pk': self.item.id}
+
+        # self.url_add_kwargs = {'pk': self.item.id}
+
+        self.add_data = {'manufacturer': 'manufacturer', 'organization': self.organization.id}
+
+        self.url_change_kwargs = {'pk': self.item.id}
+
+        self.change_data = {'manufacturer': 'manufacturer', 'organization': self.organization.id}
+
+        self.url_delete_kwargs = {'pk': self.item.id}
+
+        self.delete_data = {'manufacturer': 'manufacturer', 'organization': self.organization.id}
+
+
         view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model_name,
+                codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -62,10 +89,10 @@ class ManufacturerPermissions(TestCase):
 
 
         add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model_name,
+                codename = 'add_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -79,10 +106,10 @@ class ManufacturerPermissions(TestCase):
 
 
         change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model_name,
+                codename = 'change_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -96,10 +123,10 @@ class ManufacturerPermissions(TestCase):
 
 
         delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model_name,
+                codename = 'delete_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -158,355 +185,3 @@ class ManufacturerPermissions(TestCase):
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-    def test_manufacturer_auth_view_user_anon_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view as anon user
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-        response = client.get(url)
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    def test_manufacturer_auth_view_no_permission_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user missing permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_view_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user from different organization
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_view_has_permission(self):
-        """ Check correct permission for view
-
-        Attempt to view as user with view permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        assert response.status_code == 200
-
-
-
-    def test_manufacturer_auth_add_user_anon_denied(self):
-        """ Check correct permission for add 
-
-        Attempt to add as anon user
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_add')
-
-
-        response = client.put(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_manufacturer_auth_add_no_permission_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add as user with no permissions
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_add')
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_manufacturer_auth_add_different_organization_denied(self):
-        """ Check correct permission for add
-
-        attempt to add as user from different organization
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_add')
-
-
-        client.force_login(self.different_organization_user)
-        response = client.post(url, data={'name': 'manufacturer', 'organization': self.organization.id})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_add_permission_view_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add a user with view permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_add')
-
-
-        client.force_login(self.view_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_add_has_permission(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with no permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_add')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer', 'organization': self.organization.id})
-
-        assert response.status_code == 200
-
-
-
-    def test_manufacturer_auth_change_user_anon_denied(self):
-        """ Check correct permission for change
-
-        Attempt to change as anon
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        response = client.patch(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    def test_manufacturer_auth_change_no_permission_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user without permissions
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_change_different_organization_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user from different organization
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_change_permission_view_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with view permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_change_permission_add_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with add permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_change_has_permission(self):
-        """ Check correct permission for change
-
-        Make change with user who has change permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.post(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 200
-
-
-
-    def test_manufacturer_auth_delete_user_anon_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete item as anon user
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    def test_manufacturer_auth_delete_no_permission_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with no permissons
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_delete_different_organization_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user from different organization
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_delete_permission_view_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with veiw permission only
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_delete_permission_add_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with add permission only
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_delete_permission_change_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with change permission only
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 403
-
-
-    def test_manufacturer_auth_delete_has_permission(self):
-        """ Check correct permission for delete
-
-        Delete item as user with delete permission
-        """
-
-        client = Client()
-        url = reverse('Settings:_manufacturer_delete', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.delete_user)
-        response = client.delete(url, data={'manufacturer': 'manufacturer'})
-
-        assert response.status_code == 302 and response.url == reverse('Settings:_manufacturers')
