@@ -9,15 +9,13 @@ from access.models import Organization
 
 from core.models.history import History
 
-from itam.models.software import Software
+from itam.models.software import Software, SoftwareCategory
 
 
 
-class SoftwareHistory(TestCase):
+class SoftwareCategoryHistory(TestCase):
 
-    model = Software
-
-    model_name = 'software'
+    model = SoftwareCategory
 
 
     @classmethod
