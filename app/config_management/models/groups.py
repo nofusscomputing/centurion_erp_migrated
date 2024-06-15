@@ -116,6 +116,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
 
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.parent
+
+
     def render_config(self) -> str:
 
         config: dict = dict()
