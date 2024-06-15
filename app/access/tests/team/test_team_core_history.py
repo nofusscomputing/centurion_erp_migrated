@@ -11,87 +11,7 @@ from core.models.history import History
 
 from access.models import Team
 
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_auth_view():
-#     """ User requires Permission view_history """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_create():
-#     """ History row must be added to history table on create """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_update():
-#     """ History row must be added to history table on updatej """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_delete():
-#     """ History row must be added to history table on delete """
-#     pass
-
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_create():
-#     """ History row must be added to history table on create 
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_update():
-#     """ History row must be added to history table on update
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_operating_system_delete():
-#     """ History row must be added to history table on delete
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_create():
-#     """ History row must be added to history table on create
-
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_update():
-#     """ History row must be added to history table on update
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
-# @pytest.mark.skip(reason="to be written")
-# def test_history_device_software_delete():
-#     """ History row must be added to history table on delete
-    
-#     Must also have populated parent_item_pk and parent_item_class columns
-#     """
-#     pass
-
-
+from django.contrib.auth.models import Group
 
 
 class TeamHistory(TestCase):
@@ -110,7 +30,7 @@ class TeamHistory(TestCase):
         self.organization = organization
 
         self.item_create = self.model.objects.create(
-            name = 'test_item_' + self.model_name,
+            team_name = 'test_item_' + self.model_name,
             organization = self.organization
         )
 
@@ -130,6 +50,27 @@ class TeamHistory(TestCase):
             item_pk = self.item_change.pk,
             item_class = self.model._meta.model_name,
         )
+
+        debug = Group.objects.all()
+
+        self.item_delete = self.model.objects.create(
+            team_name = 'test_item_delete_' + self.model_name,
+            organization = self.organization
+        )
+
+        self.item_delete.delete()
+
+        self.history_delete = History.objects.filter(
+            item_pk = self.item_delete.pk,
+            item_class = self.model._meta.model_name,
+        )
+
+        self.history_delete_children = History.objects.filter(
+            item_parent_pk = self.item_delete.pk,
+            item_parent_class = self.model._meta.model_name,
+        )
+
+
 
 
     @pytest.mark.skip(reason="fails, fixme see #46")
@@ -239,5 +180,24 @@ class TeamHistory(TestCase):
 
         assert history['item_class'] == self.model._meta.model_name
         # assert type(history['item_class']) is str
+
+
+
+
+################################## Delete ##################################
+
+
+
+
+    def test_device_history_entry_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete.exists() is False
+
+
+    def test_device_history_entry_children_delete(self):
+        """ When an item is deleted, it's history entries must be removed """
+
+        assert self.history_delete_children.exists() is False
 
 
