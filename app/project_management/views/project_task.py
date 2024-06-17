@@ -20,7 +20,7 @@ from settings.models.user_settings import UserSettings
 
 class ProjectTaskAdd(generic.CreateView):
 
-    # form_class = ProjectForm
+    # form_class = form_class = ProjectTaskForm
 
     model = ProjectTask
 
@@ -50,6 +50,42 @@ class ProjectTaskAdd(generic.CreateView):
         context = super().get_context_data(**kwargs)
 
         context['content_title'] = 'Create a Project'
+
+        return context
+
+
+
+class ProjectTaskChange(OrganizationPermission, generic.UpdateView):
+
+    model = ProjectTask
+
+    permission_required = [
+        'project_management.change_projecttask'
+    ]
+
+    template_name = 'project_management/project.html.j2'
+
+    # form_class = ProjectTaskForm
+
+    context_object_name = "project_task"
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        # context['notes_form'] = AddNoteForm(prefix='note')
+        # context['notes'] = Notes.objects.filter(project=self.kwargs['pk'])
+
+
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['model_delete_url'] = reverse('Project Management:_project_task_delete', args=(self.kwargs['project_id'],self.kwargs['pk']))
+
+        context['content_title'] = context['project_task'].name
 
         return context
 
