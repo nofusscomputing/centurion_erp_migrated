@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 This page contains different items related to the development of this application.
 
+Documentation for the application api is within it's own section, [API](./api/index.md).
+
 
 ## Icons
 

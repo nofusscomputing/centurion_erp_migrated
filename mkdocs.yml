@@ -52,29 +52,9 @@ nav:
 
     - projects/django-template/index.md
 
-    - projects/django-template/configuration.md
+    - Administration:
 
-    - projects/django-template/api.md
-
-    - projects/django-template/config_management/index.md
-
-    - projects/django-template/permissions.md
-
-    - Core:
-
-      - projects/django-template/core/index.md
-
-    - ITAM:
-
-      - projects/django-template/itam/index.md
-
-      - projects/django-template/itam/device.md
-
-      - projects/django-template/itam/operating_system.md
-
-      - projects/django-template/itam/software.md
-
-    - projects/django-template/settings.md
+      - projects/django-template/administration/index.md
 
     - Development:
 
@@ -123,6 +103,33 @@ nav:
           - projects/django-template/development/api/tests/model_history_parent_item.md
 
           - projects/django-template/development/api/tests/model_history_permissions.md
+
+    - User:
+
+      - projects/django-template/user/configuration.md
+
+      - projects/django-template/user/api.md
+
+      - projects/django-template/user/config_management/index.md
+
+      - projects/django-template/user/permissions.md
+
+      - Core:
+
+        - projects/django-template/user/core/index.md
+
+      - ITAM:
+
+        - projects/django-template/user/itam/index.md
+
+        - projects/django-template/user/itam/device.md
+
+        - projects/django-template/user/itam/operating_system.md
+
+        - projects/django-template/user/itam/software.md
+
+      - projects/django-template/user/settings.md
+
 
 - Operations: 
 
