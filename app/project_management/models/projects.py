@@ -1,9 +1,9 @@
 from django.db import models
 
-from access.models import TenancyObject
+from .project_common import ProjectCommonFieldsName
 
 
-class ProjectModel(TenancyObject):
+class Project(ProjectCommonFieldsName):
 
 
     class Meta:
@@ -18,30 +18,69 @@ class ProjectModel(TenancyObject):
         verbose_name_plural = 'Projects'
 
 
+    # class ProjectStates(enum):
+    #     OPEN = 1
+    #     CLOSED = 1
 
-    class ProjectStates(enum):
-        OPEN = 1
-        CLOSED = 1
+
+    description = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
+
+    # priority
+
+    # state
 
 
-    name
+    # project_type
 
-    description
+    code = models.CharField(
+        blank = False,
+        help_text = 'Project Code',
+        max_length = 25,
+        unique = True,
+    )
 
-    priority
+    planned_start_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When the project is planned to have been started by.',
+        null = True,
+        verbose_name = 'Planned Start Date',
+    )
 
-    state
+    planned_finish_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When the project is planned to be finished by.',
+        null = True,
+        verbose_name = 'Planned Finish Date',
+    )
 
-    percent_done # Auto-Calculate
+    real_start_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When work commenced on the project.',
+        null = True,
+        verbose_name = 'Real Start Date',
+    )
 
-    project_type
+    real_finish_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When work was completed for the project',
+        null = True,
+        verbose_name = 'Real Finish Date',
+    )
 
-    code
+    model_notes = None
 
-    planned_start_date
 
-    planned_finish_date
+    @property
+    def percent_completed(self) -> str: # Auto-Calculate
+        """ How much of the project is completed.
 
-    real_start_date
+        Returns:
+            str: Calculated percentage of project completion.
+        """
 
+        return 'xx %'
 
