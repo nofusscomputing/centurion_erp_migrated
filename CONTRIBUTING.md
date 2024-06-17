@@ -41,7 +41,7 @@ Updates to python modules will need to be captured with SCM. This can be done by
 !!! danger "Requirement"
     All models **are** to have tests written for them, Including testing between dependent models. 
 
-See [Documentation](https://nofusscomputing.com/projects/django-template/development/api/tests/) for further information
+See [Documentation](https://nofusscomputing.com/projects/django-template/development/testing/) for further information
 
 
 ## Docker Container
