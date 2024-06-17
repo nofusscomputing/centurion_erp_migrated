@@ -72,8 +72,64 @@ class OrganizationManagerModelPermissionView:
         assert response.status_code == 200
 
 
+
+
+class OrganizationManagerModelPermissionChange:
+    """ Tests for checking model change permissions """
+
+
+    app_namespace: str = None
+    """ Application namespace of the model being tested """
+
+    different_organization_is_manager: object
+    """ User whom is organization Manager of different organization than object """
+
+    url_name_change: str
+    """ url name of the model view to be tested """
+
+    url_change_kwargs: dict = None
+    """ View URL kwargs for model being tested """
+
+    user_is_organization_manager: object
+    """ User whom is organization Manager of the object"""
+
+
+
+    def test_model_change_different_organization_is_organization_manager_denied(self):
+        """ Ensure permission view cant make change
+
+        Attempt to make change as user from different organization whom is an organization Manager.
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+
+        client.force_login(self.different_organization_is_manager)
+        response = client.post(url, data=self.change_data)
+
+        assert response.status_code == 403
+
+
+    def test_model_change_has_no_permission_is_organization_manager(self):
+        """ Check correct permission for change
+
+        Make change as user who is an organization manager and has no permissions assigned.
+        Object to be within same organization the user is a manager of.
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+
+        client.force_login(self.user_is_organization_manager)
+        response = client.post(url, data=self.change_data)
+
+        assert response.status_code == 200
+
 class OrganizationManagerModelPermissions(
     OrganizationManagerModelPermissionView,
+    OrganizationManagerModelPermissionChange,
 ):
     """ Tests for checking Organization Manager model permissions
     
