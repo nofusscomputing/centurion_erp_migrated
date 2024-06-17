@@ -86,6 +86,8 @@ nav:
 
           - projects/django-template/development/api/tests/model_permission_view.md
 
+          - projects/django-template/development/api/tests/model_permission_view_organization_manager.md
+
           - projects/django-template/development/api/tests/model_permissions_api.md
 
           - projects/django-template/development/api/tests/model_permission_api_add.md

@@ -123,6 +123,8 @@ Models are tested using the following test cases:
 
 - [View Permission](./model_permission_view.md)
 
+- [View Permission (organization Manager)](./model_permission_view_organization_manager.md)
+
 - [ALL API Model Permission](./model_permissions_api.md)
 
 - [API Add Permission](./model_permission_api_add.md)
