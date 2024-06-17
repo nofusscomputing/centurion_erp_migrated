@@ -17,7 +17,7 @@ class TeamInline(admin.TabularInline):
 
 class OrganizationAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {"fields": ["name", "slug"]}),
+        (None, {"fields": ["name", 'manager', "slug"]}),
         #("Date information", {"fields": ["slug"], "classes": ["collapse"]}),
     ]
     inlines = [TeamInline]

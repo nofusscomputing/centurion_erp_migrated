@@ -37,7 +37,7 @@ This application contains the following module:
 
 - [IT Asset Management (ITAM)](./user/itam/index.md)
 
-- [Multi-Tenant](./user/permissions.md)
+- [Multi-Tenant](./development/api/models/access_organization_permission_checking.md#permission-checking)
 
 Specific features for a module can be found on the module's documentation un the features heading
 

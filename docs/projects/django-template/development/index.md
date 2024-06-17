@@ -1,17 +1,27 @@
 ---
-title: Django Template Devlopment
-description: No Fuss Computings Django Site Template Development
+title: Django ITSM Development
+description: No Fuss Computings Django Site ITSM Development
 date: 2024-05-17
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
 ---
 
-This page contains different items related to the development of this application.
-
-Documentation for the application api is within it's own section, [API](./api/index.md).
+This section of the documentation different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the application.
 
 
-## Icons
+## Handy links
+
+- [Application API Documentation](./api/index.md)
+
+- [Testing](./testing.md)
+
+
+## Random items to be relocated in the future
+
+_the below sections need to be refactored._
+
+
+### Icons
 
 To locate additional icons for use see [material icons](https://fonts.google.com/icons).
 
@@ -26,7 +36,7 @@ Icons with text:
 - Issue `{% include 'icons/issue_link.html.j2' with issue=2 %}` _Used to provide a link to an issue on GitLab. i.e. incomplete feature ticket_
 
 
-## Adding an Application
+### Adding an Application
 
 1. Install the django application with `pip <app-name>`
 
@@ -62,12 +72,12 @@ Icons with text:
 Once you have completed the above list, your application will display collapsed within the navigation menu with the name of your application.
 
 
-## Tenancy Setup
+### Tenancy Setup
 
 Within your view class include the mixin class `OrganizationPermission`, ensuring that you set the `permission_required` attribute.
 
 
-### Model Setup
+#### Model Setup
 
 Any item you wish to be multi-tenant, ensure within your model you include the tenancy model abstract class. The class includes a field called `organization` which links directly to the organization model and is used by the tenancy permission check.
 
@@ -81,7 +91,7 @@ class YourObject(TenancyObject):
 ```
 
 
-### View Setup
+#### View Setup
 
 The mixin inlcuded in this template `OrganizationPermission` is designed to work with all django built in views and is what does the multi-tenancy permission checks.
 
@@ -117,7 +127,7 @@ class IndexView(OrganizationPermission, generic.ListView):
 Using a filter `pk__in=self.user_organizations()` for the queryset using the mixins function `user_organizations`, will limit the query set to only items where the user is a member of the organization.
 
 
-### Templates
+#### Templates
 
 The base template includes blocks that are designed to assist in rendering your content. The following blocks are available:
 
@@ -143,7 +153,7 @@ your content here
 ```
 
 
-## Add history to model
+### Add history to model
 
 The tracking of changes can be added to a model by including the `SaveHistory` mixin from `core.mixin.history_save` to the model.
 

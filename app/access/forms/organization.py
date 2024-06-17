@@ -12,7 +12,8 @@ class OrganizationForm(forms.ModelForm):
         model = Organization
         fields = [
             'name',
-            'slug',
+            'manager',
+            'model_notes',
         ]
 
 

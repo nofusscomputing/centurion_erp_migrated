@@ -37,6 +37,20 @@ class Organization(SaveHistory):
         unique = True,
     )
 
+    manager = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank = False,
+        null = True,
+        help_text = 'Organization Manager'
+    )
+
+    model_notes = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
+
     slug = AutoSlugField()
 
     created = AutoCreatedField()

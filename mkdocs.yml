@@ -60,6 +60,8 @@ nav:
 
       - projects/django-template/development/index.md
 
+      - projects/django-template/development/testing.md
+
       - Application API:
 
         - projects/django-template/development/api/index.md
@@ -72,19 +74,31 @@ nav:
 
           - projects/django-template/development/api/models/itam_device.md
 
+          - projects/django-template/development/api/models/access_organization_permission_checking.md
+
         - Unit Testing:
 
           - projects/django-template/development/api/tests/index.md
 
           - projects/django-template/development/api/tests/model_permissions.md
 
+          - projects/django-template/development/api/tests/model_permissions_organization_manager.md
+
           - projects/django-template/development/api/tests/model_permission_add.md
+
+          - projects/django-template/development/api/tests/model_permission_add_organization_manager.md
 
           - projects/django-template/development/api/tests/model_permission_change.md
 
+          - projects/django-template/development/api/tests/model_permission_change_organization_manager.md
+
           - projects/django-template/development/api/tests/model_permission_delete.md
 
+          - projects/django-template/development/api/tests/model_permission_delete_organization_manager.md
+
           - projects/django-template/development/api/tests/model_permission_view.md
+
+          - projects/django-template/development/api/tests/model_permission_view_organization_manager.md
 
           - projects/django-template/development/api/tests/model_permissions_api.md
 
@@ -106,13 +120,21 @@ nav:
 
     - User:
 
+      - projects/django-template/user/index.md
+
+      - Access:
+
+        - projects/django-template/user/access/index.md
+
+        - projects/django-template/user/access/organization.md
+
+        - projects/django-template/user/access/team.md
+
       - projects/django-template/user/configuration.md
 
       - projects/django-template/user/api.md
 
       - projects/django-template/user/config_management/index.md
-
-      - projects/django-template/user/permissions.md
 
       - Core:
 
