@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+
+from access.models import Team
 
 from core.mixin.history_save import SaveHistory
 
@@ -34,7 +37,6 @@ class Project(ProjectCommonFieldsName, SaveHistory):
     # priority
 
     # state
-
 
     # project_type
 
@@ -73,7 +75,29 @@ class Project(ProjectCommonFieldsName, SaveHistory):
         verbose_name = 'Real Finish Date',
     )
 
+    manager_user = models.ForeignKey(
+        User,
+        blank= True,
+        help_text = '',
+        on_delete=models.SET_NULL,
+        null = True,
+        related_name = 'manager_user'
+    )
+
+    manager_team =  models.ForeignKey(
+        Team,
+        blank= True,
+        help_text = '',
+        on_delete=models.SET_NULL,
+        null = True,
+    )
+
     model_notes = None
+
+    team_members = models.ManyToManyField(
+        to = User,
+        blank = True,
+    )
 
 
     @property

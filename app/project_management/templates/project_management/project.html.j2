@@ -71,6 +71,10 @@
         line-height: 30px;
 
     }
+
+    hr {
+        border: 0; border-top: 1px solid #ccc;
+    }
 </style>
 <form action="" method="post">
     {% csrf_token %}
@@ -146,10 +150,40 @@
 
         </div>
 
+        <hr />
+
+        <div style="display: inline; width: 40%; margin: 30px;">
+            <h3>Manager</h3>
+            <div style="display: inline; width: 40%; margin: 30px;">
+
+                <div class="detail-view-field">
+                    <label>{{ form.manager_user.label }}</label>
+                    <span>{{ form.manager_user.value }}</span>
+                </div>
+
+            </div>
+
+             <div style="display: inline; width: 40%; margin: 30px;">
+
+                <div class="detail-view-field">
+                    <label>{{ form.team_members.label }}</label>
+                    <span>{{ form.team_members.value }}</span>
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <br />
+        <hr />
+
         <div style="display: inline; width: 40%; margin: 30px;">
             <h3>Description</h3>
+            <div style="display:block; border: 1px solid #ccc;">
             {{ form.description.value | markdown | safe }}
+            </div>
         </div>
+        <br />
+        <br />
 
 
         <input type="button" value="Edit"
