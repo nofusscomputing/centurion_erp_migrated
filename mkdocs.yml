@@ -126,6 +126,8 @@ nav:
 
         - projects/django-template/user/access/organization.md
 
+        - projects/django-template/user/access/team.md
+
       - projects/django-template/user/configuration.md
 
       - projects/django-template/user/api.md
