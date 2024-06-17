@@ -90,6 +90,8 @@ nav:
 
           - projects/django-template/development/api/tests/model_permission_delete.md
 
+          - projects/django-template/development/api/tests/model_permission_delete_organization_manager.md
+
           - projects/django-template/development/api/tests/model_permission_view.md
 
           - projects/django-template/development/api/tests/model_permission_view_organization_manager.md

@@ -127,6 +127,8 @@ Models are tested using the following test cases:
 
 - [Delete Permission](./model_permission_delete.md)
 
+- [Delete Permission (organization Manager)](./model_permission_delete_organization_manager.md)
+
 - [View Permission](./model_permission_view.md)
 
 - [View Permission (organization Manager)](./model_permission_view_organization_manager.md)
