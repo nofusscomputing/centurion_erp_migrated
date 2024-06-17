@@ -39,7 +39,6 @@
       <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
     </svg> Back to Devices</button>
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-  <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'OperatingSystem')">Operating System</button>
   <button class="tablinks" onclick="openCity(event, 'Software')">Software</button>
   <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
   <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
@@ -48,6 +47,7 @@
 <style>
 
 .detail-view-field {
+  display:unset;
   height: 30px;
   line-height: 30px;
   padding: 0px 20px 40px 20px;
@@ -55,7 +55,7 @@
 }
 
 .detail-view-field label {
-  display: inline;
+  display: inline-block;
   font-weight: bold;
   width: 200px;
   margin: 10px;
@@ -66,8 +66,8 @@
 }
 
 .detail-view-field span {
-  display: inline;
-  width: 350px;
+  display: inline-block;
+  width: 340px;
   margin: 10px;
   /*padding: 10px;*/
   border-bottom: 1px solid #ccc;
@@ -85,7 +85,7 @@
       Details
       <span style="font-weight: normal; float: right;">{% include 'icons/issue_link.html.j2' with issue=6 %}</span>
     </h3>
-    <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+    <div align-items:flex-start; align-content: center; display: flexbox; width: 100%">
 
       <div style="display: inline; width: 40%; margin: 30px;">
 
@@ -134,10 +134,18 @@
           {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
         </div>
       </div>
-    </div>
+      </div>
 
+ 
 
     <input type="button" value="Edit" onclick="window.location='{% url 'ITAM:_device_change' device.id %}';">
+
+    <div style="display: block; width: 100%;">
+      <h3>Operating System</h3>
+      <br>
+      {{ operating_system.as_p }}
+      <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
+    </div>
 
     <script>
       // Get the element with id="defaultOpen" and click on it
@@ -146,11 +154,6 @@
 
   </div>
 
-  <div id="OperatingSystem" class="tabcontent">
-    <h3>Operating System</h3>
-    {{ operating_system.as_p }}
-    <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
-  </div>
 
   <div id="Software" class="tabcontent">
     <h3>Software</h3>

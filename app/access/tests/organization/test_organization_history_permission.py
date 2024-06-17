@@ -14,7 +14,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 from core.models.history import History
 
 
-class DeviceHistoryPermissions(TestCase):
+class OrganizationHistoryPermissions(TestCase):
 
 
     item_model = Organization

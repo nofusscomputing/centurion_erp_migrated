@@ -24,7 +24,7 @@ SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 BUILD_REPO = os.getenv('CI_PROJECT_URL')
 BUILD_SHA = os.getenv('CI_COMMIT_SHA')
 BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
-DOCS_ROOT = 'https://django-app-nofusscomputing-infrastructure-config-97663cd48b4029.gitlab.io/projects/django-template/'
+DOCS_ROOT = 'https://nofusscomputing.com/projects/django-template/user/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 

@@ -62,3 +62,21 @@ class History(TestCase):
         This method deletes the item and child-item history from the database
         """
         pass
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_function_save_attributes():
+        """ Ensure save Attributes function match django default
+
+        the save method is overridden. the function attributes must match default django method
+        """
+        pass
+
+
+    @pytest.mark.skip(reason="to be written")
+    def test_function_delete_attributes():
+        """ Ensure delete Attributes function match django default
+
+        the delete method is overridden. the function attributes must match default django method
+        """
+        pass

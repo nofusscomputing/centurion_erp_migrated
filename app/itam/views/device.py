@@ -134,7 +134,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         return context
 
-    @method_decorator(auth_decorator.permission_required("itam.change_device", raise_exception=True))
+
     def post(self, request, *args, **kwargs):
 
         device = Device.objects.get(pk=self.kwargs['pk'])
@@ -151,22 +151,25 @@ class View(OrganizationPermission, generic.UpdateView):
 
         if operating_system.is_bound and operating_system.is_valid():
 
-            operating_system.instance.organization = device.organization
-            operating_system.instance.device = device
+            if request.user.has_perm('itam.change_device'):
 
-            operating_system.save()
+                operating_system.instance.organization = device.organization
+                operating_system.instance.device = device
+
+                operating_system.save()
 
 
         notes = AddNoteForm(request.POST, prefix='note')
 
         if notes.is_bound and notes.is_valid() and notes.instance.note != '':
 
-            notes.instance.organization = device.organization
-            notes.instance.device = device
-            notes.instance.usercreated = request.user
+            if request.user.has_perm('core.add_notes'):
 
-            notes.save()
+                notes.instance.organization = device.organization
+                notes.instance.device = device
+                notes.instance.usercreated = request.user
 
+                notes.save()
 
 
         return super().post(request, *args, **kwargs)
