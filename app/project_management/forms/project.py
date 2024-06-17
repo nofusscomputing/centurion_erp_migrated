@@ -34,3 +34,5 @@ class ProjectForm(forms.ModelForm):
         self.fields['real_finish_date'].input_formats = settings.DATETIME_FORMAT
         self.fields['real_finish_date'].format="%Y-%m-%dT%H:%M"
 
+        self.fields['description'].widget.attrs = {'style': "height: 800px; width: 1000px"}
+
