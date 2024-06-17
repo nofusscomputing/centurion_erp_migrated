@@ -9,6 +9,9 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from core.forms.comment import AddNoteForm
+from core.models.notes import Notes
+
 from project_management.forms.project import ProjectForm
 from project_management.models.projects import Project
 
@@ -69,6 +72,10 @@ class ProjectView(OrganizationPermission, generic.UpdateView):
 
         context = super().get_context_data(**kwargs)
 
+        # context['notes_form'] = AddNoteForm(prefix='note')
+        # context['notes'] = Notes.objects.filter(project=self.kwargs['pk'])
+
+
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
@@ -77,6 +84,25 @@ class ProjectView(OrganizationPermission, generic.UpdateView):
         context['content_title'] = context['project'].name
 
         return context
+
+
+    # def post(self, request, *args, **kwargs):
+
+    #     project = self.model.objects.get(pk=self.kwargs['pk'])
+
+    #     notes = AddNoteForm(request.POST, prefix='note')
+
+    #     if notes.is_bound and notes.is_valid() and notes.instance.note != '':
+
+    #         if request.user.has_perm('core.add_notes'):
+
+    #             notes.instance.organization = device.organization
+    #             notes.instance.project = project
+    #             notes.instance.usercreated = request.user
+
+    #             notes.save()
+
+    #     return super().post(request, *args, **kwargs)
 
 
 
