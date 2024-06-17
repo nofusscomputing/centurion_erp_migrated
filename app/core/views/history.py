@@ -41,9 +41,11 @@ class View(OrganizationPermission, generic.View):
 
         from config_management.models.groups import ConfigGroups
 
+        from project_management.models.projects import Project
+
         if not hasattr(self, 'model'):
 
-            match self.kwargs['model_name']:
+            match str(self.kwargs['model_name']).lower():
 
                 case 'configgroups':
 
@@ -84,6 +86,10 @@ class View(OrganizationPermission, generic.View):
                 case 'team':
 
                     self.model = Team
+
+                case 'project':
+
+                    self.model = Project
 
                 case _:
                     raise Exception('Unable to determine history items model')
