@@ -10,12 +10,17 @@ import unittest
 import requests
 
 from access.models import Organization, Team, TeamUsers, Permission
+from access.tests.abstract.model_permissions_organization_manager import OrganizationManagerModelPermissions
 
 from app.tests.abstract.model_permissions import ModelPermissions
 
 
 
-class TeamPermissions(TestCase, ModelPermissions):
+class TeamPermissions(
+    TestCase,
+    ModelPermissions,
+    OrganizationManagerModelPermissions,
+):
 
     model = Team
 
@@ -46,6 +51,8 @@ class TeamPermissions(TestCase, ModelPermissions):
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
+
+        self.different_organization = different_organization
 
 
         self.item = self.model.objects.create(
@@ -185,3 +192,19 @@ class TeamPermissions(TestCase, ModelPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+        self.user_is_organization_manager = User.objects.create_user(
+            username="test_org_manager",
+            password="password"
+        )
+
+        self.organization.manager = self.user_is_organization_manager
+        self.organization.save()
+
+        self.different_organization_is_manager = User.objects.create_user(
+            username="test_org_manager_different_org",
+            password="password"
+        )
+
+        self.different_organization.manager = self.different_organization_is_manager
+        self.different_organization.save()
