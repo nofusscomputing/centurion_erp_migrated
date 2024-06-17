@@ -1,9 +1,11 @@
 from django.db import models
 
+from core.mixin.history_save import SaveHistory
+
 from .project_common import ProjectCommonFieldsName
 
 
-class Project(ProjectCommonFieldsName):
+class Project(ProjectCommonFieldsName, SaveHistory):
 
 
     class Meta:
