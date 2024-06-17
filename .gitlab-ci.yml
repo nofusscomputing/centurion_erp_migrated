@@ -125,6 +125,12 @@ Docker.Hub.Branch.Publish:
     #     - '{dockerfile,dockerfile.j2}'
     #   when: always
 
+    - if:
+        $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
+          &&
+        $CI_COMMIT_BRANCH == "development"
+      when: never
+
     - if: $CI_COMMIT_TAG
       exists:
         - '{dockerfile,dockerfile.j2}'
