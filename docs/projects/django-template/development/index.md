@@ -13,7 +13,7 @@ This section of the documentation different items related to the development of 
 
 - [Application API Documentation](./api/index.md)
 
-- [Testing](./testing.mdd)
+- [Testing](./testing.md)
 
 
 ## Random items to be relocated in the future

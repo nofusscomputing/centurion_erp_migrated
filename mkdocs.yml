@@ -60,6 +60,8 @@ nav:
 
       - projects/django-template/development/index.md
 
+      - projects/django-template/development/testing.md
+
       - Application API:
 
         - projects/django-template/development/api/index.md
