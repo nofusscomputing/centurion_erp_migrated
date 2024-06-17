@@ -1,17 +1,89 @@
 {% extends 'base.html.j2' %}
 
+{% load markdown %}
+
 {% block title %}Organization - {{ organization.name }}{% endblock %}
 
 {% block content %}
+<style>
+form div .helptext {
+  background-color: rgb(0, 140, 255);
+  display: block;
+}
 
-<form>
-  <div>{{ form.as_p }}</div>
-</form>
 
-{% include 'icons/issue_link.html.j2' with issue=13 %}<br>
 
-<input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
-<input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
+
+.detail-view-field {
+  display:unset;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  /*padding: 10px;*/
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline-block;
+  width: 340px;
+  margin: 10px;
+  /*padding: 10px;*/
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+
+
+</style>
+
+<div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+  <div style="display: inline; width: 40%; margin: 30px;">
+
+    <div class="detail-view-field">
+      <label>{{ form.name.label }}</label>
+      <span>{{ form.name.value }}</span>
+    </div>
+
+    <div class="detail-view-field">
+      <label>{{ form.manager.label }}</label>
+      <span>{{ form.manager.value }}</span>
+    </div>
+
+    <div class="detail-view-field">
+      <label>{{ form.created.label }}</label>
+      <span>{{ form.created.value }}</span>
+    </div>
+
+    <div class="detail-view-field">
+      <label>{{ form.modified.label }}</label>
+      <span>{{ form.modified.value }}</span>
+    </div>
+
+  </div>
+
+  <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+    <div>
+      <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
+
+      <div style="display: inline-block; text-align: left;">{{ form.model_notes.value | markdown | safe }}</div>
+  </div>
+</div>
+
+<div style="display: block;">
+  <input type="button" value="<< Back" onclick="window.location='{% url 'Access:Organizations' %}';">
+  <input type="button" value="New Team" onclick="window.location='{% url 'Access:_team_add' organization.id %}';">
+</div>
 
 <hr />
 <table>
