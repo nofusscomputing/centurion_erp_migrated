@@ -8,5 +8,6 @@ urlpatterns = [
     path('', ProjectIndex.as_view(), name='Projects'),
 
     path("project/add", ProjectAdd.as_view(), name="_project_add"),
+    path("project/<int:pk>", ProjectView.as_view(), name="_project_view"),
     
 ]

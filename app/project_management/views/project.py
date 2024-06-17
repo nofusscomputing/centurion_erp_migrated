@@ -49,6 +49,34 @@ class ProjectIndex(OrganizationPermission, generic.ListView):
 
 
 
+class ProjectView(OrganizationPermission, generic.UpdateView):
+
+    model = Project
+
+    permission_required = [
+        'itam.view_device',
+        'itam.change_device'
+    ]
+
+    template_name = 'project_management/project.html.j2'
+
+    form_class = ProjectForm
+
+    context_object_name = "project"
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['model_pk'] = self.kwargs['pk']
+        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['content_title'] = context['project'].name
+
+        return context
+
+
 
 class ProjectAdd(generic.CreateView):
 
