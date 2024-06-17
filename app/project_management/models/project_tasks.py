@@ -1,7 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 from .projects import Project
 from .project_common import ProjectCommonFieldsName
+
+from access.models import Team
 
 from core.mixin.history_save import SaveHistory
 
@@ -100,3 +103,19 @@ class ProjectTask(ProjectCommonFieldsName, SaveHistory):
 
     model_notes = None
 
+    task_owner = models.ForeignKey(
+        User,
+        blank= True,
+        help_text = 'User whom is considered the task owner.',
+        on_delete=models.SET_NULL,
+        null = True,
+        verbose_name = 'Task Owner',
+    )
+
+    task_members = models.ManyToManyField(
+        to = User,
+        blank = False,
+        help_text = 'User whom is responsible for completing the task.',
+        related_name = 'task_members',
+        verbose_name = 'Team Members',
+    )
