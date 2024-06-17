@@ -113,4 +113,34 @@ class ProjectAdd(generic.CreateView):
 
         return context
 
+
+
+class ProjectChange(generic.UpdateView):
+
+    form_class = ProjectForm
+
+    model = Project
+
+    permission_required = [
+        'project_management.change_project',
+    ]
+
+    template_name = 'form.html.j2'
+
+
+    def form_valid(self, form):
+        form.instance.is_global = False
+        return super().form_valid(form)
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Project Management:_project_view', kwargs={'pk': self.kwargs['pk']})
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit'
+
         return context
