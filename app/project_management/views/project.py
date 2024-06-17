@@ -76,6 +76,8 @@ class ProjectView(OrganizationPermission, generic.UpdateView):
         # context['notes'] = Notes.objects.filter(project=self.kwargs['pk'])
 
 
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
+
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
