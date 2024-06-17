@@ -72,6 +72,8 @@ class ProjectView(OrganizationPermission, generic.UpdateView):
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
+        context['model_delete_url'] = reverse('Project Management:_project_delete', args=(self.kwargs['pk'],))
+
         context['content_title'] = context['project'].name
 
         return context
@@ -144,3 +146,28 @@ class ProjectChange(generic.UpdateView):
         context['content_title'] = 'Edit'
 
         return context
+
+
+
+class ProjectDelete(OrganizationPermission, generic.DeleteView):
+    model = Project
+    
+    permission_required = [
+        'project_management.delete_project',
+    ]
+    
+    template_name = 'form.html.j2'
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Project Management:Projects')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete ' + self.object.name
+
+        return context
+
