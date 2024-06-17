@@ -6,7 +6,7 @@ from django.utils.functional import cached_property
 
 
 
-from .models import Team
+from .models import Organization, Team
 
 
 class OrganizationMixin():
@@ -189,9 +189,27 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
         if not request.user.is_authenticated:
                 return self.handle_no_permission()
 
+        organization_manager_models = [
+            'access.organization',
+            'access.team',
+            'access.teamusers',
+        ]
+
+        is_organization_manager = False
+
         if hasattr(self, 'get_object'):
 
-            if not self.has_organization_permission() and not request.user.is_superuser:
+            if hasattr(self, 'model'):
+
+                if self.model._meta.label_lower in organization_manager_models:
+
+                    organization = Organization.objects.get(pk=self.object_organization())
+
+                    if organization.manager == request.user:
+
+                        is_organization_manager = True
+
+            if not self.has_organization_permission() and not request.user.is_superuser and not is_organization_manager:
                 raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)

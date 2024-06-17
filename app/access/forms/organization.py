@@ -13,6 +13,7 @@ class OrganizationForm(forms.ModelForm):
         fields = [
             'name',
             'slug',
+            'manager',
         ]
 
 
