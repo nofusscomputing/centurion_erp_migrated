@@ -72,6 +72,8 @@ nav:
 
           - projects/django-template/development/api/models/itam_device.md
 
+          - projects/django-template/development/api/models/access_organization_permission_checking.md
+
         - Unit Testing:
 
           - projects/django-template/development/api/tests/index.md
@@ -116,13 +118,13 @@ nav:
 
     - User:
 
+      - projects/django-template/user/index.md
+
       - projects/django-template/user/configuration.md
 
       - projects/django-template/user/api.md
 
       - projects/django-template/user/config_management/index.md
-
-      - projects/django-template/user/permissions.md
 
       - Core:
 

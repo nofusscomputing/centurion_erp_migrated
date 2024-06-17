@@ -27,6 +27,19 @@ class View(OrganizationPermission, generic.UpdateView):
     template_name = 'access/team.html.j2'
 
 
+    def get(self, request, *args, **kwargs):
+        
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.view_team' ]):
+
+            raise PermissionDenied('You are not part of this organization')
+
+        return super().get(request, *args, **kwargs)
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -49,8 +62,15 @@ class View(OrganizationPermission, generic.UpdateView):
         return reverse('Access:_team_view', args=(self.kwargs['organization_id'], self.kwargs['pk'],))
 
 
-    @method_decorator(auth_decorator.permission_required("access.change_team", raise_exception=True))
     def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.change_team' ]):
+
+            raise PermissionDenied('You are not part of this organization')
 
         return super().post(request, *args, **kwargs)
 

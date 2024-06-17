@@ -37,12 +37,19 @@ class View(OrganizationPermission, generic.UpdateView):
 
     model = Organization
 
-    permission_required = [
-        'access.view_organization',
-        'access.change_organization',
-    ]
-
     template_name = "access/organization.html.j2"
+
+    def get(self, request, *args, **kwargs):
+        
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.view_organization' ]):
+
+            raise PermissionDenied('You are not part of this organization')
+
+        return super().get(request, *args, **kwargs)
 
 
     def get_success_url(self, **kwargs):
@@ -64,8 +71,15 @@ class View(OrganizationPermission, generic.UpdateView):
         return context
 
 
-    @method_decorator(auth_decorator.permission_required("access.change_organization", raise_exception=True))
     def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.change_organization' ]):
+
+            raise PermissionDenied('You are not part of this organization')
 
         return super().post(request, *args, **kwargs)
 
