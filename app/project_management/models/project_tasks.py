@@ -1,12 +1,13 @@
 from django.db import models
 
-from .projects import ProjectModel
+from .projects import Project
+from .project_common import ProjectCommonFieldsName
 
-from access.models import TenancyObject
+from core.mixin.history_save import SaveHistory
 
 
 
-class ProjectTaskModel(model.Model, TenancyObject):
+class ProjectTask(ProjectCommonFieldsName, SaveHistory):
 
 
     class Meta:
@@ -22,38 +23,80 @@ class ProjectTaskModel(model.Model, TenancyObject):
 
 
 
-    class ProjectTaskStates(enum):
-        OPEN = 1
-        CLOSED = 1
+    # class ProjectTaskStates(enum):
+    #     OPEN = 1
+    #     CLOSED = 1
 
 
-    project
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        null = False,
+        blank= False
+    )
     
-    parent_task
+    parent_task = models.ForeignKey(
+        'self',
+        blank= True,
+        default = None,
+        on_delete=models.CASCADE,
+        null = True,
+    )
 
-    name
+    description = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
 
-    description
+    # priority
 
-    priority
+    # state
 
-    state
+    # percent_done
 
-    percent_done
+    # task_type
 
-    task_type
+    code = models.CharField(
+        blank = False,
+        help_text = 'Project Code',
+        max_length = 25,
+        unique = True,
+    )
 
-    code
+    planned_start_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When the task is planned to have been started by.',
+        null = True,
+        verbose_name = 'Planned Start Date',
+    )
 
-    planned_start_date
+    planned_finish_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When the task is planned to be finished by.',
+        null = True,
+        verbose_name = 'Planned Finish Date',
+    )
 
-    planned_finish_date
+    real_start_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When work commenced on the task.',
+        null = True,
+        verbose_name = 'Real Start Date',
+    )
 
-    real_start_date
+    real_finish_date = models.DateTimeField(
+        blank = True,
+        help_text = 'When work was completed for the task',
+        null = True,
+        verbose_name = 'Real Finish Date',
+    )
 
     milestone = models.BooleanField(
         blank = False,
+        help_text = 'Is this task a milestone?',
         default = False,
     )
 
+    model_notes = None
 
