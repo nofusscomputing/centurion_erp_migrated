@@ -52,3 +52,27 @@ class ProjectTaskAdd(generic.CreateView):
         context['content_title'] = 'Create a Project'
 
         return context
+
+
+
+class ProjectTaskDelete(OrganizationPermission, generic.DeleteView):
+    model = ProjectTask
+    
+    permission_required = [
+        'project_management.delete_projecttask',
+    ]
+    
+    template_name = 'form.html.j2'
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Project Management:_project_view', kwargs={'pk': self.kwargs['project_id']})
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete ' + self.object.name
+
+        return context
