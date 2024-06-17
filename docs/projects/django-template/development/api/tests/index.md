@@ -115,7 +115,11 @@ Models are tested using the following test cases:
 
 - [ALL Model Permission](./model_permissions.md)
 
+- [ALL Model Permission (organization Manager)](./model_permissions_organization_manager.md)
+
 - [Add Permission](./model_permission_add.md)
+
+- [Add Permission (organization Manager)](./model_permission_add_organization_manager.md)
 
 - [Change Permission](./model_permission_change.md)
 

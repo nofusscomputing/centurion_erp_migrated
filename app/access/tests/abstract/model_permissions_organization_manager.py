@@ -73,6 +73,60 @@ class OrganizationManagerModelPermissionView:
 
 
 
+class OrganizationManagerModelPermissionAdd:
+    """ Tests for checking model Add permissions """
+
+
+    app_namespace: str = None
+    """ Application namespace of the model being tested """
+
+    different_organization_is_manager: object
+    """ User whom is organization Manager of different organization than object """
+
+    url_name_view: str
+    """ url name of the model view to be tested """
+
+    url_view_kwargs: dict = None
+    """ View URL kwargs for model being tested """
+
+    user_is_organization_manager: object
+    """ User whom is organization Manager of the object"""
+
+
+
+    def test_model_add_different_organization_is_organization_manager_denied(self):
+        """ Check correct permission for add
+
+        attempt to add as user from different organization whom is an organization Manager.
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+
+        client.force_login(self.different_organization_is_manager)
+        response = client.post(url, data=self.add_data)
+
+        assert response.status_code == 403
+
+
+    def test_model_add_has_no_permission_is_organization_manager(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user who is an organization manager and has no permissions assigned.
+        Object to be within same organization the user is a manager of.
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+
+        client.force_login(self.user_is_organization_manager)
+        response = client.post(url, data=self.add_data)
+
+        assert response.status_code == 200
+
+
 
 class OrganizationManagerModelPermissionChange:
     """ Tests for checking model change permissions """
@@ -129,6 +183,7 @@ class OrganizationManagerModelPermissionChange:
 
 class OrganizationManagerModelPermissions(
     OrganizationManagerModelPermissionView,
+    OrganizationManagerModelPermissionAdd,
     OrganizationManagerModelPermissionChange,
 ):
     """ Tests for checking Organization Manager model permissions
