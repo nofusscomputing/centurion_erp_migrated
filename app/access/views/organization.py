@@ -63,6 +63,8 @@ class View(OrganizationPermission, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
+
         context['teams'] = Team.objects.filter(organization=self.kwargs['pk'])
 
         context['model_pk'] = self.kwargs['pk']

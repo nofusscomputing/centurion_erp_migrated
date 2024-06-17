@@ -120,6 +120,12 @@ nav:
 
       - projects/django-template/user/index.md
 
+      - Access:
+
+        - projects/django-template/user/access/index.md
+
+        - projects/django-template/user/access/organization.md
+
       - projects/django-template/user/configuration.md
 
       - projects/django-template/user/api.md
