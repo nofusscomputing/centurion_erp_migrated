@@ -47,6 +47,42 @@ class ProjectIndex(OrganizationPermission, generic.ListView):
 
             return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
 
+
+
+
+class ProjectAdd(generic.CreateView):
+
+    form_class = ProjectForm
+
+    model = Project
+
+    permission_required = [
+        'project_management.add_project',
+    ]
+
+    template_name = 'form.html.j2'
+    
+
+    def get_initial(self):
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
+
+    def form_valid(self, form):
+        form.instance.is_global = False
+        return super().form_valid(form)
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Project Management:Projects')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Create a Project'
+
         return context
 
         return context
