@@ -25,7 +25,7 @@ class OrganizationMixin():
         Requires attribute `parent_model` within the view with the value of the parent's model class
 
         Returns:
-            parent_model: with PK from kwargs['pk']
+            parent_model (Model): with PK from kwargs['pk']
         """
 
         return self.parent_model.objects.get(pk=self.kwargs['pk'])
@@ -127,11 +127,8 @@ class OrganizationMixin():
         Get All groups the user is part of, fetch the associated team,
         iterate over the results adding the organization ID to a list to be returned.
 
-        Args:
-            request (_type_): Current http request
-
         Returns:
-            _type_: _description_
+            _type_: User Organizations.
         """
 
         user_organizations = []
