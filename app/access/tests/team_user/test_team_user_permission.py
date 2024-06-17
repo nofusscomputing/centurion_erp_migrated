@@ -10,15 +10,32 @@ import unittest
 import requests
 
 from access.models import Organization, Team, TeamUsers, Permission
+from access.tests.abstract.model_permissions_organization_manager import OrganizationManagerModelPermissionAdd, OrganizationManagerModelPermissionDelete
+
+from app.tests.abstract.model_permissions import ModelPermissionsAdd, ModelPermissionsChange, ModelPermissionsDelete
 
 
 
-class TeamUserPermissions(TestCase):
+class TeamUserPermissions(
+    TestCase,
+    ModelPermissionsAdd,
+    ModelPermissionsDelete,
+    OrganizationManagerModelPermissionAdd,
+    OrganizationManagerModelPermissionDelete
+):
 
     model = TeamUsers
 
-    model_name = 'teamusers'
-    app_label = 'access'
+    app_namespace = 'Access'
+
+    url_name_view = '_team_user_view'
+
+    url_name_add = '_team_user_add'
+
+    url_name_change = '_team_user_view'
+
+    url_name_delete = '_team_user_delete'
+
 
     @classmethod
     def setUpTestData(self):
@@ -37,6 +54,8 @@ class TeamUserPermissions(TestCase):
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
         self.test_team = Team.objects.create(
             team_name = 'test_team',
             organization = organization,
@@ -49,11 +68,34 @@ class TeamUserPermissions(TestCase):
             user = self.team_user
         )
 
+
+        self.url_view_kwargs = {'pk': self.item.id}
+
+        self.url_add_kwargs = {'organization_id': self.organization.id, 'pk': self.item.id}
+
+        self.add_data = {'operating_system': 'operating_system', 'organization': self.organization.id}
+
+        self.url_change_kwargs = {'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id}
+
+        self.change_data = {'operating_system': 'operating_system', 'organization': self.organization.id}
+
+        self.url_delete_kwargs = {'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id}
+
+        self.delete_data = {'operating_system': 'operating_system', 'organization': self.organization.id}
+
+        self.url_delete_response = reverse('Access:_team_view', 
+            kwargs={
+                'organization_id': self.organization.id,
+                'pk': self.test_team.id
+            }
+        )
+
+
         view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model_name,
+                codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -67,10 +109,10 @@ class TeamUserPermissions(TestCase):
 
 
         add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model_name,
+                codename = 'add_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -84,10 +126,10 @@ class TeamUserPermissions(TestCase):
 
 
         change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model_name,
+                codename = 'change_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -101,10 +143,10 @@ class TeamUserPermissions(TestCase):
 
 
         delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model_name,
+                codename = 'delete_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -164,153 +206,21 @@ class TeamUserPermissions(TestCase):
             user = self.different_organization_user
         )
 
+        self.user_is_organization_manager = User.objects.create_user(
+            username="test_org_manager",
+            password="password"
+        )
 
+        self.organization.manager = self.user_is_organization_manager
+        self.organization.save()
 
-    @pytest.mark.skip(reason="feature does not exist")
-    def test_team_user_auth_view_user_anon_denied(self):
-        """ Check correct permission for view
+        self.different_organization_is_manager = User.objects.create_user(
+            username="test_org_manager_different_org",
+            password="password"
+        )
 
-        Attempt to view as anon user
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_view', kwargs={'pk': self.item.id})
-
-        response = client.get(url)
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    @pytest.mark.skip(reason="feature does not exist")
-    def test_team_user_auth_view_no_permission_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user missing permission
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    @pytest.mark.skip(reason="feature does not exist")
-    def test_team_user_auth_view_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user from different organization
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    @pytest.mark.skip(reason="feature does not exist")
-    def test_team_user_auth_view_has_permission(self):
-        """ Check correct permission for view
-
-        Attempt to view as user with view permission
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_view', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        assert response.status_code == 200
-
-
-
-    def test_team_user_auth_add_user_anon_denied(self):
-        """ Check correct permission for add 
-
-        Attempt to add as anon user
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_add', kwargs={'organization_id': self.organization.id, 'pk': self.item.id})
-
-
-        response = client.put(url, data={'device': 'device'})
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_team_user_auth_add_no_permission_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add as user with no permissions
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_add', kwargs={'organization_id': self.organization.id, 'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.post(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="ToDO: figure out why fails")
-    def test_team_user_auth_add_different_organization_denied(self):
-        """ Check correct permission for add
-
-        attempt to add as user from different organization
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_add', kwargs={'organization_id': self.organization.id, 'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.post(url, data={'name': 'device', 'organization': self.organization.id})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_add_permission_view_denied(self):
-        """ Check correct permission for add
-
-        Attempt to add a user with view permission
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_add', kwargs={'organization_id': self.organization.id, 'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.post(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_add_has_permission(self):
-        """ Check correct permission for add 
-
-        Attempt to add as user with no permission
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_add', kwargs={'organization_id': self.organization.id, 'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data={'device': 'device', 'organization': self.organization.id})
-
-        assert response.status_code == 200
+        self.different_organization.manager = self.different_organization_is_manager
+        self.different_organization.save()
 
 
 
@@ -413,126 +323,3 @@ class TeamUserPermissions(TestCase):
         response = client.post(url, data={'device': 'device'})
 
         assert response.status_code == 200
-
-
-
-    def test_team_user_auth_delete_user_anon_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete item as anon user
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    def test_team_user_auth_delete_no_permission_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with no permissons
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_delete_different_organization_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user from different organization
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_delete_permission_view_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with veiw permission only
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_delete_permission_add_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with add permission only
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_delete_permission_change_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with change permission only
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete', kwargs={'organization_id': self.organization.id, 'team_id': self.item.team.id, 'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_team_user_auth_delete_has_permission(self):
-        """ Check correct permission for delete
-
-        Delete item as user with delete permission
-        """
-
-        client = Client()
-        url = reverse('Access:_team_user_delete',
-            kwargs={
-                'organization_id': self.organization.id,
-                'team_id': self.test_team.id,
-                'pk': self.item.id
-            }
-        )
-
-
-        client.force_login(self.delete_user)
-        response = client.delete(url, data={'device': 'device'})
-
-        assert response.status_code == 302 and response.url == reverse('Access:_team_view', 
-            kwargs={
-                'organization_id': self.organization.id,
-                'pk': self.test_team.id
-            }
-        )

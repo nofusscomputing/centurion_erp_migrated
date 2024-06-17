@@ -37,6 +37,20 @@ class Organization(SaveHistory):
         unique = True,
     )
 
+    manager = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        blank = False,
+        null = True,
+        help_text = 'Organization Manager'
+    )
+
+    model_notes = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
+
     slug = AutoSlugField()
 
     created = AutoCreatedField()
@@ -73,6 +87,12 @@ class TenancyObject(models.Model):
         blank = False
     )
 
+    model_notes = models.TextField(
+        blank = True,
+        default = None,
+        null= True,
+    )
+
     def get_organization(self) -> Organization:
         return self.organization
 
@@ -86,11 +106,12 @@ class Team(Group, TenancyObject, SaveHistory):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         self.name = self.organization.name.lower().replace(' ', '_') + '_' + self.team_name.lower().replace(' ', '_')
 
-        super().save(*args, **kwargs)
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
     team_name = models.CharField(
@@ -104,6 +125,13 @@ class Team(Group, TenancyObject, SaveHistory):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.organization
 
 
     def permission_list(self) -> list:
@@ -189,4 +217,11 @@ class TeamUsers(SaveHistory):
         user = User.objects.get(pk=self.user_id)
 
         user.groups.add(group) 
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.team
 

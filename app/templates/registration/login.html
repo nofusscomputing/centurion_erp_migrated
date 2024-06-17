@@ -1,32 +1,30 @@
-<html>
+{% extends 'base.html.j2' %}
 
-<head>
-    {% load static %}
-    <title>Login</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'base.css' %}">
-    <link rel="stylesheet" href="{% static 'content.css' %}">
-    <link rel="stylesheet" href="{% static 'data.css' %}">
+{% block body %}
 
-</head>
+{% if not SSO_LOGIN_ONLY_BACKEND %}
+<style>
+    body {
+        background-color: #393f44
+    }
+</style>
+<div style="height: 100%; width: 100%;">
 
-<body style="background-color: #393f44">
-    
-    <div style="height: 100%; width: 100%;">
-
-        <div style="display: block; text-align: center; inline-size: auto;  margin: auto; background-color: #26292d; margin-top: -185px; height: 370px; margin-left: -272px; width: 544px; position: absolute; top: 50%; left: 50%; padding: 40px">
-            <form method="post" style="display: inline-block; margin: auto; background-color: inherit; width: 100%; height: 100%; line-height: 30px; color: #f0f0f0;">
-                {% csrf_token %}
-                <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_username" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;" >User Name</label><input name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="text" /></fieldset>
-                <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_password" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;">Password</label><input name="password" autocomplete="current-password" required id="id_password" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="password" /></fieldset>
-                <button style="border-radius: 5px; background-color: #4CAF50; border: none; display: unset; width: 100%; padding: 0px; margin: 0px; margin-top: 30px; font-size: inherit; height: 35px;;" type="submit">Login</button>
-            </form>
-        </div>
-
+    <div style="display: block; text-align: center; inline-size: auto;  margin: auto; background-color: #26292d; margin-top: -185px; height: 370px; margin-left: -272px; width: 544px; position: absolute; top: 50%; left: 50%; padding: 40px">
+        <form method="post" style="display: inline-block; margin: auto; background-color: inherit; width: 100%; height: 100%; line-height: 30px; color: #f0f0f0;">
+            {% csrf_token %}
+            <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_username" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;" >User Name</label><input name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="text" /></fieldset>
+            <fieldset style="border: none; display: unset; width: 100%; padding: 0px; margin: 0px;"><label for="id_password" style="background-color: inherit; width: 100%; display: block; padding-top: 30px; text-align: left;">Password</label><input name="password" autocomplete="current-password" required id="id_password" style="color: inherit; border-radius: 5px; background-color: #393f44; border: none; border-bottom: 1px solid #999; font-size: inherit; width: 100%; line-height: inherit;" type="password" /></fieldset>
+            <button style="border-radius: 5px; background-color: #4CAF50; border: none; display: unset; width: 100%; padding: 0px; margin: 0px; margin-top: 30px; font-size: inherit; height: 35px;;" type="submit">Login</button>
+            {% for backend in social_backends %}
+            <span style="padding: 5px; margin: 10px; background-color: aqua; display: inline-block; width: auto;">
+                <a href="/sso/login/{{ backend }}/">{{ backend }}</a>
+            </span>
+            {% endfor %}
+        </form>
     </div>
+</div>
+{% endif %}
 
-</body>
-
-</html>
+{% endblock %}

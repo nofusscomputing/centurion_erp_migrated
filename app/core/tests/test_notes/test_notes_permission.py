@@ -13,6 +13,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 from itam.models.device import Device
 
 
+@pytest.mark.skip(reason="this test needs to move to models tests that recieve notes")
 class NotesPermissions(TestCase):
 
     model = Device

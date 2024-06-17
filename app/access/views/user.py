@@ -3,22 +3,28 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
 
+from access.forms.team_users import TeamUsersForm
 from access.mixin import OrganizationPermission
 from access.models import Team, TeamUsers
 
 
 
 class Add(OrganizationPermission, generic.CreateView):
+
+    context_object_name = "teamuser"
+
+    form_class = TeamUsersForm
+
     model = TeamUsers
+
+    parent_model = TeamUsers
+
     permission_required = [
         'access.view_team',
         'access.add_teamusers'
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'user',
-        'manager'
-    ]
 
 
     def form_valid(self, form):

@@ -1,32 +1,15 @@
-# from django.conf import settings
-# from django.shortcuts import reverse
-from django.test import TestCase, Client
-
 import pytest
 import unittest
-import requests
+
+from django.test import TestCase, Client
 
 
+from access.models import Organization, Team, TeamUsers, Permission
 
-@pytest.mark.skip(reason="to be written")
-def test_team_user_auth_view_api(user):
-    """ Check correct permission for view """
-    pass
-
-
-@pytest.mark.skip(reason="to be written")
-def test_team_user_auth_add_api(user):
-    """ Check correct permission for add """
-    pass
+from api.tests.abstract.api_permissions import APIPermissions
 
 
 @pytest.mark.skip(reason="to be written")
-def test_team_user_auth_change_api(user):
-    """ Check correct permission for change """
-    pass
+class TeamUsersPermissionsAPI(TestCase, APIPermissions):
 
-
-@pytest.mark.skip(reason="to be written")
-def test_team_user_auth_delete_api(user):
-    """ Check correct permission for delete """
-    pass
+    model = TeamUsers

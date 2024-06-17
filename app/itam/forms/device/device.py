@@ -18,17 +18,21 @@ class DeviceForm(forms.ModelForm):
             'serial_number',
             'uuid',
             'device_type',
-            'organization'
+            'organization',
+            'model_notes',
         ]
 
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['_lastinventory'] = forms.DateTimeField(
+        self.fields['lastinventory'] = forms.DateTimeField(
             label="Last Inventory Date",
             input_formats=settings.DATETIME_FORMAT,
             initial=kwargs['instance'].inventorydate,
             disabled=True,
             required=False,
         )
+
+        # for key in self.fields.keys():
+        #     self.fields[key].widget.attrs['disabled'] = True

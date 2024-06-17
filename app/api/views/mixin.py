@@ -1,4 +1,4 @@
-
+from django.core.exceptions import PermissionDenied
 from django.forms import ValidationError
 
 from rest_framework.permissions import DjangoObjectPermissions
@@ -50,7 +50,6 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                     raise ValidationError('you must provide an organization')
 
                 object_organization = int(request.data['organization'])
-        
         elif method == 'patch':
 
             action = 'change'
@@ -126,12 +125,17 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             return True
 
+        if hasattr(self, 'default_organization'):
+            object_organization = self.default_organization
 
-        if object_organization is None:
+        if method == 'post' and hasattr(self, 'default_organization'):
 
-            raise Exception("unable to determine object organization")
+            if self.default_organization:
+
+                object_organization = self.default_organization.id
 
         if not self.has_organization_permission(object_organization) and not request.user.is_superuser:
-            return False
+
+            raise PermissionDenied('You are not part of this organization')
 
         return True

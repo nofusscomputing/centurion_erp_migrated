@@ -1,4 +1,5 @@
 {% load settings_value %}
+{% settings_value "SSO_LOGIN_ONLY_BACKEND" as SSO_LOGIN_ONLY_BACKEND %}
 <html>
 
 <head>
@@ -7,13 +8,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  {% if SSO_LOGIN_ONLY_BACKEND %}
+  <meta http-equiv="refresh" content="0; url=/{{ settings.LOGIN_URL }}" />
+  {% else %}
   <link rel="stylesheet" href="{% static 'base.css' %}">
   <link rel="stylesheet" href="{% static 'content.css' %}">
+  {% endif %}
 
 </head>
 
 <body>
-
+  {% block body %}
   <header>
 
     <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
@@ -67,14 +72,22 @@ section h2 span svg {
   fill: #ff0000;
 }
 
-</style>
+.icon-help svg {
+  fill: #177ee6;
+}
 
+</style>
 
     <section>
       <h2>{% block title %}{{ content_title }}{% endblock %}
         {% if model_delete_url %}
         <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
           {% include 'icons/delete.svg' %}
+        </span>
+        {% endif %}
+        {% if model_docs_path %}
+        <span title="Documentation" id="content_header_icon" class="icon-help" onclick="window.open('{% settings_value 'DOCS_ROOT' %}{{ model_docs_path }}', '_blank')">
+          {% include 'icons/help.svg' %}
         </span>
         {% endif %}
         {% if model_name and model_pk %}
@@ -84,14 +97,14 @@ section h2 span svg {
             <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/>
           </svg>
         </span>
-        {% endblock %}
+        {% endblock content_header_icon %}
         {% endif %}
-        </h2>
-      {% block content %}
-      <article>
-        {% block body%}{% endblock %}
+      </h2>
+      {% block article %}
+      <article id="content-body">
+        {% block content %}{% endblock %}
       </article>
-      {% endblock %}
+      {% endblock article %}
       <footer>
       <span style="position:relative; font-size: 12px">
         Build details: 
@@ -107,8 +120,8 @@ section h2 span svg {
       <span></span>
       </footer>
     </section>
-
   </main>
+  {% endblock body %}
 
 </body>
 

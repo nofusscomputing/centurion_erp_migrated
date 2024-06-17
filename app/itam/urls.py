@@ -9,6 +9,7 @@ urlpatterns = [
     path("device/", device.IndexView.as_view(), name="Devices"),
 
     path("device/<int:pk>/", device.View.as_view(), name="_device_view"),
+    path("device/<int:pk>/edit", device.Change.as_view(), name="_device_change"),
     path("device/<int:pk>/software/add", device.SoftwareAdd.as_view(), name="_device_software_add"),
     path("device/<int:device_id>/software/<int:pk>", device.SoftwareView.as_view(), name="_device_software_view"),
     path("device/<int:pk>/delete", device.Delete.as_view(), name="_device_delete"),

@@ -1,12 +1,15 @@
 import json
 
+from datetime import timedelta
+
 from django.db import models
 
 from access.fields import *
 from access.models import TenancyObject
 
-from core.mixin.history_save import SaveHistory
+from app.helpers.merge_software import merge_software
 
+from core.mixin.history_save import SaveHistory
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
 from itam.models.device_models import DeviceModel
@@ -43,6 +46,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank = True,
         unique = True,
+        help_text = 'Serial number of the device.',
         
     )
 
@@ -53,7 +57,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank = True,
         unique = True,
-        
+        help_text = 'System GUID/UUID.',
     )
 
     device_model = models.ForeignKey(
@@ -61,7 +65,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.CASCADE,
         default = None,
         null = True,
-        blank= True
+        blank= True,
+        help_text = 'Model of the device.',
     )
 
     device_type = models.ForeignKey(
@@ -69,7 +74,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         on_delete=models.CASCADE,
         default = None,
         null = True,
-        blank= True
+        blank= True,
+        help_text = 'Type of device.',
         
     )
 
@@ -77,13 +83,47 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     inventorydate = models.DateTimeField(
         verbose_name = 'Last Inventory Date',
         null = True,
-        blank = True
+        blank = True,
     )
 
 
     def __str__(self):
 
         return self.name
+
+    @property
+    def status(self) -> str:
+        """ Fetch Device status
+
+        Returns:
+            str: Current status of the item
+        """
+
+        if self.inventorydate:
+
+            check_date = self.inventorydate
+
+        else:
+
+            check_date = now() + timedelta(days=99)
+
+        one = (now() - check_date).days
+
+        if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
+
+            return 'OK'
+
+        elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
+
+            return 'WARN'
+
+        elif (now() - check_date).days >= 3:
+
+            return 'BAD'
+
+        else:
+
+            return 'UNK'
 
 
     def get_configuration(self, id):
@@ -93,6 +133,9 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         config = {
             "software": []
         }
+
+        host_software = []
+        group_software = []
 
         for software in softwares:
 
@@ -115,7 +158,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                 if software.version:
                     software_action['version'] = software.version.name
 
-                config['software'] = config['software'] + [ software_action ]
+                host_software += [ software_action ]
 
         config: dict = config
 
@@ -131,7 +174,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
                 if rendered_config:
 
-                    config.update(json.loads(group.group.render_config()))
+                    config.update(json.loads(rendered_config))
+
+                    rendered_config: dict = json.loads(rendered_config)
+
+                    if 'software' in rendered_config.keys():
+                        
+                        group_software = group_software + rendered_config['software']
+
+            config['software'] = merge_software(group_software, host_software)
 
         return config
 
@@ -200,6 +251,13 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     )
 
 
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device
+
+
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
@@ -235,3 +293,10 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         blank = True,
         default = None,
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.device

@@ -1,8 +1,10 @@
 {% extends 'base.html.j2' %}
 
+{% load markdown %}
+
 {% block title %}{{ device.name }}{% endblock %}
 
-{% block body %}
+{% block content %}
 
 <script>
 
@@ -37,12 +39,43 @@
       <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
     </svg> Back to Devices</button>
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-  <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'OperatingSystem')">Operating System</button>
   <button class="tablinks" onclick="openCity(event, 'Software')">Software</button>
   <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
   <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
   <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
 </div>
+<style>
+
+.detail-view-field {
+  display:unset;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  /*padding: 10px;*/
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline-block;
+  width: 340px;
+  margin: 10px;
+  /*padding: 10px;*/
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+</style>
 <form action="" method="post">
   {% csrf_token %}
 
@@ -52,9 +85,68 @@
       Details
       <span style="font-weight: normal; float: right;">{% include 'icons/issue_link.html.j2' with issue=6 %}</span>
     </h3>
-    {{ form.as_p }}
-    {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
-    <input name="{{form.prefix}}" type="submit" value="Submit">
+    <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+      <div style="display: inline; width: 40%; margin: 30px;">
+
+        <div class="detail-view-field">
+          <label>{{ form.name.label }}</label>
+          <span>{{ form.name.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.device_model.label }}</label>
+          <span>{{ form.device_model.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.serial_number.label }}</label>
+          <span>{{ form.serial_number.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.uuid.label }}</label>
+          <span>{{ form.uuid.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.device_type.label }}</label>
+          <span>{{ device.device_type }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.organization.label }}</label>
+          <span>{{ device.organization }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.lastinventory.label }}</label>
+          <span>{{ form.lastinventory.value }}</span>
+        </div>
+
+      </div>
+
+      <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+        <div>
+          <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
+          
+          <div style="display: inline-block; text-align: left;">{{ form.model_notes.value | markdown | safe }}</div>
+          {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
+        </div>
+      </div>
+      </div>
+
+ 
+
+    <input type="button" value="Edit" onclick="window.location='{% url 'ITAM:_device_change' device.id %}';">
+
+    <div style="display: block; width: 100%;">
+      <h3>Operating System</h3>
+      <br>
+      {{ operating_system.as_p }}
+      <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
+    </div>
+
     <script>
       // Get the element with id="defaultOpen" and click on it
       document.getElementById("defaultOpen").click();
@@ -62,11 +154,6 @@
 
   </div>
 
-  <div id="OperatingSystem" class="tabcontent">
-    <h3>Operating System</h3>
-    {{ operating_system.as_p }}
-    <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
-  </div>
 
   <div id="Software" class="tabcontent">
     <h3>Software</h3>
@@ -126,6 +213,24 @@
       <td colspan="5">Nothing Found</td>
       {% endif %}
     </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
   </div>
 
 

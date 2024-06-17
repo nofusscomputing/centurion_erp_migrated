@@ -4,29 +4,47 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views import generic
 
+from access.forms.team import TeamForm
+# from access.forms.team_users import TeamUsersForm
 from access.models import Team, TeamUsers, Organization
 from access.mixin import *
 
 
 
 class View(OrganizationPermission, generic.UpdateView):
+
+    context_object_name = "team"
+
+    form_class = TeamForm
+
     model = Team
+
     permission_required = [
         'access.view_team',
         'access.change_team',
     ]
+
     template_name = 'access/team.html.j2'
 
-    fields = [
-        "name",
-        'id',
-        'organization',
-        'permissions'
-    ]
+
+    def get(self, request, *args, **kwargs):
+        
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.view_team' ]):
+
+            raise PermissionDenied('You are not part of this organization')
+
+        return super().get(request, *args, **kwargs)
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
+
 
         organization = Organization.objects.get(pk=self.kwargs['organization_id'])
 
@@ -37,7 +55,6 @@ class View(OrganizationPermission, generic.UpdateView):
         teamusers = TeamUsers.objects.filter(team=self.kwargs['pk'])
 
         context['teamusers'] = teamusers
-        context['permissions'] = Permission.objects.filter()
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
@@ -48,8 +65,15 @@ class View(OrganizationPermission, generic.UpdateView):
         return reverse('Access:_team_view', args=(self.kwargs['organization_id'], self.kwargs['pk'],))
 
 
-    @method_decorator(auth_decorator.permission_required("access.change_team", raise_exception=True))
     def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.change_team' ]):
+
+            raise PermissionDenied('You are not part of this organization')
 
         return super().post(request, *args, **kwargs)
 

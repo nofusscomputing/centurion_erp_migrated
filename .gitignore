@@ -6,3 +6,5 @@ __pycache__
 artifacts/
 **.tmp.*
 volumes/
+build/
+pages/

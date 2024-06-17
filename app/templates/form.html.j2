@@ -1,11 +1,12 @@
 {% extends 'base.html.j2' %}
 
-{% block body%}
+{% block content %}
 
-<form method="post">
+<div>
+<form method="post" id="dynamic-form">
   {% csrf_token %}
-  {{ form }}
+  {{ form.as_div }}
   <input type="submit" value="Submit">
 </form>
-
+</div>
 {% endblock %}

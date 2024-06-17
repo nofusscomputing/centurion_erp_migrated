@@ -53,6 +53,7 @@ class View(generic.UpdateView):
 
             context = super().get_context_data(**kwargs)
 
+            context['model_docs_path'] = self.model._meta.app_label + '/'
             context['model_pk'] = self.object.pk
             context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.j2' %}
 
-{% block body %}
+{% block content %}
 
 <script>
 
@@ -119,6 +119,45 @@
         <h3>
             Software
         </h3>
+
+        <input type="button" value="Add Software Action" onclick="window.location='{% url 'Config Management:_group_software_add' model_pk %}';">
+    <table>
+      <thead>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Action</th>
+        <th>Desired Version</th>
+        <th>&nbsp;</th>
+      </thead>
+      {% if softwares %}
+      {% for software in softwares %}
+      <tr>
+        <td><a href="{% url 'ITAM:_software_view' pk=software.software_id %}">{{ software.software }}</a></td>
+        <td>{{ software.software.category }}</td>
+        <td>
+          {% url 'Config Management:_group_software_change' group_id=group.id pk=software.id as icon_link %}
+          {% if software.get_action_display == 'Install' %}
+            {% include 'icons/success_text.html.j2' with icon_text=software.get_action_display icon_link=icon_link %}
+          {% elif software.get_action_display == 'Remove'%}
+            {% include 'icons/cross_text.html.j2' with icon_text=software.get_action_display %}
+          {% else %}
+            {% include 'icons/add_link.html.j2' with icon_text='Add' %}
+          {% endif %}
+        </td>
+        <td>
+          {% if software.version %}
+            {{ software.version }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <td colspan="5">Nothing Found</td>
+      {% endif %}
+    </table>
 
     </div>
 

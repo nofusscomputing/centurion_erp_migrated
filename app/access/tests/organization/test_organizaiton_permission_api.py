@@ -1,22 +1,34 @@
+import pytest
+import unittest
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase
-from rest_framework.test import APIClient as Client
-
-import pytest
-import unittest
-import requests
 
 from access.models import Organization, Team, TeamUsers, Permission
 
-class OrganizationPermissionsAPI(TestCase):
+from api.tests.abstract.api_permissions import APIPermissionChange, APIPermissionView
+
+
+
+class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionView):
 
     model = Organization
 
     model_name = 'organization'
     app_label = 'access'
+
+    app_namespace = 'API'
+    
+    url_name = '_api_organization'
+
+    url_list = 'device-list'
+
+    change_data = {'name': 'device'}
+
+    # delete_data = {'device': 'device'}
 
     @classmethod
     def setUpTestData(self):
@@ -38,11 +50,18 @@ class OrganizationPermissionsAPI(TestCase):
 
         self.item = organization
 
+        self.url_view_kwargs = {'pk': self.item.id}
+
+        self.url_kwargs = {'pk': self.item.id}
+
+        # self.add_data = {'name': 'device', 'organization': self.organization.id}
+
+
         view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model_name,
+                codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -56,10 +75,10 @@ class OrganizationPermissionsAPI(TestCase):
 
 
         add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model_name,
+                codename = 'add_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -73,10 +92,10 @@ class OrganizationPermissionsAPI(TestCase):
 
 
         change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model_name,
+                codename = 'change_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -90,10 +109,10 @@ class OrganizationPermissionsAPI(TestCase):
 
 
         delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model_name,
+                codename = 'delete_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
-                    app_label = self.app_label,
-                    model = self.model_name,
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
                 )
             )
 
@@ -152,375 +171,3 @@ class OrganizationPermissionsAPI(TestCase):
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-    def test_organization_auth_view_user_anon_denied_api(self):
-        """ Check correct permission for view
-
-        Attempt to view as anon user
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-        response = client.get(url)
-
-        assert response.status_code == 401
-
-
-    def test_organization_auth_view_no_permission_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user missing permission
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_view_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_view_has_permission(self):
-        """ Check correct permission for view
-
-        Attempt to view as user with view permission
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        assert response.status_code == 200
-
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_add_user_anon_denied(self):
-    #     """ Check correct permission for add 
-
-    #     Attempt to add as anon user
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs')
-
-
-    #     response = client.post(url, data={'device': 'device'})
-
-    #     assert (
-    #         response.status_code == 302
-    #         or
-    #         response.status_code == 403
-    #     )
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_add_no_permission_denied(self):
-    #     """ Check correct permission for add
-
-    #     Attempt to add as user with no permissions
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs')
-
-
-    #     client.force_login(self.no_permissions_user)
-    #     response = client.post(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_add_different_organization_denied(self):
-    #     """ Check correct permission for add
-
-    #     attempt to add as user from different organization
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs')
-
-
-    #     client.force_login(self.different_organization_user)
-    #     response = client.post(url, data={'name': 'device', 'organization': self.organization.id})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_add_permission_view_denied(self):
-    #     """ Check correct permission for add
-
-    #     Attempt to add a user with view permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs')
-
-
-    #     client.force_login(self.view_user)
-    #     response = client.post(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_add_has_permission(self):
-    #     """ Check correct permission for add 
-
-    #     Attempt to add as user with no permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs')
-
-
-    #     client.force_login(self.add_user)
-    #     response = client.post(url, data={'device': 'device', 'organization': self.organization.id})
-
-    #     assert response.status_code == 200
-
-
-
-    def test_organization_auth_change_user_anon_denied(self):
-        """ Check correct permission for change
-
-        Attempt to change as anon
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 401
-
-
-    def test_organization_auth_change_no_permission_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user without permissions
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_change_different_organization_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user from different organization
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_change_permission_view_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with view permission
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_change_permission_add_denied(self):
-        """ Ensure permission view cant make change
-
-        Attempt to make change as user with add permission
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.add_user)
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 403
-
-
-    def test_organization_auth_change_has_permission(self):
-        """ Check correct permission for change
-
-        Make change with user who has change permission
-        """
-
-        client = Client()
-        url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-        client.force_login(self.change_user)
-        response = client.patch(url, data={'device': 'device'})
-
-        assert response.status_code == 200
-
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_user_anon_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete item as anon user
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_orgs', kwargs={'pk': self.item.id})
-
-
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert (
-    #         response.status_code == 302
-    #         or
-    #         response.status_code == 403
-    #     )
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_no_permission_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete as user with no permissons
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.no_permissions_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_different_organization_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete as user from different organization
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.different_organization_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_permission_view_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete as user with veiw permission only
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.view_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_permission_add_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete as user with add permission only
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.add_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_permission_change_denied(self):
-    #     """ Check correct permission for delete
-
-    #     Attempt to delete as user with change permission only
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.change_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 403
-
-
-    # @pytest.mark.skip(reason="currently only able to add via admin interface")
-    # def test_organization_auth_delete_has_permission(self):
-    #     """ Check correct permission for delete
-
-    #     Delete item as user with delete permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse('API:_api_organization', kwargs={'pk': self.item.id})
-
-
-    #     client.force_login(self.delete_user)
-    #     response = client.delete(url, data={'device': 'device'})
-
-    #     assert response.status_code == 302 and response.url == reverse('API:_api_orgs')

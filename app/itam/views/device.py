@@ -3,6 +3,7 @@ import markdown
 
 from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -35,6 +36,15 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
     context_object_name = "devices"
 
     paginate_by = 10
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
+
+        return context
+
 
     def get_queryset(self):
 
@@ -70,7 +80,6 @@ class View(OrganizationPermission, generic.UpdateView):
     paginate_by = 10
 
 
-
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
@@ -91,10 +100,21 @@ class View(OrganizationPermission, generic.UpdateView):
             context['operating_system'] = OperatingSystemForm(prefix='operating_system')
 
 
-        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])[:50]
+        softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
+        softwares = Paginator(softwares, 10)
+
         context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
 
-        context['softwares'] = softwares
+        if hasattr(self.request.GET, 'page'):
+
+            context['page_number'] = int(self.request.GET.get("page"))
+
+        else:
+             context['page_number'] = 1
+
+        context['page_obj'] = softwares.get_page(context['page_number'])
+
+        context['softwares'] = softwares.page(context['page_number']).object_list
 
         context['notes_form'] = AddNoteForm(prefix='note')
 
@@ -114,7 +134,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         return context
 
-    @method_decorator(auth_decorator.permission_required("itam.change_device", raise_exception=True))
+
     def post(self, request, *args, **kwargs):
 
         device = Device.objects.get(pk=self.kwargs['pk'])
@@ -131,22 +151,25 @@ class View(OrganizationPermission, generic.UpdateView):
 
         if operating_system.is_bound and operating_system.is_valid():
 
-            operating_system.instance.organization = device.organization
-            operating_system.instance.device = device
+            if request.user.has_perm('itam.change_device'):
 
-            operating_system.save()
+                operating_system.instance.organization = device.organization
+                operating_system.instance.device = device
+
+                operating_system.save()
 
 
         notes = AddNoteForm(request.POST, prefix='note')
 
         if notes.is_bound and notes.is_valid() and notes.instance.note != '':
 
-            notes.instance.organization = device.organization
-            notes.instance.device = device
-            notes.instance.usercreated = request.user
+            if request.user.has_perm('core.add_notes'):
 
-            notes.save()
+                notes.instance.organization = device.organization
+                notes.instance.device = device
+                notes.instance.usercreated = request.user
 
+                notes.save()
 
 
         return super().post(request, *args, **kwargs)
@@ -310,5 +333,28 @@ class Delete(OrganizationPermission, generic.DeleteView):
         context = super().get_context_data(**kwargs)
 
         context['content_title'] = 'Delete ' + self.object.name
+
+        return context
+
+
+class Change(OrganizationPermission, generic.UpdateView):
+    model = Device
+    permission_required = [
+        'itam.change_device',
+    ]
+    template_name = 'form.html.j2'
+
+    form_class = DeviceForm
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('ITAM:_device_view', args=(self.kwargs['pk'],))
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit ' + self.object.name
 
         return context

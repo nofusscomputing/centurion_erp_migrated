@@ -3,11 +3,78 @@
 {% block title %}Devices{% endblock %}
 {% block content_header_icon %}{% endblock %}
 
-{% block body %}
+{% block content %}
 
+<style>
+
+a.status_icon {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    /*background-color: aqua;*/
+}
+
+span.status_icon {
+   /* display: inline-block;*/
+    height: 30px;
+    line-height: 30px;
+    /*background-color: aqua;*/
+    width: auto;
+    align-items: center;
+    /*position: relative;*/
+    vertical-align: middle; padding: auto; margin: 0px
+}
+
+.status_icon_ok svg {
+    fill: #319c3a;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 11px;
+    /*background-color: #c7e2ca;*/
+}
+
+.status_icon_warn svg {
+    fill: #cf9925;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 11px;
+    /*background-color: #ffefc5;*/
+}
+
+.status_icon_bad svg {
+    fill: #cf3025;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 11px;
+    /*background-color: #ffefc5;*/
+}
+
+.status_icon_ukn svg {
+    fill: #999;
+    width: 22px;
+    height: 22px;
+    border: none;
+    border-radius: 11px;
+    /*background-color: #e9e9e9;*/
+}
+
+</style>
 <input type="button" value="New Device" onclick="window.location='{% url 'ITAM:_device_add' %}';">
 <table class="data">
     <tr>
+        <th style="width: 50px;">&nbsp;</th>
         <th>Name</th>
         <th>Device Type</th>
         <th>Manufacturer</th>
@@ -17,7 +84,29 @@
     </tr>
     {% for device in devices %}
     <tr>
-        <td><a href="{% url 'ITAM:_device_view' pk=device.id %}">{{ device.name }}</a></td>
+        <td>
+            <span class="status_icon status_icon_ok">
+            {% if device.status == 'OK' %}
+            <span class="status_icon status_icon_ok">
+                {% include 'icons/status_ok.svg' %}
+            </span>
+            {% elif device.status == 'WARN' %}
+            <span class="status_icon status_icon_warn">
+                {% include 'icons/status_ok.svg' %}
+            </span>
+            {% elif device.status == 'BAD' %}
+            <span class="status_icon status_icon_bad">
+                {% include 'icons/status_bad.svg' %}
+            </span>
+            {% else %}
+            <span class="status_icon status_icon_ukn">
+                {% include 'icons/status_unknown.svg' %}
+            </span>
+            {% endif %}
+        </td>
+        <td>   
+            <a href="{% url 'ITAM:_device_view' pk=device.id %}">{{ device.name }}</a>
+        </td>
         <td>
         {% if device.device_type %}
             {{ device.device_type }}

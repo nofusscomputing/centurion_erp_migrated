@@ -5,8 +5,12 @@
         "!python"
     ],
     "python.testing.pytestArgs": [
+        // "-v",
+        // "--cov",
+        // "--cov-report xml",
         "app"
     ],
-    "python.testing.unittestEnabled": true,
+    "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "testing.coverageToolbarEnabled": true,
 }

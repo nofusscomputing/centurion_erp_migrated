@@ -2,26 +2,12 @@
 
 {% block title %}Team - {{ team.team_name }}{% endblock %}
 
-{% block body%}
+{% block content %}
 <form method="post">
   {% csrf_token %}
-  <div>
-  <input name="organization" id="id_organization" type="hidden" value="{{ organization.id }}">
-    <section class="content-header">
-      <fieldset><label>Name</label><input name="name" required id="id_name" type="text" value="{{ team.team_name }}" /></fieldset>
-      <fieldset><label>Created</label><input name="created" type="text" value="{{ team.created }}" readonly /></fieldset>
-      <fieldset><label>Modified</label><input name="modified" type="text" value="{{ team.modified }}" readonly /></fieldset>
-      <fieldset><label>Permissions</label>
-        <select name="permissions" id="id_permissions" style="height: 200px;" multiple>
-          {% for permission in permissions %}
-            {% if 'administration' not in permission.content_type|lower and 'authorization' not in permission.content_type|lower and 'content types' not in permission.content_type|lower and 'session' not in permission.content_type|lower and 'python social auth' not in permission.content_type|lower and 'add_organization' not in permission.codename|lower and 'delete_organization' not in permission.codename|lower %}
-            <option value="{{ permission.id }}" {% for team_permission in team.permissions.all %}{% if permission.id == team_permission.id %}selected{% endif %}{% endfor %}>{{ permission.content_type }} | {{ permission.name }}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
-      </fieldset>
-      </section>
-      </div>
+
+  {{ form.as_div }}
+
       {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
       <input style="display:unset;" type="submit" value="Submit">
   </form>

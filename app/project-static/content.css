@@ -1,3 +1,77 @@
+/*******************************************************************************
+
+refactored
+
+*******************************************************************************/
+
+
+#content-body form div label {
+  display: inline-block;
+  line-height: inherit;
+  text-align: right;
+  width: 200px;
+}
+
+
+#content-body form div .helptext {
+  color: #999;
+  display: inline;
+  font-size: 12px;
+
+}
+
+#content-body form div input[type=text],
+#content-body form div select {
+  background-color: #fff;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: inherit;
+  height: 30px;
+  line-height: inherit;
+  width: 400px;
+}
+
+#content-body form#dynamic-form {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  line-height: 30px;
+  padding: 10px;
+  /* text-align: center; */
+  text-align: right;
+  width: 650px;
+}
+
+
+#content-body form#dynamic-form div {
+  align-items: center;
+  display: block;
+  line-height: inherit;
+  justify-content: center;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+}
+
+
+
+input[type=button],
+input[type=submit] {
+  background-color: #177ee6;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  height: 30px;
+  margin: 10px;
+}
+/*******************************************************************************
+
+EoF refactored
+
+*******************************************************************************/
+
+
 main section a {
 
   color: #177ee6;
@@ -21,73 +95,23 @@ article div {
   flex-wrap: wrap;
 }
 
-article div form {
-  /* background-color: #00ff00; */
-  display: block;
-  /* text-align: center; */
-  align-content: center;
-  align-items: center;
-  /* justify-content: center; */
-  /* display: block; */
-  /* flex-wrap: wrap; */
-  /* for horizontal aligning of child divs */
-  justify-content: center;
-  /* for vertical aligning */
-  /* align-items: center; */
-  width: 650px;
-}
 
-article div form div {
-  /* background-color: #0000ff; */
-  /* display:inline-flexbox; */
-  /* width: 100%; */
-  /* display: block; */
-  width: 650px;
-  line-height: 30px;
-  /* align-items: center; */
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  display: inline-block;
-
-}
-
-
-article div form div label {
-  width: 100px;
-  /* display: block; */
-}
-
-article div form div input {
-  width: 200px;
-  /* display: block; */
-}
-
-
-input[type=button] {
-  color: #fff;
-  background-color: blue;
-  height: 30px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 input[type=checkbox] {
   visibility: hidden;
-  font-size: 25px;
+  font-size: 20px;
 }
 
 input[type=checkbox]:after,
 input[type=checkbox]::after {
   content: " ";
-  background-color: blue;
+  background-color: #177ee6;
   display: inline-block;
   text-align: center;
   color: #fff;
-  height: 30px;
-  line-height: 30px;
-  width: 30px;
+  height: 20px;
+  line-height: 20px;
+  width: 20px;
   visibility: visible;
   border-radius: 15px;
 }
@@ -97,14 +121,7 @@ input[type=checkbox]:checked::after {
   content: "\2714";
 }
 
-input[type=submit] {
-  color: #fff;
-  background-color: blue;
-  height: 30px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
+
 
 
 /* Style the tab */

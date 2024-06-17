@@ -73,6 +73,12 @@ Docker Container:
     #     - '{dockerfile,dockerfile.j2}'
     #   when: always
 
+    - if:
+        $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
+          &&
+        $CI_COMMIT_BRANCH == "development"
+      when: never
+
     - if: # condition_not_master_or_dev_push
         $CI_COMMIT_BRANCH != "master" && 
         $CI_COMMIT_BRANCH != "development" && 

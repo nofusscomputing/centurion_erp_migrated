@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+import sys
 
 from pathlib import Path
 from split_settings.tools import optional, include
@@ -23,20 +24,33 @@ SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 BUILD_REPO = os.getenv('CI_PROJECT_URL')
 BUILD_SHA = os.getenv('CI_COMMIT_SHA')
 BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
-
+DOCS_ROOT = 'https://nofusscomputing.com/projects/django-template/user/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b*41-$afq0yl)1e#qpz^-nbt-opvjwb#avv++b9rfdxa@b55sk'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+#
+# Defaults
+#
+ALLOWED_HOSTS = [ '*' ]          # Site host to serve
+DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
+SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
+SECRET_KEY = None                # You need to generate this
+SESSION_COOKIE_AGE = 1209600     # Age the session cookie should live for in seconds. 
+SSO_ENABLED = False              # Enable SSO
+SSO_LOGIN_ONLY_BACKEND = None    # Use specified SSO backend as the ONLY method to login. (builting login form will not be used)
+TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
-ALLOWED_HOSTS = [ '*' ]
 
 
 # Application definition
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS =    # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECURE_HSTS_SECONDS
+# SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
+# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_HOST =        # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-host
+# SESSION_COOKIE_SECURE = True
+# USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -100,7 +114,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
@@ -209,8 +223,33 @@ if API_ENABLED:
     }
 
     SPECTACULAR_SETTINGS = {
-        'TITLE': 'Your Project API',
-        'DESCRIPTION': 'Your project description',
+        'TITLE': 'ITSM API',
+        'DESCRIPTION': """This UI is intended to serve as the API documentation.
+
+## Authentication
+
+Authentication with the api is via Token. The token is placed in header `Authorization` with a value of `Token <Your Token>`.
+
+## Token Generation
+
+To generate a token, run `python3 manage.py drf_create_token <username>` from the CLI.
+
+## Examples
+
+curl:
+- Simple API Request: `curl -X GET <url>/api/ -H 'Authorization: Token <token>'`
+
+- Post an Inventory File:
+
+    ``` bash
+    curl --header "Content-Type: application/json" \\
+    --header "Authorization: Token <token>" \\
+    --request POST \\
+    --data @<path to inventory file>/<file name>.json \\
+    <url>/api/device/inventory
+    ```
+
+        """,
         'VERSION': '1.0.0',
         'SERVE_INCLUDE_SCHEMA': False,
 
@@ -220,12 +259,34 @@ if API_ENABLED:
     }
 
 DATETIME_FORMAT = 'j N Y H:i:s'
+#
+# Settings for unit tests
+#
 
+RUNNING_TESTS = 'test' in str(sys.argv)
+
+if RUNNING_TESTS:
+    SECRET_KEY = 'django-insecure-tests_are_being_run'
+
+#
+# Load user settings files
+#
 if os.path.isdir(SETTINGS_DIR):
 
     settings_files = os.path.join(SETTINGS_DIR, '*.py')
     include(optional(settings_files))
 
+#
+# Settings to reset to prevent user from over-riding
+#
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+CSRF_TRUSTED_ORIGINS = [
+    SITE_URL,
+    *TRUSTED_ORIGINS
+]
 
 if DEBUG:
     INSTALLED_APPS += [
@@ -245,3 +306,25 @@ if DEBUG:
         'information.apps.InformationConfig',
         'project_management.apps.ProjectManagementConfig',
     ]
+
+
+if SSO_ENABLED:
+
+    if SSO_LOGIN_ONLY_BACKEND:
+        LOGIN_URL = f'/sso/login/{SSO_LOGIN_ONLY_BACKEND}/'
+
+    AUTHENTICATION_BACKENDS += (
+        *SSO_BACKENDS,
+    )
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social_core.pipeline.social_auth.social_details',
+        'social_core.pipeline.social_auth.social_uid',
+        'social_core.pipeline.social_auth.social_user',
+        'social_core.pipeline.user.get_username',
+        'social_core.pipeline.social_auth.associate_by_email',
+        'social_core.pipeline.user.create_user',
+        'social_core.pipeline.social_auth.associate_user',
+        'social_core.pipeline.social_auth.load_extra_data',
+        'social_core.pipeline.user.user_details',
+    )

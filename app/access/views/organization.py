@@ -5,6 +5,8 @@ from django.views import generic
 from access.mixin import *
 from access.models import *
 
+from access.forms.organization import OrganizationForm
+
 
 
 class IndexView(OrganizationPermission, generic.ListView):
@@ -28,13 +30,26 @@ class IndexView(OrganizationPermission, generic.ListView):
 
 
 class View(OrganizationPermission, generic.UpdateView):
+
+    context_object_name = "organization"
+
+    form_class = OrganizationForm
+
     model = Organization
-    permission_required = [
-        'access.view_organization',
-        'access.change_organization',
-    ]
+
     template_name = "access/organization.html.j2"
-    fields = ["name", 'id']
+
+    def get(self, request, *args, **kwargs):
+        
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.view_organization' ]):
+
+            raise PermissionDenied('You are not part of this organization')
+
+        return super().get(request, *args, **kwargs)
 
 
     def get_success_url(self, **kwargs):
@@ -48,7 +63,7 @@ class View(OrganizationPermission, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['organization'] = Organization.objects.get(pk=self.kwargs['pk'])
+        context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
 
         context['teams'] = Team.objects.filter(organization=self.kwargs['pk'])
 
@@ -58,8 +73,15 @@ class View(OrganizationPermission, generic.UpdateView):
         return context
 
 
-    @method_decorator(auth_decorator.permission_required("access.change_organization", raise_exception=True))
     def post(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+
+                return self.handle_no_permission()
+
+        if not self.permission_check(request, [ 'access.change_organization' ]):
+
+            raise PermissionDenied('You are not part of this organization')
 
         return super().post(request, *args, **kwargs)
 

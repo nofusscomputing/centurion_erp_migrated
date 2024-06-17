@@ -7,9 +7,12 @@ from django.forms import ValidationError
 from access.fields import *
 from access.models import TenancyObject
 
+from app.helpers.merge_software import merge_software
+
 from core.mixin.history_save import SaveHistory
 
-from itam.models.device import Device
+from itam.models.device import Device, DeviceSoftware
+from itam.models.software import Software, SoftwareVersion
 
 
 
@@ -113,6 +116,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
 
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.parent
+
+
     def render_config(self) -> str:
 
         config: dict = dict()
@@ -125,13 +136,48 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
             config.update(self.config)
 
+        softwares = ConfigGroupSoftware.objects.filter(config_group=self.id)
+
+        software_actions = {
+            "software": []
+        }
+
+        for software in softwares:
+
+            if software.action:
+            
+                if int(software.action) == 1:
+
+                    state = 'present'
+
+                elif int(software.action) == 0:
+
+                    state = 'absent'
+
+                software_action = {
+                    "name": software.software.slug,
+                    "state": state
+                }
+
+
+                if software.version:
+                    software_action['version'] = software.version.name
+
+                software_actions['software'] = software_actions['software'] + [ software_action ]
+
+        if len(software_actions['software']) > 0: # don't add empty software as it prevents parent software from being added
+
+            if 'software' not in config.keys():
+
+                config['software'] = []
+
+            config['software'] = merge_software(config['software'], software_actions['software'])
+
         return json.dumps(config)
 
 
 
     def save(self, *args, **kwargs):
-
-        self.is_global = False
 
         if self.config:
 
@@ -142,7 +188,12 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
         super().save(*args, **kwargs)
 
+
     def __str__(self):
+
+        if self.parent:
+
+            return f'{self.parent.name} > {self.name}'
 
         return self.name
 
@@ -177,3 +228,66 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
         null = False,
         blank= False
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.group
+
+
+
+
+
+class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
+    """ A way to configure software to install/remove per config group """
+
+    class Meta:
+        ordering = [
+            '-action',
+            'software'
+        ]
+
+
+    config_group = models.ForeignKey(
+        ConfigGroups,
+        on_delete=models.CASCADE,
+        default = None,
+        null = False,
+        blank= False
+    )
+
+
+    software = models.ForeignKey(
+        Software,
+        on_delete=models.CASCADE,
+        default = None,
+        null = False,
+        blank= False
+    )
+
+    action = models.CharField(
+        max_length=1,
+        choices=DeviceSoftware.Actions,
+        default=None,
+        null=True,
+        blank = True,
+    )
+
+    version = models.ForeignKey(
+        SoftwareVersion,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+    )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.config_group
+
+
