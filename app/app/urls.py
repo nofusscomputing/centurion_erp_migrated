@@ -75,11 +75,12 @@ if settings.DEBUG:
         # Apps Under Development
         path("itim/", include("itim.urls")),
         path("information/", include("information.urls")),
-        path("project_management/", include("project_management.urls")),
     ]
 
 # must be after above
 urlpatterns += [
+
+    path("project_management/", include("project_management.urls")),
 
     path("settings/", include("settings.urls")),
 
