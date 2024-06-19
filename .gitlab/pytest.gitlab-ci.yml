@@ -1,15 +1,13 @@
 
 
-Unit:
+.pytest:
   stage: test
   image: python:3.11-alpine3.19
   needs: []
-  script:
+  before_script:
     - pip install -r requirements.txt
     - pip install -r requirements_test.txt
     - cd app
-    - pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/unit.JUnit.xml
-  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     expire_in: "30 days"
     when: always
@@ -21,9 +19,6 @@ Unit:
         - artifacts/*.JUnit.xml
     paths:
       - artifacts/
-  environment: 
-    name: PyTest Coverage Report
-    url: https://nofusscomputing.gitlab.io/-/projects/django_template/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html 
   rules:
 
     - if: # Occur on merge
@@ -38,3 +33,12 @@ Unit:
 
     - when: never
 
+
+Unit:
+  extends: .pytest
+  script:
+    - pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  environment: 
+    name: Unit Test Coverage Report
+    url: https://nofusscomputing.gitlab.io/-/projects/django_template/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html
