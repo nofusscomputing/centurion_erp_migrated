@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Unit tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
+User Interface (UI) test are written to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
+
 
 ## Writing Tests
 
@@ -16,6 +18,8 @@ We use class based tests. Each class will require a `setUpTestData` method for t
 naming of test classes is in `CamelCase` in format `<Model Name><what's being tested>` for example the class name for device model history entry tests would be `DeviceHistory`.
 
 Test setup is written in a method called `setUpTestData` and is to contain the setup for all tests within the test class.
+
+Test cases themselves are written within the test class within an appropriately and uniquely named method. Each test case is to test **one** and only one item.
 
 Example of a model history test class.
 
@@ -67,17 +71,15 @@ Items to test include, and are not limited to:
 
 - CRUD permissions admin site
 
-- CRUD permissions api site
+- CRUD permissions api site - [ModelPermissions (API)](./api/tests/model_permissions_api.md)
 
-- CRUD permissions main site
+- CRUD permissions main site - [ModelPermissions](./api/tests/model_permissions.md)
 
-- can only access organization object
+- can only access organization object - [ModelPermissions](./api/tests/model_permissions.md), [ModelPermissions (API)](./api/tests/model_permissions_api.md)
 
 - can access global object (still to require model CRUD permission)
 
-- model
-
-- history
+- history - [History Entries](./api/tests/model_history.md), [History Permissions](./api/tests/model_history_permissions.md)
 
     - saves history with parent pk and parent class
 
@@ -96,6 +98,12 @@ Items to test include, and are not limited to:
         history should now be auto saved as long as class `core.mixin.history_save.SaveHistory` is inherited by model.
 
     - history is deleted when item deleted if `parent_pk=None` or if has `parent_pk` deletes history on parent pk being deleted.
+
+- model - _any customizations_
+
+- notes - [Notes Permissions](./api/tests/notes_permissions.md)
+
+    _applicable if notes are able to be added to an item._
 
 
 ## Running Tests
