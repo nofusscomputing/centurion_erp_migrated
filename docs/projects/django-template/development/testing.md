@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Unit tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
+User Interface (UI) test are written to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
+
 
 ## Writing Tests
 

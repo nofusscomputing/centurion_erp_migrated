@@ -12,9 +12,6 @@
     expire_in: "30 days"
     when: always
     reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: artifacts/coverage.xml
       junit:
         - artifacts/*.JUnit.xml
     paths:
@@ -39,6 +36,46 @@ Unit:
   script:
     - pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    expire_in: "30 days"
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: artifacts/coverage.xml
+      junit:
+        - artifacts/*.JUnit.xml
+    paths:
+      - artifacts/
   environment: 
     name: Unit Test Coverage Report
     url: https://nofusscomputing.gitlab.io/-/projects/django_template/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html
+
+
+UI:
+  extends: .pytest
+  script:
+    - apk update
+    - apk add chromium-chromedriver
+    - pytest --junit-xml=../artifacts/ui.JUnit.xml **/tests/ui
+  artifacts:
+    expire_in: "30 days"
+    when: always
+    reports:
+      junit:
+        - artifacts/*.JUnit.xml
+    paths:
+      - artifacts/
+  rules:
+    - if: # Occur on merge
+        $CI_COMMIT_BRANCH
+          &&
+        (
+          $CI_PIPELINE_SOURCE == "push"
+            ||
+          $CI_PIPELINE_SOURCE == "web"
+        )
+      allow_failure: true
+      when: always
+
+    - when: never
