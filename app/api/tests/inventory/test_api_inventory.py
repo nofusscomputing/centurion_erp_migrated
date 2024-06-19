@@ -1,3 +1,4 @@
+import datetime
 import pytest
 import unittest
 
@@ -11,8 +12,11 @@ from unittest.mock import patch
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.views.mixin import OrganizationPermissionAPI
+from api.serializers.inventory import Inventory
 
-from itam.models.device import Device
+from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
+from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
+from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
 from settings.models.user_settings import UserSettings
 
@@ -41,7 +45,17 @@ class InventoryAPI(TestCase):
                 "name": "software_name",
                 "category": "category_name",
                 "version": "1.2.3"
-            }
+            },
+            {
+                "name": "software_name_not_semver",
+                "category": "category_name",
+                "version": "2024.4"
+            },
+            {
+                "name": "software_name_semver_contained",
+                "category": "category_name",
+                "version": "1.2.3-rc1"
+            },
         ]
     }
 
@@ -51,11 +65,11 @@ class InventoryAPI(TestCase):
     def setUpTestData(self):
         """Setup Test
 
-        1. Create an organization for user and item
-        . create an organization that is different to item
-        2. Create a device
-        3. create teams with each permission: view, add, change, delete
-        4. create a user per team
+        1. Create an organization for user
+        2. Create a team for user with correct permissions
+        3. add user to the teeam
+        4. upload the inventory
+        5. conduct queries for tests
         """
 
         organization = Organization.objects.create(name='test_org')
@@ -85,6 +99,52 @@ class InventoryAPI(TestCase):
 
         add_user_settings.save()
 
+        teamuser = TeamUsers.objects.create(
+            team = add_team,
+            user = self.add_user
+        )
+
+        # upload the inventory
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        self.response = client.post(url, data=self.inventory, content_type='application/json')
+
+
+        self.device = Device.objects.get(name=self.inventory['details']['name'])
+
+        self.operating_system = OperatingSystem.objects.get(name=self.inventory['os']['name'])
+
+        self.operating_system_version = OperatingSystemVersion.objects.get(name=self.inventory['os']['version_major'])
+
+        self.device_operating_system = DeviceOperatingSystem.objects.get(version=self.inventory['os']['version'])
+
+        self.software = Software.objects.get(name=self.inventory['software'][0]['name'])
+
+        self.software_category = SoftwareCategory.objects.get(name=self.inventory['software'][0]['category'])
+
+        self.software_version = SoftwareVersion.objects.get(
+            name = self.inventory['software'][0]['version'],
+            software = self.software,
+        )
+
+        self.software_not_semver = Software.objects.get(name=self.inventory['software'][1]['name'])
+
+        self.software_version_not_semver = SoftwareVersion.objects.get(
+            name = self.inventory['software'][1]['version'],
+            software = self.software_not_semver
+        )
+
+        self.software_is_semver = Software.objects.get(name=self.inventory['software'][2]['name'])
+
+        self.software_version_is_semver = SoftwareVersion.objects.get(
+            software = self.software_is_semver
+        )
+
+        self.device_software = DeviceSoftware.objects.get(device=self.device,software=self.software)
+
+
 
 
     @patch.object(OrganizationPermissionAPI, 'permission_check')
@@ -106,31 +166,103 @@ class InventoryAPI(TestCase):
         assert permission_check.called
 
 
-    @pytest.mark.skip(reason="to be written")
+
+    @patch.object(Inventory, '__init__')
+    def test_inventory_serializer_inventory_called(self, serializer):
+        """ Inventory Upload checks permissions
+        
+        Function 'permission_check' is the function that checks permissions
+
+        As the non-established way of authentication an API permission is being done
+        confimation that the permissions are still checked is required.
+        """
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.inventory, content_type='application/json')
+
+        assert serializer.called
+
+
+
+    @patch.object(Inventory.Details, '__init__')
+    def test_inventory_serializer_inventory_details_called(self, serializer):
+        """ Inventory Upload uses Inventory serializer
+
+        Details Serializer is called for inventory details dict.
+        """
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.inventory, content_type='application/json')
+
+        assert serializer.called
+
+
+
+    @patch.object(Inventory.OperatingSystem, '__init__')
+    def test_inventory_serializer_inventory_operating_system_called(self, serializer):
+        """ Inventory Upload uses Inventory serializer
+
+        Operating System Serializer is called for inventory Operating system dict.
+        """
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.inventory, content_type='application/json')
+
+        assert serializer.called
+
+
+
+    @patch.object(Inventory.Software, '__init__')
+    def test_inventory_serializer_inventory_software_called(self, serializer):
+        """ Inventory Upload uses Inventory serializer
+
+        Software Serializer is called for inventory software list.
+        """
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.inventory, content_type='application/json')
+
+        assert serializer.called
+
+
+
     def test_api_inventory_device_added(self):
         """ Device is created """
-        pass
+
+        assert self.device.name == self.inventory['details']['name']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_operating_system_added(self):
         """ Operating System is created """
-        pass
+
+        assert self.operating_system.name == self.inventory['os']['name']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_operating_system_version_added(self):
         """ Operating System version is created """
-        pass
+
+        assert self.operating_system_version.name == self.inventory['os']['version_major']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_device_has_operating_system_added(self):
         """ Operating System version linked to device """
-        pass
+
+        assert self.device_operating_system.version == self.inventory['os']['version']
 
 
 
@@ -156,66 +288,74 @@ class InventoryAPI(TestCase):
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_category_added(self):
         """ Software category exists """
-        pass
+
+        assert self.software_category.name == self.inventory['software'][0]['category']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_added(self):
         """ Test software exists """
-        pass
+
+        assert self.software.name == self.inventory['software'][0]['name']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_category_linked_to_software(self):
         """ Software category linked to software """
-        pass
+
+        assert self.software.category == self.software_category
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_version_added(self):
         """ Test software version exists """
-        pass
+
+        assert self.software_version.name == self.inventory['software'][0]['version']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_version_returns_semver(self):
         """ Software Version from inventory returns semver if within version string """
-        pass
+        
+        assert self.software_version_is_semver.name == str(self.inventory['software'][2]['version']).split('-')[0]
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_software_version_returns_original_version(self):
         """ Software Version from inventory returns inventoried version if no semver found """
-        pass
+
+        assert self.software_version_not_semver.name == self.inventory['software'][1]['version']
 
 
 
-    @pytest.mark.skip(reason="to be written")
+
     def test_api_inventory_software_version_linked_to_software(self):
         """ Test software version linked to software it belongs too """
-        pass
+
+        assert self.software_version.software == self.software
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_device_has_software_version(self):
         """ Inventoried software is linked to device and it's the corret one"""
-        pass
+
+        assert self.software_version.name == self.inventory['software'][0]['version']
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_device_software_has_installed_date(self):
         """ Inventoried software version has install date """
-        pass
+
+        assert self.device_software.installed is not None
+
+
+
+    def test_api_inventory_device_software_installed_date_type(self):
+        """ Inventoried software version has install date """
+
+        assert type(self.device_software.installed) is datetime.datetime
 
 
 
@@ -226,17 +366,47 @@ class InventoryAPI(TestCase):
 
 
 
-    @pytest.mark.skip(reason="to be written")
+    def test_api_inventory_valid_status_ok_existing_device(self):
+        """ Successful inventory upload returns 200 for existing device"""
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.inventory, content_type='application/json')
+
+        assert response.status_code == 200
+
+
+
     def test_api_inventory_valid_status_created(self):
         """ Successful inventory upload returns 201 """
-        pass
+
+        assert self.response.status_code == 201
 
 
 
-    @pytest.mark.skip(reason="to be written")
     def test_api_inventory_invalid_status_bad_request(self):
         """ Incorrectly formated inventory upload returns 400 """
-        pass
+
+        client = Client()
+        url = reverse('API:_api_device_inventory')
+
+        mod_inventory = self.inventory.copy()
+
+        mod_inventory.update({
+            'details': {
+                'name': 'test_api_inventory_invalid_status_bad_request'
+            },
+            'software': {
+                'not_within_a': 'list'
+            }
+        })
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=mod_inventory, content_type='application/json')
+
+        assert response.status_code == 400
 
 
 
