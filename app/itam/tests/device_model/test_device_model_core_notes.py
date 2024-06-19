@@ -8,6 +8,6 @@ from core.tests.abstract.notes_permissions import NotesPermissions
 
 
 
-class OperatingSystemNotes(TestCase, NotesPermissions):
+class DeviceModelNotes(TestCase, NotesPermissions):
 
     pass

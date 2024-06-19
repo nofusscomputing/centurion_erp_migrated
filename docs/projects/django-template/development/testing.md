@@ -99,6 +99,10 @@ Items to test include, and are not limited to:
 
 - model - _any customizations_
 
+- notes - [Notes Permissions](./api/tests/notes_permissions.md)
+
+    _applicable if notes are able to be added to an item._
+
 
 ## Running Tests
 

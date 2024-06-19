@@ -124,6 +124,8 @@ nav:
 
           - projects/django-template/development/api/tests/model_history_permissions.md
 
+          - projects/django-template/development/api/tests/notes_permissions.md
+
     - User:
 
       - projects/django-template/user/index.md
