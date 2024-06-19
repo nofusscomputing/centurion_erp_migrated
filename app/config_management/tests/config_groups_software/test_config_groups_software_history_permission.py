@@ -14,9 +14,10 @@ from access.models import Organization, Team, TeamUsers, Permission
 from config_management.models.groups import ConfigGroups
 
 from core.models.history import History
+from core.tests.abstract.history_permissions import HistoryPermissions
 
 
-class ConfigGroupSoftwaresHistoryPermissions(TestCase):
+class ConfigGroupSoftwaresHistoryPermissions(TestCase, HistoryPermissions):
 
 
     item_model = ConfigGroups
@@ -105,70 +106,3 @@ class ConfigGroupSoftwaresHistoryPermissions(TestCase):
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-    @pytest.mark.skip(reason="figure out best way to test")
-    def test_auth_view_history_user_anon_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view as anon user
-        """
-
-        client = Client()
-        url = reverse(self.namespace + self.name_view, kwargs={'model_name': self.history_model_name, 'model_pk': self.item.id})
-
-        response = client.get(url)
-
-        assert response.status_code == 302 and response.url.startswith('/account/login')
-
-
-    @pytest.mark.skip(reason="figure out best way to test")
-    def test_auth_view_history_no_permission_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user missing permission
-        """
-
-        client = Client()
-        url = reverse(self.namespace +  self.name_view, kwargs={'model_name': self.history_model_name, 'model_pk': self.item.id})
-
-
-        client.force_login(self.no_permissions_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    @pytest.mark.skip(reason="figure out best way to test")
-    def test_auth_view_history_different_organizaiton_denied(self):
-        """ Check correct permission for view
-
-        Attempt to view with user from different organization
-        """
-
-        client = Client()
-        url = reverse(self.namespace +  self.name_view, kwargs={'model_name': self.history_model_name, 'model_pk': self.item.id})
-
-
-        client.force_login(self.different_organization_user)
-        response = client.get(url)
-
-        assert response.status_code == 403
-
-
-    @pytest.mark.skip(reason="figure out best way to test")
-    def test_auth_view_history_has_permission(self):
-        """ Check correct permission for view
-
-        Attempt to view as user with view permission
-        """
-
-        client = Client()
-        url = reverse(self.namespace +  self.name_view, kwargs={'model_name': self.history_model_name, 'model_pk': self.item.id})
-
-
-        client.force_login(self.view_user)
-        response = client.get(url)
-
-        assert response.status_code == 200

@@ -17,6 +17,8 @@ naming of test classes is in `CamelCase` in format `<Model Name><what's being te
 
 Test setup is written in a method called `setUpTestData` and is to contain the setup for all tests within the test class.
 
+Test cases themselves are written within the test class within an appropriately and uniquely named method. Each test case is to test **one** and only one item.
+
 Example of a model history test class.
 
 ``` py
@@ -67,17 +69,15 @@ Items to test include, and are not limited to:
 
 - CRUD permissions admin site
 
-- CRUD permissions api site
+- CRUD permissions api site - [ModelPermissions (API)](./api/tests/model_permissions_api.md)
 
-- CRUD permissions main site
+- CRUD permissions main site - [ModelPermissions](./api/tests/model_permissions.md)
 
-- can only access organization object
+- can only access organization object - [ModelPermissions](./api/tests/model_permissions.md), [ModelPermissions (API)](./api/tests/model_permissions_api.md)
 
 - can access global object (still to require model CRUD permission)
 
-- model
-
-- history
+- history - [History Entries](./api/tests/model_history.md), [History Permissions](./api/tests/model_history_permissions.md)
 
     - saves history with parent pk and parent class
 
@@ -96,6 +96,8 @@ Items to test include, and are not limited to:
         history should now be auto saved as long as class `core.mixin.history_save.SaveHistory` is inherited by model.
 
     - history is deleted when item deleted if `parent_pk=None` or if has `parent_pk` deletes history on parent pk being deleted.
+
+- model - _any customizations_
 
 
 ## Running Tests
