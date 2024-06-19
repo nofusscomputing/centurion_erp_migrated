@@ -48,4 +48,6 @@ Models are tested using the following test cases:
 
 - [Notes Permissions](./notes_permissions.md)
 
+- [Tenancy Objects](./model_tenancy_object.md)
+
 The above test cases are common to alot of models and function of this application and are intended to be inherited by your test class.

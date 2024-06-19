@@ -86,6 +86,14 @@ nav:
 
           - projects/django-template/development/api/tests/index.md
 
+          - projects/django-template/development/api/tests/model_history.md
+
+          - projects/django-template/development/api/tests/model_history_child_item.md
+
+          - projects/django-template/development/api/tests/model_history_parent_item.md
+
+          - projects/django-template/development/api/tests/model_history_permissions.md
+
           - projects/django-template/development/api/tests/model_permissions.md
 
           - projects/django-template/development/api/tests/model_permissions_organization_manager.md
@@ -116,13 +124,7 @@ nav:
 
           - projects/django-template/development/api/tests/model_permission_api_view.md
 
-          - projects/django-template/development/api/tests/model_history.md
-
-          - projects/django-template/development/api/tests/model_history_child_item.md
-
-          - projects/django-template/development/api/tests/model_history_parent_item.md
-
-          - projects/django-template/development/api/tests/model_history_permissions.md
+          - projects/django-template/development/api/tests/model_tenancy_object.md
 
           - projects/django-template/development/api/tests/notes_permissions.md
 
