@@ -2,6 +2,7 @@
 import json
 import re
 
+from django.core.exceptions import ValidationError, PermissionDenied
 from django.http import Http404, JsonResponse
 from django.utils import timezone
 
@@ -15,6 +16,7 @@ from access.models import Organization
 
 from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.itam.inventory import InventorySerializer
+from api.serializers.inventory import Inventory
 
 from core.http.common import Http
 
@@ -33,7 +35,7 @@ class InventoryPermissions(OrganizationPermissionAPI):
 
         data = view.request.data
 
-        self.obj = Device.objects.get(slug=str(data['details']['name']).lower())
+        self.obj = Device.objects.get(slug=str(data.details.name).lower())
 
         return super().permission_check(request, view, obj=None)
 
@@ -76,68 +78,69 @@ this setting populated, no device will be created and the endpoint will return H
     )
     def post(self, request, *args, **kwargs):
 
-
-        data = json.loads(request.body)
-
-        device = None
-
-        self.default_organization = UserSettings.objects.get(user=request.user).default_organization
-
-        if Device.objects.filter(slug=str(data['details']['name']).lower()).exists():
-
-            self.obj = Device.objects.get(slug=str(data['details']['name']).lower())
-
-            device = self.obj
-
-
-        if not self.permission_check(request=request, view=self, obj=device):
-
-            raise Http404
-
-
-
-        status = Http.Status.BAD_REQUEST
-
-        device_operating_system = None
-        operating_system = None
-        operating_system_version = None
+        status = Http.Status.OK
+        response_data = 'OK'
 
         try:
+
+            data = json.loads(request.body)
+            data = Inventory(data)
+
+            device = None
+
+
+            self.default_organization = UserSettings.objects.get(user=request.user).default_organization
+
+            if Device.objects.filter(slug=str(data.details.name).lower()).exists():
+
+                self.obj = Device.objects.get(slug=str(data.details.name).lower())
+
+                device = self.obj
+
+
+            if not self.permission_check(request=request, view=self, obj=device):
+
+                raise Http404
+
+            device_operating_system = None
+            operating_system = None
+            operating_system_version = None
+
 
             app_settings = AppSettings.objects.get(owner_organization = None)
 
             if not device: # Create the device
 
                 device = Device.objects.create(
-                    name = data['details']['name'],
+                    name = data.details.name,
                     device_type = None,
-                    serial_number = data['details']['serial_number'],
-                    uuid = data['details']['uuid'],
+                    serial_number = data.details.serial_number,
+                    uuid = data.details.uuid,
                     organization = self.default_organization,
                 )
 
                 status = Http.Status.CREATED
 
 
-            if OperatingSystem.objects.filter( slug=data['os']['name'] ).exists():
+            if OperatingSystem.objects.filter( slug=data.operating_system.name ).exists():
 
-                operating_system = OperatingSystem.objects.get( slug=data['os']['name'] )
+                operating_system = OperatingSystem.objects.get( slug=data.operating_system.name )
 
             else: # Create Operating System
 
                 operating_system = OperatingSystem.objects.create(
-                    name = data['os']['name'],
+                    name = data.operating_system.name,
                     organization = self.default_organization,
                     is_global = True
                 )
 
 
-            if OperatingSystemVersion.objects.filter( name=data['os']['version_major'], operating_system=operating_system ).exists():
+            if OperatingSystemVersion.objects.filter( name=data.operating_system.version_major, operating_system=operating_system ).exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
                     organization = self.default_organization,
                     is_global = True,
-                    name = data['os']['version_major'],
+                    name = data.operating_system.version_major,
                     operating_system = operating_system
                 )
 
@@ -146,16 +149,16 @@ this setting populated, no device will be created and the endpoint will return H
                 operating_system_version = OperatingSystemVersion.objects.create(
                     organization = self.default_organization,
                     is_global = True,
-                    name = data['os']['version_major'],
+                    name = data.operating_system.version_major,
                     operating_system = operating_system,
                 )
 
 
-            if DeviceOperatingSystem.objects.filter( version=data['os']['version'], device=device, operating_system_version=operating_system_version ).exists():
+            if DeviceOperatingSystem.objects.filter( version=data.operating_system.version, device=device, operating_system_version=operating_system_version ).exists():
 
                 device_operating_system = DeviceOperatingSystem.objects.get(
                     device=device,
-                    version = data['os']['version'],
+                    version = data.operating_system.version,
                     operating_system_version = operating_system_version,
                 )
 
@@ -170,7 +173,7 @@ this setting populated, no device will be created and the endpoint will return H
                 device_operating_system = DeviceOperatingSystem.objects.create(
                     organization = self.default_organization,
                     device=device,
-                    version = data['os']['version'],
+                    version = data.operating_system.version,
                     operating_system_version = operating_system_version,
                     installdate = timezone.now()
                 )
@@ -195,7 +198,7 @@ this setting populated, no device will be created and the endpoint will return H
 
 
 
-            for inventory in list(data['software']):
+            for inventory in list(data.software):
 
                 software = None
                 software_category = None
@@ -204,10 +207,10 @@ this setting populated, no device will be created and the endpoint will return H
                 device_software = None
 
 
-                if SoftwareCategory.objects.filter( name = inventory['category'] ).exists():
+                if SoftwareCategory.objects.filter( name = inventory.category ).exists():
 
                     software_category = SoftwareCategory.objects.get(
-                        name = inventory['category']
+                        name = inventory.category
                     )
 
                 else: # Create Software Category
@@ -215,14 +218,14 @@ this setting populated, no device will be created and the endpoint will return H
                     software_category = SoftwareCategory.objects.create(
                         organization = software_category_organization,
                         is_global = True,
-                        name = inventory['category'],
+                        name = inventory.category,
                     )
 
 
-                if Software.objects.filter( name = inventory['name'] ).exists():
+                if Software.objects.filter( name = inventory.name ).exists():
 
                     software = Software.objects.get(
-                        name = inventory['name']
+                        name = inventory.name
                     )
 
                     if not software.category:
@@ -235,14 +238,14 @@ this setting populated, no device will be created and the endpoint will return H
                     software = Software.objects.create(
                         organization = software_organization,
                         is_global = True,
-                        name = inventory['name'],
+                        name = inventory.name,
                         category = software_category,
                     )
 
 
                 pattern = r"^(\d+:)?(?P<semver>\d+\.\d+(\.\d+)?)"
 
-                semver = re.search(pattern, str(inventory['version']), re.DOTALL)
+                semver = re.search(pattern, str(inventory.version), re.DOTALL)
 
 
                 if semver:
@@ -250,7 +253,7 @@ this setting populated, no device will be created and the endpoint will return H
                     semver = semver['semver']
 
                 else:
-                    semver = inventory['version']
+                    semver = inventory.version
 
 
                 if SoftwareVersion.objects.filter( name = semver, software = software ).exists():
@@ -328,15 +331,25 @@ this setting populated, no device will be created and the endpoint will return H
 
                     status = Http.Status.OK
 
+        except PermissionDenied as e:
+
+            status = Http.Status.FORBIDDEN
+            response_data = ''
+
+        except ValidationError as e:
+
+            status = Http.Status.BAD_REQUEST
+            response_data = e.message
 
         except Exception as e:
 
             print(f'An error occured{e}')
 
             status = Http.Status.SERVER_ERROR
+            response_data = 'Unknown Server Error occured'
 
 
-        return Response(data='OK',status=status)
+        return Response(data=response_data,status=status)
 
 
 

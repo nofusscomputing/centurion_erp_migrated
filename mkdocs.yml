@@ -76,6 +76,12 @@ nav:
 
           - projects/django-template/development/api/models/access_organization_permission_checking.md
 
+        - Serializers:
+
+          - projects/django-template/development/api/serializer/index.md
+
+          - projects/django-template/development/api/serializer/inventory.md
+
         - Unit Testing:
 
           - projects/django-template/development/api/tests/index.md
