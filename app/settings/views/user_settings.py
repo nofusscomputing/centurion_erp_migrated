@@ -5,6 +5,7 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from settings.forms.user_settings import UserSettingsForm
 from settings.models.user_settings import UserSettings
 
 
@@ -13,9 +14,7 @@ class View(generic.UpdateView):
 
     context_object_name = "settings"
 
-    fields = [
-        'default_organization',
-    ]
+    form_class = UserSettingsForm
 
     model = UserSettings
 
