@@ -56,9 +56,14 @@ class AuthToken(models.Model):
 
     def generate(self) -> str:
 
+        return str(hashlib.sha256(str(self.randomword()).encode('utf-8')).hexdigest())
+
+
+    def token_hash(self, token:str) -> str:
+
         salt = settings.SECRET_KEY
 
-        return str(hashlib.sha256(str(self.randomword() + salt).encode('utf-8')).hexdigest())
+        return str(hashlib.sha256(str(token + salt).encode('utf-8')).hexdigest())
 
 
     def randomword(self) -> str:
