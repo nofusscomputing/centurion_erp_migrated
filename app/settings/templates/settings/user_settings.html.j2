@@ -1,0 +1,52 @@
+{% extends 'base.html.j2' %}
+
+{% block content %}
+
+<style>
+    .detail-view-field {
+        display: unset;
+        height: 30px;
+        line-height: 30px;
+        padding: 0px 20px 40px 20px;
+
+    }
+
+    .detail-view-field label {
+        display: inline-block;
+        font-weight: bold;
+        width: 200px;
+        margin: 10px;
+        /*padding: 10px;*/
+        height: 30px;
+        line-height: 30px;
+
+    }
+
+    .detail-view-field span {
+        display: inline-block;
+        width: 340px;
+        margin: 10px;
+        /*padding: 10px;*/
+        border-bottom: 1px solid #ccc;
+        height: 30px;
+        line-height: 30px;
+
+    }
+</style>
+
+<div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+    <div style="display: inline; width: 40%; margin: 30px;">
+
+        <div class="detail-view-field">
+            <label>{{ form.default_organization.label }}</label>
+            <span>{{ settings.default_organization }}</span>
+        </div>
+
+    </div>
+    <div>
+        <input type="button" value="Edit" onclick="window.location='{% url '_settings_user_change' settings.id %}';">
+    </div>
+</div>
+
+{% endblock %}

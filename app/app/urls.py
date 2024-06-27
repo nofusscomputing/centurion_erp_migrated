@@ -36,6 +36,7 @@ urlpatterns = [
 
     path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"), name="change_password"),
     path('account/settings/<int:pk>', user_settings.View.as_view(), name="_settings_user"),
+    path('account/settings/<int:pk>/edit', user_settings.Change.as_view(), name="_settings_user_change"),
     path("account/", include("django.contrib.auth.urls")),
 
     path("organization/", include("access.urls")),

@@ -18,6 +18,31 @@ class View(generic.UpdateView):
 
     model = UserSettings
 
+    template_name = 'settings/user_settings.html.j2'
+
+
+    def get_context_data(self, **kwargs):
+
+        if self.object.is_owner(self.request.user):
+
+            context = super().get_context_data(**kwargs)
+
+            context['content_title'] = 'User Settings'
+
+            return context
+        
+        raise PermissionDenied()
+
+
+
+class Change(generic.UpdateView):
+
+    context_object_name = "settings"
+
+    form_class = UserSettingsForm
+
+    model = UserSettings
+
     template_name = 'form.html.j2'
 
 
