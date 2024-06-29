@@ -8,12 +8,31 @@ from api.models.tokens import AuthToken
 
 
 class TokenAuthentication(BaseAuthentication):
+    """ API Token Authentication
+
+    Provides the ability to use the API by using a token to authenticate.
+    """
 
     def authenticate_header(self, request):
         return 'Token'
 
 
     def authenticate(self, request):
+        """ Authentication the API session using the supplied token
+
+        Args:
+            request (object): API Request Object
+
+        Raises:
+            exceptions.AuthenticationFailed: 'Token header invalid' - Authorization Header Value is not in format `Token <auth-token>`
+            exceptions.AuthenticationFailed: 'Token header invalid. Possibly incorrectly formatted' - Authentication header value has >1 space
+            exceptions.AuthenticationFailed: 'Invalid token header. Token string should not contain invalid characters.' - Authorization header contains non-unicode chars
+
+        Returns:
+            None (None): User not authenticated
+            tuple(user,token): User authenticated
+        """
+
         auth = get_authorization_header(request).split()
 
         if not auth:
