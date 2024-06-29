@@ -134,6 +134,8 @@ nav:
 
       - projects/django-template/user/index.md
 
+      - projects/django-template/user/user_settings.md
+
       - Access:
 
         - projects/django-template/user/access/index.md

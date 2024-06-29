@@ -31,6 +31,8 @@ class View(generic.UpdateView):
 
             context['tokens'] = AuthToken.objects.filter(user=self.kwargs['pk'])
 
+            context['model_docs_path'] = 'user_settings/'
+
             context['content_title'] = 'User Settings'
 
             return context
