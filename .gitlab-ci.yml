@@ -31,6 +31,9 @@ include:
       - template/automagic.gitlab-ci.yaml
 
 
+Update Git Submodules:
+  extends: .ansible_playbook_git_submodule
+
 
 Docker Container:
   extends: .build_docker_container
