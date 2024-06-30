@@ -126,6 +126,26 @@ class TokenDelete(OrganizationPermission, generic.DeleteView):
     template_name = 'form.html.j2'
 
 
+    def delete(self, request, *args, **kwargs):
+
+        if self.request.user.id != self.kwargs['user_id']:
+
+            raise PermissionDenied()
+            return None
+
+        return super().delete(request, *args, **kwargs)
+
+
+    def post(self, request, *args, **kwargs):
+
+        if self.request.user.id != self.kwargs['user_id']:
+
+            raise PermissionDenied()
+            return None
+
+        return super().post(request, *args, **kwargs)
+
+
     def get_success_url(self, **kwargs):
 
         return reverse('_settings_user', args=(self.kwargs['user_id'],))
