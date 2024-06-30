@@ -66,6 +66,8 @@ nav:
 
         - projects/django-template/development/api/index.md
 
+        - projects/django-template/development/api/token_authentication.md
+
         - Models:
 
           - projects/django-template/development/api/models/index.md
@@ -76,9 +78,23 @@ nav:
 
           - projects/django-template/development/api/models/access_organization_permission_checking.md
 
+        - Serializers:
+
+          - projects/django-template/development/api/serializer/index.md
+
+          - projects/django-template/development/api/serializer/inventory.md
+
         - Unit Testing:
 
           - projects/django-template/development/api/tests/index.md
+
+          - projects/django-template/development/api/tests/model_history.md
+
+          - projects/django-template/development/api/tests/model_history_child_item.md
+
+          - projects/django-template/development/api/tests/model_history_parent_item.md
+
+          - projects/django-template/development/api/tests/model_history_permissions.md
 
           - projects/django-template/development/api/tests/model_permissions.md
 
@@ -110,17 +126,15 @@ nav:
 
           - projects/django-template/development/api/tests/model_permission_api_view.md
 
-          - projects/django-template/development/api/tests/model_history.md
+          - projects/django-template/development/api/tests/model_tenancy_object.md
 
-          - projects/django-template/development/api/tests/model_history_child_item.md
-
-          - projects/django-template/development/api/tests/model_history_parent_item.md
-
-          - projects/django-template/development/api/tests/model_history_permissions.md
+          - projects/django-template/development/api/tests/notes_permissions.md
 
     - User:
 
       - projects/django-template/user/index.md
+
+      - projects/django-template/user/user_settings.md
 
       - Access:
 

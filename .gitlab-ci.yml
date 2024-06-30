@@ -125,6 +125,12 @@ Docker.Hub.Branch.Publish:
     #     - '{dockerfile,dockerfile.j2}'
     #   when: always
 
+    - if:
+        $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
+          &&
+        $CI_COMMIT_BRANCH == "development"
+      when: never
+
     - if: $CI_COMMIT_TAG
       exists:
         - '{dockerfile,dockerfile.j2}'
@@ -139,6 +145,31 @@ Docker.Hub.Branch.Publish:
       when: on_success
 
     - when: never
+
+
+Github (Push --mirror):
+  extends:
+    - .git_push_mirror
+  needs: []
+  rules:
+        - if: '$JOB_STOP_GIT_PUSH_MIRROR'
+          when: never
+
+        - if: $GIT_SYNC_URL == null
+          when: never
+
+        - if: # condition_master_or_dev_push
+            ( 
+              $CI_COMMIT_BRANCH == "master"
+               || 
+              $CI_COMMIT_BRANCH == "development"
+                ||
+              $CI_COMMIT_BRANCH == "14-feat-project-management"
+            ) && 
+            $CI_PIPELINE_SOURCE == "push"
+          when: always
+
+        - when: never
 
 
 Website.Submodule.Deploy:
