@@ -1,3 +1,34 @@
+## 0.6.0 (2024-06-30)
+
+### Bug Fixes
+
+- **user_token**: [6cfcf158](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/6cfcf1580c669c046e4dd6d547b99c8b9814a078) - conduct user check on token view access [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+- **itam**: [f6866912](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/f6866912329fd2ea5f1bce6014db53605e1fee55) - use same form for edit and add [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#65](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/65) ]
+- **itam**: [802f2c41](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/802f2c410da1d4810005991f6da27963621adc25) - dont add field inventorydate if adding new item [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) ]
+- **api**: [4e428560](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/4e428560274fc2a82d927338c66b4641a1c93986) - inventory upload requires sanitization [ [!33](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/33) ]
+
+### Code Refactor
+
+- **settings**: [66b8d936](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/66b8d9362d815e7f54ae402e4689c0a38f65c14d) - use seperate change/view views [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) ]
+- **settings**: [37d277e1](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/37d277e1493ab708b8861fa8d0de3191da24d2f2) - use form for user settings [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) ]
+- **tests**: [58b134ae](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/58b134ae30866b2ca207cef2cf17158d54517044) - move unit tests to unit test sub-directory [ [!33](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/33) [#15](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/15) ]
+
+### Continious Integration
+
+- **git_sync**: [a0874356](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/a0874356fd59978864664d4c25217dca527ee667) - sync on push ro feature branch 14-feat-project-management [ [!29](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/29) [!31](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/31) ]
+- [5d8f5e3a](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/5d8f5e3a518bea520a4b6159623c60a3eaade051) - remove dockerhub publish on bot push [ [!29](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/29) ]
+
+### Documentaton / Guides
+
+- [4d3a2385](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/4d3a2385831c4db99bb9f3e70411b3d2d4d624f0) - Add user settings documentation [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+- **api**: [47d6a3be](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/47d6a3beffa7bb3d5b822c54440fe8b31ad18e02) - API Token authentication [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+
+### Features
+
+- **api**: [11179143](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/111791438a45a8eb0cf4c175e4a1439cd56c84da) - API token authentication [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+- **api**: [ce2c6f3b](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/ce2c6f3b135ec9110682db3b77c80d6dde26a3c2) - abilty for user to create/delete api token [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+- **api**: [e655f22f](https://gitlab.com/nofusscomputing/projects/django_template/-/commit/e655f22fac4d7de2ef42f16f33c8427528b63481) - create token model [ [!34](https://gitlab.com/nofusscomputing/projects/django_template/-/merge_requests/34) [#63](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/63) ]
+
 ## 0.5.0 (2024-06-17)
 
 ### Bug Fixes
