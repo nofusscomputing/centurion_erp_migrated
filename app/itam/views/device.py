@@ -105,7 +105,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
 
-        if hasattr(self.request.GET, 'page'):
+        if 'page' in self.request.GET:
 
             context['page_number'] = int(self.request.GET.get("page"))
 
