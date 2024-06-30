@@ -66,6 +66,8 @@ nav:
 
         - projects/django-template/development/api/index.md
 
+        - projects/django-template/development/api/token_authentication.md
+
         - Models:
 
           - projects/django-template/development/api/models/index.md
@@ -131,6 +133,8 @@ nav:
     - User:
 
       - projects/django-template/user/index.md
+
+      - projects/django-template/user/user_settings.md
 
       - Access:
 

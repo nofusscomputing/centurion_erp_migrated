@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_json_api',
-    'rest_framework.authtoken',
     'social_django',
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
@@ -188,7 +187,7 @@ if API_ENABLED:
             'rest_framework.permissions.IsAuthenticated',
         ),
         'DEFAULT_AUTHENTICATION_CLASSES': [
-            'rest_framework.authentication.TokenAuthentication',
+            'api.auth.TokenAuthentication',
             'rest_framework.authentication.SessionAuthentication',
         ],
         'DEFAULT_PAGINATION_CLASS':
@@ -228,11 +227,15 @@ if API_ENABLED:
 
 ## Authentication
 
-Authentication with the api is via Token. The token is placed in header `Authorization` with a value of `Token <Your Token>`.
+Access to the API is restricted and requires authentication. Available authentication methods are:
 
-## Token Generation
+- Session
+- Token
 
-To generate a token, run `python3 manage.py drf_create_token <username>` from the CLI.
+Session authentication is made available after logging into the application via the login interface.
+
+Token authentication is via an API token that a user will generate within their 
+[settings panel](https://nofusscomputing.com/projects/django-template/user/user_settings/#api-tokens).
 
 ## Examples
 

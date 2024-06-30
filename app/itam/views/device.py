@@ -219,18 +219,15 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
 
 class Add(OrganizationPermission, generic.CreateView):
+
+    form_class = DeviceForm
+
     model = Device
     permission_required = [
         'itam.add_device',
     ]
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'serial_number',
-        'uuid',
-        'device_type',
-        'organization',
-    ]
+
 
     def get_initial(self):
         return {

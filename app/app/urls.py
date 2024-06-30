@@ -36,6 +36,9 @@ urlpatterns = [
 
     path('account/password_change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html.j2"), name="change_password"),
     path('account/settings/<int:pk>', user_settings.View.as_view(), name="_settings_user"),
+    path('account/settings/<int:pk>/edit', user_settings.Change.as_view(), name="_settings_user_change"),
+    path('account/settings/<int:user_id>/token/add', user_settings.TokenAdd.as_view(), name="_user_auth_token_add"),
+    path('account/settings/<int:user_id>/token/<int:pk>/delete', user_settings.TokenDelete.as_view(), name="_user_auth_token_delete"),
     path("account/", include("django.contrib.auth.urls")),
 
     path("organization/", include("access.urls")),

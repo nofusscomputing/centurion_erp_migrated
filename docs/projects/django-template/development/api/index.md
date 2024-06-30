@@ -8,6 +8,7 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 This section contains the application API documentation to assist in application development. The target audience is anyone whom would be developing the application.
 
+- [Token Authentication](./token_authentication.md)
 
 - [Models](./models/index.md)
 
