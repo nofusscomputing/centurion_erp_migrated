@@ -122,6 +122,20 @@ this setting populated, no device will be created and the endpoint will return H
                 status = Http.Status.CREATED
 
 
+            if not device.uuid and data.details.uuid:
+
+                device.uuid = data.details.uuid
+
+                device.save()
+
+
+            if not device.serial_number and data.details.serial_number:
+
+                device.serial_number = data.details.serial_number
+
+                device.save()
+
+
             if OperatingSystem.objects.filter( slug=data.operating_system.name ).exists():
 
                 operating_system = OperatingSystem.objects.get( slug=data.operating_system.name )
