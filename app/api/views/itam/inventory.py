@@ -220,8 +220,10 @@ this setting populated, no device will be created and the endpoint will return H
 
                 device_software = None
 
+                software_category = SoftwareCategory.objects.filter( name = inventory.category )
 
-                if SoftwareCategory.objects.filter( name = inventory.category ).exists():
+
+                if software_category.exists():
 
                     software_category = SoftwareCategory.objects.get(
                         name = inventory.category
@@ -236,94 +238,108 @@ this setting populated, no device will be created and the endpoint will return H
                     )
 
 
-                if Software.objects.filter( name = inventory.name ).exists():
+                if software_category.name == inventory.category:
 
-                    software = Software.objects.get(
-                        name = inventory.name
-                    )
+                    if Software.objects.filter( name = inventory.name ).exists():
 
-                    if not software.category:
+                        software = Software.objects.get(
+                            name = inventory.name
+                        )
 
-                        software.category = software_category
-                        software.save()
+                        if not software.category:
 
-                else: # Create Software
+                            software.category = software_category
+                            software.save()
 
-                    software = Software.objects.create(
-                        organization = software_organization,
-                        is_global = True,
-                        name = inventory.name,
-                        category = software_category,
-                    )
+                    else: # Create Software
 
-
-                pattern = r"^(\d+:)?(?P<semver>\d+\.\d+(\.\d+)?)"
-
-                semver = re.search(pattern, str(inventory.version), re.DOTALL)
+                        software = Software.objects.create(
+                            organization = software_organization,
+                            is_global = True,
+                            name = inventory.name,
+                            category = software_category,
+                        )
 
 
-                if semver:
+                    if software.name == inventory.name:
 
-                    semver = semver['semver']
+                        pattern = r"^(\d+:)?(?P<semver>\d+\.\d+(\.\d+)?)"
 
-                else:
-                    semver = inventory.version
-
-
-                if SoftwareVersion.objects.filter( name = semver, software = software ).exists():
-
-                    software_version = SoftwareVersion.objects.get(
-                        name = semver,
-                        software = software,
-                    )
-
-                else: # Create Software Category
-
-                    software_version = SoftwareVersion.objects.create(
-                        organization = self.default_organization,
-                        is_global = True,
-                        name = semver,
-                        software = software,
-                    )
+                        semver = re.search(pattern, str(inventory.version), re.DOTALL)
 
 
-                if DeviceSoftware.objects.filter( software = software, device=device ).exists():
+                        if semver:
 
-                    device_software = DeviceSoftware.objects.get(
-                        device = device,
-                        software = software
-                    )
+                            semver = semver['semver']
 
-                else: # Create Software
-
-                    device_software = DeviceSoftware.objects.create(
-                        organization = self.default_organization,
-                        is_global = True,
-                        installedversion = software_version,
-                        software = software,
-                        device = device,
-                        action=None
-                    )
+                        else:
+                            semver = inventory.version
 
 
-                if device_software: # Update the Inventoried software
+                        if SoftwareVersion.objects.filter( name = semver, software = software ).exists():
 
-                    inventoried_software += [ device_software.id ]
+                            software_version = SoftwareVersion.objects.get(
+                                name = semver,
+                                software = software,
+                            )
+
+                        else: # Create Software Category
+
+                            software_version = SoftwareVersion.objects.create(
+                                organization = self.default_organization,
+                                is_global = True,
+                                name = semver,
+                                software = software,
+                            )
 
 
-                    if not device_software.installed: # Only update install date if blank
+                        if software_version.name == semver:
 
-                        device_software.installed = timezone.now()
+                            if DeviceSoftware.objects.filter( software = software, device=device ).exists():
 
-                        device_software.save()
+                                device_software = DeviceSoftware.objects.get(
+                                    device = device,
+                                    software = software
+                                )
+
+                                print(f"Select Existing Device Software: {device_software.software.name}")
+
+                            else: # Create Software
+
+                                device_software = DeviceSoftware.objects.create(
+                                    organization = self.default_organization,
+                                    is_global = True,
+                                    installedversion = software_version,
+                                    software = software,
+                                    device = device,
+                                    action=None
+                                )
 
 
-                    if device_software.installedversion.name != software_version.name:
+                                print(f"Create Device Software: {device_software.software.name}")
 
-                        device_software.installedversion = software_version
 
-                        device_software.save()
+                            if device_software: # Update the Inventoried software
 
+                                inventoried_software += [ device_software.id ]
+
+
+                                if not device_software.installed: # Only update install date if blank
+
+                                    device_software.installed = timezone.now()
+
+                                    device_software.save()
+
+                                    print(f"Update Device Software (installed): {device_software.software.name}")
+
+
+                                if device_software.installedversion.name != software_version.name:
+
+                                    device_software.installedversion = software_version
+
+                                    device_software.save()
+
+                                    print(f"Update Device Software (installedversion): {device_software.software.name}")
 
             for not_installed in DeviceSoftware.objects.filter( device=device ):
 
