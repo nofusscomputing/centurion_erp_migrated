@@ -210,7 +210,7 @@ this setting populated, no device will be created and the endpoint will return H
 
                 software_category_organization = device.organization
 
-
+            inventoried_software: list = []
 
             for inventory in list(data.software):
 
@@ -308,14 +308,7 @@ this setting populated, no device will be created and the endpoint will return H
 
                 if device_software: # Update the Inventoried software
 
-                    clear_installed_software = DeviceSoftware.objects.filter(
-                        device = device,
-                        software = software
-                    )
-
-                    # Clear installed version of all installed software
-                    # any found later with no version to be removed
-                    clear_installed_software.update(installedversion=None)
+                    inventoried_software += [ device_software.id ]
 
 
                     if not device_software.installed: # Only update install date if blank
@@ -332,13 +325,17 @@ this setting populated, no device will be created and the endpoint will return H
                         device_software.save()
 
 
+            for not_installed in DeviceSoftware.objects.filter( device=device ):
+
+                if not_installed.id not in inventoried_software:
+
+                    not_installed.delete()
+
+                    print(f"Remove Device Software: {not_installed.software.name}")
+
+
             if device and operating_system and operating_system_version and device_operating_system:
 
-                # Remove software no longer installed
-                DeviceSoftware.objects.filter(
-                    device = device,
-                    software = software,
-                ).delete()
 
                 device.inventorydate = timezone.now()
 
