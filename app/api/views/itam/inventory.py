@@ -324,9 +324,12 @@ this setting populated, no device will be created and the endpoint will return H
 
                         device_software.save()
 
-                    device_software.installedversion = software_version
 
-                    device_software.save()
+                    if device_software.installedversion.name != software_version.name:
+
+                        device_software.installedversion = software_version
+
+                        device_software.save()
 
 
             if device and operating_system and operating_system_version and device_operating_system:
