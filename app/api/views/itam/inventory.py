@@ -61,9 +61,7 @@ this setting populated, no device will be created and the endpoint will return H
         tags = ['device', 'inventory',],
         request = InventorySerializer,
         responses = {
-            200: OpenApiResponse(description='Inventory updated an existing device'),
-            201: OpenApiResponse(description='Inventory created a new device'),
-            400: OpenApiResponse(description='Inventory is invalid'),
+            200: OpenApiResponse(description='Inventory upload successful'),
             401: OpenApiResponse(description='User Not logged in'),
             403: OpenApiResponse(description='User is missing permission or in different organization'),
             500: OpenApiResponse(description='Exception occured. View server logs for the Stack Trace'),
