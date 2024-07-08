@@ -46,19 +46,26 @@ def process_inventory(self, data, organization: int):
 
         app_settings = AppSettings.objects.get(owner_organization = None)
 
+        device_serial_number = None
+        device_uuid = None
+
+        if not data.details.serial_number and str(data.details.serial_number).lower() != 'na':
+
+            device_serial_number = data.details.serial_number
+
+        if not data.details.uuid and str(data.details.uuid).lower() != 'na':
+
+            device_uuid = data.details.uuid
+
         if not device: # Create the device
 
-            device_serial_number = None
 
-            if not data.details.serial_number and str(data.details.serial_number).lower() != 'na':
-
-                device_serial_number = data.details.serial_number
 
             device = Device.objects.create(
                 name = data.details.name,
                 device_type = None,
-                serial_number = data.details.serial_number,
-                uuid = data.details.uuid,
+                serial_number = device_serial_number,
+                uuid = device_uuid,
                 organization = organization,
             )
 
@@ -67,9 +74,9 @@ def process_inventory(self, data, organization: int):
 
             logger.info(f"Device: {device.name}, Serial: {device.serial_number}, UUID: {device.uuid}")
 
-            if not device.uuid and data.details.uuid:
+            if not device.uuid and not device_uuid:
 
-                device.uuid = data.details.uuid
+                device.uuid = device_uuid
 
                 device.save()
 
