@@ -1,0 +1,25 @@
+{% extends 'base.html.j2' %}
+
+{% block content %}
+<input type="button" value="<< Back to settings" onclick="window.location='{% url 'Settings:Settings' %}';">
+
+<table style="max-width: 100%;">
+    <thead>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Created</th>
+        <th>Completed</th>
+    </thead>
+    {% for entry in task_results %}
+    <tr class="clicker">
+        <td><a href="{% url 'Settings:_task_result_view' pk=entry.id %}">{{ entry.task_id }}</a></td>
+        <td>{{ entry.task_name }}</td>
+        <td>{{ entry.status }}</td>
+        <td>{{ entry.date_created }}</td>
+        <td>{{ entry.date_done }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

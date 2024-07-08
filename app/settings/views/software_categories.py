@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -6,7 +5,7 @@ from access.mixin import OrganizationPermission
 from itam.models.software import SoftwareCategory
 
 
-class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class Index(OrganizationPermission, generic.ListView):
 
     model = SoftwareCategory
 

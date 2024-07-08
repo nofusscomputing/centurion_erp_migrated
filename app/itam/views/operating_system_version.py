@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse
 from django.views import generic
 
@@ -34,7 +33,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = OperatingSystemVersion
     permission_required = [
         'access.add_operating_systemversion',
@@ -67,7 +66,7 @@ class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(PermissionRequiredMixin, OrganizationPermission, generic.DeleteView):
+class Delete(OrganizationPermission, generic.DeleteView):
     model = OperatingSystemVersion
     permission_required = [
         'access.delete_operating_system',

@@ -2,7 +2,6 @@ import json
 import markdown
 
 from django.contrib.auth import decorators as auth_decorator
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
@@ -29,7 +28,7 @@ from itam.forms.device.operating_system import Update as OperatingSystemForm
 
 from settings.models.user_settings import UserSettings
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class IndexView(OrganizationPermission, generic.ListView):
     model = Device
     permission_required = 'itam.view_device'
     template_name = 'itam/device_index.html.j2'
@@ -68,7 +67,6 @@ class View(OrganizationPermission, generic.UpdateView):
 
     permission_required = [
         'itam.view_device',
-        'itam.change_device'
     ]
 
     template_name = 'itam/device.html.j2'
@@ -253,7 +251,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class SoftwareAdd(OrganizationPermission, generic.CreateView):
     model = DeviceSoftware
     permission_required = [
         'itam.add_devicesoftware',

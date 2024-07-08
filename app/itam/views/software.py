@@ -1,5 +1,4 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -18,7 +17,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class IndexView(OrganizationPermission, generic.ListView):
     model = Software
     permission_required = 'itam.view_software'
     template_name = 'itam/software_index.html.j2'

@@ -16,6 +16,11 @@ To install this application you must have a container engine installed, both doc
 Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. SQLLite and MariaDB/MySQL are supported.
 
 
+### Background workers
+
+This application requires that you deploy at least one background worker. The background worker requires access to a RabbitMQ message broker for the queueing and routing of messages (background jobs). If you are using our docker container to deploy this application, launch an additional container with `celery -A app worker -l INFO` as the entrypoint/command. Configuration for the worker resides in directory `/etc/itsm/` within the container. see below for the `CELERY_` configuration.
+
+
 ### Settings file
 
 The settings file is a python file `.py` and must remain a valid python file for the application to work.

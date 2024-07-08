@@ -55,12 +55,15 @@ class TeamForm(forms.ModelForm):
             'access',
             'config_management',
             'core',
+            'django_celery_results',
             'itam',
             'settings',
         ]
 
         exclude_models = [
             'appsettings',
+            'chordcounter',
+            'groupresult',
             'organization'
             'settings',
             'usersettings',
@@ -68,8 +71,11 @@ class TeamForm(forms.ModelForm):
 
         exclude_permissions = [
             'add_organization',
+            'add_taskresult',
             'change_organization',
+            'change_taskresult',
             'delete_organization',
+            'delete_taskresult',
         ]
 
         self.fields['permissions'].queryset = Permission.objects.filter(
