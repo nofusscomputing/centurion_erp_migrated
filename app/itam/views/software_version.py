@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views import generic
 
 from access.mixin import OrganizationPermission
@@ -30,7 +29,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class Add(OrganizationPermission, generic.CreateView):
     model = SoftwareVersion
     permission_required = [
         'access.add_softwareversion',

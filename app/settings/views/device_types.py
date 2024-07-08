@@ -1,4 +1,3 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.views import generic
 
@@ -8,7 +7,7 @@ from itam.models.device import DeviceType
 
 
 
-class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class Index(OrganizationPermission, generic.ListView):
     model = DeviceType
 
     permission_required = 'itam.view_devicetype'

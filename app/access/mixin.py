@@ -4,8 +4,6 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
-
-
 from .models import Organization, Team
 
 
@@ -276,7 +274,31 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
         
         if len(self.permission_required) > 0:
 
+            non_organization_models = [
+                'TaskResult'
+            ]
+
+            if hasattr(self, 'model'):
+
+
+                if self.model.__name__ in non_organization_models:
+
+                    if hasattr(self, 'get_object'):
+
+                        self.get_object()
+
+                    perms = self.get_permission_required()
+
+
+                    if not self.request.user.has_perms(perms):
+
+                        return self.handle_no_permission()
+
+                    return super().dispatch(self.request, *args, **kwargs)
+
+
             if not self.permission_check(request):
-                    raise PermissionDenied('You are not part of this organization')
+
+                raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)
