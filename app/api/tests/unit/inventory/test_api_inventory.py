@@ -1,4 +1,5 @@
 import datetime
+import json
 import pytest
 import unittest
 
@@ -13,6 +14,8 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.inventory import Inventory
+
+from api.tasks import process_inventory
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
@@ -105,11 +108,7 @@ class InventoryAPI(TestCase):
         )
 
         # upload the inventory
-        client = Client()
-        url = reverse('API:_api_device_inventory')
-
-        client.force_login(self.add_user)
-        self.response = client.post(url, data=self.inventory, content_type='application/json')
+        process_inventory(json.dumps(self.inventory), organization.id)
 
 
         self.device = Device.objects.get(name=self.inventory['details']['name'])
@@ -376,13 +375,6 @@ class InventoryAPI(TestCase):
         response = client.post(url, data=self.inventory, content_type='application/json')
 
         assert response.status_code == 200
-
-
-
-    def test_api_inventory_valid_status_created(self):
-        """ Successful inventory upload returns 201 """
-
-        assert self.response.status_code == 201
 
 
 

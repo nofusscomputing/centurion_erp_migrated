@@ -264,6 +264,6 @@ class InventoryPermissionsAPI(TestCase):
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
 
-        assert response.status_code == 201
+        assert response.status_code == 200
 
 
