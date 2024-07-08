@@ -1,3 +1,4 @@
+import celery
 import pytest
 import unittest
 import requests
@@ -7,6 +8,9 @@ from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
+from django.test.utils import override_settings
+
+from unittest.mock import patch
 
 from access.models import Organization, Team, TeamUsers, Permission
 
@@ -188,6 +192,8 @@ class InventoryPermissionsAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_device_auth_add_user_anon_denied(self):
         """ Check correct permission for add 
 
@@ -203,6 +209,8 @@ class InventoryPermissionsAPI(TestCase):
         assert response.status_code == 401
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_device_auth_add_no_permission_denied(self):
         """ Check correct permission for add
 
@@ -219,6 +227,8 @@ class InventoryPermissionsAPI(TestCase):
         assert response.status_code == 403
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_device_auth_add_different_organization_denied(self):
         """ Check correct permission for add
 
@@ -235,6 +245,8 @@ class InventoryPermissionsAPI(TestCase):
         assert response.status_code == 403
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_device_auth_add_permission_view_denied(self):
         """ Check correct permission for add
 
@@ -251,6 +263,8 @@ class InventoryPermissionsAPI(TestCase):
         assert response.status_code == 403
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_device_auth_add_has_permission(self):
         """ Check correct permission for add 
 
