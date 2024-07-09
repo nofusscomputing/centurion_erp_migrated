@@ -88,19 +88,19 @@ span.status_icon {
             <span class="status_icon status_icon_ok">
             {% if device.status == 'OK' %}
             <span class="status_icon status_icon_ok">
-                {% include 'icons/status_ok.svg' %}
+                {% include 'icons/inventory_status_ok.svg' %}
             </span>
             {% elif device.status == 'WARN' %}
             <span class="status_icon status_icon_warn">
-                {% include 'icons/status_ok.svg' %}
+                {% include 'icons/inventory_status_warning.svg' %}
             </span>
             {% elif device.status == 'BAD' %}
             <span class="status_icon status_icon_bad">
-                {% include 'icons/status_bad.svg' %}
+                {% include 'icons/inventory_status_bad.svg' %}
             </span>
             {% else %}
             <span class="status_icon status_icon_ukn">
-                {% include 'icons/status_unknown.svg' %}
+                {% include 'icons/inventory_status_unknown.svg' %}
             </span>
             {% endif %}
         </td>
