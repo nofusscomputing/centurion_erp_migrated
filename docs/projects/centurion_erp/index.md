@@ -45,6 +45,31 @@ Centurion ERP contains the following modules:
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
 
 
+## Documentation
+
+Documentation is broken down into three areas, they are:
+
+- [Administration](./administration/index.md)
+
+- [Development](./development/index.md)
+
+- [User](./user/index.md)
+
+Specific features for a module can be found on the module's documentation un the features heading
+
+
+## Development
+
+It's important to us that Centurion ERP remaining stable. To assist with this we do test the Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
+
+!!! info
+    If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
+
+
+## Roadmap / Planned Features
+
+Below is a list of modules/features we intend to add to Centurion. To find out what we are working on now please view the [Milestones](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/milestones) on Gitlab.
+
 - **Planned Modules:**
 
     - Accounting _[see #88](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/88)_
@@ -84,27 +109,7 @@ Centurion ERP contains the following modules:
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.
 
-     - ArgoCD
+     - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
 
         [ArgoCD](https://github.com/argoproj-labs) is a Continious Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
 
-
-## Documentation
-
-Documentation is broken down into three areas, they are:
-
-- [Administration](./administration/index.md)
-
-- [Development](./development/index.md)
-
-- [User](./user/index.md)
-
-Specific features for a module can be found on the module's documentation un the features heading
-
-
-## Development
-
-It's important to us that Centurion ERP remaining stable. To assist with this we do test the Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
-
-!!! info
-    If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
