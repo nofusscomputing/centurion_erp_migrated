@@ -45,6 +45,8 @@ span.navigation_icon {
         {% include 'icons/devices.svg' %}
     {% elif group_urls.name == 'Software' %}
         {% include 'icons/software.svg' %}
+    {% elif group_urls.name == 'Groups' %}
+        {% include 'icons/config_management.svg' %}
     {% endif %}
     </span>
     <a href="{{ group_urls.url }}">{{ group_urls.name }}</a>
