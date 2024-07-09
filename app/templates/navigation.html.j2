@@ -38,7 +38,7 @@ span.navigation_icon {
 <div class="content"{% if group.is_active %} style="max-height:inherit" {% endif %}>
   <ul>
     {% for group_urls in group.urls %}
-    <li{% if group_urls.is_active %} class="active"{% endif %}>
+    <li{% if group_urls.is_active %} class="active"{% endif %} style="padding-left: 40px">
     <span class="navigation_icon">
     {% if group_urls.name == 'Devices' %}
         {% include 'icons/devices.svg' %}
