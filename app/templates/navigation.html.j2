@@ -7,17 +7,18 @@ span.navigation_icon {
    display: inline-block;
     line-height: 30px;
     align-items: center;
-    vertical-align: middle; padding: auto; margin: 0px;
-    fill: #fff;
-    width: 25px;
-    height: 25px;
     vertical-align: middle;
+    /*padding: auto;*/
     margin: 0px;
-    padding: 0px;
+    fill: #fff;
+    width: 20px;
+    height: 20px;
+    /*vertical-align: middle;*/
+    /*margin: 0px;*/
+    /*padding: 0px;*/
     border: none;
     border-radius: 11px;
 }
-
 
 
 </style>
@@ -42,6 +43,8 @@ span.navigation_icon {
     <span class="navigation_icon">
     {% if group_urls.name == 'Devices' %}
         {% include 'icons/devices.svg' %}
+    {% elif group_urls.name == 'Software' %}
+        {% include 'icons/software.svg' %}
     {% endif %}
     </span>
     <a href="{{ group_urls.url }}">{{ group_urls.name }}</a>
