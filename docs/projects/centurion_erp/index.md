@@ -105,11 +105,11 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
 - **Planned Integrations:**
 
-     - AWX
+    - AWX
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.
 
-     - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
+    - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
 
         [ArgoCD](https://github.com/argoproj-labs) is a Continious Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
 
