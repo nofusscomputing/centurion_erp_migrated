@@ -96,22 +96,46 @@
 
         <div class="detail-view-field">
           <label>{{ form.device_model.label }}</label>
-          <span>{{ device.device_model }}</span>
+          <span>
+          {% if device.device_model %}
+            {{ device.device_model }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.serial_number.label }}</label>
-          <span>{{ form.serial_number.value }}</span>
+          <span>
+          {% if form.serial_number.value %}
+            {{ form.serial_number.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.uuid.label }}</label>
-          <span>{{ form.uuid.value }}</span>
+          <span>
+          {% if form.uuid.value %}
+            {{ form.uuid.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.device_type.label }}</label>
-          <span>{{ device.device_type }}</span>
+          <span>
+          {% if device.device_type %}
+            {{ device.device_type }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
@@ -121,7 +145,13 @@
 
         <div class="detail-view-field">
           <label>{{ form.lastinventory.label }}</label>
-          <span>{{ form.lastinventory.value }}</span>
+          <span>
+          {% if form.lastinventory.value %}
+            {{ form.lastinventory.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
       </div>
@@ -130,8 +160,13 @@
         <div>
           <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
           
-          <div style="display: inline-block; text-align: left;">{{ form.model_notes.value | markdown | safe }}</div>
-          {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
+          <div style="display: inline-block; text-align: left;">
+          {% if form.model_notes.value  %} 
+            {{ form.model_notes.value | markdown | safe }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </div>
         </div>
       </div>
       </div>
