@@ -81,7 +81,7 @@ def process_inventory(self, data, organization: int):
                 device.save()
 
 
-            if not device.serial_number and data.details.serial_number:
+            if not device.serial_number and device_serial_number:
 
                 device.serial_number = data.details.serial_number
 
