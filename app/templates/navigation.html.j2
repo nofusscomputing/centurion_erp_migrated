@@ -1,11 +1,51 @@
 {% block navigation %}
 
 {% for group in nav_items %}
-<button class="collapsible{% if group.is_active %} active{% endif %}">{{ group.name }}</button>
+<style>
+
+span.navigation_icon {
+   display: inline-block;
+    line-height: 30px;
+    align-items: center;
+    vertical-align: middle; padding: auto; margin: 0px;
+    fill: #fff;
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    border-radius: 11px;
+}
+
+
+
+</style>
+<button class="collapsible{% if group.is_active %} active{% endif %}">
+  <span class="navigation_icon">
+  {% if group.name == 'Access' %}
+      {% include 'icons/access.svg' %}
+  {% elif group.name == 'Config Management' %}
+      {% include 'icons/ansible.svg' %}
+  {% elif group.name == 'ITAM' %}
+      {% include 'icons/itam.svg' %}
+  {% elif group.name == 'Settings' %}
+      {% include 'icons/settings.svg' %}
+  {% endif %}
+  </span>
+{{ group.name }}
+</button>
 <div class="content"{% if group.is_active %} style="max-height:inherit" {% endif %}>
   <ul>
     {% for group_urls in group.urls %}
-    <li{% if group_urls.is_active %} class="active"{% endif %}><a href="{{ group_urls.url }}">{{ group_urls.name }}</a></li>
+    <li{% if group_urls.is_active %} class="active"{% endif %}>
+    <span class="navigation_icon">
+    {% if group_urls.name == 'Devices' %}
+        {% include 'icons/devices.svg' %}
+    {% endif %}
+    </span>
+    <a href="{{ group_urls.url }}">{{ group_urls.name }}</a>
+    </li>
     {% endfor %}
   </ul>
 </div>
