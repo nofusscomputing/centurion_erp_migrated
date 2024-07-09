@@ -280,21 +280,23 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
 
             if hasattr(self, 'model'):
 
+                
+                if hasattr(self.model, '__name__'):
 
-                if self.model.__name__ in non_organization_models:
+                    if self.model.__name__ in non_organization_models:
 
-                    if hasattr(self, 'get_object'):
+                        if hasattr(self, 'get_object'):
 
-                        self.get_object()
+                            self.get_object()
 
-                    perms = self.get_permission_required()
+                        perms = self.get_permission_required()
 
 
-                    if not self.request.user.has_perms(perms):
+                        if not self.request.user.has_perms(perms):
 
-                        return self.handle_no_permission()
+                            return self.handle_no_permission()
 
-                    return super().dispatch(self.request, *args, **kwargs)
+                        return super().dispatch(self.request, *args, **kwargs)
 
 
             if not self.permission_check(request):
