@@ -110,6 +110,14 @@ class View(OrganizationPermission, generic.UpdateView):
         else:
              context['page_number'] = 1
 
+
+        if 'tab' in self.request.GET:
+
+            context['tab'] = str(self.request.GET.get("tab")).lower()
+
+        else:
+             context['tab'] = None
+
         context['page_obj'] = softwares.get_page(context['page_number'])
 
         context['softwares'] = softwares.page(context['page_number']).object_list
