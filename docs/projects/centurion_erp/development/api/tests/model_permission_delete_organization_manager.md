@@ -1,0 +1,9 @@
+---
+title: Model Permissions Delete (Organization Manager) Test Cases
+description: No Fuss Computings model permissions delete test cases for organization manager
+date: 2024-06-17
+template: project.html
+about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
+---
+
+::: app.access.tests.abstract.model_permissions_organization_manager.OrganizationManagerModelPermissionDelete

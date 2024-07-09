@@ -13,4 +13,8 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "testing.coverageToolbarEnabled": true,
+    "cSpell.words": [
+        "ITSM"
+    ],
+    "cSpell.language": "en-AU",
 }

@@ -2,21 +2,21 @@
 
 variables:
   MY_PROJECT_ID: "57560288"
-  GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/django_template.git"
+  GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/centurion_erp.git"
 
   # Docker Build / Publish
   DOCKER_IMAGE_BUILD_TARGET_PLATFORMS: "linux/amd64,linux/arm64"
-  DOCKER_IMAGE_BUILD_NAME: django-template
+  DOCKER_IMAGE_BUILD_NAME: centurion-erp
   DOCKER_IMAGE_BUILD_REGISTRY: $CI_REGISTRY_IMAGE
   DOCKER_IMAGE_BUILD_TAG: $CI_COMMIT_SHA
 
   # Docker Publish
-  DOCKER_IMAGE_PUBLISH_NAME: django-template
+  DOCKER_IMAGE_PUBLISH_NAME: centurion-erp
   DOCKER_IMAGE_PUBLISH_REGISTRY: docker.io/nofusscomputing
   DOCKER_IMAGE_PUBLISH_URL: https://hub.docker.com/r/nofusscomputing/$DOCKER_IMAGE_PUBLISH_NAME
 
   # Docs NFC
-  PAGES_ENVIRONMENT_PATH: projects/django-template/
+  PAGES_ENVIRONMENT_PATH: projects/centurion_erp/
 
   # RELEASE_ADDITIONAL_ACTIONS_BUMP: ./.gitlab/additional_actions_bump.sh
 

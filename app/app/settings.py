@@ -217,7 +217,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_TITLE = "Site Title"
+SITE_TITLE = "Centurion ERP"
 
 
 API_ENABLED = True
