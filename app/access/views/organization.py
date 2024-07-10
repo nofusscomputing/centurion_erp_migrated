@@ -18,6 +18,14 @@ class IndexView(OrganizationPermission, generic.ListView):
     context_object_name = "organization_list"
 
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Organizations'
+
+        return context
+
+
     def get_queryset(self):
 
         if self.request.user.is_superuser:
@@ -74,6 +82,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['content_title'] = 'Organization - ' + context[self.context_object_name].name
 
         return context
 

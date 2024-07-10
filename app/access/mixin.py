@@ -55,9 +55,11 @@ class OrganizationMixin():
 
                 id = obj.get_organization().id
 
-                if obj.is_global:
+                if hasattr(obj, 'is_global'):
 
-                    id = 0
+                    if obj.is_global:
+
+                        id = 0
 
 
         except AttributeError:
