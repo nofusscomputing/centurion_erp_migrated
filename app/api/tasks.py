@@ -49,13 +49,13 @@ def process_inventory(self, data, organization: int):
         device_serial_number = None
         device_uuid = None
 
-        if not data.details.serial_number and str(data.details.serial_number).lower() != 'na':
+        if data.details.serial_number and str(data.details.serial_number).lower() != 'na':
 
-            device_serial_number = data.details.serial_number
+            device_serial_number = str(data.details.serial_number)
 
-        if not data.details.uuid and str(data.details.uuid).lower() != 'na':
+        if data.details.uuid and str(data.details.uuid).lower() != 'na':
 
-            device_uuid = data.details.uuid
+            device_uuid = str(data.details.uuid)
 
         if not device: # Create the device
 
@@ -74,7 +74,7 @@ def process_inventory(self, data, organization: int):
 
             logger.info(f"Device: {device.name}, Serial: {device.serial_number}, UUID: {device.uuid}")
 
-            if not device.uuid and not device_uuid:
+            if not device.uuid and device_uuid:
 
                 device.uuid = device_uuid
 
