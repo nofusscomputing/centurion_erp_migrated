@@ -1,4 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views import generic
 
@@ -25,7 +26,11 @@ class IndexView(OrganizationPermission, generic.ListView):
 
         else:
 
-            return Organization.objects.filter(pk__in=self.user_organizations())
+            return Organization.objects.filter(
+                Q(pk__in=self.user_organizations())
+                or
+                Q(manager=self.request.user)
+            )
 
 
 
