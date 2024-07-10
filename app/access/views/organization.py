@@ -36,8 +36,8 @@ class IndexView(OrganizationPermission, generic.ListView):
 
             return Organization.objects.filter(
                 Q(pk__in=self.user_organizations())
-                or
-                Q(manager=self.request.user)
+                |
+                Q(manager=self.request.user.id)
             )
 
 
