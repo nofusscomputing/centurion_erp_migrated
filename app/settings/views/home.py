@@ -4,7 +4,6 @@ from django.conf import settings
 from django.shortcuts import redirect, render
 from django.views.generic import View
 
-from settings.models.settings import Settings
 
 class View(View):
 
