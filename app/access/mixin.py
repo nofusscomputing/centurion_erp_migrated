@@ -210,7 +210,6 @@ class OrganizationMixin():
 
                 pass
 
-            organization_manager = None
 
             if hasattr(self, 'model'):
 
@@ -218,9 +217,7 @@ class OrganizationMixin():
 
                     organization = Organization.objects.get(pk=self.object_organization())
 
-                    organization_manager = organization.manager
-
-                    if organization_manager == request.user:
+                    if organization.manager == request.user:
 
                         is_organization_manager = True
 
@@ -245,7 +242,7 @@ class OrganizationMixin():
 
             if required_permission.replace(
                     'view_', ''
-                ) == 'access.organization' and organization_manager == request.user:
+                ) == 'access.organization' and len(self.kwargs) == 0:
 
                 return True
 
