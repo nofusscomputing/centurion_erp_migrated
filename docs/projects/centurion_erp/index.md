@@ -84,7 +84,7 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
     - Development Operations (DevOPS) _[see #68](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/58)_
 
-        - Repository Management
+        - Repository Management _[see #115](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/115)_
 
     - Human Resource Management _[see #92](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/92)_
 
@@ -105,7 +105,7 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
 - **Planned Integrations:**
 
-    - AWX
+    - AWX  _[see #113](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/113)_
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.
 
