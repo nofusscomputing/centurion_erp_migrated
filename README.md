@@ -63,3 +63,32 @@ For further details on contributing please refer to the [contribution guide](CON
 ## Other
 
 This repo is release under this [license](LICENSE)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+artifacts
+
+
+dont work to file
+https://gitlab.com/nofusscomputing/projects/centurion_erp/-/jobs/artifacts/master/browse/artifacts/coverage/index.html?job=Unit
+
+works to dir
+https://gitlab.com/nofusscomputing/projects/centurion_erp/-/jobs/artifacts/master/browse/artifacts/coverage/?job=Unit
+
+
