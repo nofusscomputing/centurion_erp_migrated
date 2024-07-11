@@ -304,14 +304,14 @@ nav button.active, .collapsible:hover {
 }
 
 nav button.collapsible:after {
-  content: '\002B';
+  content: url('/static/icons/nav_arrow_right.svg');
   color: white;
   float: right;
   margin-left: 5px;
 }
 
 nav button.active:after {
-  content: "\2212";
+  content: url('/static/icons/nav_arrow_down.svg');
   font-weight: bold;
 }
 
