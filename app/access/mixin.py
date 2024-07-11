@@ -203,10 +203,24 @@ class OrganizationMixin():
 
                         is_organization_manager = True
 
-            if not self.has_organization_permission() and not request.user.is_superuser and not is_organization_manager:
-                return False
+                        return True
 
-        return True
+
+        if request.user.is_superuser:
+
+            return True
+
+        perms = self.get_permission_required()
+
+        if self.has_organization_permission():
+
+            return True
+
+        if self.request.user.has_perms(perms):
+
+            return True
+
+        return False
 
 
 
