@@ -18,7 +18,7 @@ from settings.models.user_settings import UserSettings
 
 class IndexView(OrganizationPermission, generic.ListView):
     model = OperatingSystem
-    permission_required = 'itam.view_operating_system'
+    permission_required = 'itam.view_operatingsystem'
     template_name = 'itam/operating_system_index.html.j2'
     context_object_name = "operating_systems"
     paginate_by = 10
