@@ -49,6 +49,7 @@ class Organization(SaveHistory):
         blank = True,
         default = None,
         null= True,
+        verbose_name = 'Notes',
     )
 
     slug = AutoSlugField()
@@ -91,6 +92,7 @@ class TenancyObject(models.Model):
         blank = True,
         default = None,
         null= True,
+        verbose_name = 'Notes',
     )
 
     def get_organization(self) -> Organization:
