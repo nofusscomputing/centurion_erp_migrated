@@ -1,10 +1,11 @@
-from django import forms
 from django.db.models import Q
+
+from core.forms.common import CommonModelForm
 
 from itam.models.software import Software
 
 
-class Update(forms.ModelForm):
+class Update(CommonModelForm):
 
     class Meta:
         model = Software

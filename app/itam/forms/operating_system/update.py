@@ -1,11 +1,14 @@
-from app import settings
 from django import forms
 from django.db.models import Q
+
+from app import settings
+
+from core.forms.common import CommonModelForm
 
 from itam.models.operating_system import OperatingSystem
 
 
-class Update(forms.ModelForm):
+class Update(CommonModelForm):
 
     class Meta:
         model = OperatingSystem

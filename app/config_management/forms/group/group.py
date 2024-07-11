@@ -1,11 +1,13 @@
-from django import forms
 from django.db.models import Q
 
 from config_management.models.groups import ConfigGroups
+
+from core.forms.common import CommonModelForm
+
 from itam.models.software import Software, SoftwareVersion
 
 
-class ConfigGroupForm(forms.ModelForm):
+class ConfigGroupForm(CommonModelForm):
 
     class Meta:
        model = ConfigGroups

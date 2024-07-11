@@ -5,9 +5,10 @@ from api.models.tokens import AuthToken
 
 from app import settings
 
+from core.forms.common import CommonModelForm
 
 
-class AuthTokenForm(forms.ModelForm):
+class AuthTokenForm(CommonModelForm):
 
     prefix = 'user_token'
 

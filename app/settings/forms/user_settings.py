@@ -5,10 +5,12 @@ from django.contrib.auth.models import User
 
 from access.models import Organization, TeamUsers
 
+from core.forms.common import CommonModelForm
+
 from settings.models.user_settings import UserSettings
 
 
-class UserSettingsForm(forms.ModelForm):
+class UserSettingsForm(CommonModelForm):
 
     prefix = 'user_settings'
 

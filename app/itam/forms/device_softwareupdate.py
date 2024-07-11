@@ -1,11 +1,12 @@
-from django import forms
 from django.db.models import Q
+
+from core.forms.common import CommonModelForm
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
 
 
-class SoftwareUpdate(forms.ModelForm):
+class SoftwareUpdate(CommonModelForm):
 
     class Meta:
        model = DeviceSoftware

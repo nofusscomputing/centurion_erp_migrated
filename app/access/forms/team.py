@@ -6,8 +6,10 @@ from django.forms import inlineformset_factory
 from app import settings
 
 from .team_users import TeamUsersForm, TeamUsers
+
 from access.models import Team
 
+from core.forms.common import CommonModelForm
 
 TeamUserFormSet = inlineformset_factory(
     model=TeamUsers,
@@ -19,7 +21,7 @@ TeamUserFormSet = inlineformset_factory(
     ]
 )
 
-class TeamForm(forms.ModelForm):
+class TeamForm(CommonModelForm):
 
     class Meta:
         model = Team
