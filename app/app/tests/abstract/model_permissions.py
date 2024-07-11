@@ -118,6 +118,16 @@ class ModelPermissionsAdd:
     add_data: dict = None
 
 
+    @pytest.mark.skip(reason="ToDO: write test")
+    def test_model_requires_attribute_parent_model(self):
+        """ Child model requires 'django view' attribute 'parent_model'
+        
+        When a child-model is added the parent model is required so that the organization can be detrmined.
+        """
+
+        pass
+
+
     def test_model_add_user_anon_denied(self):
         """ Check correct permission for add 
 

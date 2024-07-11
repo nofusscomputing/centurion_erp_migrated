@@ -81,6 +81,9 @@ class View(OrganizationPermission, generic.UpdateView):
 
 class Add(OrganizationPermission, generic.CreateView):
     model = Team
+
+    parent_model = Organization
+
     permission_required = [
         'access.add_team',
     ]
