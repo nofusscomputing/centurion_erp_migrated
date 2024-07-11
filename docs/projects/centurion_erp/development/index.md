@@ -15,6 +15,8 @@ This section of the documentation different items related to the development of 
 
 - [Testing](./testing.md)
 
+- [Views](./views.md)
+
 
 ## Random items to be relocated in the future
 

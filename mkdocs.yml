@@ -78,6 +78,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
 
+        - projects/centurion_erp/development/api/common_views.md
+
         - Serializers:
 
           - projects/centurion_erp/development/api/serializer/index.md
@@ -130,6 +132,8 @@ nav:
 
           - projects/centurion_erp/development/api/tests/notes_permissions.md
 
+    - projects/centurion_erp/development/views.md
+    
     - User:
 
       - projects/centurion_erp/user/index.md
