@@ -168,6 +168,10 @@ def nav_items(context) -> list(dict()):
 
                                         user_has_perm = True
 
+                            if str(nav_group.app_name).lower() == 'settings':
+
+                                user_has_perm = True
+
                             if user_has_perm:
 
                                 nav_items = nav_items + [ {
