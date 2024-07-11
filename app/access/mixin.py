@@ -70,6 +70,18 @@ class OrganizationMixin():
 
                     id = int(self.request.POST.get("organization", ""))
 
+                for field in self.request.POST.dict(): # cater for fields prefixed '<prefix>-<field name>'
+
+                    a_field = str(field).split('-')
+
+                    if len(a_field) == 2:
+
+                        if a_field[1] == 'organization':
+
+                            id = int(self.request.POST.get(field))
+
+                
+
 
         return id
 
