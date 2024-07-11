@@ -17,7 +17,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
     model = TeamUsers
 
-    parent_model = TeamUsers
+    parent_model = Team
 
     permission_required = [
         'access.add_teamusers'
