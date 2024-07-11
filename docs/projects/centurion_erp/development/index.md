@@ -13,6 +13,8 @@ This section of the documentation different items related to the development of 
 
 - [Application API Documentation](./api/index.md)
 
+- [Forms](./api/form.md)
+
 - [Testing](./testing.md)
 
 - [Views](./views.md)
