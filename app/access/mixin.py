@@ -191,7 +191,16 @@ class OrganizationMixin():
 
         is_organization_manager = False
 
+        queryset = None
+
+        if hasattr(self, 'get_queryset'):
+
+            queryset = self.get_queryset()
+
+        obj = None
+
         if hasattr(self, 'get_object'):
+
 
             try:
 
@@ -201,13 +210,17 @@ class OrganizationMixin():
 
                 pass
 
+            organization_manager = None
+
             if hasattr(self, 'model'):
 
                 if self.model._meta.label_lower in organization_manager_models:
 
                     organization = Organization.objects.get(pk=self.object_organization())
 
-                    if organization.manager == request.user:
+                    organization_manager = organization.manager
+
+                    if organization_manager == request.user:
 
                         is_organization_manager = True
 
@@ -224,9 +237,17 @@ class OrganizationMixin():
 
             return True
 
-        if self.request.user.has_perms(perms):
+        if self.request.user.has_perms(perms) and len(self.kwargs) == 0 and str(self.request.method).lower() == 'get':
 
             return True
+
+        for required_permission in self.permission_required:
+
+            if required_permission.replace(
+                    'view_', ''
+                ) == 'access.organization' and organization_manager == request.user:
+
+                return True
 
         return False
 
