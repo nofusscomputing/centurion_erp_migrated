@@ -18,7 +18,7 @@
 <input type="button" value="<< Back" onclick="window.location='{% url 'Access:_organization_view' pk=organization.id %}';">
 <input type="button" value="Delete Team"
   onclick="window.location='{% url 'Access:_team_delete' organization_id=organization.id pk=team.id %}';">
-<input type="button" value="New User"
+<input type="button" value="Assign User"
   onclick="window.location='{% url 'Access:_team_user_add' organization_id=organization.id pk=team.id %}';">
 {{ formset.management_form }}
 
