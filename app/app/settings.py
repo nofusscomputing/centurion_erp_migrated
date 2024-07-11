@@ -24,7 +24,7 @@ SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 BUILD_REPO = os.getenv('CI_PROJECT_URL')
 BUILD_SHA = os.getenv('CI_COMMIT_SHA')
 BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
-DOCS_ROOT = 'https://nofusscomputing.com/projects/django-template/user/'
+DOCS_ROOT = 'https://nofusscomputing.com/projects/centurion_erp/user/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
