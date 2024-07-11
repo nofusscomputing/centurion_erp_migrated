@@ -193,6 +193,14 @@ class OrganizationMixin():
 
         if hasattr(self, 'get_object'):
 
+            try:
+
+                obj = self.get_object()
+
+            except:
+
+                pass
+
             if hasattr(self, 'model'):
 
                 if self.model._meta.label_lower in organization_manager_models:
