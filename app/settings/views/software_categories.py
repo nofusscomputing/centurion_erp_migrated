@@ -26,7 +26,7 @@ class Index(OrganizationPermission, generic.ListView):
 
         else:
 
-            return self.model.objects.filter(organization=self.user_organizations()).order_by('name')
+            return self.model.objects.filter(organization__in=self.user_organizations()).order_by('name')
 
 
     def get_context_data(self, **kwargs):
