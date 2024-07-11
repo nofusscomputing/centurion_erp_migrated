@@ -49,4 +49,12 @@ class DeleteView(OrganizationPermission, generic.DeleteView):
 
 class IndexView(View, generic.ListView):
 
-    pass
+    model = None
+
+    def __init__(self, **kwargs):
+
+        if not self.model:
+
+            raise Exception('Model is required for view')
+
+        super().__init__(**kwargs)

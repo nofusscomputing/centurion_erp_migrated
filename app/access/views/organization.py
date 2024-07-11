@@ -12,6 +12,8 @@ from core.views.common import ChangeView, IndexView
 
 
 class IndexView(IndexView):
+
+    model = Organization
     permission_required = [
         'access.view_organization'
     ]
