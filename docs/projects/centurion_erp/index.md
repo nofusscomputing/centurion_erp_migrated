@@ -12,7 +12,7 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 ![Gitlab build status - stable](https://img.shields.io/badge/dynamic/json?color=ff782e&label=Stable%20Build&query=0.status&url=https%3A%2F%2Fgitlab.com%2Fapi%2Fv4%2Fprojects%2F57560288%2Fpipelines%3Fref%3Dmaster&logo=gitlab&style=plastic) ![Gitlab build status - development](https://img.shields.io/badge/dynamic/json?color=ff782e&label=Dev%20Build&query=0.status&url=https%3A%2F%2Fgitlab.com%2Fapi%2Fv4%2Fprojects%2F57560288%2Fpipelines%3Fref%3Ddevelopment&logo=gitlab&style=plastic)
 
-![GitLab Issues](https://img.shields.io/gitlab/issues/open/nofusscomputing%2Fprojects%2Fcenturion_erp?style=plastic&logo=gitlab&label=Issues&color=fc6d26)
+![GitLab Issues](https://img.shields.io/gitlab/issues/open/nofusscomputing%2Fprojects%2Fcenturion_erp?style=plastic&logo=gitlab&label=Issues&color=fc6d26) [![GitLab Bugs](https://img.shields.io/gitlab/issues/open/nofusscomputing%2Fprojects%2Fcenturion_erp?labels=type%3A%3Abug&style=plastic&logo=gitlab&label=Bug%20Fixes%20Required&color=fc6d26)](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/issues/?sort=created_date&state=opened&label_name%5B%5D=type%3A%3Abug)
 
 ![Gitlab Code Coverage](https://img.shields.io/gitlab/pipeline-coverage/nofusscomputing%2Fprojects%2Fcenturion_erp?branch=master&style=plastic&logo=gitlab&label=Test%20Coverage)
 
