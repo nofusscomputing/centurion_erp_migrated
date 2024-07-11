@@ -1,15 +1,13 @@
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
-from django.utils.decorators import method_decorator
-from django.views import generic
 
 from access.forms.team_users import TeamUsersForm
-from access.mixin import OrganizationPermission
 from access.models import Team, TeamUsers
 
+from core.views.common import AddView, DeleteView
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
 
     context_object_name = "teamuser"
 
@@ -51,7 +49,7 @@ class Add(OrganizationPermission, generic.CreateView):
         return context
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = TeamUsers
     permission_required = [
         'access.delete_teamusers'

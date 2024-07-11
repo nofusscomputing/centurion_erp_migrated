@@ -1,16 +1,15 @@
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
 
-from access.mixin import OrganizationPermission
+from core.views.common import AddView, ChangeView, DeleteView
 
 from ..models.software import Software, SoftwareCategory
 
 from settings.models.user_settings import UserSettings
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = SoftwareCategory
     permission_required = [
         'itam.view_softwarecategory',
@@ -52,7 +51,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = SoftwareCategory
     permission_required = [
         'itam.add_softwarecategory',
@@ -86,7 +85,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = SoftwareCategory
     permission_required = [
         'itam.delete_softwarecategory',

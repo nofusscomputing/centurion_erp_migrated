@@ -1,17 +1,16 @@
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from itam.models.device_models import DeviceModel
+
+from core.views.common import AddView, ChangeView, DeleteView
 
 from settings.models.user_settings import UserSettings
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = DeviceModel
     permission_required = [
         'itam.view_devicemodel',
@@ -55,7 +54,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = DeviceModel
     permission_required = [
         'itam.add_devicemodel',
@@ -90,7 +89,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = DeviceModel
     permission_required = [
         'itam.delete_devicemodel',

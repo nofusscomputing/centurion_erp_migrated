@@ -1,11 +1,11 @@
-from django.views import generic
-
 from access.mixin import OrganizationPermission
+
+from core.views.common import IndexView
 
 from itam.models.software import SoftwareCategory
 
 
-class Index(OrganizationPermission, generic.ListView):
+class Index(IndexView):
 
     model = SoftwareCategory
 

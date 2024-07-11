@@ -1,13 +1,12 @@
 from django.db.models import Q
-from django.views import generic
 
+from core.views.common import IndexView
 
-from access.mixin import OrganizationPermission
 from itam.models.device import DeviceType
 
 
 
-class Index(OrganizationPermission, generic.ListView):
+class Index(IndexView):
     model = DeviceType
 
     permission_required = 'itam.view_devicetype'

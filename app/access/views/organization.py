@@ -8,9 +8,10 @@ from access.models import *
 
 from access.forms.organization import OrganizationForm
 
+from core.views.common import ChangeView, IndexView
 
 
-class IndexView(OrganizationPermission, generic.ListView):
+class IndexView(IndexView):
     permission_required = [
         'access.view_organization'
     ]
@@ -42,7 +43,7 @@ class IndexView(OrganizationPermission, generic.ListView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "organization"
 

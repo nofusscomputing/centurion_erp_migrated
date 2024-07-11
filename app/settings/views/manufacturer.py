@@ -7,10 +7,11 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 from core.models.manufacturer import Manufacturer
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 
 
-class Index(OrganizationPermission, generic.ListView):
+class Index(IndexView):
 
     context_object_name = "list"
 

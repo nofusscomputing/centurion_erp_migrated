@@ -1,11 +1,9 @@
-from django.views import generic
-
-from access.mixin import OrganizationPermission
+from core.views.common import AddView, ChangeView
 
 from ..models.software import Software, SoftwareVersion
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = SoftwareVersion
     permission_required = [
         'itam.view_softwareversion'
@@ -29,7 +27,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = SoftwareVersion
     permission_required = [
         'access.add_softwareversion',

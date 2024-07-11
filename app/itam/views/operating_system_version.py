@@ -1,13 +1,12 @@
 from django.urls import reverse
-from django.views import generic
 
-from access.mixin import OrganizationPermission
+from core.views.common import AddView, ChangeView, DeleteView
 
 from ..models.operating_system import OperatingSystem, OperatingSystemVersion
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = OperatingSystemVersion
     permission_required = [
         'itam.view_operating_systemversion'
@@ -33,7 +32,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = OperatingSystemVersion
     permission_required = [
         'access.add_operating_systemversion',
@@ -66,7 +65,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = OperatingSystemVersion
     permission_required = [
         'access.delete_operating_system',

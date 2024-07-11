@@ -1,7 +1,4 @@
 from django.urls import reverse
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from itam.models.software import Software
 
@@ -9,9 +6,10 @@ from config_management.forms.group.add_software import SoftwareAdd
 from config_management.forms.group.change_software import SoftwareUpdate
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
+from core.views.common import AddView, ChangeView, DeleteView
 
 
-class GroupSoftwareAdd(OrganizationPermission, generic.CreateView):
+class GroupSoftwareAdd(AddView):
 
     form_class = SoftwareAdd
 
@@ -74,7 +72,7 @@ class GroupSoftwareAdd(OrganizationPermission, generic.CreateView):
 
 
 
-class GroupSoftwareChange(OrganizationPermission, generic.UpdateView):
+class GroupSoftwareChange(ChangeView):
 
     form_class = SoftwareUpdate
 
@@ -113,7 +111,7 @@ class GroupSoftwareChange(OrganizationPermission, generic.UpdateView):
 
 
 
-class GroupSoftwareDelete(OrganizationPermission, generic.DeleteView):
+class GroupSoftwareDelete(DeleteView):
 
     model = ConfigGroupSoftware
 

@@ -2,12 +2,10 @@ from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Q, Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
@@ -16,7 +14,7 @@ from itam.forms.operating_system.update import Update
 from settings.models.user_settings import UserSettings
 
 
-class IndexView(OrganizationPermission, generic.ListView):
+class IndexView(IndexView):
     model = OperatingSystem
     permission_required = 'itam.view_operatingsystem'
     template_name = 'itam/operating_system_index.html.j2'
@@ -44,7 +42,7 @@ class IndexView(OrganizationPermission, generic.ListView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = OperatingSystem
     permission_required = [
         'itam.view_operatingsystem',
@@ -103,7 +101,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = OperatingSystem
     permission_required = [
         'itam.add_operatingsystem',
@@ -138,7 +136,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
 
     model = OperatingSystem
 

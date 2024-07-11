@@ -4,12 +4,10 @@ from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import Device
 
@@ -21,7 +19,7 @@ from config_management.models.groups import ConfigGroups, ConfigGroupHosts, Conf
 
 
 
-class GroupIndexView(OrganizationPermission, generic.ListView):
+class GroupIndexView(IndexView):
 
     context_object_name = "groups"
 
@@ -57,7 +55,7 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
 
 
-class GroupAdd(OrganizationPermission, generic.CreateView):
+class GroupAdd(AddView):
 
     fields = [
         'name',
@@ -111,7 +109,7 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
 
 
 
-class GroupView(OrganizationPermission, generic.UpdateView):
+class GroupView(ChangeView):
 
     context_object_name = "group"
 
@@ -195,7 +193,7 @@ class GroupView(OrganizationPermission, generic.UpdateView):
 
 
 
-class GroupDelete(OrganizationPermission, generic.DeleteView):
+class GroupDelete(DeleteView):
 
     model = ConfigGroups
 
@@ -220,7 +218,7 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
 
 
 
-class GroupHostAdd(OrganizationPermission, generic.CreateView):
+class GroupHostAdd(AddView):
 
     model = ConfigGroupHosts
 
@@ -280,7 +278,7 @@ class GroupHostAdd(OrganizationPermission, generic.CreateView):
 
 
 
-class GroupHostDelete(OrganizationPermission, generic.DeleteView):
+class GroupHostDelete(DeleteView):
 
     model = ConfigGroupHosts
 

@@ -5,6 +5,8 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from core.views.common import ChangeView
+
 from settings.models.app_settings import AppSettings
 
 

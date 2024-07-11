@@ -7,18 +7,18 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
 
-from access.mixin import OrganizationPermission
 from access.models import Organization
 
 from config_management.models.groups import ConfigGroupHosts
+
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from ..models.software import Software
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
@@ -28,7 +28,9 @@ from itam.forms.device.operating_system import Update as OperatingSystemForm
 
 from settings.models.user_settings import UserSettings
 
-class IndexView(OrganizationPermission, generic.ListView):
+
+
+class IndexView(IndexView):
     model = Device
     permission_required = 'itam.view_device'
     template_name = 'itam/device_index.html.j2'
@@ -61,7 +63,7 @@ def _get_form(request, formcls, prefix, **kwargs):
     data = request.POST if prefix in request.POST else None
     return formcls(data, prefix=prefix, **kwargs)
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     model = Device
 
@@ -187,7 +189,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class SoftwareView(OrganizationPermission, generic.UpdateView):
+class SoftwareView(ChangeView):
     model = DeviceSoftware
     permission_required = [
         'itam.view_devicesoftware'
@@ -224,7 +226,7 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
 
     form_class = DeviceForm
 
@@ -259,7 +261,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class SoftwareAdd(OrganizationPermission, generic.CreateView):
+class SoftwareAdd(AddView):
     model = DeviceSoftware
     permission_required = [
         'itam.add_devicesoftware',
@@ -319,7 +321,7 @@ class SoftwareAdd(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = Device
     permission_required = [
         'itam.delete_device',
@@ -340,7 +342,7 @@ class Delete(OrganizationPermission, generic.DeleteView):
         return context
 
 
-class Change(OrganizationPermission, generic.UpdateView):
+class Change(ChangeView):
     model = Device
     permission_required = [
         'itam.change_device',

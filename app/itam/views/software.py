@@ -2,12 +2,10 @@ from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
@@ -17,7 +15,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class IndexView(OrganizationPermission, generic.ListView):
+class IndexView(IndexView):
     model = Software
     permission_required = 'itam.view_software'
     template_name = 'itam/software_index.html.j2'
@@ -46,7 +44,7 @@ class IndexView(OrganizationPermission, generic.ListView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
     model = Software
     permission_required = [
         'itam.view_software',
@@ -127,7 +125,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
     model = Software
     permission_required = [
         'itam.add_software',
@@ -161,7 +159,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
         return context
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = Software
     permission_required = [
         'itam.delete_software',

@@ -21,7 +21,9 @@ class View(OrganizationPermission):
 
         kwargs = super().get_form_kwargs()
 
-        kwargs.update({'user': self.request.user})
+        if self.form_class:
+
+            kwargs.update({'user': self.request.user})
 
         return kwargs
 
@@ -39,7 +41,7 @@ class ChangeView(View, generic.UpdateView):
 
 
 
-class DeleteView(generic.DeleteView):
+class DeleteView(OrganizationPermission, generic.DeleteView):
 
     pass
 
