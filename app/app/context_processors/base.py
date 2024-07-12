@@ -172,6 +172,10 @@ def nav_items(context) -> list(dict()):
 
                                 user_has_perm = True
 
+                            if context.user.is_superuser:
+
+                                user_has_perm = True
+
                             if user_has_perm:
 
                                 nav_items = nav_items + [ {
