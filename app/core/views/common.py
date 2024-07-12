@@ -46,10 +46,20 @@ class DeleteView(OrganizationPermission, generic.DeleteView):
     pass
 
 
+class DisplayView(OrganizationPermission, generic.DetailView):
+    """ A View used for displaying arbitrary data """
+
+    pass
+
+
 
 class IndexView(View, generic.ListView):
 
     model = None
+    """ Model the view is for
+
+    Leaving this value unset will prevent the item from showing up within the navigation menu
+    """
 
     def __init__(self, **kwargs):
 

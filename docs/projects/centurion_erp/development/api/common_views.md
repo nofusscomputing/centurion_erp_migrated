@@ -41,6 +41,14 @@ Below you will find the API documentation for the views that are used throughout
         heading_level: 3
 
 
+## Display View
+
+::: app.core.views.common.DisplayView
+    options:
+        inherited_members: true
+        heading_level: 3
+
+
 ## Index View
 
 ::: app.core.views.common.IndexView
