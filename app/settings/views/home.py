@@ -7,7 +7,10 @@ from django.views.generic import View
 
 class View(View):
 
-    permission_required = 'itam.view_settings'
+    permission_required = [
+        'itam.view_settings'
+    ]
+
     template_name = 'settings/home.html.j2'
 
 

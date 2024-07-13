@@ -9,7 +9,9 @@ class Index(IndexView):
 
     model = SoftwareCategory
 
-    permission_required = 'itam.view_software'
+    permission_required = [
+        'itam.view_software'
+    ]
 
     template_name = 'settings/software_categories.html.j2'
 
