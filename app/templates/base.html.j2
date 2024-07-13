@@ -86,7 +86,7 @@ section h2 span svg {
         </span>
         {% endif %}
         {% if model_docs_path %}
-        <span title="Documentation" id="content_header_icon" class="icon-help" onclick="window.open('{% settings_value 'DOCS_ROOT' %}{{ model_docs_path }}', '_blank')">
+        <span title="Help" id="content_header_icon" class="icon-help" onclick="window.open('{% settings_value 'DOCS_ROOT' %}{{ model_docs_path }}', '_blank')">
           {% include 'icons/help.svg' %}
         </span>
         {% endif %}
@@ -105,19 +105,38 @@ section h2 span svg {
         {% block content %}{% endblock %}
       </article>
       {% endblock article %}
+      <style>
+
+      </style>
       <footer>
-      <span style="position:relative; font-size: 12px">
-        Build details: 
-        {% if build_details.version %}
-        version: {{ build_details.version }} 
-        {% else %}
-          development
-        {% endif %}
-        ( {% if build_details.project_url %}<a href="{{ build_details.project_url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
-        {{ build_details.sha }}
-        {% if build_details.project_url %}</a>{% endif %} )
-      </span>
-      <span></span>
+        <span style=" text-align: left;">
+          <a title="Documentation" href="https://nofusscomputing.com/projects/centurion_erp/" target="_blank">
+            {% include 'icons/documentation.svg' %}
+          </a>
+          <a title="Rest API" href="/api/" target="_blank">
+            {% include 'icons/api.svg' %}
+          </a>
+          <a title="Swagger API Documentation" href="/api/swagger/" target="_blank">
+            {% include 'icons/swagger_docs.svg' %}
+          </a>
+          <a title="Code Home" href="https://gitlab.com/nofusscomputing/projects/centurion_erp" target="_blank">
+            {% include 'icons/git.svg' %}
+          </a>
+        </span>
+        <span style="color: #aaa; font-size: 12px; text-align: center;">
+          Centurion ERP brought to you by <a href="https://nofusscomputing.com">No Fuss Computing</a>
+        </span>
+        <span style="text-align: right; font-size: 12px">
+          Release: 
+          {% if build_details.version %}
+          version: {{ build_details.version }} 
+          {% else %}
+            development
+          {% endif %}
+          ( {% if build_details.project_url %}<a href="{{ build_details.project_url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
+          {{ build_details.sha }}
+          {% if build_details.project_url %}</a>{% endif %} )
+        </span>
       </footer>
     </section>
   </main>

@@ -190,6 +190,22 @@ footer {
   margin: 0%;
 }
 
+footer span {
+  display: inline-block;
+  width: 33%;
+  padding: 0px 10px 0px 10px;
+  margin: 0px;
+  vertical-align: middle;
+  height: 100%;
+  /*line-height: 76px;*/
+}
+
+footer span svg {
+  height: 100%;
+  width: 30px;
+  fill: #177ee6
+}
+
 /* Style The Dropdown Button */
 .dropbtn {
   background-color: #177ee6;
