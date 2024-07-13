@@ -27,7 +27,9 @@ class GroupIndexView(IndexView):
 
     paginate_by = 10
 
-    permission_required = 'config_management.view_configgroups'
+    permission_required = [
+        'config_management.view_configgroups'
+    ]
 
     template_name = 'config_management/group_index.html.j2'
 
@@ -56,6 +58,8 @@ class GroupIndexView(IndexView):
 
 
 class GroupAdd(AddView):
+
+    organization_field = 'organization'
 
     fields = [
         'name',
