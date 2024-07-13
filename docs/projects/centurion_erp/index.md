@@ -20,7 +20,7 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 </span>
 
-Whilst there exists many ERPs, Centurion ERP is being developed to provide another open source option with a large emphasis on the IT Service Management (ITSM) modules. The goal is to provide a system that is not only an IT Information Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. Other common modules that form part of or are normally found within an ERP system, will be added if they relate specifically to any ITSM workflow. We welcome contributions should you desire a feature that does not yet exist.
+Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurion ERP is being developed to provide an open source option with a large emphasis on the IT Service Management (ITSM) modules. The goal is to provide a system that is not only an IT Information Library (ITIL), but that of which will connect to other ITSM systems, i.e. AWX for automation orchestration. Other common modules that form part of or are normally found within an ERP system, will be added if they relate specifically to any ITSM workflow. We welcome contributions should you desire a feature that does not yet exist.
 
 
 ## Features
@@ -60,7 +60,7 @@ Specific features for a module can be found on the module's documentation un the
 
 ## Development
 
-It's important to us that Centurion ERP remaining stable. To assist with this we do test the Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
+It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
 
 !!! info
     If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.

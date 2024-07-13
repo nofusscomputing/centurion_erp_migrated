@@ -6,7 +6,7 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-This section of the documentation different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the application.
+This section of the documentation contains different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the application.
 
 
 ## Handy links
@@ -42,7 +42,7 @@ Icons with text:
 
 ### Adding an Application
 
-1. Install the django application with `pip <app-name>`
+1. Install Centurion ERP application with `pip <app-name>`
 
 1. Update `app.settings.py`
 
