@@ -10,7 +10,7 @@ urlpatterns = [
     path('group/add', GroupAdd.as_view(), name='_group_add'),
     path('group/<int:pk>', GroupView.as_view(), name='_group_view'),
 
-    path('group/<int:group_id>/child', GroupAdd.as_view(), name='_group_add_child'),
+    path('group/<int:pk>/child', GroupAdd.as_view(), name='_group_add_child'),
     path('group/<int:pk>/delete', GroupDelete.as_view(), name='_group_delete'),
 
     path("group/<int:pk>/software/add", GroupSoftwareAdd.as_view(), name="_group_software_add"),

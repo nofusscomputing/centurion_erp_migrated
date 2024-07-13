@@ -78,11 +78,11 @@ class GroupAdd(AddView):
             'organization': UserSettings.objects.get(user = self.request.user).default_organization
         }
 
-        if 'group_id' in self.kwargs:
+        if 'pk' in self.kwargs:
 
-            if self.kwargs['group_id']:
+            if self.kwargs['pk']:
 
-                initial.update({'parent': self.kwargs['group_id']})
+                initial.update({'parent': self.kwargs['pk']})
 
                 self.model.parent.field.hidden = True
 
