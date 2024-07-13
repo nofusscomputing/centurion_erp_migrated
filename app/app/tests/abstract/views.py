@@ -14,6 +14,21 @@ class AddView:
     """ View Class name to test """
 
 
+    def test_view_add_attribute_not_exists_fields(self):
+        """ Attribute does not exists test
+        
+        Ensure that `fields` attribute is not defined as the expectation is that a form will be used.
+        """
+
+        module = __import__(self.add_module, fromlist=[self.add_view])
+
+        assert hasattr(module, self.add_view)
+
+        viewclass = getattr(module, self.add_view)
+
+        assert viewclass.fields is None
+
+
     def test_view_add_attribute_exists_form_class(self):
         """ Attribute exists test
         
@@ -128,6 +143,21 @@ class ChangeView:
 
     change_view: str = None
     """ Change Class name to test """
+
+
+    def test_view_change_attribute_not_exists_fields(self):
+        """ Attribute does not exists test
+        
+        Ensure that `fields` attribute is not defined as the expectation is that a form will be used.
+        """
+
+        module = __import__(self.change_module, fromlist=[self.change_view])
+
+        assert hasattr(module, self.change_view)
+
+        viewclass = getattr(module, self.change_view)
+
+        assert viewclass.fields is None
 
 
     def test_view_change_attribute_exists_form_class(self):
