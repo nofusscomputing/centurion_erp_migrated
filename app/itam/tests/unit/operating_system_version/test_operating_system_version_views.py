@@ -4,13 +4,14 @@ import requests
 
 from django.test import TestCase
 
-from app.tests.abstract.models import ModelAdd, ModelDelete, ModelDisplay
+from app.tests.abstract.models import ModelAdd, ModelChange, ModelDelete, ModelDisplay
 
 
 
 class OperatingSystemVersionViews(
     TestCase,
     ModelAdd,
+    ModelChange,
     ModelDelete,
     ModelDisplay
 ):
@@ -18,8 +19,8 @@ class OperatingSystemVersionViews(
     add_module = 'itam.views.operating_system_version'
     add_view = 'Add'
 
-    # change_module = add_module
-    # change_view = 'View'
+    change_module = add_module
+    change_view = 'View'
 
     delete_module = add_module
     delete_view = 'Delete'

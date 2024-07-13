@@ -21,6 +21,18 @@ TeamUserFormSet = inlineformset_factory(
     ]
 )
 
+
+
+class TeamFormAdd(CommonModelForm):
+
+    class Meta:
+        model = Team
+        fields = [
+            'name',
+        ]
+
+
+
 class TeamForm(CommonModelForm):
 
     class Meta:

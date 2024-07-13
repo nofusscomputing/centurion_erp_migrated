@@ -15,5 +15,7 @@ class ConfigGroupForm(CommonModelForm):
         'name',
         'parent',
         'is_global',
+        'organization',
+        'model_notes',
         'config',
        ]

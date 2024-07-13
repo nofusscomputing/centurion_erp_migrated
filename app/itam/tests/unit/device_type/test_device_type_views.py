@@ -4,13 +4,14 @@ import requests
 
 from django.test import TestCase
 
-from app.tests.abstract.models import ModelAdd, ModelDelete, ModelDisplay
+from app.tests.abstract.models import ModelAdd, ModelChange, ModelDelete, ModelDisplay
 
 
 
 class DeviceTypeViews(
     TestCase,
     ModelAdd,
+    ModelChange,
     ModelDelete,
     ModelDisplay
 ):

@@ -4,29 +4,26 @@ from django.utils.decorators import method_decorator
 
 from core.views.common import AddView, ChangeView, DeleteView
 
-from ..models.software import Software, SoftwareCategory
+from itam.forms.software_category import SoftwareCategoryForm
+from itam.models.software import Software, SoftwareCategory
 
 from settings.models.user_settings import UserSettings
 
 
 class View(ChangeView):
+
+    context_object_name = "software"
+
+    form_class = SoftwareCategoryForm
+
     model = SoftwareCategory
+
     permission_required = [
         'itam.view_softwarecategory',
         'itam.change_softwarecategory',
     ]
+
     template_name = 'form.html.j2'
-
-    fields = [
-        "name",
-        'slug',
-        'id',
-        'organization',
-        'is_global',
-        'model_notes',
-    ]
-
-    context_object_name = "software"
 
 
     def get_context_data(self, **kwargs):
@@ -52,17 +49,16 @@ class View(ChangeView):
 
 
 class Add(AddView):
+
+    form_class = SoftwareCategoryForm
+
     model = SoftwareCategory
+
     permission_required = [
         'itam.add_softwarecategory',
     ]
-    template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'organization',
-        'is_global'
-    ]
 
+    template_name = 'form.html.j2'
 
     def get_initial(self):
 

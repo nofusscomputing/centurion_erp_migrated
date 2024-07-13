@@ -5,7 +5,8 @@ from core.forms.common import CommonModelForm
 from itam.models.software import Software
 
 
-class Update(CommonModelForm):
+
+class SoftwareForm(CommonModelForm):
 
     class Meta:
         model = Software
@@ -19,6 +20,11 @@ class Update(CommonModelForm):
             'category',
             'model_notes',
         ]
+
+
+
+class SoftwareFormUpdate(SoftwareForm):
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

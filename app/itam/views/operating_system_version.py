@@ -2,21 +2,22 @@ from django.urls import reverse
 
 from core.views.common import AddView, ChangeView, DeleteView
 
-from ..models.operating_system import OperatingSystem, OperatingSystemVersion
+from itam.forms.operating_system_version import OperatingSystemVersionForm
+from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
 
 
 class View(ChangeView):
+
+    form_class = OperatingSystemVersionForm
+
     model = OperatingSystemVersion
+
     permission_required = [
         'itam.view_operating_systemversion'
     ]
+
     template_name = 'form.html.j2'
-
-    fields = [
-        "name",
-    ]
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -33,14 +34,16 @@ class View(ChangeView):
 
 
 class Add(AddView):
+
+    form_class = OperatingSystemVersionForm
+
     model = OperatingSystemVersion
+
     permission_required = [
         'access.add_operating_systemversion',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name'
-    ]
 
     def form_valid(self, form):
         operating_system = OperatingSystem.objects.get(pk=self.kwargs['pk'])

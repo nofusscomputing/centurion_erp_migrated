@@ -4,28 +4,25 @@ from django.utils.decorators import method_decorator
 
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
-from ..models.device import DeviceType
+from itam.models.device import DeviceType
+from itam.forms.device_type import DeviceTypeForm
 
 from settings.models.user_settings import UserSettings
 
 
 
 class View(ChangeView):
+
+    form_class = DeviceTypeForm
+
     model = DeviceType
+
     permission_required = [
         'itam.view_devicetype',
         'itam.change_devicetype'
     ]
-    template_name = 'form.html.j2'
 
-    fields = [
-        "name",
-        'slug',
-        'id',
-        'organization',
-        'is_global',
-        'model_notes',
-    ]
+    template_name = 'form.html.j2'
 
     context_object_name = "device_category"
 
@@ -52,16 +49,16 @@ class View(ChangeView):
 
 
 class Add(AddView):
+
+    form_class = DeviceTypeForm
+
     model = DeviceType
+
     permission_required = [
         'itam.add_devicetype',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):

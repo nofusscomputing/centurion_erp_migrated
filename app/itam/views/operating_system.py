@@ -9,7 +9,7 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.forms.operating_system.update import Update
+from itam.forms.operating_system.update import OperatingSystemFormCommon, Update
 
 from settings.models.user_settings import UserSettings
 
@@ -45,16 +45,19 @@ class IndexView(IndexView):
 
 
 class View(ChangeView):
+
+    context_object_name = "operating_system"
+
+    form_class = Update
+
     model = OperatingSystem
+
     permission_required = [
         'itam.view_operatingsystem',
         'itam.change_operatingsystem',
     ]
+
     template_name = 'itam/operating_system.html.j2'
-
-    form_class = Update
-
-    context_object_name = "operating_system"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -104,17 +107,16 @@ class View(ChangeView):
 
 
 class Add(AddView):
+
+    form_class = OperatingSystemFormCommon
+
     model = OperatingSystem
+
     permission_required = [
         'itam.add_operatingsystem',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'publisher',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):

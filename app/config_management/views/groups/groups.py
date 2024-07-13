@@ -61,11 +61,7 @@ class GroupAdd(AddView):
 
     organization_field = 'organization'
 
-    fields = [
-        'name',
-        'parent',
-        'organization',
-    ]
+    form_class = ConfigGroupForm
 
     model = ConfigGroups
 

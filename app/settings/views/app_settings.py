@@ -7,6 +7,7 @@ from access.mixin import OrganizationPermission
 
 from core.views.common import ChangeView
 
+from settings.forms.app_settings import AppSettingsForm
 from settings.models.app_settings import AppSettings
 
 
@@ -15,9 +16,9 @@ class View(generic.UpdateView):
 
     context_object_name = "settings"
 
-    model = AppSettings
+    form_class = AppSettingsForm
 
-    fields = model.__all__
+    model = AppSettings
 
     permission_required = [
         'settings.change_appsettings'

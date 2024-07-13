@@ -3,7 +3,7 @@ from django.contrib.auth.models import Permission
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 
-from access.forms.team import TeamForm
+from access.forms.team import TeamForm, TeamFormAdd
 from access.models import Team, TeamUsers, Organization
 from access.mixin import *
 
@@ -79,6 +79,9 @@ class View(ChangeView):
 
 
 class Add(AddView):
+
+    form_class = TeamFormAdd
+
     model = Team
 
     parent_model = Organization
@@ -86,10 +89,8 @@ class Add(AddView):
     permission_required = [
         'access.add_team',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'team_name',
-    ]
 
     def form_valid(self, form):
         form.instance.organization = Organization.objects.get(pk=self.kwargs['pk'])

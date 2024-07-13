@@ -8,7 +8,7 @@ from app.tests.abstract.models import PrimaryModel
 
 
 
-class SoftwareViews(
+class SoftwareCategoryViews(
     TestCase,
     PrimaryModel
 ):

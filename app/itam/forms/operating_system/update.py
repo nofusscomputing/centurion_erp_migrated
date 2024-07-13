@@ -8,10 +8,11 @@ from core.forms.common import CommonModelForm
 from itam.models.operating_system import OperatingSystem
 
 
-class Update(CommonModelForm):
+
+class OperatingSystemFormCommon(CommonModelForm):
 
     class Meta:
-        model = OperatingSystem
+
         fields = [
             "name",
             'publisher',
@@ -21,6 +22,12 @@ class Update(CommonModelForm):
             'is_global',
             'model_notes',
         ]
+
+        model = OperatingSystem
+
+
+
+class Update(OperatingSystemFormCommon):
 
 
     def __init__(self, *args, **kwargs):
