@@ -1,6 +1,6 @@
 ---
 title: Test Cases
-description: No Fuss Computings django itsm unit tests
+description: No Fuss Computings Centurion ERP unit tests
 date: 2024-06-15
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
