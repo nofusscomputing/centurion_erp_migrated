@@ -51,13 +51,6 @@ class GroupSoftwareAdd(AddView):
             return super().form_valid(form)
 
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        obj = ConfigGroups.objects.get(pk=self.kwargs['pk'])
-        kwargs['organizations'] = [ obj.organization.id ]
-        return kwargs
-
-
     def get_success_url(self, **kwargs):
 
         return reverse('Config Management:_group_view', args=(self.kwargs['pk'],))

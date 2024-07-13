@@ -15,9 +15,3 @@ class SoftwareAdd(CommonModelForm):
         'software',
         'action'
        ]
-
-    def __init__(self, *args, **kwargs):
-        organizations = kwargs.pop('organizations')
-        super().__init__(*args, **kwargs)
-
-        self.fields['software'].queryset = Software.objects.filter(Q(organization_id__in=organizations) | Q(is_global = True))

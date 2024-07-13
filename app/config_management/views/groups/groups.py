@@ -258,20 +258,11 @@ class GroupHostAdd(AddView):
 
         exsting_group_hosts = ConfigGroupHosts.objects.filter(group=group)
 
-        form_class.fields["host"].queryset = None
+        form_class.fields["host"].queryset = form_class.fields["host"].queryset.filter(
+        ).exclude(
+            id__in=exsting_group_hosts.values_list('host', flat=True)
+        )
 
-        if group.is_global:
-
-            form_class.fields["host"].queryset = Device.objects.filter(
-            ).exclude(
-                id__in=exsting_group_hosts.values_list('host', flat=True)
-            )
-
-        if form_class.fields["host"].queryset is None:
-
-            form_class.fields["host"].queryset = Device.objects.filter(
-                organization=group.organization.id,
-            ).exclude(id__in=exsting_group_hosts.values_list('host', flat=True))
 
         return form_class
 
