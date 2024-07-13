@@ -2,6 +2,7 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from core.exceptions import MissingAttribute
 
 
 class View(OrganizationPermission):
@@ -70,6 +71,6 @@ class IndexView(View, generic.ListView):
 
         if not self.model:
 
-            raise Exception('Model is required for view')
+            raise MissingAttribute('Model is required for view')
 
         super().__init__(**kwargs)
