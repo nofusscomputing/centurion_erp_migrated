@@ -3,8 +3,8 @@ INHERIT: website-template/mkdocs.yml
 docs_dir: 'docs'
 
 repo_name: Centurion ERP
-repo_url: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
-edit_uri: '/-/ide/project/nofusscomputing/infrastructure/configuration-management/django_app/edit/development/-/docs/'
+repo_url: https://gitlab.com/nofusscomputing/projects/centurion_erp
+edit_uri: '/-/ide/project/nofusscomputing/projects/centurion_erp/edit/development/-/docs/'
 
 plugins:
   mkdocstrings:
@@ -48,7 +48,7 @@ nav:
 
   - projects/index.md
 
-  - Django Template:
+  - Centurion ERP:
 
     - projects/centurion_erp/index.md
 
