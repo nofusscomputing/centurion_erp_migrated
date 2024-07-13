@@ -17,7 +17,7 @@ urlpatterns = [
     path("group/<int:group_id>/software/<int:pk>", GroupSoftwareChange.as_view(), name="_group_software_change"),
     path("group/<int:group_id>/software/<int:pk>/delete", GroupSoftwareDelete.as_view(), name="_group_software_delete"),
 
-    path('group/<int:group_id>/host', GroupHostAdd.as_view(), name='_group_add_host'),
+    path('group/<int:pk>/host', GroupHostAdd.as_view(), name='_group_add_host'),
     path('group/<int:group_id>/host/<int:pk>/delete', GroupHostDelete.as_view(), name='_group_delete_host'),
 
 ]

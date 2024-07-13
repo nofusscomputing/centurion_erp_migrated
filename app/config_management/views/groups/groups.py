@@ -222,8 +222,10 @@ class GroupHostAdd(AddView):
 
     model = ConfigGroupHosts
 
+    parent_model = ConfigGroups
+
     permission_required = [
-        'config_management.add_hosts',
+        'config_management.add_configgrouphosts',
     ]
 
     template_name = 'form.html.j2'
@@ -233,7 +235,9 @@ class GroupHostAdd(AddView):
 
     def form_valid(self, form):
 
-        form.instance.group_id = self.kwargs['group_id']
+        form.instance.group_id = self.kwargs['pk']
+
+        form.instance.organization = self.parent_model.objects.get(pk=form.instance.group_id).organization
 
         return super().form_valid(form)
 
@@ -250,7 +254,7 @@ class GroupHostAdd(AddView):
 
         form_class = super().get_form(form_class=None)
 
-        group = ConfigGroups.objects.get(pk=self.kwargs['group_id'])
+        group = ConfigGroups.objects.get(pk=self.kwargs['pk'])
 
         exsting_group_hosts = ConfigGroupHosts.objects.filter(group=group)
 
@@ -274,7 +278,7 @@ class GroupHostAdd(AddView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])
+        return reverse('Config Management:_group_view', args=[self.kwargs['pk'],])
 
 
 
