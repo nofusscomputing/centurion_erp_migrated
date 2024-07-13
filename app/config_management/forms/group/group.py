@@ -19,3 +19,16 @@ class ConfigGroupForm(CommonModelForm):
         'model_notes',
         'config',
        ]
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        if 'parent' in kwargs['initial']:
+
+            self.fields['parent'].queryset = self.fields['parent'].queryset.filter(
+            ).exclude(
+                id=int(kwargs['initial']['parent'])
+            )
