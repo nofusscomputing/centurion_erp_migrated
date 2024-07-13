@@ -287,7 +287,7 @@ class GroupHostDelete(DeleteView):
     model = ConfigGroupHosts
 
     permission_required = [
-        'config_management.delete_hosts',
+        'config_management.delete_configgrouphosts',
     ]
 
     template_name = 'form.html.j2'
