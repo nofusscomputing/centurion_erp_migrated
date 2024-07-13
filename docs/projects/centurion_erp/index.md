@@ -60,7 +60,7 @@ Specific features for a module can be found on the module's documentation un the
 
 ## Development
 
-It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
+It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/merge_requests) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
 
 !!! info
     If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
@@ -74,9 +74,19 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
     - Accounting _[see #88](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/88)_
 
+        General Ledger - _[see #116](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/116)_
+
     - Asset Management _[see #89](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/88)_
 
     - Change Management _[see #90](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/90)_
+
+    - Config Management
+
+        - Host Config _[see #44](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/44)_
+
+    - Core
+
+        - Location Management (Regions, Sites and Locations) _[see #62](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/62)_
 
     - Customer Relationship Management (CRM) _[see #91](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/91)_
 
@@ -92,9 +102,31 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
     - Information Management _[see #10](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/10)_
 
+    - IT Asset Management (ITAM)
+
+        - Licence Management _[see #4](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/4)_
+
     - IT Infrastructure Management (ITIM) _[see #61](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/61)_
 
+        - Cluster Management _[see #71](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/71)_
+
+        - Database Management _[see #72](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/72)_
+
+        - Service Management _[see #19](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/19)_
+
+        - Software Package Management _[see #96](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/96)_
+
+        - Role Management _[see #70](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/70)_
+
+        - Virtual Machine Management _[see #73](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/73)_
+
+        - Vulnerability Management 
+
+            - Software _[see #3](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/3)_
+
     - Order Management _[see #94](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/94)_
+
+        - Supplier Management _[see #123](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/123)_
 
     - Project Management _[see #14](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/14)_
 
@@ -105,11 +137,11 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
 - **Planned Integrations:**
 
+    - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
+
+        [ArgoCD](https://github.com/argoproj-labs) is a Continuous Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
+
     - AWX  _[see #113](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/113)_
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.
-
-    - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
-
-        [ArgoCD](https://github.com/argoproj-labs) is a Continious Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
 
