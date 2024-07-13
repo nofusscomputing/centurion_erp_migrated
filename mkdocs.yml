@@ -60,8 +60,6 @@ nav:
 
       - projects/centurion_erp/development/index.md
 
-      - projects/centurion_erp/development/testing.md
-
       - Application API:
 
         - projects/centurion_erp/development/api/index.md
@@ -136,7 +134,13 @@ nav:
 
           - projects/centurion_erp/development/api/tests/notes_permissions.md
 
-    - projects/centurion_erp/development/views.md
+      - projects/centurion_erp/development/forms.md
+
+      - projects/centurion_erp/development/models.md
+
+      - projects/centurion_erp/development/testing.md
+
+      - projects/centurion_erp/development/views.md
     
     - User:
 

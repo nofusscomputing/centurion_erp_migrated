@@ -41,14 +41,14 @@ Icons with text:
 
 Within Centurion ERP the navigation menu is dynamically built. To have an item added to the navigation bar to the left of the screen, the following items must be set:
 
-- within the `urlpatterns` list, the path contains the name parameter. 
+- within the `urlpatterns` list, the path contains the name parameter.
 
     !!! tip
         Don't use a name that starts with `_`, as this prefix is designed to be used to prevent the url from showing up within the navigation menu
 
 - `app_name = "<app name>"` set in `urls.py`
 
-_Example entry_
+._Example entry_
 
 ``` py title="urls.py"
 

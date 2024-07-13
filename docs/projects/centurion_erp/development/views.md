@@ -43,9 +43,9 @@ All views are to meet the following requirements:
 
 - View class has the following attributes definedL
 
-    - `form_class`
+    - `form_class` for the display of [forms](./forms.md).
 
-    - `model`
+    - `model` for which data [model](./models.md) to use.
 
 - Add and change views to use a form class
 
@@ -56,7 +56,7 @@ All views are to meet the following requirements:
     The below documentation is still to be developed. As such what is written below may be incorrect.
 
 
-#### Templates
+### Templates
 
 The base template includes blocks that are designed to assist in rendering your content. The following blocks are available:
 
