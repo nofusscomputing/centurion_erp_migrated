@@ -1,3 +1,4 @@
+import inspect
 import pytest
 import unittest
 
@@ -31,7 +32,7 @@ class AddView:
     def test_view_add_attribute_type_form_class(self):
         """ Attribute Type Test
         
-        Ensure that `form_class` attribute is a string.
+        Ensure that `form_class` attribute is a class.
         """
 
         module = __import__(self.add_module, fromlist=[self.add_view])
@@ -40,7 +41,7 @@ class AddView:
 
         viewclass = getattr(module, self.add_view)
 
-        assert type(viewclass.form_class) == str
+        assert inspect.isclass(viewclass.form_class)
 
 
     def test_view_add_attribute_exists_model(self):
@@ -156,7 +157,7 @@ class ChangeView:
 
         viewclass = getattr(module, self.change_view)
 
-        assert type(viewclass.form_class) == str
+        assert inspect.isclass(viewclass.form_class)
 
 
     def test_view_change_attribute_exists_model(self):
