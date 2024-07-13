@@ -120,7 +120,7 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
         - Virtual Machine Management _[see #73](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/73)_
 
-        - Vulnerability Management 
+        - Vulnerability Management
 
             - Software _[see #3](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/3)_
 
@@ -144,4 +144,3 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
     - AWX  _[see #113](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/113)_
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.
-

@@ -15,19 +15,16 @@ This section of the documentation contains different items related to the develo
 
 - [Forms](./api/form.md)
 
+- [Models](./models.md)
+
 - [Testing](./testing.md)
 
 - [Views](./views.md)
 
 
-## Random items to be relocated in the future
+## Icons
 
-_the below sections need to be refactored._
-
-
-### Icons
-
-To locate additional icons for use see [material icons](https://fonts.google.com/icons).
+To locate additional icons for use see [material icons](https://fonts.google.com/icons) or [more material icons](https://pictogrammers.com/library/mdi/).
 
 Icons with text:
 
@@ -40,144 +37,36 @@ Icons with text:
 - Issue `{% include 'icons/issue_link.html.j2' with issue=2 %}` _Used to provide a link to an issue on GitLab. i.e. incomplete feature ticket_
 
 
-### Adding an Application
+## Navigation
 
-1. Install Centurion ERP application with `pip <app-name>`
+Within Centurion ERP the navigation menu is dynamically built. To have an item added to the navigation bar to the left of the screen, the following items must be set:
 
-1. Update `app.settings.py`
+- within the `urlpatterns` list, the path contains the name parameter. 
 
-    ``` python
+    !!! tip
+        Don't use a name that starts with `_`, as this prefix is designed to be used to prevent the url from showing up within the navigation menu
 
-    INSTALLED_APPS = [
+- `app_name = "<app name>"` set in `urls.py`
 
-        '<app name>.apps.<apps.py Class Name>', # Within project directory
+_Example entry_
 
-        '<app name>',                           # not in project directory
+``` py title="urls.py"
 
-    ]
+from django.urls import path
 
-    ```
-
-1. Update `itsm/urls.py`
-
-    ``` python
-
-    urlpatterns = [
-
-        path("<url path>/", include("<app name>.urls")),
-
-    ]
-
-    ```
-
-!!! tip
-    No url from the application will be visible without including the `name` parameter when calling the `path` function within the applications `url.py`. i.e. `urlpatterns[].path(name='<Navigation Name>')`. This is by design and when combined with a prefix of `_` provides the option to limit what URL's are displayed within the navigation menu. A name beginning with an underscore `_` will not be displayed in the menu.
-
-Once you have completed the above list, your application will display collapsed within the navigation menu with the name of your application.
+from access.views import organization
 
 
-### Tenancy Setup
-
-Within your view class include the mixin class `OrganizationPermission`, ensuring that you set the `permission_required` attribute.
+app_name = "Access"
 
 
-#### Model Setup
-
-Any item you wish to be multi-tenant, ensure within your model you include the tenancy model abstract class. The class includes a field called `organization` which links directly to the organization model and is used by the tenancy permission check.
-
-``` python title="<your app name>/models.py"
-
-from access.models import TenancyObject
-
-class YourObject(TenancyObject):
-    ...
+urlpatterns = [
+    path("", organization.IndexView.as_view(), name="Organizations"),
+]
 
 ```
 
 
-#### View Setup
+## Tenancy Setup
 
-The mixin inlcuded in this template `OrganizationPermission` is designed to work with all django built in views and is what does the multi-tenancy permission checks.
-
-``` python title="<your app name>/views.py"
-
-from django.db.models import Q
-
-from access.mixins import OrganizationPermission
-
-
-class IndexView(OrganizationPermission, generic.ListView):
-    
-    model = YourModel
-
-    permission_required = 'access.view_organization'
-
-    # Use this for static success url
-    success_url = f"/organization/" + pk_url_kwarg
-
-
-    # Use this to build dynamic success URL
-    def get_success_url(self, **kwargs):
-
-        return f"/organization/{self.kwargs['pk']}/"
-
-
-    def get_queryset(self):
-
-        return MyModel.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True))
-
-```
-
-Using a filter `pk__in=self.user_organizations()` for the queryset using the mixins function `user_organizations`, will limit the query set to only items where the user is a member of the organization.
-
-
-#### Templates
-
-The base template includes blocks that are designed to assist in rendering your content. The following blocks are available:
-
-- `title` - The page and title
-
-- `content_header_icon` - Header icon that is middle aligned with the page title, floating right.
-
-- `body` -  The html content of the page
-
-``` html title="template.html.j2"
-
-{% extends 'base.html.j2' %}
-
-{% block title %}{% endblock %}
-{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}
-
-{% block body %}
-
-your content here
-
-{% endblock %}
-
-```
-
-
-### Add history to model
-
-The tracking of changes can be added to a model by including the `SaveHistory` mixin from `core.mixin.history_save` to the model.
-
-``` python
-
-from core.mixin.history_save import SaveHistory
-
-class MyModel(SaveHistory):
-
-    .....
-
-```
-
-for items that have a parent item, modification will need to be made to the mixin by adding the relevant check and setting the relevant keys.
-
-``` python
-
-if self._meta.model_name == 'deviceoperatingsystem':
-
-    item_parent_pk = self.device.pk
-    item_parent_class = self.device._meta.model_name
-
-```
+All items within Centurion ERP are considered tenancy objects. Pay particular attention to any requirement that specifies that a class is to be included. Some of these classes add the required logic for Tenancy object CRUD operations as well as permission checking.

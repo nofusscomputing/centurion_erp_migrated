@@ -31,3 +31,53 @@ The views that we use are:
     Display a model
 
 Common test cases are available for views. These test cases can be found within the API docs under [model view test cases](./api/tests/model_views.md).
+
+
+## Requirements
+
+All views are to meet the following requirements:
+
+- is defined as a class
+
+- View class inherits from one of the above listed views
+
+- View class has the following attributes definedL
+
+    - `form_class`
+
+    - `model`
+
+- Add and change views to use a form class
+
+
+## Docs to clean up
+
+!!! note
+    The below documentation is still to be developed. As such what is written below may be incorrect.
+
+
+#### Templates
+
+The base template includes blocks that are designed to assist in rendering your content. The following blocks are available:
+
+- `title` - The page and title
+
+- `content_header_icon` - Header icon that is middle aligned with the page title, floating right.
+
+- `body` -  The html content of the page
+
+``` html title="template.html.j2"
+
+{% extends 'base.html.j2' %}
+
+{% block title %}{% endblock %}
+{% block content_header_icon %}<span title="View History" id="content_header_icon">H</span>{% endblock %}
+
+{% block body %}
+
+your content here
+
+{% endblock %}
+
+```
+
