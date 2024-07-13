@@ -31,9 +31,15 @@ from settings.models.user_settings import UserSettings
 
 
 class IndexView(IndexView):
+
     model = Device
-    permission_required = 'itam.view_device'
+
+    permission_required = [
+        'itam.view_device'
+    ]
+
     template_name = 'itam/device_index.html.j2'
+
     context_object_name = "devices"
 
     paginate_by = 10
