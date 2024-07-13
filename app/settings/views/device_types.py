@@ -7,9 +7,12 @@ from itam.models.device import DeviceType
 
 
 class Index(IndexView):
+
     model = DeviceType
 
-    permission_required = 'itam.view_devicetype'
+    permission_required = [
+        'itam.view_devicetype'
+    ]
 
     template_name = 'settings/device_types.html.j2'
 
