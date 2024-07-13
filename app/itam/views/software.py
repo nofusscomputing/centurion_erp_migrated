@@ -16,11 +16,19 @@ from settings.models.user_settings import UserSettings
 
 
 class IndexView(IndexView):
-    model = Software
-    permission_required = 'itam.view_software'
-    template_name = 'itam/software_index.html.j2'
+
     context_object_name = "softwares"
+
+    model = Software
+
     paginate_by = 10
+
+    permission_required = [
+        'itam.view_software'
+
+    ]
+
+    template_name = 'itam/software_index.html.j2'
 
 
     def get_context_data(self, **kwargs):
