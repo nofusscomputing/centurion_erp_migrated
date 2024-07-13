@@ -13,11 +13,15 @@ from settings.models.app_settings import AppSettings
 
 class View(generic.UpdateView):
 
-    model = AppSettings
-
     context_object_name = "settings"
 
+    model = AppSettings
+
     fields = model.__all__
+
+    permission_required = [
+        'settings.change_appsettings'
+    ]
 
     template_name = 'form.html.j2'
 
