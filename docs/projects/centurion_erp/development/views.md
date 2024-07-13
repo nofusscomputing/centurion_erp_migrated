@@ -12,7 +12,7 @@ The views that we use are:
 
 - [Index](./api/common_views.md#index-view)
 
-    A Models index page
+    Models index page
 
 - [Add](./api/common_views.md#add-view)
 
@@ -24,4 +24,10 @@ The views that we use are:
 
 - [Delete](./api/common_views.md#delete-view)
 
-    To Delete a model
+    Delete a model
+
+- [Display](./api/common_views.md#display-view)
+
+    Display a model
+
+Common test cases are available for views. These test cases can be found within the API docs under [model view test cases](./api/tests/model_views.md).

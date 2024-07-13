@@ -46,6 +46,8 @@ Models are tested using the following test cases:
 
 - [History Entry Permissions](./model_history_permissions.md)
 
+- [Model Views](./model_views.md)
+
 - [Notes Permissions](./notes_permissions.md)
 
 - [Tenancy Objects](./model_tenancy_object.md)
