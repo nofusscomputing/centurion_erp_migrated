@@ -1,16 +1,16 @@
-# docker exec -ti django-itsm python manage.py migrate
-# docker exec -ti django-itsm python manage.py createsuperuser
+# docker exec -ti centurion-erp python manage.py migrate
+# docker exec -ti centurion-erp python manage.py createsuperuser
 version: "3.2"
 
 services:
 
-  django-itsm:
-    image: django-itsm:dev
+  centurion-erp:
+    image: centurion-erp:dev
     build:
-      context: .
+      context: ../.
       dockerfile: dockerfile
-    container_name : django-itsm
-    hostname: django-itsm
+    container_name: centurion-erp
+    hostname: centurion-erp
     ports:
       - "8002:8000"
     volumes:
