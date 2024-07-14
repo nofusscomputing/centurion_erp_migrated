@@ -22,7 +22,7 @@ class Index(IndexView):
     paginate_by = 10
 
     permission_required = [
-        'core.view_devicetype'
+        'core.view_manufacturer'
     ]
 
     template_name = 'settings/manufacturers.html.j2'
