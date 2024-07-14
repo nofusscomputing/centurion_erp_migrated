@@ -188,6 +188,8 @@ footer {
   vertical-align: middle;
   padding: 0%;
   margin: 0%;
+  color: #aaa;
+  font-size: 12px; 
 }
 
 footer span {
