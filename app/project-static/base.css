@@ -188,6 +188,24 @@ footer {
   vertical-align: middle;
   padding: 0%;
   margin: 0%;
+  color: #aaa;
+  font-size: 12px; 
+}
+
+footer span {
+  display: inline-block;
+  width: 33%;
+  padding: 0px 10px 0px 10px;
+  margin: 0px;
+  vertical-align: middle;
+  height: 100%;
+  /*line-height: 76px;*/
+}
+
+footer span svg {
+  height: 100%;
+  width: 30px;
+  fill: #177ee6
 }
 
 /* Style The Dropdown Button */
@@ -288,13 +306,15 @@ nav button.collapsible {
   background-color: inherit;
   color: white;
   cursor: pointer;
-  padding: 18px;
+  padding: 0px 18px 0px 18px;
   width: 100%;
   border: none;
   text-align: left;
   outline: none;
   font-size: 15px;
   margin: 0px;
+  line-height: 50px;
+  vertical-align: middle;
 }
 
 nav button.active, .collapsible:hover {
@@ -302,14 +322,14 @@ nav button.active, .collapsible:hover {
 }
 
 nav button.collapsible:after {
-  content: '\002B';
+  content: url('/static/icons/nav_arrow_right.svg');
   color: white;
   float: right;
   margin-left: 5px;
 }
 
 nav button.active:after {
-  content: "\2212";
+  content: url('/static/icons/nav_arrow_down.svg');
   font-weight: bold;
 }
 

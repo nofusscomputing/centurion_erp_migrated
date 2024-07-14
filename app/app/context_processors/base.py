@@ -5,6 +5,8 @@ from app.urls import urlpatterns
 from django.conf import settings
 from django.urls import URLPattern, URLResolver
 
+from access.models import Organization
+
 from settings.models.user_settings import UserSettings
 
 
@@ -88,7 +90,7 @@ def nav_items(context) -> list(dict()):
         is_active: {bool} if this link is the active URL
 
     Returns:
-        _type_: _description_
+        list: Items user has view access to
     """
 
     dnav = []
@@ -142,11 +144,45 @@ def nav_items(context) -> list(dict()):
 
                         name = str(pattern.name)
 
-                        nav_items = nav_items + [ {
-                            'name': name,
-                            'url': url,
-                            'is_active': is_active
-                            } ]
+                        if hasattr(pattern.callback.view_class, 'permission_required'):
+
+                            permissions_required = pattern.callback.view_class.permission_required
+
+                            user_has_perm = False
+
+                            if type(permissions_required) is list:
+
+                                user_has_perm = context.user.has_perms(permissions_required)
+
+                            else:
+
+                                user_has_perm = context.user.has_perm(permissions_required)
+
+                            if hasattr(pattern.callback.view_class, 'model'):
+
+                                if pattern.callback.view_class.model is Organization and context.user.is_authenticated:
+
+                                    organizations = Organization.objects.filter(manager = context.user)
+
+                                    if len(organizations) > 0:
+
+                                        user_has_perm = True
+
+                            if str(nav_group.app_name).lower() == 'settings':
+
+                                user_has_perm = True
+
+                            if context.user.is_superuser:
+
+                                user_has_perm = True
+
+                            if user_has_perm:
+
+                                nav_items = nav_items + [ {
+                                    'name': name,
+                                    'url': url,
+                                    'is_active': is_active
+                                    } ]
 
         if len(nav_items) > 0:
 

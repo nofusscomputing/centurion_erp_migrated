@@ -39,9 +39,9 @@
       <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
     </svg> Back to Devices</button>
   <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-  <button class="tablinks" onclick="openCity(event, 'Software')">Software</button>
-  <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
-  <button class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
+  <button id="SoftwareOpen" class="tablinks" onclick="openCity(event, 'Software')">Software</button>
+  <button id="NotesOpen" class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
+  <button id="ConfigManagementOpen" class="tablinks" onclick="openCity(event, 'ConfigManagement')">Config Management</button>
   <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
 </div>
 <style>
@@ -96,22 +96,46 @@
 
         <div class="detail-view-field">
           <label>{{ form.device_model.label }}</label>
-          <span>{{ form.device_model.value }}</span>
+          <span>
+          {% if device.device_model %}
+            {{ device.device_model }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.serial_number.label }}</label>
-          <span>{{ form.serial_number.value }}</span>
+          <span>
+          {% if form.serial_number.value %}
+            {{ form.serial_number.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.uuid.label }}</label>
-          <span>{{ form.uuid.value }}</span>
+          <span>
+          {% if form.uuid.value %}
+            {{ form.uuid.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
           <label>{{ form.device_type.label }}</label>
-          <span>{{ device.device_type }}</span>
+          <span>
+          {% if device.device_type %}
+            {{ device.device_type }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
         <div class="detail-view-field">
@@ -121,7 +145,13 @@
 
         <div class="detail-view-field">
           <label>{{ form.lastinventory.label }}</label>
-          <span>{{ form.lastinventory.value }}</span>
+          <span>
+          {% if form.lastinventory.value %}
+            {{ form.lastinventory.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
         </div>
 
       </div>
@@ -130,8 +160,13 @@
         <div>
           <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
           
-          <div style="display: inline-block; text-align: left;">{{ form.model_notes.value | markdown | safe }}</div>
-          {% include 'icons/issue_link.html.j2' with issue=13 %}<br>
+          <div style="display: inline-block; text-align: left;">
+          {% if form.model_notes.value  %} 
+            {{ form.model_notes.value | markdown | safe }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </div>
         </div>
       </div>
       </div>
@@ -147,10 +182,12 @@
       <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
     </div>
 
+    {% if not tab %}
     <script>
       // Get the element with id="defaultOpen" and click on it
       document.getElementById("defaultOpen").click();
     </script>
+    {% endif %}
 
   </div>
 
@@ -217,8 +254,8 @@
     <div class="pagination">
         <span class="step-links">
             {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                <a href="?page=1&tab=software">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}&tab=software">previous</a>
             {% endif %}
 
             <span class="current">
@@ -226,11 +263,18 @@
             </span>
 
             {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                <a href="?page={{ page_obj.next_page_number }}&tab=software">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&tab=software">last &raquo;</a>
             {% endif %}
         </span>
     </div>
+
+    {% if tab == 'software' %}
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("SoftwareOpen").click();
+    </script>
+    {% endif %}
   </div>
 
 
@@ -248,6 +292,12 @@
       {% endif %}
     </div>
 
+    {% if tab == 'notes' %}
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("NotesOpen").click();
+    </script>
+    {% endif %}
   </div>
 
 
@@ -278,6 +328,13 @@
       </tr>
       {% endif %}
     </table>
+
+    {% if tab == 'configmanagement' %}
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("ConfigManagementOpen").click();
+    </script>
+    {% endif %}
   </div>
 
 </form>

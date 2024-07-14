@@ -1,29 +1,34 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
-from itam.forms.software.update import Update as SoftwareUpdate_Form
+from itam.forms.software.update import SoftwareForm, SoftwareFormUpdate
 
 from settings.models.user_settings import UserSettings
 
 
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
-    model = Software
-    permission_required = 'itam.view_software'
-    template_name = 'itam/software_index.html.j2'
+class IndexView(IndexView):
+
     context_object_name = "softwares"
+
+    model = Software
+
     paginate_by = 10
+
+    permission_required = [
+        'itam.view_software'
+
+    ]
+
+    template_name = 'itam/software_index.html.j2'
 
 
     def get_context_data(self, **kwargs):
@@ -46,18 +51,20 @@ class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListVie
 
 
 
+class View(ChangeView):
 
-class View(OrganizationPermission, generic.UpdateView):
+    context_object_name = "software"
+
+    form_class = SoftwareFormUpdate
+
     model = Software
+
     permission_required = [
         'itam.view_software',
         'itam.change_software'
     ]
+
     template_name = 'itam/software.html.j2'
-
-    form_class = SoftwareUpdate_Form
-
-    context_object_name = "software"
 
 
     def get_context_data(self, **kwargs):
@@ -128,19 +135,17 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
+
+    form_class = SoftwareForm
+
     model = Software
+
     permission_required = [
         'itam.add_software',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'publisher',
-        'category',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):
@@ -162,7 +167,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
         return context
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = Software
     permission_required = [
         'itam.delete_software',

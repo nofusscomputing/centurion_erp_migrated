@@ -1,5 +1,7 @@
 from django.urls import path
 
+from core.views import celery_log
+
 from .views import app_settings, home, device_models, device_types, manufacturer, software_categories
 
 from itam.views import device_type, device_model, software_category
@@ -11,6 +13,8 @@ urlpatterns = [
 
     path('application', app_settings.View.as_view(), name="_settings_application"),
     
+    path("task_results", celery_log.Index.as_view(), name="_task_results"),
+    path("task_result/<int:pk>", celery_log.View.as_view(), name="_task_result_view"),
 
     path("device_models", device_models.Index.as_view(), name="_device_models"),
     path("device_model/<int:pk>", device_model.View.as_view(), name="_device_model_view"),

@@ -19,7 +19,10 @@ RUN apk add --update \
         gettext \
         mariadb-client \
         mariadb-dev \
-        pkgconf
+        pkgconf \
+        postgresql16-dev \
+        postgresql16-client \
+        libpq-dev
 
 RUN pip install --upgrade \
     setuptools \
@@ -75,7 +78,8 @@ COPY includes/ /
 RUN apk update --no-cache; \
   apk add --no-cache \
     mariadb-client \
-    mariadb-dev; \
+    mariadb-dev \
+    postgresql16-client; \
   pip install --no-cache-dir /tmp/python_builds/*.*; \
     python /app/manage.py collectstatic --noinput; \
     rm -rf /tmp/python_builds; \

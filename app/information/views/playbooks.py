@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
 from django.template import Template, Context

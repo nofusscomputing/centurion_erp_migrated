@@ -1,35 +1,31 @@
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
 
-from access.mixin import OrganizationPermission
-
+from itam.forms.device_model import DeviceModelForm
 from itam.models.device_models import DeviceModel
+
+from core.views.common import AddView, ChangeView, DeleteView
 
 from settings.models.user_settings import UserSettings
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
+
+    form_class = DeviceModelForm
+
+    context_object_name = "device_model"
+
     model = DeviceModel
+
     permission_required = [
         'itam.view_devicemodel',
         'itam.change_devicemodel',
     ]
+
     template_name = 'form.html.j2'
 
-    fields = [
-        "name",
-        'slug',
-        'manufacturer',
-        'id',
-        'organization',
-        'is_global',
-        'model_notes',
-    ]
-
-    context_object_name = "device_model"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,18 +51,17 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
+
+    form_class = DeviceModelForm
+
     model = DeviceModel
+
     permission_required = [
         'itam.add_devicemodel',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'manufacturer',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):
@@ -90,7 +85,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = DeviceModel
     permission_required = [
         'itam.delete_devicemodel',

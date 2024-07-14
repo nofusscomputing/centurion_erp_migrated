@@ -2,10 +2,13 @@ from django import forms
 from django.db.models import Q
 
 from app import settings
+
+from core.forms.common import CommonModelForm
+
 from itam.models.device import Device
 
 
-class DeviceForm(forms.ModelForm):
+class DeviceForm(CommonModelForm):
 
     prefix = 'device'
 

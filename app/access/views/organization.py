@@ -1,4 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
+from django.db.models import Q
 from django.utils.decorators import method_decorator
 from django.views import generic
 
@@ -7,14 +8,25 @@ from access.models import *
 
 from access.forms.organization import OrganizationForm
 
+from core.views.common import ChangeView, IndexView
 
 
-class IndexView(OrganizationPermission, generic.ListView):
+class IndexView(IndexView):
+
+    model = Organization
     permission_required = [
         'access.view_organization'
     ]
     template_name = 'access/index.html.j2'
     context_object_name = "organization_list"
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Organizations'
+
+        return context
 
 
     def get_queryset(self):
@@ -25,11 +37,15 @@ class IndexView(OrganizationPermission, generic.ListView):
 
         else:
 
-            return Organization.objects.filter(pk__in=self.user_organizations())
+            return Organization.objects.filter(
+                Q(pk__in=self.user_organizations())
+                |
+                Q(manager=self.request.user.id)
+            )
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "organization"
 
@@ -69,6 +85,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
+
+        context['content_title'] = 'Organization - ' + context[self.context_object_name].name
 
         return context
 

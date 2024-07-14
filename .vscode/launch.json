@@ -15,6 +15,23 @@
             "django": true,
             "autoStartBrowser": false,
             "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
+            "name": "Debug: Celery",
+            "type": "python",
+            "request": "launch",
+            "module": "celery",
+            "console": "integratedTerminal",
+            "args": [
+                "-A",
+                "app",
+                "worker",
+                "-l",
+                "INFO",
+                "-n",
+                "debug-itsm@%h"
+            ],
+            "cwd": "${workspaceFolder}/app"
         }
     ]
 }

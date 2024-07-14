@@ -4,12 +4,10 @@ from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import Device
 
@@ -21,7 +19,7 @@ from config_management.models.groups import ConfigGroups, ConfigGroupHosts, Conf
 
 
 
-class GroupIndexView(OrganizationPermission, generic.ListView):
+class GroupIndexView(IndexView):
 
     context_object_name = "groups"
 
@@ -29,7 +27,9 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
     paginate_by = 10
 
-    permission_required = 'config_management.view_configgroups'
+    permission_required = [
+        'config_management.view_configgroups'
+    ]
 
     template_name = 'config_management/group_index.html.j2'
 
@@ -57,13 +57,11 @@ class GroupIndexView(OrganizationPermission, generic.ListView):
 
 
 
-class GroupAdd(OrganizationPermission, generic.CreateView):
+class GroupAdd(AddView):
 
-    fields = [
-        'name',
-        'parent',
-        'organization',
-    ]
+    organization_field = 'organization'
+
+    form_class = ConfigGroupForm
 
     model = ConfigGroups
 
@@ -80,11 +78,11 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
             'organization': UserSettings.objects.get(user = self.request.user).default_organization
         }
 
-        if 'group_id' in self.kwargs:
+        if 'pk' in self.kwargs:
 
-            if self.kwargs['group_id']:
+            if self.kwargs['pk']:
 
-                initial.update({'parent': self.kwargs['group_id']})
+                initial.update({'parent': self.kwargs['pk']})
 
                 self.model.parent.field.hidden = True
 
@@ -111,7 +109,7 @@ class GroupAdd(OrganizationPermission, generic.CreateView):
 
 
 
-class GroupView(OrganizationPermission, generic.UpdateView):
+class GroupView(ChangeView):
 
     context_object_name = "group"
 
@@ -195,7 +193,7 @@ class GroupView(OrganizationPermission, generic.UpdateView):
 
 
 
-class GroupDelete(OrganizationPermission, generic.DeleteView):
+class GroupDelete(DeleteView):
 
     model = ConfigGroups
 
@@ -220,12 +218,14 @@ class GroupDelete(OrganizationPermission, generic.DeleteView):
 
 
 
-class GroupHostAdd(OrganizationPermission, generic.CreateView):
+class GroupHostAdd(AddView):
 
     model = ConfigGroupHosts
 
+    parent_model = ConfigGroups
+
     permission_required = [
-        'config_management.add_hosts',
+        'config_management.add_configgrouphosts',
     ]
 
     template_name = 'form.html.j2'
@@ -235,7 +235,9 @@ class GroupHostAdd(OrganizationPermission, generic.CreateView):
 
     def form_valid(self, form):
 
-        form.instance.group_id = self.kwargs['group_id']
+        form.instance.group_id = self.kwargs['pk']
+
+        form.instance.organization = self.parent_model.objects.get(pk=form.instance.group_id).organization
 
         return super().form_valid(form)
 
@@ -252,40 +254,31 @@ class GroupHostAdd(OrganizationPermission, generic.CreateView):
 
         form_class = super().get_form(form_class=None)
 
-        group = ConfigGroups.objects.get(pk=self.kwargs['group_id'])
+        group = ConfigGroups.objects.get(pk=self.kwargs['pk'])
 
         exsting_group_hosts = ConfigGroupHosts.objects.filter(group=group)
 
-        form_class.fields["host"].queryset = None
+        form_class.fields["host"].queryset = form_class.fields["host"].queryset.filter(
+        ).exclude(
+            id__in=exsting_group_hosts.values_list('host', flat=True)
+        )
 
-        if group.is_global:
-
-            form_class.fields["host"].queryset = Device.objects.filter(
-            ).exclude(
-                id__in=exsting_group_hosts.values_list('host', flat=True)
-            )
-
-        if form_class.fields["host"].queryset is None:
-
-            form_class.fields["host"].queryset = Device.objects.filter(
-                organization=group.organization.id,
-            ).exclude(id__in=exsting_group_hosts.values_list('host', flat=True))
 
         return form_class
 
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])
+        return reverse('Config Management:_group_view', args=[self.kwargs['pk'],])
 
 
 
-class GroupHostDelete(OrganizationPermission, generic.DeleteView):
+class GroupHostDelete(DeleteView):
 
     model = ConfigGroupHosts
 
     permission_required = [
-        'config_management.delete_hosts',
+        'config_management.delete_configgrouphosts',
     ]
 
     template_name = 'form.html.j2'

@@ -1,16 +1,17 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views import generic
-
 from access.mixin import OrganizationPermission
+
+from core.views.common import IndexView
 
 from itam.models.software import SoftwareCategory
 
 
-class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class Index(IndexView):
 
     model = SoftwareCategory
 
-    permission_required = 'itam.view_software'
+    permission_required = [
+        'itam.view_software'
+    ]
 
     template_name = 'settings/software_categories.html.j2'
 
@@ -27,7 +28,7 @@ class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
 
         else:
 
-            return self.model.objects.filter(organization=self.user_organizations()).order_by('name')
+            return self.model.objects.filter(organization__in=self.user_organizations()).order_by('name')
 
 
     def get_context_data(self, **kwargs):

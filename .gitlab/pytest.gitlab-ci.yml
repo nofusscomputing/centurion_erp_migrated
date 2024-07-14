@@ -49,7 +49,7 @@ Unit:
       - artifacts/
   environment: 
     name: Unit Test Coverage Report
-    url: https://nofusscomputing.gitlab.io/-/projects/django_template/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html
+    url: https://nofusscomputing.gitlab.io/-/projects/centurion_erp/-/jobs/${CI_JOB_ID}/artifacts/artifacts/coverage/index.html
 
 
 UI:

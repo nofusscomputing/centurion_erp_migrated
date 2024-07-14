@@ -5,8 +5,9 @@ from app import settings
 
 from access.models import Organization
 
+from core.forms.common import CommonModelForm
 
-class OrganizationForm(forms.ModelForm):
+class OrganizationForm(CommonModelForm):
 
     class Meta:
         model = Organization

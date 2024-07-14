@@ -1,10 +1,10 @@
-from django import forms
-
 from app import settings
+
+from core.forms.common import CommonModelForm
 from core.models.notes import Notes
 
 
-class AddNoteForm(forms.ModelForm):
+class AddNoteForm(CommonModelForm):
 
     prefix = 'note'
 

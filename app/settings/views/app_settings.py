@@ -5,17 +5,24 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
+from core.views.common import ChangeView
+
+from settings.forms.app_settings import AppSettingsForm
 from settings.models.app_settings import AppSettings
 
 
 
 class View(generic.UpdateView):
 
-    model = AppSettings
-
     context_object_name = "settings"
 
-    fields = model.__all__
+    form_class = AppSettingsForm
+
+    model = AppSettings
+
+    permission_required = [
+        'settings.change_appsettings'
+    ]
 
     template_name = 'form.html.j2'
 

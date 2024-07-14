@@ -24,14 +24,61 @@ SETTINGS_DIR = '/etc/itsm'    # Primary Settings Directory
 BUILD_REPO = os.getenv('CI_PROJECT_URL')
 BUILD_SHA = os.getenv('CI_COMMIT_SHA')
 BUILD_VERSION = os.getenv('CI_COMMIT_TAG')
-DOCS_ROOT = 'https://nofusscomputing.com/projects/django-template/user/'
+DOCS_ROOT = 'https://nofusscomputing.com/projects/centurion_erp/user/'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 
+# Celery settings
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True # broker_connection_retry_on_startup
+CELERY_BROKER_URL = 'amqp://guest:guest@172.16.10.102:30712/itsm'
+
+# https://docs.celeryq.dev/en/stable/userguide/configuration.html#broker-use-ssl
+# import ssl
+# broker_use_ssl = {
+#   'keyfile': '/var/ssl/private/worker-key.pem',
+#   'certfile': '/var/ssl/amqp-server-cert.pem',
+#   'ca_certs': '/var/ssl/myca.pem',
+#   'cert_reqs': ssl.CERT_REQUIRED
+# }
+
+CELERY_BROKER_POOL_LIMIT = 3 # broker_pool_limit
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_ENABLE_UTC = True
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_EXTENDED = True
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_DEFAULT_EXCHANGE = 'ITSM' # task_default_exchange
+CELERY_TASK_DEFAULT_PRIORITY = 10 # 1-10=LOW-HIGH task_default_priority
+# CELERY_TASK_DEFAULT_QUEUE = 'background'
+CELERY_TASK_TIME_LIMIT = 3600 # task_time_limit
+CELERY_TASK_TRACK_STARTED = True # task_track_started
+
+# dont set concurrency for docer as it defaults to CPU count
+CELERY_WORKER_CONCURRENCY = 2 # worker_concurrency -  Default: Number of CPU cores
+CELERY_WORKER_DEDUPLICATE_SUCCESSFUL_TASKS = True # worker_deduplicate_successful_tasks
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 1 # worker_max_tasks_per_child
+# CELERY_WORKER_MAX_MEMORY_PER_CHILD = 10000 # 10000=10mb worker_max_memory_per_child - Default: No limit. Type: int (kilobytes)
+# CELERY_TASK_SEND_SENT_EVENT = True
+CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
+
+# django setting.
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
 #
 # Defaults
 #
+
 ALLOWED_HOSTS = [ '*' ]          # Site host to serve
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
@@ -62,6 +109,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_json_api',
     'social_django',
+    'django_celery_results',
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
     'itam.apps.ItamConfig',
@@ -169,7 +217,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_TITLE = "Site Title"
+SITE_TITLE = "Centurion ERP"
 
 
 API_ENABLED = True

@@ -2,24 +2,23 @@ import json
 import markdown
 
 from django.contrib.auth import decorators as auth_decorator
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
 
-from access.mixin import OrganizationPermission
 from access.models import Organization
 
 from config_management.models.groups import ConfigGroupHosts
+
 
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from ..models.software import Software
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
@@ -29,10 +28,18 @@ from itam.forms.device.operating_system import Update as OperatingSystemForm
 
 from settings.models.user_settings import UserSettings
 
-class IndexView(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+
+
+class IndexView(IndexView):
+
     model = Device
-    permission_required = 'itam.view_device'
+
+    permission_required = [
+        'itam.view_device'
+    ]
+
     template_name = 'itam/device_index.html.j2'
+
     context_object_name = "devices"
 
     paginate_by = 10
@@ -62,13 +69,12 @@ def _get_form(request, formcls, prefix, **kwargs):
     data = request.POST if prefix in request.POST else None
     return formcls(data, prefix=prefix, **kwargs)
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     model = Device
 
     permission_required = [
         'itam.view_device',
-        'itam.change_device'
     ]
 
     template_name = 'itam/device.html.j2'
@@ -105,12 +111,20 @@ class View(OrganizationPermission, generic.UpdateView):
 
         context['installed_software'] = len(DeviceSoftware.objects.filter(device=self.kwargs['pk']))
 
-        if hasattr(self.request.GET, 'page'):
+        if 'page' in self.request.GET:
 
             context['page_number'] = int(self.request.GET.get("page"))
 
         else:
              context['page_number'] = 1
+
+
+        if 'tab' in self.request.GET:
+
+            context['tab'] = str(self.request.GET.get("tab")).lower()
+
+        else:
+             context['tab'] = None
 
         context['page_obj'] = softwares.get_page(context['page_number'])
 
@@ -181,7 +195,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class SoftwareView(OrganizationPermission, generic.UpdateView):
+class SoftwareView(ChangeView):
     model = DeviceSoftware
     permission_required = [
         'itam.view_devicesoftware'
@@ -218,7 +232,7 @@ class SoftwareView(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
 
     form_class = DeviceForm
 
@@ -253,7 +267,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.CreateView):
+class SoftwareAdd(AddView):
     model = DeviceSoftware
     permission_required = [
         'itam.add_devicesoftware',
@@ -313,7 +327,7 @@ class SoftwareAdd(PermissionRequiredMixin, OrganizationPermission, generic.Creat
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = Device
     permission_required = [
         'itam.delete_device',
@@ -334,7 +348,7 @@ class Delete(OrganizationPermission, generic.DeleteView):
         return context
 
 
-class Change(OrganizationPermission, generic.UpdateView):
+class Change(ChangeView):
     model = Device
     permission_required = [
         'itam.change_device',

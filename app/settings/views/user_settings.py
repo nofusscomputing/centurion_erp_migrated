@@ -7,12 +7,14 @@ from access.mixin import OrganizationPermission
 
 from api.forms.user_token import AuthTokenForm, AuthToken
 
+from core.views.common import AddView, ChangeView, DeleteView
+
 from settings.forms.user_settings import UserSettingsForm
 from settings.models.user_settings import UserSettings
 
 
 
-class View(generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "settings"
 
@@ -45,7 +47,7 @@ class View(generic.UpdateView):
         return reverse('_settings_user', args=(self.kwargs['pk'],))
 
 
-class Change(generic.UpdateView):
+class Change(ChangeView):
 
     context_object_name = "settings"
 
@@ -83,7 +85,7 @@ class Change(generic.UpdateView):
         raise PermissionDenied()
 
 
-class TokenAdd(generic.CreateView):
+class TokenAdd(AddView):
 
     context_object_name = "settings"
 
@@ -120,7 +122,7 @@ class TokenAdd(generic.CreateView):
         return reverse('_settings_user', args=(self.kwargs['user_id'],))
 
 
-class TokenDelete(OrganizationPermission, generic.DeleteView):
+class TokenDelete(DeleteView):
     model = AuthToken
 
     template_name = 'form.html.j2'

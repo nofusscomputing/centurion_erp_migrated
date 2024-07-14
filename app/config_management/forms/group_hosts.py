@@ -1,11 +1,12 @@
-from django import forms
-
 from itam.models.device import Device
 
 from config_management.models.groups import ConfigGroups, ConfigGroupHosts
 
+from core.forms.common import CommonModelForm
 
-class ConfigGroupHostsForm(forms.ModelForm):
+
+
+class ConfigGroupHostsForm(CommonModelForm):
 
     __name__ = 'asdsa'
 

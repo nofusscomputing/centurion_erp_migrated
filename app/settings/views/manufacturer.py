@@ -6,11 +6,14 @@ from django.views import generic
 
 
 from access.mixin import OrganizationPermission
+
+from core.forms.manufacturer import ManufacturerForm
 from core.models.manufacturer import Manufacturer
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 
 
-class Index(OrganizationPermission, generic.ListView):
+class Index(IndexView):
 
     context_object_name = "list"
 
@@ -50,14 +53,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
     context_object_name = "manufacturer"
 
-    fields = [
-        "name",
-        'slug',
-        'id',
-        'organization',
-        'is_global',
-        'model_notes',
-    ]
+    form_class = ManufacturerForm
 
     model = Manufacturer
 
@@ -95,11 +91,8 @@ class View(OrganizationPermission, generic.UpdateView):
 
 class Add(OrganizationPermission, generic.CreateView):
 
-    fields = [
-        'name',
-        'organization',
-        'is_global'
-    ]
+    
+    form_class = ManufacturerForm
 
     model = Manufacturer
 

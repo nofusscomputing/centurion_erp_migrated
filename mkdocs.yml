@@ -2,9 +2,9 @@ INHERIT: website-template/mkdocs.yml
 
 docs_dir: 'docs'
 
-repo_name: Django Template
-repo_url: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/django_app
-edit_uri: '/-/ide/project/nofusscomputing/infrastructure/configuration-management/django_app/edit/development/-/docs/'
+repo_name: Centurion ERP
+repo_url: https://gitlab.com/nofusscomputing/projects/centurion_erp
+edit_uri: '/-/ide/project/nofusscomputing/projects/centurion_erp/edit/development/-/docs/'
 
 plugins:
   mkdocstrings:
@@ -48,123 +48,135 @@ nav:
 
   - projects/index.md
 
-  - Django Template:
+  - Centurion ERP:
 
-    - projects/django-template/index.md
+    - projects/centurion_erp/index.md
 
     - Administration:
 
-      - projects/django-template/administration/index.md
+      - projects/centurion_erp/administration/index.md
 
     - Development:
 
-      - projects/django-template/development/index.md
-
-      - projects/django-template/development/testing.md
+      - projects/centurion_erp/development/index.md
 
       - Application API:
 
-        - projects/django-template/development/api/index.md
+        - projects/centurion_erp/development/api/index.md
 
-        - projects/django-template/development/api/token_authentication.md
+        - projects/centurion_erp/development/api/form.md
+
+        - projects/centurion_erp/development/api/token_authentication.md
 
         - Models:
 
-          - projects/django-template/development/api/models/index.md
+          - projects/centurion_erp/development/api/models/index.md
 
-          - projects/django-template/development/api/models/core_history_save.md
+          - projects/centurion_erp/development/api/models/core_history_save.md
 
-          - projects/django-template/development/api/models/itam_device.md
+          - projects/centurion_erp/development/api/models/itam_device.md
 
-          - projects/django-template/development/api/models/access_organization_permission_checking.md
+          - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
+
+        - projects/centurion_erp/development/api/common_views.md
 
         - Serializers:
 
-          - projects/django-template/development/api/serializer/index.md
+          - projects/centurion_erp/development/api/serializer/index.md
 
-          - projects/django-template/development/api/serializer/inventory.md
+          - projects/centurion_erp/development/api/serializer/inventory.md
 
         - Unit Testing:
 
-          - projects/django-template/development/api/tests/index.md
+          - projects/centurion_erp/development/api/tests/index.md
 
-          - projects/django-template/development/api/tests/model_history.md
+          - projects/centurion_erp/development/api/tests/model_history.md
 
-          - projects/django-template/development/api/tests/model_history_child_item.md
+          - projects/centurion_erp/development/api/tests/model_history_child_item.md
 
-          - projects/django-template/development/api/tests/model_history_parent_item.md
+          - projects/centurion_erp/development/api/tests/model_history_parent_item.md
 
-          - projects/django-template/development/api/tests/model_history_permissions.md
+          - projects/centurion_erp/development/api/tests/model_history_permissions.md
 
-          - projects/django-template/development/api/tests/model_permissions.md
+          - projects/centurion_erp/development/api/tests/model_permissions.md
 
-          - projects/django-template/development/api/tests/model_permissions_organization_manager.md
+          - projects/centurion_erp/development/api/tests/model_permissions_organization_manager.md
 
-          - projects/django-template/development/api/tests/model_permission_add.md
+          - projects/centurion_erp/development/api/tests/model_permission_add.md
 
-          - projects/django-template/development/api/tests/model_permission_add_organization_manager.md
+          - projects/centurion_erp/development/api/tests/model_permission_add_organization_manager.md
 
-          - projects/django-template/development/api/tests/model_permission_change.md
+          - projects/centurion_erp/development/api/tests/model_permission_change.md
 
-          - projects/django-template/development/api/tests/model_permission_change_organization_manager.md
+          - projects/centurion_erp/development/api/tests/model_permission_change_organization_manager.md
 
-          - projects/django-template/development/api/tests/model_permission_delete.md
+          - projects/centurion_erp/development/api/tests/model_permission_delete.md
 
-          - projects/django-template/development/api/tests/model_permission_delete_organization_manager.md
+          - projects/centurion_erp/development/api/tests/model_permission_delete_organization_manager.md
 
-          - projects/django-template/development/api/tests/model_permission_view.md
+          - projects/centurion_erp/development/api/tests/model_permission_view.md
 
-          - projects/django-template/development/api/tests/model_permission_view_organization_manager.md
+          - projects/centurion_erp/development/api/tests/model_permission_view_organization_manager.md
 
-          - projects/django-template/development/api/tests/model_permissions_api.md
+          - projects/centurion_erp/development/api/tests/model_permissions_api.md
 
-          - projects/django-template/development/api/tests/model_permission_api_add.md
+          - projects/centurion_erp/development/api/tests/model_permission_api_add.md
 
-          - projects/django-template/development/api/tests/model_permission_api_change.md
+          - projects/centurion_erp/development/api/tests/model_permission_api_change.md
 
-          - projects/django-template/development/api/tests/model_permission_api_delete.md
+          - projects/centurion_erp/development/api/tests/model_permission_api_delete.md
 
-          - projects/django-template/development/api/tests/model_permission_api_view.md
+          - projects/centurion_erp/development/api/tests/model_permission_api_view.md
 
-          - projects/django-template/development/api/tests/model_tenancy_object.md
+          - projects/centurion_erp/development/api/tests/model_tenancy_object.md
 
-          - projects/django-template/development/api/tests/notes_permissions.md
+          - projects/centurion_erp/development/api/tests/model_views.md
 
+          - projects/centurion_erp/development/api/tests/notes_permissions.md
+
+      - projects/centurion_erp/development/forms.md
+
+      - projects/centurion_erp/development/models.md
+
+      - projects/centurion_erp/development/testing.md
+
+      - projects/centurion_erp/development/views.md
+    
     - User:
 
-      - projects/django-template/user/index.md
+      - projects/centurion_erp/user/index.md
 
-      - projects/django-template/user/user_settings.md
+      - projects/centurion_erp/user/user_settings.md
 
       - Access:
 
-        - projects/django-template/user/access/index.md
+        - projects/centurion_erp/user/access/index.md
 
-        - projects/django-template/user/access/organization.md
+        - projects/centurion_erp/user/access/organization.md
 
-        - projects/django-template/user/access/team.md
+        - projects/centurion_erp/user/access/team.md
 
-      - projects/django-template/user/configuration.md
+      - projects/centurion_erp/user/configuration.md
 
-      - projects/django-template/user/api.md
+      - projects/centurion_erp/user/api.md
 
-      - projects/django-template/user/config_management/index.md
+      - projects/centurion_erp/user/config_management/index.md
 
       - Core:
 
-        - projects/django-template/user/core/index.md
+        - projects/centurion_erp/user/core/index.md
 
       - ITAM:
 
-        - projects/django-template/user/itam/index.md
+        - projects/centurion_erp/user/itam/index.md
 
-        - projects/django-template/user/itam/device.md
+        - projects/centurion_erp/user/itam/device.md
 
-        - projects/django-template/user/itam/operating_system.md
+        - projects/centurion_erp/user/itam/operating_system.md
 
-        - projects/django-template/user/itam/software.md
+        - projects/centurion_erp/user/itam/software.md
 
-      - projects/django-template/user/settings.md
+      - projects/centurion_erp/user/settings.md
 
 
 - Operations: 

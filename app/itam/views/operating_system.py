@@ -2,23 +2,23 @@ from django.contrib.auth import decorators as auth_decorator
 from django.db.models import Q, Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
-
-from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceOperatingSystem
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
-from itam.forms.operating_system.update import Update
+from itam.forms.operating_system.update import OperatingSystemFormCommon, Update
 
 from settings.models.user_settings import UserSettings
 
 
-class IndexView(OrganizationPermission, generic.ListView):
+class IndexView(IndexView):
     model = OperatingSystem
-    permission_required = 'itam.view_operating_system'
+    permission_required = [
+        'itam.view_operatingsystem'
+    ]
     template_name = 'itam/operating_system_index.html.j2'
     context_object_name = "operating_systems"
     paginate_by = 10
@@ -44,17 +44,20 @@ class IndexView(OrganizationPermission, generic.ListView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
+
+    context_object_name = "operating_system"
+
+    form_class = Update
+
     model = OperatingSystem
+
     permission_required = [
         'itam.view_operatingsystem',
         'itam.change_operatingsystem',
     ]
+
     template_name = 'itam/operating_system.html.j2'
-
-    form_class = Update
-
-    context_object_name = "operating_system"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -103,18 +106,17 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
+
+    form_class = OperatingSystemFormCommon
+
     model = OperatingSystem
+
     permission_required = [
         'itam.add_operatingsystem',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'publisher',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):
@@ -138,7 +140,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
 
     model = OperatingSystem
 

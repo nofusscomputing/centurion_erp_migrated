@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ```
 
-To setup the django test server run the following
+To setup the centurion erp test server run the following
 
 ``` bash
 
@@ -50,9 +50,9 @@ See [Documentation](https://nofusscomputing.com/projects/django-template/develop
 
 cd app
 
-docker build . --tag django-app:dev
+docker build . --tag centurion-erp:dev
 
-docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app django-app:dev
+docker run -d --rm -v ${PWD}/db.sqlite3:/app/db.sqlite3 -p 8002:8000 --name app centurion-erp:dev
 
 ```
 

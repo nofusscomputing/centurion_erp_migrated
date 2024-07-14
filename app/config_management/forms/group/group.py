@@ -1,11 +1,13 @@
-from django import forms
 from django.db.models import Q
 
 from config_management.models.groups import ConfigGroups
+
+from core.forms.common import CommonModelForm
+
 from itam.models.software import Software, SoftwareVersion
 
 
-class ConfigGroupForm(forms.ModelForm):
+class ConfigGroupForm(CommonModelForm):
 
     class Meta:
        model = ConfigGroups
@@ -13,5 +15,20 @@ class ConfigGroupForm(forms.ModelForm):
         'name',
         'parent',
         'is_global',
+        'organization',
+        'model_notes',
         'config',
        ]
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        if 'parent' in kwargs['initial']:
+
+            self.fields['parent'].queryset = self.fields['parent'].queryset.filter(
+            ).exclude(
+                id=int(kwargs['initial']['parent'])
+            )

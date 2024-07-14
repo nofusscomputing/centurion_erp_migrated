@@ -6,8 +6,10 @@ from django.forms import inlineformset_factory
 from app import settings
 
 from .team_users import TeamUsersForm, TeamUsers
+
 from access.models import Team
 
+from core.forms.common import CommonModelForm
 
 TeamUserFormSet = inlineformset_factory(
     model=TeamUsers,
@@ -19,7 +21,19 @@ TeamUserFormSet = inlineformset_factory(
     ]
 )
 
-class TeamForm(forms.ModelForm):
+
+
+class TeamFormAdd(CommonModelForm):
+
+    class Meta:
+        model = Team
+        fields = [
+            'name',
+        ]
+
+
+
+class TeamForm(CommonModelForm):
 
     class Meta:
         model = Team
@@ -55,12 +69,15 @@ class TeamForm(forms.ModelForm):
             'access',
             'config_management',
             'core',
+            'django_celery_results',
             'itam',
             'settings',
         ]
 
         exclude_models = [
             'appsettings',
+            'chordcounter',
+            'groupresult',
             'organization'
             'settings',
             'usersettings',
@@ -68,8 +85,11 @@ class TeamForm(forms.ModelForm):
 
         exclude_permissions = [
             'add_organization',
+            'add_taskresult',
             'change_organization',
+            'change_taskresult',
             'delete_organization',
+            'delete_taskresult',
         ]
 
         self.fields['permissions'].queryset = Permission.objects.filter(

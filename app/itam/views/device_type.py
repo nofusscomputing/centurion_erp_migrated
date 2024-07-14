@@ -1,32 +1,28 @@
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import generic
 
-from access.mixin import OrganizationPermission
+from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
-from ..models.device import DeviceType
+from itam.models.device import DeviceType
+from itam.forms.device_type import DeviceTypeForm
 
 from settings.models.user_settings import UserSettings
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
+
+    form_class = DeviceTypeForm
+
     model = DeviceType
+
     permission_required = [
         'itam.view_devicetype',
         'itam.change_devicetype'
     ]
-    template_name = 'form.html.j2'
 
-    fields = [
-        "name",
-        'slug',
-        'id',
-        'organization',
-        'is_global',
-        'model_notes',
-    ]
+    template_name = 'form.html.j2'
 
     context_object_name = "device_category"
 
@@ -52,17 +48,17 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
+
+    form_class = DeviceTypeForm
+
     model = DeviceType
+
     permission_required = [
         'itam.add_devicetype',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'name',
-        'organization',
-        'is_global'
-    ]
 
 
     def get_initial(self):
@@ -86,7 +82,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = DeviceType
     permission_required = [
         'itam.delete_devicetype',

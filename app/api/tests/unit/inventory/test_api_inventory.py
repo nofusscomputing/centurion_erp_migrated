@@ -1,4 +1,5 @@
 import datetime
+import json
 import pytest
 import unittest
 
@@ -6,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import TestCase, Client
+from django.test.utils import override_settings
 
 from unittest.mock import patch
 
@@ -13,6 +15,8 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.inventory import Inventory
+
+from api.tasks import process_inventory
 
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
@@ -105,11 +109,7 @@ class InventoryAPI(TestCase):
         )
 
         # upload the inventory
-        client = Client()
-        url = reverse('API:_api_device_inventory')
-
-        client.force_login(self.add_user)
-        self.response = client.post(url, data=self.inventory, content_type='application/json')
+        process_inventory(json.dumps(self.inventory), organization.id)
 
 
         self.device = Device.objects.get(name=self.inventory['details']['name'])
@@ -147,6 +147,8 @@ class InventoryAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     @patch.object(OrganizationPermissionAPI, 'permission_check')
     def test_inventory_function_called_permission_check(self, permission_check):
         """ Inventory Upload checks permissions
@@ -167,6 +169,8 @@ class InventoryAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     @patch.object(Inventory, '__init__')
     def test_inventory_serializer_inventory_called(self, serializer):
         """ Inventory Upload checks permissions
@@ -187,6 +191,8 @@ class InventoryAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     @patch.object(Inventory.Details, '__init__')
     def test_inventory_serializer_inventory_details_called(self, serializer):
         """ Inventory Upload uses Inventory serializer
@@ -204,6 +210,8 @@ class InventoryAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     @patch.object(Inventory.OperatingSystem, '__init__')
     def test_inventory_serializer_inventory_operating_system_called(self, serializer):
         """ Inventory Upload uses Inventory serializer
@@ -221,6 +229,8 @@ class InventoryAPI(TestCase):
 
 
 
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     @patch.object(Inventory.Software, '__init__')
     def test_inventory_serializer_inventory_software_called(self, serializer):
         """ Inventory Upload uses Inventory serializer
@@ -365,7 +375,8 @@ class InventoryAPI(TestCase):
         pass
 
 
-
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_api_inventory_valid_status_ok_existing_device(self):
         """ Successful inventory upload returns 200 for existing device"""
 
@@ -378,14 +389,8 @@ class InventoryAPI(TestCase):
         assert response.status_code == 200
 
 
-
-    def test_api_inventory_valid_status_created(self):
-        """ Successful inventory upload returns 201 """
-
-        assert self.response.status_code == 201
-
-
-
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPOGATES=True)
     def test_api_inventory_invalid_status_bad_request(self):
         """ Incorrectly formated inventory upload returns 400 """
 

@@ -2,16 +2,15 @@ from django.contrib.auth import decorators as auth_decorator
 from django.contrib.auth.models import Permission
 from django.utils.decorators import method_decorator
 from django.urls import reverse
-from django.views import generic
 
-from access.forms.team import TeamForm
-# from access.forms.team_users import TeamUsersForm
+from access.forms.team import TeamForm, TeamFormAdd
 from access.models import Team, TeamUsers, Organization
 from access.mixin import *
 
+from core.views.common import AddView, ChangeView, DeleteView
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "team"
 
@@ -79,15 +78,19 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
+
+    form_class = TeamFormAdd
+
     model = Team
+
+    parent_model = Organization
+
     permission_required = [
         'access.add_team',
     ]
+
     template_name = 'form.html.j2'
-    fields = [
-        'team_name',
-    ]
 
     def form_valid(self, form):
         form.instance.organization = Organization.objects.get(pk=self.kwargs['pk'])
@@ -101,8 +104,6 @@ class Add(OrganizationPermission, generic.CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
         context['content_title'] = 'Add Team'
 
@@ -110,7 +111,7 @@ class Add(OrganizationPermission, generic.CreateView):
 
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
     model = Team
     permission_required = [
         'access.delete_team'

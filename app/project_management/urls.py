@@ -4,6 +4,6 @@ from .views import ProjectIndex
 
 app_name = "Project Management"
 urlpatterns = [
-    path('', ProjectIndex.as_view(), name='Projects'),
+    # path('', ProjectIndex.as_view(), name='Projects'),
     
 ]

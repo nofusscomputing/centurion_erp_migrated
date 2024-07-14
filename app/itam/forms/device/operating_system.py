@@ -3,10 +3,13 @@ from django.db.models import Q
 
 from app import settings
 
+from core.forms.common import CommonModelForm
+
 from itam.models.device import DeviceOperatingSystem
 
 
-class Update(forms.ModelForm):
+
+class Update(CommonModelForm):
 
     prefix = 'operating_system'
 

@@ -1,17 +1,18 @@
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db.models import Q
-from django.views import generic
 
+from core.views.common import IndexView
 
-from access.mixin import OrganizationPermission
 from itam.models.device import DeviceType
 
 
 
-class Index(PermissionRequiredMixin, OrganizationPermission, generic.ListView):
+class Index(IndexView):
+
     model = DeviceType
 
-    permission_required = 'itam.view_devicetype'
+    permission_required = [
+        'itam.view_devicetype'
+    ]
 
     template_name = 'settings/device_types.html.j2'
 

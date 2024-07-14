@@ -1,14 +1,18 @@
-from app import settings
 from django import forms
 from django.db.models import Q
+
+from app import settings
+
+from core.forms.common import CommonModelForm
 
 from itam.models.operating_system import OperatingSystem
 
 
-class Update(forms.ModelForm):
+
+class OperatingSystemFormCommon(CommonModelForm):
 
     class Meta:
-        model = OperatingSystem
+
         fields = [
             "name",
             'publisher',
@@ -18,6 +22,12 @@ class Update(forms.ModelForm):
             'is_global',
             'model_notes',
         ]
+
+        model = OperatingSystem
+
+
+
+class Update(OperatingSystemFormCommon):
 
 
     def __init__(self, *args, **kwargs):

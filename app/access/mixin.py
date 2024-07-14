@@ -4,8 +4,6 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.utils.functional import cached_property
 
-
-
 from .models import Organization, Team
 
 
@@ -57,9 +55,11 @@ class OrganizationMixin():
 
                 id = obj.get_organization().id
 
-                if obj.is_global:
+                if hasattr(obj, 'is_global'):
 
-                    id = 0
+                    if obj.is_global:
+
+                        id = 0
 
 
         except AttributeError:
@@ -69,6 +69,18 @@ class OrganizationMixin():
                 if self.request.POST.get("organization", ""):
 
                     id = int(self.request.POST.get("organization", ""))
+
+                for field in self.request.POST.dict(): # cater for fields prefixed '<prefix>-<field name>'
+
+                    a_field = str(field).split('-')
+
+                    if len(a_field) == 2:
+
+                        if a_field[1] == 'organization':
+
+                            id = int(self.request.POST.get(field))
+
+                
 
 
         return id
@@ -191,7 +203,25 @@ class OrganizationMixin():
 
         is_organization_manager = False
 
+        queryset = None
+
+        if hasattr(self, 'get_queryset'):
+
+            queryset = self.get_queryset()
+
+        obj = None
+
         if hasattr(self, 'get_object'):
+
+
+            try:
+
+                obj = self.get_object()
+
+            except:
+
+                pass
+
 
             if hasattr(self, 'model'):
 
@@ -203,10 +233,32 @@ class OrganizationMixin():
 
                         is_organization_manager = True
 
-            if not self.has_organization_permission() and not request.user.is_superuser and not is_organization_manager:
-                return False
+                        return True
 
-        return True
+
+        if request.user.is_superuser:
+
+            return True
+
+        perms = self.get_permission_required()
+
+        if self.has_organization_permission():
+
+            return True
+
+        if self.request.user.has_perms(perms) and len(self.kwargs) == 0 and str(self.request.method).lower() == 'get':
+
+            return True
+
+        for required_permission in self.permission_required:
+
+            if required_permission.replace(
+                    'view_', ''
+                ) == 'access.organization' and len(self.kwargs) == 0:
+
+                return True
+
+        return False
 
 
 
@@ -276,7 +328,33 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
         
         if len(self.permission_required) > 0:
 
+            non_organization_models = [
+                'TaskResult'
+            ]
+
+            if hasattr(self, 'model'):
+
+                
+                if hasattr(self.model, '__name__'):
+
+                    if self.model.__name__ in non_organization_models:
+
+                        if hasattr(self, 'get_object'):
+
+                            self.get_object()
+
+                        perms = self.get_permission_required()
+
+
+                        if not self.request.user.has_perms(perms):
+
+                            return self.handle_no_permission()
+
+                        return super().dispatch(self.request, *args, **kwargs)
+
+
             if not self.permission_check(request):
-                    raise PermissionDenied('You are not part of this organization')
+
+                raise PermissionDenied('You are not part of this organization')
 
         return super().dispatch(self.request, *args, **kwargs)

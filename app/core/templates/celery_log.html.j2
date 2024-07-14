@@ -1,0 +1,138 @@
+{% extends 'base.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+{% block content %}
+
+<script>
+
+  function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+</script>
+
+<div class="tab">
+  <button onclick="window.location='{% url 'Settings:_task_results' %}';"
+    style="vertical-align: middle; padding: auto; margin: 0px">
+    <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
+      style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
+      <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+    </svg> Back to Task Results</button>
+  <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
+  <!-- <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button> -->
+</div>
+<style>
+
+.detail-view-field {
+  display:unset;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  /*padding: 10px;*/
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline-block;
+  width: 340px;
+  margin: 10px;
+  /*padding: 10px;*/
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+</style>
+
+  <div id="Details" class="tabcontent">
+    
+    <h3>Details </h3>
+    
+    <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+      <div style="display: inline; width: 40%; margin: 30px;">
+
+        <div class="detail-view-field">
+          <label>{{ form.task_id.label }}</label>
+          <span>{{ form.task_id.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.task_name.label }}</label>
+          <span>{{ form.task_name.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.status.label }}</label>
+          <span>{{ form.status.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>Created</label>
+          <span>{{ task_result.date_created }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>Finished</label>
+          <span>{{ task_result.date_done }}</span>
+        </div>
+
+      </div>
+
+      <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+        <div>
+          <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.task_args.label }}</label>
+          
+          <div style="display: inline-block; text-align: left;">{{ form.task_args.value }}</div>
+
+        </div>
+        <br />
+        <div>
+          <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">Result</label>
+          
+          <div style="display: inline-block; text-align: left;"><pre style="text-align: left; max-width: 300px;">{{ task_result.result | json_pretty }}</pre></div>
+
+        </div>
+      </div>
+      </div>
+
+ 
+
+
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("defaultOpen").click();
+    </script>
+
+  </div>
+
+{% endblock %}
