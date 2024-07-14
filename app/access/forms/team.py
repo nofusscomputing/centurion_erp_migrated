@@ -28,7 +28,8 @@ class TeamFormAdd(CommonModelForm):
     class Meta:
         model = Team
         fields = [
-            'name',
+            'team_name',
+            'model_notes',
         ]
 
 
@@ -38,7 +39,7 @@ class TeamForm(CommonModelForm):
     class Meta:
         model = Team
         fields = [
-            'name',
+            'team_name',
             'permissions',
             'model_notes',
         ]
