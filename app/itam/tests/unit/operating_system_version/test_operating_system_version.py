@@ -5,13 +5,18 @@ from django.test import TestCase
 
 from access.models import Organization
 
+from app.tests.abstract.models import TenancyModel
+
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
 
 
-class OperatingSystemVersionModel(TestCase):
+class OperatingSystemVersionModel(
+    TestCase,
+    TenancyModel,
+):
 
     model = OperatingSystemVersion
 

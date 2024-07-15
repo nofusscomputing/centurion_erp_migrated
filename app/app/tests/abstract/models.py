@@ -3,6 +3,28 @@ import unittest
 
 from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
+
+
+class BaseModel:
+    """ Test cases for all models """
+
+    model = None
+    """ Model to test """
+
+
+
+
+class TenancyModel(
+    BaseModel,
+    TenancyObjectTestCases
+):
+    """ Test cases for tenancy models"""
+
+    model = None
+    """ Model to test """
+
+
+
 class ModelAdd(
     AddView
 ):

@@ -6,16 +6,14 @@ import pytest
 import unittest
 import requests
 
-# from django.contrib.auth import get_user_model
-# from django.core.exceptions import ValidationError
-# from access.models import Organization
-
-# from access.models import Organization
+from app.tests.abstract.models import TenancyModel
 
 from itam.models.device import Device
 
+
 class Device(
-    TestCase
+    TestCase,
+    TenancyModel,
 ):
 
     model = Device

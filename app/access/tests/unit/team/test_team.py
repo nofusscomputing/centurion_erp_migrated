@@ -5,9 +5,14 @@ from django.test import TestCase, Client
 
 from access.models import Organization, Team, TeamUsers, Permission
 
+from app.tests.abstract.models import TenancyModel
 
 
-class TeamModel(TestCase):
+
+class TeamModel(
+    TestCase,
+    TenancyModel
+):
 
     model = Team
 
@@ -53,4 +58,9 @@ class TeamModel(TestCase):
 
         the save method is overridden. the function attributes must match default django method
         """
+        pass
+
+
+    @pytest.mark.skip(reason="uses Django group manager")
+    def test_attribute_is_type_objects(self):
         pass
