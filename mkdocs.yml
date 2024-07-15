@@ -78,6 +78,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
 
+          - projects/centurion_erp/development/api/models/tenancy_object.md
+
         - projects/centurion_erp/development/api/common_views.md
 
         - Serializers:
