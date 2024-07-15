@@ -15,6 +15,22 @@ class View(OrganizationPermission):
     template_name:str  = 'form.html.j2'
 
 
+    def get_form_kwargs(self) -> dict:
+        """ Fetch kwargs for form
+
+        Returns:
+            dict: kwargs used in fetching form
+        """
+
+        kwargs = super().get_form_kwargs()
+
+        if self.form_class:
+
+            kwargs.update({'user': self.request.user})
+
+        return kwargs
+
+
 
 class AddView(View, generic.CreateView):
 
