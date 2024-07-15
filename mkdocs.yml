@@ -92,6 +92,8 @@ nav:
 
           - projects/centurion_erp/development/api/tests/index.md
 
+          - projects/centurion_erp/development/api/tests/models.md
+
           - projects/centurion_erp/development/api/tests/model_history.md
 
           - projects/centurion_erp/development/api/tests/model_history_child_item.md

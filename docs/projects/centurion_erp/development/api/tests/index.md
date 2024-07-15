@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Models are tested using the following test cases:
 
+- [Models](./models.md)
+
 - [ALL Model Permission](./model_permissions.md)
 
 - [ALL Model Permission (organization Manager)](./model_permissions_organization_manager.md)

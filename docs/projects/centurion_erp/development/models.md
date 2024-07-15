@@ -34,6 +34,18 @@ All models must meet the following requirements:
 - No `queryset` is to return data that the user has not got access to. _see [queryset()](./api/models/tenancy_object.md#tenancy-object-manager)_
 
 
+## Tests
+
+The following Unit test cases exists for models:
+
+- [BaseModel](./api/tests/models.md#base-unit-tests-for-all-models)
+
+- [TenancyObject](./api/tests/models.md#tenancy-model-unit-tests)
+
+!!! info
+    If you add a feature you will have to write the test cases for that feature if they are not covered by existing test cases.
+
+
 ## Docs to clean up
 
 !!! note

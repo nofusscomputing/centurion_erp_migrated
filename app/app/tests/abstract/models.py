@@ -1,7 +1,12 @@
 import pytest
 import unittest
 
+from access.models import TenancyObject
+from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectTestCases
+
 from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
+
+from core.mixin.history_save import SaveHistory
 
 
 
@@ -11,6 +16,15 @@ class BaseModel:
     model = None
     """ Model to test """
 
+
+    @pytest.mark.skip(reason="figure out how to test sub-sub-class")
+    def test_class_inherits_save_history(self):
+        """ Confirm class inheritence
+
+        TenancyObject must inherit SaveHistory
+        """
+
+        assert issubclass(self.model, TenancyObject)
 
 
 

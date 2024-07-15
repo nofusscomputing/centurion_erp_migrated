@@ -41,22 +41,3 @@ class Models:
         pass
 
 
-    @pytest.mark.skip(reason="write test")
-    def test_model_class_tenancy_object_attribute_objects(self):
-        """ Attribute Check
-
-        attribute `objects` must be set to `access.models.TenancyManager()`
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason="write test")
-    def test_model_class_inheritence_tenancy_object_save_history(self):
-        """ Class inheritence Check
-
-        Class inherits from `core.mixin.history_save.SaveHistory`
-        """
-
-        pass
-
