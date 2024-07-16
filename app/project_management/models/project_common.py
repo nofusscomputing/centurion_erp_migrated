@@ -4,7 +4,7 @@ from access.fields import *
 from access.models import TenancyObject
 
 
-class ProjectCommonFields(TenancyObject, models.Model):
+class ProjectCommonFields(TenancyObject):
 
     class Meta:
         abstract = True
