@@ -103,9 +103,8 @@ Docker Container:
         (
           $CI_COMMIT_BRANCH == "development"
             ||
-          $CI_COMMIT_BRANCH == "master"
-        )
-         && 
+          $CI_COMMIT_BRANCH == "v-1-0-0-alpha"
+        ) && 
         $CI_PIPELINE_SOURCE == "push"
       exists:
         - '{dockerfile,dockerfile.j2}'
@@ -181,7 +180,7 @@ Docker Container:
         - if: # condition_dev_branch_push
             $CI_COMMIT_BRANCH == "development" && 
             $CI_PIPELINE_SOURCE == "push"
-          when: manual
+          when: always
           allow_failure: true
 
         # for testing
@@ -229,7 +228,11 @@ Docker.Hub.Branch.Publish:
       when: always
 
     - if: # condition_dev_branch_push
-        $CI_COMMIT_BRANCH == "development" && 
+        (
+          $CI_COMMIT_BRANCH == "development"
+            ||
+          $CI_COMMIT_BRANCH == "v-1-0-0-alpha"
+        ) && 
         $CI_PIPELINE_SOURCE == "push"
       exists:
         - '{dockerfile,dockerfile.j2}'
@@ -251,13 +254,8 @@ Github (Push --mirror):
           when: never
 
         - if: # condition_master_or_dev_push
-            ( 
-              $CI_COMMIT_BRANCH == "master"
-               || 
-              $CI_COMMIT_BRANCH == "development"
-                ||
-              $CI_COMMIT_BRANCH == "14-feat-project-management"
-            ) && 
+            $CI_COMMIT_BRANCH
+              && 
             $CI_PIPELINE_SOURCE == "push"
           when: always
 
@@ -273,7 +271,11 @@ Website.Submodule.Deploy:
     name: Documentation
   rules:
     - if:  # condition_dev_branch_push
-        $CI_COMMIT_BRANCH == "development" && 
+        (
+          $CI_COMMIT_BRANCH == "development"
+            ||
+          $CI_COMMIT_BRANCH == "v-1-0-0-alpha"
+        ) && 
         $CI_PIPELINE_SOURCE == "push"
       exists:
         - '{docs/**,pages/**}/*.md'
