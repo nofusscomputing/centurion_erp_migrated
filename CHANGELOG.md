@@ -1,3 +1,25 @@
+## 1.0.0-a1 (2024-07-16)
+
+### BREAKING CHANGE
+
+- squashed DB migrations in preparation for v1.0 release.
+
+### Feat
+
+- Administratively set global items org/is_global field now read-only
+- **access**: Add multi-tennant manager
+
+### Fix
+
+- **core**: migrate manufacturer to use new form/view logic
+- **settings**: correct the permission to view manufacturers
+- **access**: Correct team form fields
+- **config_management**: don't exclude parent from field, only self
+
+### Refactor
+
+- Squash database migrations
+
 ## 0.7.0 (2024-07-14)
 
 ### Bug Fixes
