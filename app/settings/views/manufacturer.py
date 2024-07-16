@@ -28,17 +28,6 @@ class Index(IndexView):
     template_name = 'settings/manufacturers.html.j2'
 
 
-    def get_queryset(self):
-
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter().order_by('name')
-
-        else:
-
-            return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
-
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -49,7 +38,7 @@ class Index(IndexView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "manufacturer"
 
@@ -89,7 +78,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
 
     
     form_class = ManufacturerForm
@@ -116,7 +105,7 @@ class Add(OrganizationPermission, generic.CreateView):
         return context
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
 
     model = Manufacturer
 

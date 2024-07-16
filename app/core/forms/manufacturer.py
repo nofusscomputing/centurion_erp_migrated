@@ -1,10 +1,11 @@
 from django import forms
 
+from core.forms.common import CommonModelForm
 from core.models.manufacturer import Manufacturer
 
 
 
-class ManufacturerForm(forms.ModelForm):
+class ManufacturerForm(CommonModelForm):
 
     class Meta:
 
