@@ -133,7 +133,8 @@ Docker Container:
         - python -m ensurepip  && ln -sf pip3 /usr/bin/pip
         - pip install --upgrade pip
         - pip install -r $ROOT_DIR/gitlab_release/requirements.txt
-        - pip install $ROOT_DIR/gitlab_release/python-module/cz_nfc/.
+        # - pip install $ROOT_DIR/gitlab_release/python-module/cz_nfc/.
+        - pip install commitizen --force
         - 'CLONE_URL="https://gitlab-ci-token:$GIT_COMMIT_TOKEN@gitlab.com/$CI_PROJECT_PATH.git"'
         - echo "[DEBUG] CLONE_URL[$CLONE_URL]"
         - git clone -b development $CLONE_URL repo
@@ -142,11 +143,11 @@ Docker Container:
         - git config --global user.email "helpdesk@nofusscomputing.com"
         - git config --global user.name "nfc_bot"
         - git push --set-upstream origin development
-        - RELEASE_VERSION_CURRENT=$(cz -n cz_nfc version --project)        
+        - RELEASE_VERSION_CURRENT=$(cz version --project)        
     script:
         - "$MY_COMMAND"
-        - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz -n cz_nfc bump --changelog --changelog-to-stdout --prerelease alpha); else RELEASE_CHANGELOG=$(cz -n cz_nfc bump --changelog --changelog-to-stdout); fi
-        - RELEASE_VERSION_NEW=$(cz -n cz_nfc version --project)
+        - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout --prerelease alpha); else RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout); fi
+        - RELEASE_VERSION_NEW=$(cz version --project)
         - RELEASE_TAG=$RELEASE_VERSION_NEW
         - echo "[DEBUG] RELEASE_VERSION_CURRENT[$RELEASE_VERSION_CURRENT]"
         - echo "[DEBUG] RELEASE_CHANGELOG[$RELEASE_CHANGELOG]"
