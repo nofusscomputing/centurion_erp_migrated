@@ -7,7 +7,6 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 from itam.models.device import DeviceType
 from itam.forms.device_type import DeviceTypeForm
 
-from settings.models.user_settings import UserSettings
 
 
 
@@ -59,13 +58,6 @@ class Add(AddView):
     ]
 
     template_name = 'form.html.j2'
-
-
-    def get_initial(self):
-
-        return {
-            'organization': UserSettings.objects.get(user = self.request.user).default_organization
-        }
 
 
     def get_success_url(self, **kwargs):

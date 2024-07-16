@@ -4,6 +4,9 @@ from access.mixin import OrganizationPermission
 
 from core.exceptions import MissingAttribute
 
+from settings.models.user_settings import UserSettings
+
+
 
 class View(OrganizationPermission):
     """ Abstract class common to all views
@@ -36,6 +39,11 @@ class AddView(View, generic.CreateView):
 
     template_name:str  = 'form.html.j2'
 
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
 class ChangeView(View, generic.UpdateView):

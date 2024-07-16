@@ -64,7 +64,9 @@ nav:
 
         - projects/centurion_erp/development/api/index.md
 
-        - projects/centurion_erp/development/api/form.md
+        - projects/centurion_erp/development/api/admin_model_form.md
+
+        - projects/centurion_erp/development/api/model_form.md
 
         - projects/centurion_erp/development/api/token_authentication.md
 

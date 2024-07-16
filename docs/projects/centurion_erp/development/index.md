@@ -15,7 +15,7 @@ Centurion ERP is a Django Application. We have added a lot of little tid bits th
 
 - [Application API Documentation](./api/index.md)
 
-- [Forms](./api/form.md)
+- [Forms](./forms.md)
 
 - [Models](./models.md)
 

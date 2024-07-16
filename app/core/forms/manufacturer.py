@@ -3,9 +3,14 @@ from django import forms
 from core.forms.common import CommonModelForm
 from core.models.manufacturer import Manufacturer
 
+from settings.forms.admin_settings_global import AdminGlobalModels
 
 
-class ManufacturerForm(CommonModelForm):
+
+class ManufacturerForm(
+    AdminGlobalModels,
+    CommonModelForm
+):
 
     class Meta:
 
