@@ -2,9 +2,14 @@ from django import forms
 from django.db.models import Q
 
 from app import settings
+
+from core.forms.common import CommonModelForm
+
 from project_management.models.projects import Project
 
-class ProjectForm(forms.ModelForm):
+
+
+class ProjectForm(CommonModelForm):
 
     prefix = 'project'
 
