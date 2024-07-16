@@ -11,6 +11,7 @@ from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.views.common import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
 from project_management.models.project_tasks import ProjectTask
 
@@ -18,7 +19,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class ProjectTaskAdd(generic.CreateView):
+class ProjectTaskAdd(AddView):
 
     # form_class = form_class = ProjectTaskForm
 
@@ -55,7 +56,7 @@ class ProjectTaskAdd(generic.CreateView):
 
 
 
-class ProjectTaskChange(OrganizationPermission, generic.UpdateView):
+class ProjectTaskChange(ChangeView):
 
     # form_class = ProjectTaskForm
 
@@ -87,7 +88,7 @@ class ProjectTaskChange(OrganizationPermission, generic.UpdateView):
 
 
 
-class ProjectTaskView(OrganizationPermission, generic.UpdateView):
+class ProjectTaskView(ChangeView):
 
     model = ProjectTask
 
@@ -152,7 +153,7 @@ class ProjectTaskView(OrganizationPermission, generic.UpdateView):
 
 
 
-class ProjectTaskDelete(OrganizationPermission, generic.DeleteView):
+class ProjectTaskDelete(DeleteView):
     model = ProjectTask
     
     permission_required = [

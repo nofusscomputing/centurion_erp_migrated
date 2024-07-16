@@ -10,7 +10,7 @@ from core.mixin.history_save import SaveHistory
 
 
 
-class ProjectTask(ProjectCommonFieldsName, SaveHistory):
+class ProjectTask(ProjectCommonFieldsName):
 
 
     class Meta:
