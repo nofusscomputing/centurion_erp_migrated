@@ -51,6 +51,22 @@ def process_inventory(self, data, organization: int):
             device_uuid = str(data.details.uuid)
 
 
+        if device_serial_number: # Search for device by serial number.
+
+            device = Device.objects.filter(
+                serial_number__iexact=device_serial_number
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    serial_number__iexact=device_serial_number
+                )
+
+            else:
+
+                device = None
+
         if not device: # Search for device by Name.
 
             device = Device.objects.filter(
