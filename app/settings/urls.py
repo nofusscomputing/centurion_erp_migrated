@@ -2,7 +2,7 @@ from django.urls import path
 
 from core.views import celery_log
 
-from .views import app_settings, home, device_models, device_types, manufacturer, software_categories
+from settings.views import app_settings, home, device_models, device_types, external_link, manufacturer, software_categories
 
 from itam.views import device_type, device_model, software_category
 
@@ -10,6 +10,13 @@ app_name = "Settings"
 urlpatterns = [
 
     path("", home.View.as_view(), name="Settings"),
+
+    path("external_links", external_link.Index.as_view(), name="External Links"),
+    path("external_links/add", external_link.Add.as_view(), name="_external_link_add"),
+    path("external_links/<int:pk>", external_link.View.as_view(), name="_external_link_view"),
+    path("external_links/<int:pk>/edit", external_link.Change.as_view(), name="_external_link_change"),
+    path("external_links/<int:pk>/delete", external_link.Delete.as_view(), name="_external_link_delete"),
+
 
     path('application', app_settings.View.as_view(), name="_settings_application"),
     

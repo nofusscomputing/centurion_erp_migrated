@@ -43,8 +43,12 @@
 
 <form method="post">
 <div id="Details" class="tabcontent">
-  <h3>Details</h3>
-  
+  <h3>
+    Details
+    {% for external_link in external_links %}
+      <span style="font-weight: normal; float: right;">{% include 'icons/external_link.html.j2' with external_link=external_link %}</span>
+    {% endfor %}
+  </h3>
     {% csrf_token %}
     {{ form }}
     <br>
