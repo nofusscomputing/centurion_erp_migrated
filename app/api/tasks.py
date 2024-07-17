@@ -37,13 +37,6 @@ def process_inventory(self, data, organization: int):
 
         organization = Organization.objects.get(id=organization)
 
-        if Device.objects.filter(slug=str(data.details.name).lower()).exists():
-
-            device = Device.objects.get(slug=str(data.details.name).lower())
-
-            # device = self.obj
-
-
         app_settings = AppSettings.objects.get(owner_organization = None)
 
         device_serial_number = None
@@ -56,6 +49,23 @@ def process_inventory(self, data, organization: int):
         if data.details.uuid and str(data.details.uuid).lower() != 'na':
 
             device_uuid = str(data.details.uuid)
+
+
+        if not device: # Search for device by Name.
+
+            device = Device.objects.filter(
+                name__iexact=str(data.details.name).lower()
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    name__iexact=str(data.details.name).lower()
+                )
+
+            else:
+
+                device = None
 
         if not device: # Create the device
 
