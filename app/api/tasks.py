@@ -133,14 +133,14 @@ def process_inventory(self, data, organization: int):
                 device.save()
 
             operating_system = OperatingSystem.objects.filter(
-                slug=data.operating_system.name,
+                name=data.operating_system.name,
                 is_global = True
             )
 
             if operating_system.exists():
 
                 operating_system = OperatingSystem.objects.get(
-                    slug=data.operating_system.name,
+                    name=data.operating_system.name,
                     is_global = True
                 )
 
@@ -154,7 +154,7 @@ def process_inventory(self, data, organization: int):
             if not operating_system:
 
                 operating_system = OperatingSystem.objects.filter(
-                    slug=data.operating_system.name,
+                    name=data.operating_system.name,
                     organization = organization
                 )
 
@@ -162,7 +162,7 @@ def process_inventory(self, data, organization: int):
                 if operating_system.exists():
 
                     operating_system = OperatingSystem.objects.get(
-                        slug=data.operating_system.name,
+                        name=data.operating_system.name,
                         organization = organization
                     )
 
@@ -174,7 +174,7 @@ def process_inventory(self, data, organization: int):
             if not operating_system:
 
                 operating_system = OperatingSystem.objects.create(
-                    slug = data.operating_system.name,
+                    name = data.operating_system.name,
                     organization = organization,
                     is_global = True
                 )
