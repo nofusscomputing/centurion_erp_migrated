@@ -1,6 +1,6 @@
 ---
 title: Settings
-description: Settings Module Documentation for Centurion ERP by No Fuss Computing
+description: Application Settings user documentation for Centurion ERP by No Fuss Computing
 date: 2024-05-25
 template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
