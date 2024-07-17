@@ -74,6 +74,11 @@ This configuration can also be obtained from API endpoint `/api/config/<machine-
 
 It's possible for a machine to be inventoried and have the report passed to the [inventory endpoint](../api.md#inventory-reports). This report will update the device within the interface and provides the option to use scheduled inventory gathering to keep the device up to date.
 
+Inventory processing is conducted by a background worker. As soon as the inventory is uploaded, the inventory processing is added to the background worker queue. Further information about the background worker can be found within its [documentation](../core/index.md#background-worker)
+
+!!! tip
+    Inventory not uploading? review the task logs by navigating to `Settings -> Application -> Task Logs`
+
 The report can contain the following information:
 
 - device:
