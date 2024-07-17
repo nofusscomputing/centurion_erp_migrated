@@ -37,7 +37,7 @@ This tab displays the details of the software, in particular:
 - global
 
 !!! info
-    If a super admin sets [application setting](../settings.md#global-software) `software is global`, when any software is created, regardless of what organization you set. The software will be created in the "global" organization.
+    If a super admin sets [application setting](../settings/app_settings.md#global-software) `software is global`, when any software is created, regardless of what organization you set. The software will be created in the "global" organization.
 
 
 ## Versions
