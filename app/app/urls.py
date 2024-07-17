@@ -43,6 +43,7 @@ urlpatterns = [
 
     path("organization/", include("access.urls")),
     path("itam/", include("itam.urls")),
+    path("itim/", include("itim.urls")),
     path("config_management/", include("config_management.urls")),
 
     path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
@@ -73,7 +74,6 @@ if settings.DEBUG:
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
         # Apps Under Development
-        path("itim/", include("itim.urls")),
         path("information/", include("information.urls")),
         path("project_management/", include("project_management.urls")),
     ]
