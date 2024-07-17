@@ -184,6 +184,13 @@
       <input type="submit" name="{{operating_system.prefix}}" value="Submit" />
     </div>
 
+    <div style="display: block; width: 100%;">
+      <h3>Device Config</h3>
+      <br>
+      <textarea cols="90" rows="30" readonly>{{ device.config }}</textarea>
+    </div>
+
+    <input type="button" value="Edit" onclick="window.location='{% url 'ITAM:_device_change' device.id %}';">
     {% if not tab %}
     <script>
       // Get the element with id="defaultOpen" and click on it

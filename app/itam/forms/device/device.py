@@ -23,6 +23,7 @@ class DeviceForm(CommonModelForm):
             'device_type',
             'organization',
             'model_notes',
+            'config',
         ]
 
 

@@ -39,6 +39,21 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 class Device(DeviceCommonFieldsName, SaveHistory):
 
+
+    reserved_config_keys: list = [
+        'software'
+    ]
+
+    def validate_config_keys_not_reserved(self):
+
+        value: dict = self
+
+        for invalid_key in Device.reserved_config_keys:
+
+            if invalid_key in value.keys():
+                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+
+
     serial_number = models.CharField(
         verbose_name = 'Serial Number',
         max_length = 50,
@@ -78,6 +93,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         help_text = 'Type of device.',
     )
 
+
+    config = models.JSONField(
+        blank = True,
+        default = None,
+        null = True,
+        validators=[ validate_config_keys_not_reserved ],
+        verbose_name = 'Host Configuration',
+        help_text = 'Configuration for this device'
+    )
 
     inventorydate = models.DateTimeField(
         verbose_name = 'Last Inventory Date',
@@ -219,6 +243,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                         group_software = group_software + rendered_config['software']
 
             config['software'] = merge_software(group_software, host_software)
+
+            if self.config:
+
+                config.update(self.config)
 
         return config
 
