@@ -97,30 +97,72 @@ def process_inventory(self, data, organization: int):
 
                 device.save()
 
+            operating_system = OperatingSystem.objects.filter(
+                slug=data.operating_system.name,
+                is_global = True
+            )
 
-            if OperatingSystem.objects.filter( slug=data.operating_system.name ).exists():
+            if operating_system.exists():
 
-                operating_system = OperatingSystem.objects.get( slug=data.operating_system.name )
+                operating_system = OperatingSystem.objects.get(
+                    slug=data.operating_system.name,
+                    is_global = True
+                )
 
-            else: # Create Operating System
+
+            else:
+
+                operating_system = None
+
+
+
+            if not operating_system:
+
+                operating_system = OperatingSystem.objects.filter(
+                    slug=data.operating_system.name,
+                    organization = organization
+                )
+
+
+                if operating_system.exists():
+
+                    operating_system = OperatingSystem.objects.get(
+                        slug=data.operating_system.name,
+                        organization = organization
+                    )
+
+                else:
+
+                    operating_system = None
+
+
+            if not operating_system:
 
                 operating_system = OperatingSystem.objects.create(
-                    name = data.operating_system.name,
+                    slug = data.operating_system.name,
                     organization = organization,
                     is_global = True
                 )
 
 
-            if OperatingSystemVersion.objects.filter( name=data.operating_system.version_major, operating_system=operating_system ).exists():
+            operating_system_version = OperatingSystemVersion.objects.filter(
+                name=data.operating_system.version_major,
+                operating_system=operating_system
+            )
+
+            if operating_system_version.exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
-                    organization = organization,
-                    is_global = True,
-                    name = data.operating_system.version_major,
-                    operating_system = operating_system
+                    name=data.operating_system.version_major,
+                    operating_system=operating_system
                 )
 
-            else: # Create Operating System Version
+            else:
+
+                operating_system_version = None
+
+
+            if not operating_system_version:
 
                 operating_system_version = OperatingSystemVersion.objects.create(
                     organization = organization,
@@ -129,22 +171,22 @@ def process_inventory(self, data, organization: int):
                     operating_system = operating_system,
                 )
 
+            device_operating_system = DeviceOperatingSystem.objects.filter(
+                device=device,
+            )
 
-            if DeviceOperatingSystem.objects.filter( version=data.operating_system.version, device=device, operating_system_version=operating_system_version ).exists():
+            if device_operating_system.exists():
 
                 device_operating_system = DeviceOperatingSystem.objects.get(
                     device=device,
-                    version = data.operating_system.version,
-                    operating_system_version = operating_system_version,
                 )
 
-                if not device_operating_system.installdate: # Only update install date if empty
+            else:
 
-                    device_operating_system.installdate = timezone.now()
+                device_operating_system = None
 
-                    device_operating_system.save()
 
-            else: # Create Operating System Version
+            if not device_operating_system:
 
                 device_operating_system = DeviceOperatingSystem.objects.create(
                     organization = organization,
@@ -153,6 +195,26 @@ def process_inventory(self, data, organization: int):
                     operating_system_version = operating_system_version,
                     installdate = timezone.now()
                 )
+
+            if not device_operating_system.installdate: # Only update install date if empty
+
+                device_operating_system.installdate = timezone.now()
+
+                device_operating_system.save()
+
+
+            if device_operating_system.operating_system_version != operating_system_version:
+
+                device_operating_system.operating_system_version = operating_system_version
+
+                device_operating_system.save()
+
+
+            if device_operating_system.version != data.operating_system.version:
+
+                device_operating_system.version = data.operating_system.version
+
+                device_operating_system.save()
 
 
             if app_settings.software_is_global:
