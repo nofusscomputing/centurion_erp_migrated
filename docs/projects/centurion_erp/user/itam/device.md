@@ -69,6 +69,8 @@ This tab displays in `JSON` format configuration that is ready for use. Config f
 
 This configuration can also be obtained from API endpoint `/api/config/<machine-slug>` where `<machine-slug>` would match the Ansible `inventory_hostname`.
 
+The device can also have configuration defined. this configuration is intended to replicate Ansible `hostvars`. After all of the configuration has been rendered from the other modules that contain config, the devices configuration is applied last. In essence the devices configuration will always override any duplicated configuration.
+
 
 ### Inventory
 
