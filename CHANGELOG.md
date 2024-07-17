@@ -1,3 +1,18 @@
+## 1.0.0-a2 (2024-07-17)
+
+### Feat
+
+- **api**: Inventory matching of device second by uuid
+- **api**: Inventory matching of device first by serial number
+- **base**: show warning bar if the user has not set a default organization
+
+### Fix
+
+- **base**: dont show user warning bar for non-authenticated user
+- **api**: correct inventory operating system selection by name
+- **api**: correct inventory operating system and it's linking to device
+- **api**: correct inventory device search to be case insensitive
+
 ## 1.0.0-a1 (2024-07-16)
 
 ### BREAKING CHANGE
