@@ -113,6 +113,7 @@ INSTALLED_APPS = [
     'core.apps.CoreConfig',
     'access.apps.AccessConfig',
     'itam.apps.ItamConfig',
+    'itim.apps.ItimConfig',
     'settings.apps.SettingsConfig',
     'drf_spectacular',
     'drf_spectacular_sidecar',
