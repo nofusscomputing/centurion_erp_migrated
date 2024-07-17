@@ -67,6 +67,24 @@ def process_inventory(self, data, organization: int):
 
                 device = None
 
+
+        if device_uuid and not device: # Search for device by UUID.
+
+            device = Device.objects.filter(
+                uuid__iexact=device_uuid
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    uuid__iexact=device_uuid
+                )
+
+            else:
+
+                device = None
+
+
         if not device: # Search for device by Name.
 
             device = Device.objects.filter(
@@ -83,9 +101,10 @@ def process_inventory(self, data, organization: int):
 
                 device = None
 
+
+
+
         if not device: # Create the device
-
-
 
             device = Device.objects.create(
                 name = data.details.name,
