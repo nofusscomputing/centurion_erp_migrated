@@ -34,6 +34,11 @@ All models must meet the following requirements:
 - No `queryset` is to return data that the user has not got access to. _see [queryset()](./api/models/tenancy_object.md#tenancy-object-manager)_
 
 
+## History
+
+Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.
+
+
 ## Tests
 
 The following Unit test cases exists for models:
