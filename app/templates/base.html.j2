@@ -76,6 +76,15 @@ section h2 span svg {
   fill: #177ee6;
 }
 
+.warning-bar {
+  background-color: #f1d599;
+  border: 1px solid #ecb785;
+  height: 30px;
+  line-height: 30px;
+  width: 100%;
+  padding: 0px 20px 0px 20px
+}
+
 </style>
 
     <section>
@@ -100,6 +109,9 @@ section h2 span svg {
         {% endblock content_header_icon %}
         {% endif %}
       </h2>
+      {% if not user_default_organization %}
+      <div class="warning-bar">You do not have a <b>default organization</b> set, go to <a href="{% url '_settings_user' pk=user_settings %}">user settings</a> to set one</div>
+      {% endif %}
       {% block article %}
       <article id="content-body">
         {% block content %}{% endblock %}

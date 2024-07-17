@@ -69,6 +69,9 @@ This configuration can also be obtained from API endpoint `/api/config/<machine-
 
 ### Inventory
 
+!!! tip
+    Within your "user settings" you must have a default organization set. Without this the inventory will not be added as this is how the inventory logic determines which organization for the device to be created in.
+
 It's possible for a machine to be inventoried and have the report passed to the [inventory endpoint](../api.md#inventory-reports). This report will update the device within the interface and provides the option to use scheduled inventory gathering to keep the device up to date.
 
 The report can contain the following information:

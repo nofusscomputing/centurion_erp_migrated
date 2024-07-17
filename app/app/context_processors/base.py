@@ -74,6 +74,23 @@ def user_settings(context) -> int:
     return None
 
 
+def user_default_organization(context) -> int:
+    """ Provides the users default organization.
+
+    Returns:
+        int: Users Default Organization
+    """
+    if context.user.is_authenticated:
+
+        settings = UserSettings.objects.filter(user=context.user)
+
+        if settings[0].default_organization:
+
+            return settings[0].default_organization.id
+
+    return None
+
+
 def nav_items(context) -> list(dict()):
     """ Fetch All Project URLs
 
@@ -203,4 +220,5 @@ def common(context):
         'nav_items': nav_items(context),
         'social_backends': social_backends(context),
         'user_settings': user_settings(context),
+        'user_default_organization': user_default_organization(context)
     }
