@@ -1,0 +1,42 @@
+{% extends 'base.html.j2' %}
+
+
+{% block content_header_icon %}{% endblock %}
+
+{% block content %}
+
+<input type="button" value="New External Link" onclick="window.location='{% url 'Settings:_external_link_add' %}';">
+<table class="data">
+    <tr>
+        <th>Name</th>
+        <th>Organization</th>
+        <th>&nbsp;</th>
+    </tr>
+    {% for item in list %}
+    <tr>
+        <td><a href="{% url 'Settings:_external_link_view' pk=item.id %}">{{ item.name }}</a></td>
+        <td>{% if item.is_global %}Global{% else %}{{ item.organization }}{% endif %}</td>
+        <td>&nbsp;</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
