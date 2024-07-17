@@ -82,6 +82,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/core_history_save.md
 
+          - projects/centurion_erp/development/api/models/external_links.md
+
           - projects/centurion_erp/development/api/models/itam_device.md
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
@@ -193,6 +195,8 @@ nav:
         - projects/centurion_erp/user/settings/index.md
 
         - projects/centurion_erp/user/settings/app_settings.md
+
+        - projects/centurion_erp/user/settings/external_links.md
 
 
 - Operations: 

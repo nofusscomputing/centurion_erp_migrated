@@ -1,0 +1,194 @@
+{% extends 'base.html.j2' %}
+
+{% load markdown %}
+
+{% block title %}{{ externallink.name }}{% endblock %}
+
+{% block content %}
+
+<script>
+
+  function openCity(evt, cityName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+</script>
+
+<div class="tab">
+  <button onclick="window.location='{% url 'Settings:External Links' %}';"
+    style="vertical-align: middle; padding: auto; margin: 0px">
+    <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
+      style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
+      <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+    </svg> Back to External Links</button>
+  <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
+  <button id="NotesOpen" class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
+</div>
+<style>
+
+.detail-view-field {
+  display:unset;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  /*padding: 10px;*/
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline-block;
+  width: 340px;
+  margin: 10px;
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+</style>
+<form action="" method="post">
+  {% csrf_token %}
+
+
+  <div id="Details" class="tabcontent">
+    <h3>
+      Details
+      {% for external_link in external_links %}
+        <span style="font-weight: normal; float: right;">{% include 'icons/external_link.html.j2' with external_link=external_link %}</span>
+      {% endfor %}
+    </h3>
+    <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+      <div style="display: inline; width: 40%; margin: 30px;">
+
+        <div class="detail-view-field">
+          <label>{{ form.organization.label }}</label>
+          <span>{{ externallink.organization }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.name.label }}</label>
+          <span>{{ form.name.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.template.label }}</label>
+          <span>{{ externallink.template }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.colour.label }}</label>
+          <span>
+          {% if form.colour.value %}
+            {{ form.colour.value }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.devices.label }}</label>
+          <span> {{ form.devices.value }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>{{ form.software.label }}</label>
+          <span>{{ externallink.software }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>Created</label>
+          <span>{{ externallink.created }}</span>
+        </div>
+
+        <div class="detail-view-field">
+          <label>Modified</label>
+          <span>{{ externallink.modified }}</span>
+        </div>
+
+      </div>
+
+      <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+        <div>
+          <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
+          
+          <div style="display: inline-block; text-align: left;">
+          {% if form.model_notes.value  %} 
+            {{ form.model_notes.value | markdown | safe }}
+          {% else %}
+            &nbsp;
+          {% endif %}
+          </div>
+        </div>
+      </div>
+      </div>
+
+ 
+
+    <input type="button" value="Edit" onclick="window.location='{% url 'Settings:_external_link_change' externallink.id %}';">
+
+
+    {% if not tab %}
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("defaultOpen").click();
+    </script>
+    {% endif %}
+
+  </div>
+
+
+
+
+  <div id="Notes" class="tabcontent">
+    <h3>
+      Notes
+    </h3>
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if tab == 'notes' %}
+    <script>
+      // Get the element with id="defaultOpen" and click on it
+      document.getElementById("NotesOpen").click();
+    </script>
+    {% endif %}
+  </div>
+
+
+</form>
+{% endblock %}

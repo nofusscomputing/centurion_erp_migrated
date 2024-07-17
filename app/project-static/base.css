@@ -52,6 +52,7 @@ span.icon-text {
   padding-right: 10px;
   height: 30px;
   display: inline-block;
+  margin-left: 5px;
 }
 
 span.icon-text a {
@@ -140,6 +141,16 @@ span.icon-issue {
   padding: 0px;
   vertical-align: middle;
   display: inline-block;
+}
+
+span.icon-external-link {
+  height: 30px;
+  line-height: 30px;
+  margin: 0px;
+  padding: 0px;
+  vertical-align: middle;
+  display: inline-block;
+  width: 25px;
 }
 
 /* .icon {
