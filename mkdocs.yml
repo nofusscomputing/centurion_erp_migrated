@@ -188,7 +188,11 @@ nav:
 
         - projects/centurion_erp/user/itam/software.md
 
-      - projects/centurion_erp/user/settings.md
+      - Settings:
+
+        - projects/centurion_erp/user/settings/index.md
+
+        - projects/centurion_erp/user/settings/app_settings.md
 
 
 - Operations: 
