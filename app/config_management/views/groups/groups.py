@@ -1,7 +1,6 @@
 import json
 
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -47,13 +46,7 @@ class GroupIndexView(IndexView):
 
     def get_queryset(self):
 
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter(parent=None).order_by('name')
-
-        else:
-
-            return self.model.objects.filter(Q(parent=None, organization__in=self.user_organizations()) | Q(parent=None, is_global = True)).order_by('name')
+        return self.model.objects.filter(parent=None).order_by('name')
 
 
 
