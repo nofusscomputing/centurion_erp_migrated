@@ -1,5 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Count, Q
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -47,7 +47,7 @@ class IndexView(IndexView):
 
         else:
 
-            return Software.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return Software.objects.filter().order_by('name')
 
 
 
@@ -98,9 +98,9 @@ class View(ChangeView):
             )
 
         elif not self.request.user.is_superuser:
+
             context['device_software'] = DeviceSoftware.objects.filter(
-                Q(device__in=self.user_organizations(),
-                software=self.kwargs['pk'])
+                software=self.kwargs['pk']
             ).order_by(
                 'device',
                 'organization'
