@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     'access.apps.AccessConfig',
     'itam.apps.ItamConfig',
     'itim.apps.ItimConfig',
+    'assistance.apps.AssistanceConfig',
     'settings.apps.SettingsConfig',
     'drf_spectacular',
     'drf_spectacular_sidecar',
@@ -358,7 +359,6 @@ if DEBUG:
 
     # Apps Under Development
     INSTALLED_APPS += [
-        'information.apps.InformationConfig',
         'project_management.apps.ProjectManagementConfig',
     ]
 
