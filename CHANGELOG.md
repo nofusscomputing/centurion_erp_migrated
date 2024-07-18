@@ -1,3 +1,19 @@
+## 1.0.0-a3 (2024-07-18)
+
+### Feat
+
+- **config_management**: Prevent a config group from being able to change organization
+- **itam**: On device organization change remove config groups
+
+### Fix
+
+- **config_management**: dont attempt to do action during save if group being created
+- **itam**: remove org filter for device so that user can see installations
+- **itam**: remove org filter for operating systems so that user can see installations
+- **itam**: remove org filter for software so that user can see installations
+- **itam**: Device related items should not be global.
+- **itam**: When changing device organization move related items too.
+
 ## 1.0.0-a2 (2024-07-17)
 
 ### Feat
