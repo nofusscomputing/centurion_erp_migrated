@@ -1,5 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Q, Count
+from django.db.models import Count
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -40,7 +40,7 @@ class IndexView(IndexView):
 
         else:
 
-            return OperatingSystem.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return OperatingSystem.objects.filter().order_by('name')
 
 
 
