@@ -116,6 +116,12 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     organization = self.organization,
                 )
 
+        from config_management.models.groups import ConfigGroupHosts
+
+        ConfigGroupHosts.objects.filter(
+            host = self.id,
+        ).delete()
+
 
     def __str__(self):
 

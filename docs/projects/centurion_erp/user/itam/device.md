@@ -41,6 +41,9 @@ To add a new model navigate to `settings -> ITAM -> Device Models`
 
 Operating System is also visible on this tab with the version `name` as intended to be full [semver](https://semver.org/).
 
+!!! note
+    If you change the devices organization the config groups the device is a part of will be removed.
+
 
 ### Software
 
