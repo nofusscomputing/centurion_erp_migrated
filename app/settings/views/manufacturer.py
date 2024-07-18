@@ -1,5 +1,4 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic

@@ -22,13 +22,7 @@ class Index(IndexView):
 
     def get_queryset(self):
 
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter().order_by('name')
-
-        else:
-
-            return self.model.objects.filter(organization__in=self.user_organizations()).order_by('name')
+        return self.model.objects.filter().order_by('name')
 
 
     def get_context_data(self, **kwargs):

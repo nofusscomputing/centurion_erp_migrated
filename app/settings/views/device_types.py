@@ -1,5 +1,3 @@
-from django.db.models import Q
-
 from core.views.common import IndexView
 
 from itam.models.device import DeviceType
@@ -23,13 +21,7 @@ class Index(IndexView):
 
     def get_queryset(self):
 
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter().order_by('name')
-
-        else:
-
-            return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+        return self.model.objects.filter().order_by('name')
 
 
     def get_context_data(self, **kwargs):
