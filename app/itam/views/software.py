@@ -1,5 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -71,9 +71,12 @@ class View(ChangeView):
         context = super().get_context_data(**kwargs)
 
         software_versions = SoftwareVersion.objects.filter(
-            software=self.kwargs['pk']
+            software=self.kwargs['pk'],
         ).annotate(
-            installs=Count("installedversion")
+            installs=Count(
+                "installedversion", 
+                filter=Q(installedversion__organization__in = self.user_organizations())
+            )
         )
 
         context['software_versions'] = software_versions
