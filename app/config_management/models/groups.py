@@ -202,7 +202,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
         if self.parent:
 
-            return f'{self.parent.name} > {self.name}'
+            return f'{self.parent} > {self.name}'
 
         return self.name
 
