@@ -42,6 +42,7 @@ urlpatterns = [
     path("account/", include("django.contrib.auth.urls")),
 
     path("organization/", include("access.urls")),
+    path("assistance/", include("assistance.urls")),
     path("itam/", include("itam.urls")),
     path("itim/", include("itim.urls")),
     path("config_management/", include("config_management.urls")),
@@ -73,8 +74,6 @@ if settings.DEBUG:
     urlpatterns += [
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
-        # Apps Under Development
-        path("information/", include("information.urls")),
         path("project_management/", include("project_management.urls")),
     ]
 

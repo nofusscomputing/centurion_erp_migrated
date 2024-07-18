@@ -6,7 +6,7 @@ from itam.views import device, device_type, software, software_category, softwar
 app_name = "ITIM"
 urlpatterns = [
 
-    # path("clusters", device.IndexView.as_view(), name="Clusters"),
-    # path("services", device.IndexView.as_view(), name="Services"),
+    path("clusters", device.IndexView.as_view(), name="Clusters"),
+    path("services", device.IndexView.as_view(), name="Services"),
 
 ]
