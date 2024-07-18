@@ -1,3 +1,10 @@
+## 1.0.0-a4 (2024-07-18)
+
+### Feat
+
+- **api**: When processing uploaded inventory and name does not match, update name to one within inventory file
+- **config_management**: Group name to be entire breadcrumb
+
 ## 1.0.0-a3 (2024-07-18)
 
 ### Feat
