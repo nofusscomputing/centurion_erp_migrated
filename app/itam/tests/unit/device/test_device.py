@@ -39,6 +39,16 @@ class Device(
     #     )
 
     @pytest.mark.skip(reason="to be written")
+    def test_device_move_organization(user):
+        """Move Organization test
+
+        When a device moves organization, devicesoftware and devicesoftware table data
+        must also move organizations
+        """
+        pass
+
+
+    @pytest.mark.skip(reason="to be written")
     def test_device_software_action(user):
         """Ensure only software that is from the same organization or is global can be added to the device
         """
