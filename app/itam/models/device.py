@@ -112,6 +112,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             if obj.exists():
 
                 obj.update(
+                    is_global = False,
                     organization = self.organization,
                 )
 
@@ -287,6 +288,16 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         return self.device
 
 
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+        ):
+
+        self.is_global = False
+
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
+
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
@@ -329,3 +340,14 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         """ Fetch the parent object """
         
         return self.device
+
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+        ):
+
+        self.is_global = False
+
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
