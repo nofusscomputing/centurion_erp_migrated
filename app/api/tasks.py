@@ -119,18 +119,34 @@ def process_inventory(self, data, organization: int):
 
             logger.info(f"Device: {device.name}, Serial: {device.serial_number}, UUID: {device.uuid}")
 
+            device_edited = False
+
+
             if not device.uuid and device_uuid:
 
                 device.uuid = device_uuid
 
-                device.save()
+                device_edited = True
 
 
             if not device.serial_number and device_serial_number:
 
                 device.serial_number = data.details.serial_number
 
+                device_edited = True
+
+
+            if str(device.name).lower() != str(data.details.name).lower(): # Update device Name
+
+                device.name = data.details.name
+
+                device_edited = True
+
+
+            if device_edited:
+
                 device.save()
+
 
             operating_system = OperatingSystem.objects.filter(
                 name=data.operating_system.name,
