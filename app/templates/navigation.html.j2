@@ -24,7 +24,9 @@ span.navigation_icon {
 </style>
 <button class="collapsible{% if group.is_active %} active{% endif %}">
   <span class="navigation_icon">
-  {% if group.name == 'Access' %}
+  {% if group.name == 'Assistance' %}
+      {% include 'icons/assistance.svg' %}
+  {% elif group.name == 'Access' %}
       {% include 'icons/access.svg' %}
   {% elif group.name == 'Config Management' %}
       {% include 'icons/ansible.svg' %}
@@ -45,6 +47,8 @@ span.navigation_icon {
     <span class="navigation_icon">
     {% if group_urls.name == 'Devices' %}
         {% include 'icons/devices.svg' %}
+    {% elif group_urls.name == 'Knowledge Base' %}
+        {% include 'icons/information.svg' %}
     {% elif group_urls.name == 'Software' %}
         {% include 'icons/software.svg' %}
     {% elif group_urls.name == 'Groups' %}
