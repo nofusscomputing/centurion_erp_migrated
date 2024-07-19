@@ -1,5 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -62,7 +62,15 @@ class View(ChangeView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        operating_system_versions = OperatingSystemVersion.objects.filter(operating_system=self.kwargs['pk']).order_by('name').annotate(installs=Count("deviceoperatingsystem"))
+        operating_system_versions = OperatingSystemVersion.objects.filter(
+            operating_system=self.kwargs['pk']
+        ).order_by(
+            'name'
+        ).annotate(
+            installs=Count("deviceoperatingsystem"),
+            filter=Q(deviceoperatingsystem__organization__in = self.user_organizations())
+        )
+        
         context['operating_system_versions'] = operating_system_versions
 
         installs = DeviceOperatingSystem.objects.filter(operating_system_version__operating_system_id=self.kwargs['pk'])
