@@ -16,7 +16,7 @@ variables:
   DOCKER_IMAGE_PUBLISH_URL: https://hub.docker.com/r/nofusscomputing/$DOCKER_IMAGE_PUBLISH_NAME
 
   # Extra release commands
-  MY_COMMAND: './.gitlab/additional_actions_bump.sh'
+  MY_COMMAND: ./.gitlab/additional_actions_bump.sh
 
   # Docs NFC
   PAGES_ENVIRONMENT_PATH: projects/centurion_erp/
@@ -132,7 +132,7 @@ Docker Container:
         - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/$CI_JOB_NAME"
         - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/tests"
         - apk update
-        - apk add git
+        - apk add git curl
         - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
         - python -m ensurepip  && ln -sf pip3 /usr/bin/pip
         - pip install --upgrade pip
@@ -159,7 +159,26 @@ Docker Container:
         - RELEASE_TAG_SHA1=$(git log -n1 --format=format:"%H")
         - echo "[DEBUG] RELEASE_TAG_SHA1[$RELEASE_TAG_SHA1]"
 
-        - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] not running extra actions, no new version"; else "$MY_COMMAND"; fi
+        - |
+          if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then 
+
+            echo "[DEBUG] not running extra actions, no new version"; 
+
+          else
+
+            echo "[DEBUG] Creating new Version Label";
+
+            curl \
+              --data "name=v${RELEASE_TAG}&color=#eee600&description=Version%20that%20is%20affected" \
+              --header "PRIVATE-TOKEN: $GIT_COMMIT_TOKEN" \
+              "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/labels";
+
+            echo curl \
+              --data "name=v${RELEASE_TAG}&color=#eee600&description=Version%20that%20is%20affected" \
+              --header "PRIVATE-TOKEN: $GIT_COMMIT_TOKEN" \
+              "https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/labels";
+
+          fi
 
         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No tag to delete, version was not bumped"; else git tag -d $RELEASE_TAG; fi
 
