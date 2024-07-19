@@ -15,6 +15,9 @@ variables:
   DOCKER_IMAGE_PUBLISH_REGISTRY: docker.io/nofusscomputing
   DOCKER_IMAGE_PUBLISH_URL: https://hub.docker.com/r/nofusscomputing/$DOCKER_IMAGE_PUBLISH_NAME
 
+  # Extra release commands
+  MY_COMMAND: './.gitlab/additional_actions_bump.sh'
+
   # Docs NFC
   PAGES_ENVIRONMENT_PATH: projects/centurion_erp/
 
@@ -146,7 +149,6 @@ Docker Container:
         - git push --set-upstream origin development
         - RELEASE_VERSION_CURRENT=$(cz version --project)        
     script:
-        - "$MY_COMMAND"
         - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout --prerelease beta); else RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout); fi
         - RELEASE_VERSION_NEW=$(cz version --project)
         - RELEASE_TAG=$RELEASE_VERSION_NEW
@@ -156,8 +158,11 @@ Docker Container:
         - echo "[DEBUG] RELEASE_TAG[$RELEASE_TAG]"
         - RELEASE_TAG_SHA1=$(git log -n1 --format=format:"%H")
         - echo "[DEBUG] RELEASE_TAG_SHA1[$RELEASE_TAG_SHA1]"
+
+        - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] not running extra actions, no new version"; else "$MY_COMMAND"; fi
+
         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No tag to delete, version was not bumped"; else git tag -d $RELEASE_TAG; fi
-        
+
         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No push will be conducted, version was not bumped"; else git push; fi
         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No release will be created, version was not bumped"; else release-cli create --name "Release $RELEASE_TAG" --tag-name "$RELEASE_TAG" --tag-message "$RELEASE_CHANGELOG" --ref "$RELEASE_TAG_SHA1" --description "$RELEASE_CHANGELOG"; fi
         - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git checkout master; fi
