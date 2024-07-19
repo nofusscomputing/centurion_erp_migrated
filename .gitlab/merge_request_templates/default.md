@@ -24,6 +24,8 @@
 
     _Breaking Change must also be notated in the commit that introduces it and in [Conventional Commit Format](https://www.conventionalcommits.org/en/v1.0.0/)._
 
+    - [ ] Release notes updated
+
 - [ ] ~Documentation Documentation written
 
     _All features to be documented within the correct section(s). Administration, Development and/or User_
