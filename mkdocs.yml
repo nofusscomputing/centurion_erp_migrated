@@ -170,6 +170,12 @@ nav:
 
         - projects/centurion_erp/user/access/team.md
 
+      - Assistance:
+
+        - projects/centurion_erp/user/assistance/index.md
+
+        - projects/centurion_erp/user/assistance/knowledge_base.md
+
       - projects/centurion_erp/user/configuration.md
 
       - projects/centurion_erp/user/api.md
