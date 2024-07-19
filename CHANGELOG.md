@@ -1,3 +1,9 @@
+## 1.0.0-b2 (2024-07-19)
+
+### Fix
+
+- **itam**: only show os version once
+
 ## 1.0.0-b1 (2024-07-19)
 
 ### Fix
