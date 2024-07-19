@@ -1,3 +1,10 @@
+## 1.0.0-b1 (2024-07-19)
+
+### Fix
+
+- **itam**: ensure installed operating system count is limited to users organizations
+- **itam**: ensure installed software count is limited to users organizations
+
 ## 1.0.0-a4 (2024-07-18)
 
 ### Feat
