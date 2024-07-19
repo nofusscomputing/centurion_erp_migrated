@@ -56,6 +56,12 @@ nav:
 
       - projects/centurion_erp/administration/index.md
 
+      - projects/centurion_erp/administration/authentication.md
+
+      - projects/centurion_erp/administration/backup.md
+
+      - projects/centurion_erp/administration/installation.md
+
     - Development:
 
       - projects/centurion_erp/development/index.md
