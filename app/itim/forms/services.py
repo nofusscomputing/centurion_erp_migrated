@@ -24,6 +24,8 @@ class ServiceForm(CommonModelForm):
 
         self.fields['dependent_service'].queryset = self.fields['dependent_service'].queryset.exclude(
             id=self.instance.pk
+        ).exclude(
+            is_template=True
         )
 
         self.fields['template'].queryset = self.fields['template'].queryset.exclude(

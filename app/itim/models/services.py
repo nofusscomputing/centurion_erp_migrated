@@ -107,7 +107,7 @@ class Service(TenancyObject):
         help_text = 'Template this service uses',
         null = True,
         on_delete = models.CASCADE,
-        verbose_name = 'Template',
+        verbose_name = 'Template Name',
     )
 
     name = models.CharField(
