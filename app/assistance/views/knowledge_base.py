@@ -1,8 +1,11 @@
 from datetime import datetime
 
 from django.contrib.auth import decorators as auth_decorator
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+
+from access.models import TeamUsers
 
 from assistance.forms.knowledge_base import KnowledgeBaseForm
 from assistance.models.knowledge_base import KnowledgeBase
@@ -36,7 +39,23 @@ class Index(IndexView):
 
         if not self.request.user.has_perm('assistance.change_knowledgebase') and not self.request.user.is_superuser:
 
-            context['items'] = self.get_queryset().filter(expiry_date__lte=datetime.now())
+            user_teams = []
+            for team_user in TeamUsers.objects.filter(user=self.request.user):
+
+                if team_user.team.id not in user_teams:
+
+                    user_teams += [ team_user.team.id ]
+
+
+            context['items'] = self.get_queryset().filter(
+                Q(expiry_date__lte=datetime.now())
+                  |
+                Q(expiry_date=None)
+            ).filter(
+                Q(target_team__in=user_teams)
+                  |
+                Q(target_user=self.request.user.id)
+            )
 
         context['model_docs_path'] = self.model._meta.app_label + '/knowledge_base/'
 
