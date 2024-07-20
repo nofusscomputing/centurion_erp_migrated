@@ -1,0 +1,196 @@
+{% extends 'base.html.j2' %}
+
+{% load markdown %}
+
+{% block content %}
+
+<script>
+
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+</script>
+
+<style>
+    .detail-view-field {
+        display: unset;
+        height: 30px;
+        line-height: 30px;
+        padding: 0px 20px 40px 20px;
+
+    }
+
+    .detail-view-field label {
+        display: inline-block;
+        font-weight: bold;
+        width: 200px;
+        margin: 10px;
+        height: 30px;
+        line-height: 30px;
+
+    }
+
+    .detail-view-field span {
+        display: inline-block;
+        width: 340px;
+        margin: 10px;
+        border-bottom: 1px solid #ccc;
+        height: 30px;
+        line-height: 30px;
+
+    }
+
+    pre {
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+</style>
+<div class="tab">
+    <button onclick="window.location='{% url 'Settings:_ports' %}';"
+        style="vertical-align: middle; padding: auto; margin: 0px">
+        <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px"
+            style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
+            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z" />
+        </svg>Back to Ports</button>
+
+    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
+    <button class="tablinks" onclick="openCity(event, 'Services')">Services</button>
+    {% if perms.assistance.change_service %}
+    <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
+    {% endif %}
+</div>
+
+<form method="post">
+    <div id="Details" class="tabcontent">
+        <h3>Details</h3>
+
+        {% csrf_token %}
+
+
+        <div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+            <div style="display: inline; width: 40%; margin: 30px;">
+
+                <div class="detail-view-field">
+                    <label>{{ form.number.label }}</label>
+                    <span>{{ form.number.value }}</span>
+                </div>
+
+                <div class="detail-view-field">
+                    <label>{{ form.description.label }}</label>
+                    <span>
+                        {% if form.description.value %}
+                        {{ form.description.value }}
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="detail-view-field">
+                    <label>{{ form.protocol.label }}</label>
+                    <span>{{ form.protocol.value }}</span>
+                </div>
+
+                <div class="detail-view-field">
+                    <label>{{ form.organization.label }}</label>
+                    <span>{{ item.organization }}</span>
+                </div>
+
+                <div class="detail-view-field">
+                    <label>Created</label>
+                    <span>{{ item.created }}</span>
+                </div>
+
+                <div class="detail-view-field">
+                    <label>Modified</label>
+                    <span>{{ item.modified }}</span>
+                </div>
+
+
+            </div>
+
+            <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+                <div>
+                    <label
+                        style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">{{ form.model_notes.label }}</label>
+
+                    <div style="display: inline-block; text-align: left;">
+                        {% if form.model_notes.value %}
+                        {{ form.model_notes.value | markdown | safe }}
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <input type="button" value="Edit" onclick="window.location='{% url 'Settings:_port_change' item.pk %}';">
+
+        <br>
+
+        <script>
+            document.getElementById("defaultOpen").click();
+        </script>
+
+    </div>
+
+    <div id="Services" class="tabcontent">
+        <h3>
+            Services
+        </h3>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Organization</th>
+            </tr>
+            {% for service in services %}
+            <tr>
+                <td><a href="{% url 'ITIM:_service_view' service.pk %}">{{ service.name }}</a></td>
+                <td>{{ service.organization }}</td>
+            </tr>
+            {% endfor%}
+        </table>
+    </div>
+
+    </div>
+
+    {% if perms.assistance.change_knowledgebase %}
+    <div id="Notes" class="tabcontent">
+        <h3>
+            Notes
+        </h3>
+        {{ notes_form }}
+        <input type="submit" name="{{ notes_form.prefix }}" value="Submit" />
+        <div class="comments">
+            {% if notes %}
+            {% for note in notes %}
+            {% include 'note.html.j2' %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
+    </div>
+    {% endif %}
+
+</form>
+
+{% endblock %}
