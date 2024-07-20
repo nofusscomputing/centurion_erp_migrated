@@ -1,4 +1,8 @@
+
+from django import forms
 from django.forms import ValidationError
+
+from app import settings
 
 from assistance.models.knowledge_base import KnowledgeBase
 
@@ -17,6 +21,18 @@ class KnowledgeBaseForm(CommonModelForm):
         model = KnowledgeBase
 
     prefix = 'knowledgebase'
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['expiry_date'].widget = forms.widgets.DateTimeInput(attrs={'type': 'datetime-local', 'format': "%Y-%m-%dT%H:%M"})
+        self.fields['expiry_date'].input_formats = settings.DATETIME_FORMAT
+        self.fields['expiry_date'].format="%Y-%m-%dT%H:%M"
+
+        self.fields['release_date'].widget = forms.widgets.DateTimeInput(attrs={'type': 'datetime-local', 'format': "%Y-%m-%dT%H:%M"})
+        self.fields['release_date'].input_formats = settings.DATETIME_FORMAT
+        self.fields['release_date'].format="%Y-%m-%dT%H:%M"
 
 
     def clean(self):
