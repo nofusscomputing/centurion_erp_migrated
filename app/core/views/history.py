@@ -103,6 +103,12 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = Team
 
+                case 'service':
+
+                    from itim.models.services import Service
+
+                    self.model = Service
+
                 case _:
                     raise Exception('Unable to determine history items model')
 
