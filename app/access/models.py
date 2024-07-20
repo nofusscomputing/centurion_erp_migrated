@@ -15,9 +15,6 @@ class Organization(SaveHistory):
         verbose_name_plural = "Organizations"
         ordering = ['name']
 
-    def __str__(self):
-        return self.name
-
     def save(self, *args, **kwargs):
 
         if self.slug == '_':
@@ -61,6 +58,9 @@ class Organization(SaveHistory):
 
     def get_organization(self):
         return self
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -196,9 +196,6 @@ class Team(Group, TenancyObject):
         verbose_name_plural = "Teams"
         ordering = ['team_name']
 
-    def __str__(self):
-        return self.name
-
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
@@ -239,6 +236,10 @@ class Team(Group, TenancyObject):
             permission_list += [ str(permission.content_type.app_label + '.' + permission.codename) ]
 
         return [permission_list, self.permissions.all()]
+
+
+    def __str__(self):
+        return self.team_name
 
 
 
@@ -317,4 +318,7 @@ class TeamUsers(SaveHistory):
         """ Fetch the parent object """
         
         return self.team
+
+    def __str__(self):
+        return self.user.username
 
