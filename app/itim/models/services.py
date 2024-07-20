@@ -93,6 +93,23 @@ class Service(TenancyObject):
         blank=False
     )
 
+    is_template = models.BooleanField(
+        blank = False,
+        default = False,
+        help_text = 'Is this service to be used as a template',
+        verbose_name = 'Template',
+    )
+
+    template = models.ForeignKey(
+        'self',
+        blank = True,
+        default = None,
+        help_text = 'Template this service uses',
+        null = True,
+        on_delete = models.CASCADE,
+        verbose_name = 'Template',
+    )
+
     name = models.CharField(
         blank = False,
         help_text = 'Name of the Service',
@@ -132,7 +149,7 @@ class Service(TenancyObject):
 
     port = models.ManyToManyField(
         Port,
-        blank = False,
+        blank = True,
         help_text = 'Port the service is available on',
         verbose_name = 'Port',
     )
@@ -148,6 +165,27 @@ class Service(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+    @property
+    def config_variables(self):
+
+        if self.is_template:
+
+            return self.config
+
+        if self.template:
+
+            template_config: dict = Service.objects.get(id=self.template.id).config
+
+            template_config.update(self.config)
+
+            return template_config
+
+        else:
+
+            return self.config
+
+        return None
 
 
     def __str__(self):
