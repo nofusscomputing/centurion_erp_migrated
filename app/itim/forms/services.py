@@ -26,6 +26,10 @@ class ServiceForm(CommonModelForm):
             id=self.instance.pk
         )
 
+        self.fields['template'].queryset = self.fields['template'].queryset.exclude(
+            id=self.instance.pk
+        )
+
 
     def clean(self):
         
@@ -33,16 +37,28 @@ class ServiceForm(CommonModelForm):
 
         device = cleaned_data.get("device")
         cluster = cleaned_data.get("cluster")
+        is_template = cleaned_data.get("is_template")
+        template = cleaned_data.get("template")
+        port = cleaned_data.get("port")
 
 
-        if not device and not cluster:
+        if not is_template and not template:
 
-            raise ValidationError('A Service must be assigned to either a "Cluster" or a "Device".')
+            if not device and not cluster:
+
+                raise ValidationError('A Service must be assigned to either a "Cluster" or a "Device".')
 
 
-        if device and cluster:
+            if device and cluster:
 
-            raise ValidationError('A Service must only be assigned to either a "Cluster" or a "Device". Not both.')
+                raise ValidationError('A Service must only be assigned to either a "Cluster" or a "Device". Not both.')
+
+
+            if not port:
+
+                raise ValidationError('Port(s) must be assigned to a service.')
+
+            
 
 
         return cleaned_data

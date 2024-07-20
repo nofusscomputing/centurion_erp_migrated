@@ -1,5 +1,6 @@
 {% extends 'base.html.j2' %}
 
+{% load json %}
 {% load markdown %}
 
 {% block content %}
@@ -68,6 +69,7 @@
         </svg>Back to Services</button>
 
     <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
+    <button class="tablinks" onclick="openCity(event, 'Rendered_Config')">Rendered Config</button>
     {% if perms.assistance.change_service %}
     <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
     {% endif %}
@@ -87,6 +89,19 @@
                     <label>{{ form.name.label }}</label>
                     <span>{{ form.name.value }}</span>
                 </div>
+
+                {% if form.template.value or form.is_template.value %}
+                <div class="detail-view-field">
+                    <label>{{ form.is_template.label }}</label>
+                    <span>
+                    {% if form.is_template.value %}
+                    {{ form.is_template.value }}
+                    {% else %}
+                    <a href="{% url 'ITIM:_service_view' item.template.pk %}">{{ item.template }}</a>
+                    {% endif %}
+                    </span>
+                </div>
+                {% endif %}
 
                 <div class="detail-view-field">
                     <label>{{ form.organization.label }}</label>
@@ -157,8 +172,15 @@
                     <th>Name</th>
                     <th>Description</th>
                 </tr>
-                {% if item.port.all %}
+                {% if item.port.all and not item.template %}
                 {% for port in item.port.all %}
+                <tr>
+                    <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ port }}</a></td>
+                    <td>{{ port.description }}</td>
+                </tr>
+                {% endfor %}
+                {% elif not item.port.all and item.template %}
+                {% for port in item.template.port.all %}
                 <tr>
                     <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ port }}</a></td>
                     <td>{{ port.description }}</td>
@@ -199,7 +221,7 @@
         <div style="display: block; width: 100%;">
             <h3>Service Config</h3>
             <br>
-            <textarea cols="90" rows="30" readonly>{{ item.config }}</textarea>
+            <textarea cols="90" rows="30" readonly>{{ item.config | json_pretty }}</textarea>
         </div>
 
         <br>
@@ -207,6 +229,17 @@
         <script>
             document.getElementById("defaultOpen").click();
         </script>
+
+    </div>
+
+    <div id="Rendered_Config" class="tabcontent">
+        <h3>
+            Rendered Config
+        </h3>
+        
+        <div>
+            <textarea cols="90" rows="30" readonly>{{ item.config_variables | json_pretty }}</textarea>
+        </div>
 
     </div>
 
