@@ -8,6 +8,8 @@ from settings.views import app_settings, home, device_models, device_types, exte
 
 from itam.views import device_type, device_model, software_category
 
+from itim.views import ports
+
 app_name = "Settings"
 urlpatterns = [
 
@@ -51,4 +53,6 @@ urlpatterns = [
     path("manufacturer/add/", manufacturer.Add.as_view(), name="_manufacturer_add"),
     path("manufacturer/<int:pk>/delete", manufacturer.Delete.as_view(), name="_manufacturer_delete"),
 
+    path("ports", ports.Index.as_view(), name="_ports"),
+    path("port/add", ports.Add.as_view(), name="_port_add"),
 ]
