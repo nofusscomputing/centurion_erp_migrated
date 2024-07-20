@@ -12,7 +12,12 @@ from itam.models.device import Device
 
 
 class HistoryPermissions:
-    """Test cases for accessing History """    
+    """Test cases for accessing History
+    
+    For this test to function properly you must add the history items model to
+    `app.core.views.history.View.get_object()`. specifically an entry to the switch in the middle
+    of the function.
+    """
 
 
     item: object
