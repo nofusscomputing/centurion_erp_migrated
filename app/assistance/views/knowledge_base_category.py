@@ -2,8 +2,8 @@ from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from assistance.forms.knowledge_base import KnowledgeBaseForm
-from assistance.models.knowledge_base import KnowledgeBase
+from assistance.forms.knowledge_base_category import KnowledgeBaseCategoryForm
+from assistance.models.knowledge_base import KnowledgeBase, KnowledgeBaseCategory
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
@@ -17,15 +17,15 @@ class Index(IndexView):
 
     context_object_name = "items"
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     paginate_by = 10
 
     permission_required = [
-        'assistance.view_knowledgebase'
+        'assistance.view_knowledgebasecategory'
     ]
 
-    template_name = 'assistance/kb_index.html.j2'
+    template_name = 'assistance/kb_category_index.html.j2'
 
 
     def get_context_data(self, **kwargs):
@@ -34,20 +34,19 @@ class Index(IndexView):
 
         context['model_docs_path'] = self.model._meta.app_label + '/knowledge_base/'
 
-        context['content_title'] = 'Knowledge Base Articles'
+        context['content_title'] = 'Knowledge Base Categories'
 
         return context
 
 
-
 class Add(AddView):
 
-    form_class = KnowledgeBaseForm
+    form_class = KnowledgeBaseCategoryForm
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     permission_required = [
-        'assistance.add_knowledgebase',
+        'assistance.add_knowledgebasecategory',
     ]
 
 
@@ -70,7 +69,7 @@ class Add(AddView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:Knowledge Base')
+        return reverse('Settings:KB Categories')
 
 
     def get_context_data(self, **kwargs):
@@ -86,12 +85,12 @@ class Change(ChangeView):
 
     context_object_name = "group"
 
-    form_class = KnowledgeBaseForm
+    form_class = KnowledgeBaseCategoryForm
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     permission_required = [
-        'assistance.change_knowledgebase',
+        'assistance.change_knowledgebasecategory',
     ]
 
 
@@ -99,35 +98,37 @@ class Change(ChangeView):
 
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = self.object.title
+        context['content_title'] = self.object.name
 
         return context
 
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:_knowledge_base_view', args=(self.kwargs['pk'],))
+        return reverse('Settings:_knowledge_base_category_view', args=(self.kwargs['pk'],))
 
 
 
 class View(ChangeView):
 
-    context_object_name = "kb"
+    context_object_name = "item"
 
-    form_class = KnowledgeBaseForm
+    form_class = KnowledgeBaseCategoryForm
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     permission_required = [
-        'assistance.view_knowledgebase',
+        'assistance.view_knowledgebasecategory',
     ]
 
-    template_name = 'assistance/kb_article.html.j2'
+    template_name = 'assistance/kb_category.html.j2'
 
 
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
+
+        context['articles'] = KnowledgeBase.objects.filter(category=self.kwargs['pk'])
 
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(config_group=self.kwargs['pk'])
@@ -135,15 +136,15 @@ class View(ChangeView):
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.model_name
 
-        context['model_delete_url'] = reverse('Assistance:_knowledge_base_delete', args=(self.kwargs['pk'],))
+        context['model_delete_url'] = reverse('Settings:_knowledge_base_category_delete', args=(self.kwargs['pk'],))
 
 
-        context['content_title'] = self.object.title
+        context['content_title'] = self.object.name
 
         return context
 
 
-    @method_decorator(auth_decorator.permission_required("assistance.change_knowledgebase", raise_exception=True))
+    @method_decorator(auth_decorator.permission_required("assistance.change_knowledgebasecategory", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         item = KnowledgeBase.objects.get(pk=self.kwargs['pk'])
@@ -163,16 +164,16 @@ class View(ChangeView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:_knowledge_base_view', args=(self.kwargs['pk'],))
+        return reverse('Settings:_knowledge_base_category_view', args=(self.kwargs['pk'],))
 
 
 
 class Delete(DeleteView):
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     permission_required = [
-        'assistance.delete_knowledgebase',
+        'assistance.delete_knowledgebasecategory',
     ]
 
 
@@ -180,11 +181,11 @@ class Delete(DeleteView):
 
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = 'Delete ' + self.object.title
+        context['content_title'] = 'Delete ' + self.object.name
 
         return context
 
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:Knowledge Base')
+        return reverse('Settings:KB Categories')

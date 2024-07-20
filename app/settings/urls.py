@@ -1,5 +1,7 @@
 from django.urls import path
 
+from assistance.views import knowledge_base_category
+
 from core.views import celery_log
 
 from settings.views import app_settings, home, device_models, device_types, external_link, manufacturer, software_categories
@@ -32,6 +34,12 @@ urlpatterns = [
     path("device_type/<int:pk>", device_type.View.as_view(), name="_device_type_view"),
     path("device_type/add/", device_type.Add.as_view(), name="_device_type_add"),
     path("device_type/<int:pk>/delete", device_type.Delete.as_view(), name="_device_type_delete"),
+
+    path("kb/category", knowledge_base_category.Index.as_view(), name="KB Categories"),
+    path("kb/category/add", knowledge_base_category.Add.as_view(), name="_knowledge_base_category_add"),
+    path("kb/category/<int:pk>/edit", knowledge_base_category.Change.as_view(), name="_knowledge_base_category_change"),
+    path("kb/category/<int:pk>/delete", knowledge_base_category.Delete.as_view(), name="_knowledge_base_category_delete"),
+    path("kb/category/<int:pk>", knowledge_base_category.View.as_view(), name="_knowledge_base_category_view"),
 
     path("software_category", software_categories.Index.as_view(), name="_software_categories"),
     path("software_category/<int:pk>", software_category.View.as_view(), name="_software_category_view"),
