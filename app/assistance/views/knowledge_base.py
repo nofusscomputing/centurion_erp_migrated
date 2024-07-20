@@ -55,7 +55,7 @@ class Index(IndexView):
                 Q(target_team__in=user_teams)
                   |
                 Q(target_user=self.request.user.id)
-            )
+            ).distinct()
 
         context['model_docs_path'] = self.model._meta.app_label + '/knowledge_base/'
 
