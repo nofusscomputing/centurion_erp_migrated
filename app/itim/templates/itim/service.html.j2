@@ -157,15 +157,42 @@
                     <th>Name</th>
                     <th>Description</th>
                 </tr>
+                {% if item.port.all %}
                 {% for port in item.port.all %}
                 <tr>
                     <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ port }}</a></td>
                     <td>{{ port.description }}</td>
                 </tr>
                 {% endfor%}
+                {% else %}
+                <tr>
+                <td colspan="2"> Nothing Found</td>
+                </tr>
+                {% endif %}
             </table>
+        </div>
 
 
+        <div style="display: block; width: 100%;">
+            <h3>Dependent Services</h3>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Organization</th>
+                </tr>
+                {% if item.dependent_service.all %}
+                {% for service in item.dependent_service.all %}
+                <tr>
+                    <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ service }}</a></td>
+                    <td>{{ service.organization }}</td>
+                </tr>
+                {% endfor%}
+                {% else %}
+                <tr>
+                <td colspan="2"> Nothing Found</td>
+                </tr>
+                {% endif %}
+            </table>
         </div>
 
 
