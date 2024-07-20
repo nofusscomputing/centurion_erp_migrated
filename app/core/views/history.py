@@ -67,6 +67,18 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = ExternalLink
 
+                case 'knowledgebase':
+
+                    from assistance.models.knowledge_base import KnowledgeBase
+
+                    self.model = KnowledgeBase
+
+                case 'knowledgebasecategory':
+
+                    from assistance.models.knowledge_base import KnowledgeBaseCategory
+
+                    self.model = KnowledgeBaseCategory
+
                 case 'manufacturer':
 
                     self.model = Manufacturer

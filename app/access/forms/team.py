@@ -68,6 +68,7 @@ class TeamForm(CommonModelForm):
 
         apps = [
             'access',
+            'assistance',
             'config_management',
             'core',
             'django_celery_results',

@@ -33,6 +33,11 @@ All models must meet the following requirements:
 
 - No `queryset` is to return data that the user has not got access to. _see [queryset()](./api/models/tenancy_object.md#tenancy-object-manager)_
 
+- Single Field validation is conducted if required.
+
+    !!! danger "Requirement"
+        Multi-field validation, or validation that requires access to multiple fields must be done within the [form class](./forms.md#requirements).
+
 
 ## History
 
