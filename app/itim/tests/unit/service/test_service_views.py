@@ -8,12 +8,12 @@ from app.tests.abstract.models import PrimaryModel
 
 
 
-class KnowledgeBaseViews(
+class ServiceViews(
     TestCase,
     PrimaryModel
 ):
 
-    add_module = 'assistance.views.knowledge_base'
+    add_module = 'itim.views.services'
     add_view = 'Add'
 
     change_module = add_module

@@ -196,6 +196,12 @@ nav:
 
         - projects/centurion_erp/user/itam/software.md
 
+      - ITIM:
+
+        - projects/centurion_erp/user/itim/index.md
+
+        - projects/centurion_erp/user/itim/service.md
+
       - Settings:
 
         - projects/centurion_erp/user/settings/index.md
