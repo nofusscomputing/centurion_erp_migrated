@@ -99,6 +99,12 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = Organization
 
+                case 'port':
+
+                    from itim.models.services import Port
+
+                    self.model = Port
+
                 case 'team':
 
                     self.model = Team

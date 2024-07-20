@@ -55,4 +55,8 @@ urlpatterns = [
 
     path("ports", ports.Index.as_view(), name="_ports"),
     path("port/add", ports.Add.as_view(), name="_port_add"),
+    path("port/<int:pk>/edit", ports.Change.as_view(), name="_port_change"),
+    path("port/<int:pk>/delete", ports.Delete.as_view(), name="_port_delete"),
+    path("port/<int:pk>", ports.View.as_view(), name="_port_view"),
+
 ]
