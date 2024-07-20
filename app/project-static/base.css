@@ -31,6 +31,10 @@ h2 {
   padding-left: 50px
 }
 
+.codehilite {
+  display: inline;
+}
+
 span#content_header_icon {
   float: right;
   width: 30px;
