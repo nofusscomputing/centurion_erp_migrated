@@ -18,6 +18,14 @@ class ServiceForm(CommonModelForm):
 
     prefix = 'service'
 
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.fields['dependent_service'].queryset = self.fields['dependent_service'].queryset.exclude(
+            id=self.instance.pk
+        )
+
 
     def clean(self):
         
