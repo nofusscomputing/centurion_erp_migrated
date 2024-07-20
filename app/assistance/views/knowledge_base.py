@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -31,6 +33,10 @@ class Index(IndexView):
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
+
+        if not self.request.user.has_perm('assistance.change_knowledgebase') and not self.request.user.is_superuser:
+
+            context['items'] = self.get_queryset().filter(expiry_date__lte=datetime.now())
 
         context['model_docs_path'] = self.model._meta.app_label + '/knowledge_base/'
 
