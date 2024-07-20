@@ -51,3 +51,19 @@ Article content is intended to be written in markdown, which provides for a rich
 ### Notes
 
 Notes can be added to an article that is intended to be article owner notes. these notes are not made available as part of the article.
+
+
+## Categories
+
+Categories are available to offer an ability to filter/sort articles. Fields available as part of Knowledge Base Categories are:
+
+- Name _Category Name_
+
+- Parent _Parent Category for nesting categories_
+
+- Target Team _Team the categories articles should be made available for_
+
+- Target User _User the categories articles should be made available for_
+
+!!! info
+    A KB Category must either have a target user or target group. Not both.
