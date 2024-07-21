@@ -7,6 +7,7 @@ from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectT
 from app.tests.abstract.views import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
 from core.mixin.history_save import SaveHistory
+from core.tests.abstract.models import Models
 
 
 
@@ -30,7 +31,8 @@ class BaseModel:
 
 class TenancyModel(
     BaseModel,
-    TenancyObjectTestCases
+    TenancyObjectTestCases,
+    Models
 ):
     """ Test cases for tenancy models"""
 

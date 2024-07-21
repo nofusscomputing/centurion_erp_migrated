@@ -190,7 +190,7 @@ class TenancyObject(SaveHistory):
 
 
 
-class Team(Group, TenancyObject, SaveHistory):
+class Team(Group, TenancyObject):
     class Meta:
         # proxy = True
         verbose_name_plural = "Teams"
