@@ -30,6 +30,12 @@ class Port(TenancyObject):
         TCP = 'TCP', 'TCP'
         UDP = 'UDP', 'UDP'
 
+    def validation_port_number(number: int):
+
+        if number < 1 or number > 65535:
+
+            raise ValidationError('A Valid port number is between 1-65535')
+
 
     id = models.AutoField(
         primary_key=True,
@@ -41,6 +47,7 @@ class Port(TenancyObject):
         blank = False,
         help_text = 'The port number',
         unique = False,
+        validators = [ validation_port_number ],
         verbose_name = 'Port Number',
     )
 
