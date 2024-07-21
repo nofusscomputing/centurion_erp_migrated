@@ -67,8 +67,14 @@ class View(ChangeView):
         ).order_by(
             'name'
         ).annotate(
-            installs=Count("deviceoperatingsystem"),
-            filter=Q(deviceoperatingsystem__operating_system_version__organization__in = self.user_organizations())
+            installs=Count(
+                "deviceoperatingsystem",
+                filter=Q(deviceoperatingsystem__device__organization__in = self.user_organizations())
+            ),
+            # filter=Q(deviceoperatingsystem__operating_system_version__organization__in = self.user_organizations())
+            # filter=Q(deviceoperatingsystem__operating_system_version__deviceoperatingsystem__device__organization__in = self.user_organizations()),
+            filter=Q(deviceoperatingsystem__operating_system_version__organization__in = self.user_organizations()),
+            
         )
         
         context['operating_system_versions'] = operating_system_versions
