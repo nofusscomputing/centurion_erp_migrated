@@ -185,6 +185,28 @@
     </div>
 
     <div style="display: block; width: 100%;">
+      <h3>Dependent Services</h3>
+      <table>
+          <tr>
+              <th>Name</th>
+              <th>Ports</th>
+          </tr>
+          {% if services %}
+          {% for service in services %}
+          <tr>
+              <td><a href="{% url 'ITIM:_service_view' service.pk %}">{{ service }}</a></td>
+              <td>{% for port in service.port.all %}{{ port }} ({{ port.description}}), {% endfor %}</td>
+          </tr>
+          {% endfor%}
+          {% else %}
+          <tr>
+          <td colspan="2"> Nothing Found</td>
+          </tr>
+          {% endif %}
+      </table>
+        </div>
+
+    <div style="display: block; width: 100%;">
       <h3>Device Config</h3>
       <br>
       <textarea cols="90" rows="30" readonly>{{ device.config }}</textarea>

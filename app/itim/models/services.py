@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.forms import ValidationError
@@ -93,6 +95,18 @@ class Service(TenancyObject):
 
         verbose_name_plural = "Services"
 
+    def validate_config_key_variable(value):
+
+        if not value:
+
+            raise ValidationError('You must enter a config key.')
+
+        valid_chars = search=re.compile(r'[^a-z_]').search
+
+        if bool(valid_chars(value)):
+
+            raise ValidationError('config key must only contain [a-z_].')
+
 
     id = models.AutoField(
         primary_key=True,
@@ -154,6 +168,16 @@ class Service(TenancyObject):
         verbose_name = 'Configuration',
     )
 
+    config_key_variable = models.CharField(
+        blank = False,
+        help_text = 'Key name to use when merging with cluster/device config.',
+        max_length = 50,
+        null = True,
+        unique = False,
+        validators = [ validate_config_key_variable ],
+        verbose_name = 'Configuration Key',
+    )
+
     port = models.ManyToManyField(
         Port,
         blank = True,
@@ -196,6 +220,12 @@ class Service(TenancyObject):
 
         return None
 
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        self.config_key_variable = self.config_key_variable.lower()
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
     def __str__(self):
 

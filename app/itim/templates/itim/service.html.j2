@@ -90,6 +90,11 @@
                     <span>{{ form.name.value }}</span>
                 </div>
 
+                <div class="detail-view-field">
+                    <label>{{ form.config_key_variable.label }}</label>
+                    <span>{{ form.config_key_variable.value }}</span>
+                </div>
+
                 {% if form.template.value or form.is_template.value %}
                 <div class="detail-view-field">
                     <label>{{ form.is_template.label }}</label>
@@ -131,7 +136,7 @@
                         {% if item.cluster %}
                         {{ item.cluster }}
                         {% else %}
-                        {{ item.device }}
+                        <a href="{% url 'ITAM:_device_view' item.device.id %}">{{ item.device }}</a>
                         {% endif %}
                     </span>
                 </div>
