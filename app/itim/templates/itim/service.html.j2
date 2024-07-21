@@ -205,7 +205,7 @@
                 {% if item.dependent_service.all %}
                 {% for service in item.dependent_service.all %}
                 <tr>
-                    <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ service }}</a></td>
+                    <td><a href="{% url 'ITIM:_service_view' service.pk %}">{{ service }}</a></td>
                     <td>{{ service.organization }}</td>
                 </tr>
                 {% endfor%}

@@ -166,6 +166,8 @@ class Service(TenancyObject):
         blank = True,
         default = None,
         help_text = 'Services that this service depends upon',
+        related_name = 'dependentservice',
+        symmetrical = False,
         verbose_name = 'Dependent Services',
     )
 
