@@ -21,9 +21,10 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
-
 from itam.forms.device.device import DeviceForm
 from itam.forms.device.operating_system import Update as OperatingSystemForm
+
+from itim.models.services import Service
 
 from settings.models.user_settings import UserSettings
 
@@ -103,6 +104,8 @@ class View(ChangeView):
         else:
 
             context['operating_system'] = OperatingSystemForm(prefix='operating_system')
+
+        context['services'] = Service.objects.filter(device=self.kwargs['pk'])
 
 
         softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
