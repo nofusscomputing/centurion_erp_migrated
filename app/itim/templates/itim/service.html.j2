@@ -136,7 +136,9 @@
                         {% if item.cluster %}
                         {{ item.cluster }}
                         {% else %}
+                        {% if item.device.id %}
                         <a href="{% url 'ITAM:_device_view' item.device.id %}">{{ item.device }}</a>
+                        {% endif %}
                         {% endif %}
                     </span>
                 </div>
