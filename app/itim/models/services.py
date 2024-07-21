@@ -223,9 +223,12 @@ class Service(TenancyObject):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
-        self.config_key_variable = self.config_key_variable.lower()
+        if self.config_key_variable:
+
+            self.config_key_variable = self.config_key_variable.lower()
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
 
     def __str__(self):
 
