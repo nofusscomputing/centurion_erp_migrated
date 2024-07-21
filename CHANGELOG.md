@@ -1,3 +1,9 @@
+## 1.0.0-b3 (2024-07-21)
+
+### Fix
+
+- **itam**: Limit os version count to devices user has access to
+
 ## 1.0.0-b2 (2024-07-19)
 
 ### Fix
