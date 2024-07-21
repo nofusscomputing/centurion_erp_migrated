@@ -37,6 +37,8 @@ class ServiceForm(CommonModelForm):
         
         cleaned_data = super().clean()
 
+        pk = self.instance.id
+        dependent_service = cleaned_data.get("dependent_service")
         device = cleaned_data.get("device")
         cluster = cleaned_data.get("cluster")
         is_template = cleaned_data.get("is_template")
@@ -59,6 +61,19 @@ class ServiceForm(CommonModelForm):
             if not port:
 
                 raise ValidationError('Port(s) must be assigned to a service.')
+
+        if dependent_service:
+
+            for dependency in dependent_service:
+
+                query = Service.objects.filter(
+                    dependent_service = pk,
+                    id = dependency.id,
+                )
+
+                if query.exists():
+
+                    raise ValidationError('A dependent service already depends upon this service. Circular dependencies are not allowed.')
 
             
 
