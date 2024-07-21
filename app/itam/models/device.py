@@ -288,10 +288,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
             for service in services:
 
-                if service.config:
+                if service.config_variables:
 
                     service_config:dict = {
-                        service.config_key_variable: service.config
+                        service.config_key_variable: service.config_variables
                     }
 
                     config.update(service_config)
