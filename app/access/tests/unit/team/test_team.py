@@ -64,3 +64,7 @@ class TeamModel(
     @pytest.mark.skip(reason="uses Django group manager")
     def test_attribute_is_type_objects(self):
         pass
+
+    @pytest.mark.skip(reason="uses Django group manager")
+    def test_model_class_tenancy_manager_function_get_queryset_called(self):
+        pass
