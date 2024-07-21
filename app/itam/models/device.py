@@ -281,6 +281,21 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
                 config.update(self.config)
 
+            from itim.models.services import Service
+            services = Service.objects.filter(
+                device = self.pk
+            )
+
+            for service in services:
+
+                if service.config:
+
+                    service_config:dict = {
+                        service.config_key_variable: service.config
+                    }
+
+                    config.update(service_config)
+
         return config
 
 
