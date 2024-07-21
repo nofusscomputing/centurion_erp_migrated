@@ -10,3 +10,9 @@ This component within ITIM is an extension of Service Management, in particular 
 
 
 ## Ports
+
+- number _A Valid port number [1-65535]_
+
+- description _Short description of the port_
+
+- protocol _OSI Layer 4 protocol [TCP or UDP]_
