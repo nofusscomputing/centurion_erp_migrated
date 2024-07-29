@@ -1,5 +1,7 @@
 from django.contrib.auth.models import Permission
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+
 from rest_framework import generics, routers, serializers, views
 from rest_framework.permissions import DjangoObjectPermissions
 from rest_framework.response import Response
@@ -7,12 +9,17 @@ from rest_framework.response import Response
 from access.mixin import OrganizationMixin
 from access.models import Organization, Team
 
-from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer
+from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer, TeamPermissionSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 
-
-class OrganizationList(generics.ListCreateAPIView):
+@extend_schema_view(
+    get=extend_schema(
+        summary = "Fetch Organizations",
+        description="Returns a list of organizations."
+    ),
+)
+class OrganizationList(generics.ListAPIView):
 
     permission_classes = [
         OrganizationPermissionAPI
@@ -28,7 +35,18 @@ class OrganizationList(generics.ListCreateAPIView):
 
 
 
-class OrganizationDetail(generics.RetrieveUpdateDestroyAPIView):
+@extend_schema_view(
+    get=extend_schema(
+        summary = "Get An Organization",
+    ),
+    patch=extend_schema(
+        summary = "Update an organization",
+    ),
+    put=extend_schema(
+        summary = "Update an organization",
+    ),
+)
+class OrganizationDetail(generics.RetrieveUpdateAPIView):
 
     permission_classes = [
         OrganizationPermissionAPI
