@@ -307,6 +307,9 @@ curl:
         'SWAGGER_UI_DIST': 'SIDECAR',
         'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
         'REDOC_DIST': 'SIDECAR',
+        'PREPROCESSING_HOOKS': [
+            'drf_spectacular.hooks.preprocess_exclude_path_format'
+        ],
     }
 
 DATETIME_FORMAT = 'j N Y H:i:s'

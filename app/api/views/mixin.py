@@ -1,6 +1,7 @@
 from django.core.exceptions import PermissionDenied
 from django.forms import ValidationError
 
+from rest_framework import exceptions
 from rest_framework.permissions import DjangoObjectPermissions
 
 from access.mixin import OrganizationMixin
@@ -28,11 +29,15 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
         self.request = request
 
+        method = self.request._request.method.lower()
+
+        if method.upper() not in view.allowed_methods:
+
+            view.http_method_not_allowed(request._request)
+
         if hasattr(view, 'queryset'):
             if view.queryset.model._meta:
                 self.obj = view.queryset.model
-
-        method = self.request._request.method.lower()
 
         object_organization = None
 
