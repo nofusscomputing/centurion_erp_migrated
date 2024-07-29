@@ -62,6 +62,20 @@ class OrganizationDetail(generics.RetrieveUpdateAPIView):
 
 
 
+@extend_schema_view(
+    post=extend_schema(
+        summary = "Create a Team",
+        description = """Create a team within the defined organization.""",
+        tags = ['team',],
+        request = TeamSerializer,
+        responses = {
+            200: OpenApiResponse(description='Team has been updated with the supplied permissions'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+        }
+    ),
+    create=extend_schema(exclude=True),
+)
 class TeamList(generics.ListCreateAPIView):
 
     permission_classes = [
@@ -84,6 +98,45 @@ class TeamList(generics.ListCreateAPIView):
 
 
 
+@extend_schema_view(
+    get=extend_schema(
+        summary = "Fetch a Team",
+        description = """Fetch a team within the defined organization.
+        """,
+        methods=["GET"],
+        tags = ['team',],
+        request = TeamSerializer,
+        responses = {
+            200: OpenApiResponse(description='Team has been updated with the supplied permissions'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+        }
+    ),
+    patch=extend_schema(
+        summary = "Update a Team",
+        description = """Update a team within the defined organization.
+        """,
+        methods=["Patch"],
+        tags = ['team',],
+        request = TeamSerializer,
+        responses = {
+            200: OpenApiResponse(description='Team has been updated with the supplied permissions'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+        }
+    ),
+    put = extend_schema(
+        summary = "Amend a team",
+        tags = ['team',],
+    ),
+    delete=extend_schema(
+        summary = "Delete a Team",
+        tags = ['team',],
+    ),
+    post = extend_schema(
+        exclude = True,
+    )
+)
 class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
 
     permission_classes = [
@@ -97,12 +150,66 @@ class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
-class TeamPermissionDetail(routers.APIRootView):
+@extend_schema_view(
+    get=extend_schema(
+        summary = "Fetch a teams permissions",
+        tags = ['team',],
+    ),
+    post=extend_schema(
+        summary = "Replace team Permissions",
+        description = """Replace the teams permissions with the permissions supplied.
 
-    # temp disabled until permission checker updated
-    # permission_classes = [
-    #     OrganizationPermissionAPI
-    # ]
+Teams Permissions will be replaced with the permissions supplied. **ALL** existing permissions will be
+removed.
+
+permissions are required to be in format `<module name>_<permission>_<table name>`
+        """,
+
+        methods=["POST"],
+        tags = ['team',],
+        request = TeamPermissionSerializer,
+        responses = {
+            200: OpenApiResponse(description='Team has been updated with the supplied permissions'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+        }
+    ),
+    delete=extend_schema(
+        summary = "Delete permissions",
+        tags = ['team',],
+    ),
+    patch = extend_schema(
+        summary = "Amend team Permissions",
+        description = """Amend the teams permissions with the permissions supplied.
+
+Teams permissions will include the existing permissions along with the ones supplied.
+permissions are required to be in format `<module name>_<permission>_<table name>`
+        """,
+
+        methods=["PATCH"],
+        parameters = None,
+        tags = ['team',],
+        request = TeamPermissionSerializer,
+        responses = {
+            200: OpenApiResponse(description='Team has been updated with the supplied permissions'),
+            401: OpenApiResponse(description='User Not logged in'),
+            403: OpenApiResponse(description='User is missing permission or in different organization'),
+        }
+    ),
+    put = extend_schema(
+        summary = "Amend team Permissions",
+        tags = ['team',],
+    )
+)
+class TeamPermissionDetail(views.APIView):
+
+    permission_classes = [
+        OrganizationPermissionAPI
+    ]
+
+    queryset = Team.objects.all()
+
+    serializer_class = TeamPermissionSerializer
 
 
     def get(self, request, *args, **kwargs):
