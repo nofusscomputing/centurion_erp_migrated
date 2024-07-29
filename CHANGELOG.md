@@ -1,3 +1,16 @@
+## 1.0.0-b4 (2024-07-29)
+
+### Feat
+
+- **swagger**: remove `{format}` suffixed doc entries
+
+### Fix
+
+- **api**: cleanup team post/get
+- **api**: confirm HTTP method is allowed before permission check
+- **api**: Ensure that organizations can't be created via the API
+- **access**: Team model class inheritance order corrected
+
 ## 1.0.0-b3 (2024-07-21)
 
 ### Fix
