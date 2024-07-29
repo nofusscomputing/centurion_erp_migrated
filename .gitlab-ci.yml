@@ -168,8 +168,19 @@ Docker Container:
 
             echo "[DEBUG] Creating new Version Label";
 
-            ${MY_COMMAND}
+            echo "----------------------------";
 
+            echo ${MY_COMMAND};
+
+            echo "----------------------------";
+
+            cat ${MY_COMMAND};
+
+            echo "----------------------------";
+
+            ${MY_COMMAND};
+
+            echo "----------------------------";
           fi
 
         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No tag to delete, version was not bumped"; else git tag -d $RELEASE_TAG; fi
