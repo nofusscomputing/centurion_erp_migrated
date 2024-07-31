@@ -3,7 +3,7 @@ from django.urls import path
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from .views import access, index
+from .views import access, config, index
 
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
@@ -23,6 +23,9 @@ router.register('software', software.SoftwareViewSet, basename='software')
 
 urlpatterns = [
     path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
+
+    path("configuration/", config.ConfigGroupsList.as_view(), name='_api_config_groups'),
+    path("configuration/<int:pk>", config.ConfigGroupsDetail.as_view(), name='_api_config_group'),
 
     path("device/inventory", inventory.Collect.as_view(), name="_api_device_inventory"),
 
