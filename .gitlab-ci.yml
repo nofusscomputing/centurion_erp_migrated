@@ -151,7 +151,7 @@ Docker Container:
     script:
         - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout --prerelease beta); else RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout); fi
         - RELEASE_VERSION_NEW=$(cz version --project)
-        - RELEASE_TAG=$RELEASE_VERSION_NEW
+        - export RELEASE_TAG=$RELEASE_VERSION_NEW
         - echo "[DEBUG] RELEASE_VERSION_CURRENT[$RELEASE_VERSION_CURRENT]"
         - echo "[DEBUG] RELEASE_CHANGELOG[$RELEASE_CHANGELOG]"
         - echo "[DEBUG] RELEASE_VERSION_NEW[$RELEASE_VERSION_NEW]"
