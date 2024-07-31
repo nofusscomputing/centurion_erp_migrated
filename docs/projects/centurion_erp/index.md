@@ -27,6 +27,8 @@ Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurio
 
 Centurion ERP contains the following modules:
 
+- [Companion Ansible Collection](../ansible/collections/centurion/index.md)
+
 - [Configuration Management](./user/config_management/index.md)
 
 - [IT Asset Management (ITAM)](./user/itam/index.md)
