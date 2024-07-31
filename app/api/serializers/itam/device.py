@@ -43,7 +43,7 @@ class DeviceSerializer(serializers.ModelSerializer):
 
     config = serializers.SerializerMethodField('get_device_config')
 
-    groups = DeviceConfigGroupsSerializer(source='configgrouphosts_set', many=True, read_only=False)
+    groups = DeviceConfigGroupsSerializer(source='configgrouphosts_set', many=True, read_only=True)
 
     def get_device_config(self, device):
 
@@ -70,11 +70,12 @@ class DeviceSerializer(serializers.ModelSerializer):
         ]
 
         read_only_fields = [
+            'id',
+            'config',
+            'inventorydate',
             'created',
             'modified',
-            'inventorydate',
-            'is_global',
-            'slug',
             'groups',
+            'url',
         ]
 
