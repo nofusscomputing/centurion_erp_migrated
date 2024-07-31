@@ -1,3 +1,14 @@
+## 1.0.0-b5 (2024-07-31)
+
+### Feat
+
+- **api**: Add device config groups to devices
+- **api**: Ability to fetch configgroups from api along with config
+
+### Fix
+
+- **api**: Ensure device groups is read only
+
 ## 1.0.0-b4 (2024-07-29)
 
 ### Feat
