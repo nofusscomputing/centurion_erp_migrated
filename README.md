@@ -7,7 +7,7 @@
 ![Project Status - Active](https://img.shields.io/badge/Project%20Status-Active-green?logo=gitlab&style=plastic) 
 
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed)](https://hub.docker.com/r/nofusscomputing/centurion-erp)
+[![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed)](https://hub.docker.com/r/nofusscomputing/centurion-erp) [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/centurion-erp)](https://artifacthub.io/packages/search?repo=centurion-erp)
 
 
 

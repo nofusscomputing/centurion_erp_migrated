@@ -57,6 +57,14 @@ RUN cd /tmp/python_modules \
 
 FROM python:3.11-alpine3.19
 
+LABEL \
+  org.opencontainers.image.vendor="No Fuss Computing" \
+  org.opencontainers.image.title="Centurion ERP" \
+  org.opencontainers.image.description="An ERP with a focus on ITSM and automation" \
+  org.opencontainers.image.vendor="No Fuss Computing" \
+  io.artifacthub.package.license="MIT"
+
+
 ARG CI_PROJECT_URL
 ARG CI_COMMIT_SHA
 ARG CI_COMMIT_TAG

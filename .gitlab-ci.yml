@@ -49,10 +49,12 @@ Docker Container:
       echo "[DEBUG] building multiarch/specified arch image";
 
       docker buildx build --platform=$DOCKER_IMAGE_BUILD_TARGET_PLATFORMS . \
-        --label org.opencontainers.image.created="$(date '+%Y-%m-%d %H:%M:%S%:z')" \
+        --label org.opencontainers.image.created="$(date '+%Y-%m-%dT%H:%M:%S%:z')" \
         --label org.opencontainers.image.documentation="$CI_PROJECT_URL" \
         --label org.opencontainers.image.source="$CI_PROJECT_URL" \
         --label org.opencontainers.image.revision="$CI_COMMIT_SHA" \
+        --label io.artifacthub.package.readme-url="$CI_PROJECT_URL/-/raw/development/README.md?ref_type=heads" \
+        --label io.artifacthub.package.maintainers='[{"name":"No Fuss Computing","email":"helpdesk@nofusscomputing.com"}, {"name":"jon_nfc","email":"jonathon.lockwood@networkedweb.com"}]' \
       --push \
       --build-arg CI_PROJECT_URL=$CI_PROJECT_URL \
       --build-arg CI_COMMIT_SHA=$CI_COMMIT_SHA \
