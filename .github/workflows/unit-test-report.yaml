@@ -25,10 +25,11 @@ jobs:
         python-version: ['3.10', '3.11', '3.12']
     steps:
 
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      with:
-        artifact: unit-test-results-${{ matrix.python-version }}
-        name: Unit Test Report [Python ${{ matrix.python-version }}]
-        path: '*.xml'
-        reporter: java-junit
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: unit-test-results-${{ matrix.python-version }}
+          badge-title: 'Unit Tests [Python ${{ matrix.python-version }}]'
+          name: Unit Test Report [Python ${{ matrix.python-version }}]
+          path: '*.xml'
+          reporter: java-junit

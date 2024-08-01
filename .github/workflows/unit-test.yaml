@@ -12,7 +12,7 @@ on:
 
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
     strategy:
@@ -46,7 +46,7 @@ jobs:
 
 
       - name: Upload Test Report
-        uses: actions/upload-artifact@v4 
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: unit-test-results-${{ matrix.python-version }}
@@ -54,7 +54,7 @@ jobs:
 
 
       - name: Upload Coverage Report
-        uses: actions/upload-artifact@v4 
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: coverage-report-${{ matrix.python-version }}
@@ -62,8 +62,67 @@ jobs:
 
 
       - name: Upload Coverage
-        uses: actions/upload-artifact@v4 
+        uses: actions/upload-artifact@v4
         if: success() || failure()
         with:
           name: coverage-${{ matrix.python-version }}
           path: coverage/*
+
+  # coverage:
+  #   needs:
+  #     - test
+  #   runs-on: ubuntu-latest
+  #   # strategy:
+  #   #   max-parallel: 4
+  #   #   matrix:
+  #   #     python-version: ['3.12']
+  #   name: Coverage
+  #   steps:
+
+  #     # - name: Run Tests
+  #     #   run: |
+  #     #     ls -l;
+
+  #     - name: Download Coverage Artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: coverage-report-3.12
+  #         # path: coverage.xml
+  #         # run-id: ${{ github.event.workflow_run.id }}
+  #         # github-token: ${{ github.token }}
+
+
+  #     - name: Add Coverage PR Comment
+  #       uses: marocchino/sticky-pull-request-comment@v2
+  #       if: github.event_name == 'pull_request'
+  #       with:
+  #         recreate: true
+  #         path: code-coverage-results.md
+
+
+  #     - name: ls
+  #       if: success() || failure()
+  #       run: |
+  #         ls -l;
+
+  #     - name: Code Coverage Report
+  #       uses: irongut/CodeCoverageSummary@v1.3.0
+  #       with:
+  #         filename: coverage.xml
+  #         badge: true
+  #         fail_below_min: true
+  #         format: markdown
+  #         hide_branch_rate: false
+  #         hide_complexity: false
+  #         indicators: true
+  #         output: both
+  #         thresholds: '60 85'
+
+  #     - name: ls
+  #       if: success() || failure()
+  #       run: |
+  #         ls -l;
+
+  #     - name: Summary
+  #       run: |
+  #         cat $(ls *.md | tail -1) >> $GITHUB_STEP_SUMMARY
