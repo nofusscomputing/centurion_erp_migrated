@@ -20,7 +20,7 @@ jobs:
     with:
       DOCKER_BUILD_IMAGE_NAME: "nofusscomputing/centurion-erp"
       DOCKER_PUBLISH_REGISTRY: "docker.io"
-      DOCKER_PUBLISH_IMAGE_NAME: "docker.io/nofusscomputing/centurion-erp"
+      DOCKER_PUBLISH_IMAGE_NAME: "nofusscomputing/centurion-erp"
     secrets:
       DOCKER_PUBLISH_USERNAME: ${{ secrets.NFC_DOCKERHUB_USERNAME }}
       DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
