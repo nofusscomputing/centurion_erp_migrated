@@ -2,21 +2,21 @@
 
 variables:
   MY_PROJECT_ID: "57560288"
-  GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/centurion_erp.git"
+  # GIT_SYNC_URL: "https://$GITHUB_USERNAME_ROBOT:$GITHUB_TOKEN_ROBOT@github.com/NoFussComputing/centurion_erp.git"
 
-  # Docker Build / Publish
-  DOCKER_IMAGE_BUILD_TARGET_PLATFORMS: "linux/amd64,linux/arm64"
-  DOCKER_IMAGE_BUILD_NAME: centurion-erp
-  DOCKER_IMAGE_BUILD_REGISTRY: $CI_REGISTRY_IMAGE
-  DOCKER_IMAGE_BUILD_TAG: $CI_COMMIT_SHA
+  # # Docker Build / Publish
+  # DOCKER_IMAGE_BUILD_TARGET_PLATFORMS: "linux/amd64,linux/arm64"
+  # DOCKER_IMAGE_BUILD_NAME: centurion-erp
+  # DOCKER_IMAGE_BUILD_REGISTRY: $CI_REGISTRY_IMAGE
+  # DOCKER_IMAGE_BUILD_TAG: $CI_COMMIT_SHA
 
-  # Docker Publish
-  DOCKER_IMAGE_PUBLISH_NAME: centurion-erp
-  DOCKER_IMAGE_PUBLISH_REGISTRY: docker.io/nofusscomputing
-  DOCKER_IMAGE_PUBLISH_URL: https://hub.docker.com/r/nofusscomputing/$DOCKER_IMAGE_PUBLISH_NAME
+  # # Docker Publish
+  # DOCKER_IMAGE_PUBLISH_NAME: centurion-erp
+  # DOCKER_IMAGE_PUBLISH_REGISTRY: docker.io/nofusscomputing
+  # DOCKER_IMAGE_PUBLISH_URL: https://hub.docker.com/r/nofusscomputing/$DOCKER_IMAGE_PUBLISH_NAME
 
-  # Extra release commands
-  MY_COMMAND: ./.gitlab/additional_actions_bump.sh
+  # # Extra release commands
+  # MY_COMMAND: ./.gitlab/additional_actions_bump.sh
 
   # Docs NFC
   PAGES_ENVIRONMENT_PATH: projects/centurion_erp/
@@ -25,207 +25,101 @@ variables:
 
 
 include:
-  - local: .gitlab/pytest.gitlab-ci.yml
+  # - local: .gitlab/pytest.gitlab-ci.yml
   # - local: .gitlab/unit-test.gitlab-ci.yml
   - project: nofusscomputing/projects/gitlab-ci
     ref: development
     file:
       - .gitlab-ci_common.yaml
-      - template/automagic.gitlab-ci.yaml
-
-
-Update Git Submodules:
-  extends: .ansible_playbook_git_submodule
-
-
-Docker Container:
-  extends: .build_docker_container
-  resource_group: build
-  needs: []
-  script: 
-    - update-binfmts --display
-    - |
-
-      echo "[DEBUG] building multiarch/specified arch image";
-
-      docker buildx build --platform=$DOCKER_IMAGE_BUILD_TARGET_PLATFORMS . \
-        --label org.opencontainers.image.created="$(date '+%Y-%m-%dT%H:%M:%S%:z')" \
-        --label org.opencontainers.image.documentation="$CI_PROJECT_URL" \
-        --label org.opencontainers.image.source="$CI_PROJECT_URL" \
-        --label org.opencontainers.image.revision="$CI_COMMIT_SHA" \
-        --label io.artifacthub.package.readme-url="$CI_PROJECT_URL/-/raw/development/README.md?ref_type=heads" \
-        --label io.artifacthub.package.maintainers='[{"name":"No Fuss Computing","email":"helpdesk@nofusscomputing.com"}, {"name":"jon_nfc","email":"jonathon.lockwood@networkedweb.com"}]' \
-      --push \
-      --build-arg CI_PROJECT_URL=$CI_PROJECT_URL \
-      --build-arg CI_COMMIT_SHA=$CI_COMMIT_SHA \
-      --build-arg CI_COMMIT_TAG=$CI_COMMIT_TAG \
-      --file $DOCKER_DOCKERFILE \
-      --tag $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
-
-      docker buildx imagetools inspect $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
-
-      # during docker multi platform build there are >=3 additional unknown images added to gitlab container registry. cleanup
+      # - template/automagic.gitlab-ci.yaml
+  - local: gitlab-ci/automation/.gitlab-ci-ansible.yaml
+  - local: gitlab-ci/template/mkdocs-documentation.gitlab-ci.yaml
+  - local: gitlab-ci/lint/ansible.gitlab-ci.yaml
       
-      DOCKER_MULTI_ARCH_IMAGES=$(docker buildx imagetools inspect "$DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG" --format "{{ range .Manifest.Manifests }}{{ if ne (print .Platform) \"&{unknown unknown  [] }\" }}$DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG@{{ println .Digest }}{{end}} {{end}}");
-
-      docker buildx imagetools create $DOCKER_MULTI_ARCH_IMAGES --tag $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
-
-      docker buildx imagetools inspect $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
-
-  rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
-
-    # - if: # condition_master_branch_push
-    #     $CI_COMMIT_BRANCH == "master" && 
-    #     $CI_PIPELINE_SOURCE == "push"
-    #   exists:
-    #     - '{dockerfile,dockerfile.j2}'
-    #   when: always
-
-    - if:
-        $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
-          &&
-        $CI_COMMIT_BRANCH == "development"
-      when: never
-
-    - if: # condition_not_master_or_dev_push
-        $CI_COMMIT_BRANCH != "master" && 
-        $CI_COMMIT_BRANCH != "development" && 
-        $CI_PIPELINE_SOURCE == "push"
-      exists:
-        - '{dockerfile,dockerfile.j2}'
-      changes:
-        paths:
-          - '{dockerfile,dockerfile.j2,includes/**/*}'
-        compare_to: 'development'
-      when: always
-
-    - if: $CI_COMMIT_TAG
-      exists:
-        - '{dockerfile,dockerfile.j2}'
-      when: always
-
-    - if: # condition_dev_branch_push
-        (
-          $CI_COMMIT_BRANCH == "development"
-            ||
-          $CI_COMMIT_BRANCH == "master"
-        )
-         && 
-        $CI_PIPELINE_SOURCE == "push"
-      exists:
-        - '{dockerfile,dockerfile.j2}'
-      allow_failure: true
-      when: on_success
-
-    - when: never
 
 
+# Update Git Submodules:
+#   extends: .ansible_playbook_git_submodule
 
 
+# Docker Container:
+#   extends: .build_docker_container
+#   resource_group: build
+#   needs: []
+#   script: 
+#     - update-binfmts --display
+#     - |
 
+#       echo "[DEBUG] building multiarch/specified arch image";
 
+#       docker buildx build --platform=$DOCKER_IMAGE_BUILD_TARGET_PLATFORMS . \
+#         --label org.opencontainers.image.created="$(date '+%Y-%m-%d %H:%M:%S%:z')" \
+#         --label org.opencontainers.image.documentation="$CI_PROJECT_URL" \
+#         --label org.opencontainers.image.source="$CI_PROJECT_URL" \
+#         --label org.opencontainers.image.revision="$CI_COMMIT_SHA" \
+#       --push \
+#       --build-arg CI_PROJECT_URL=$CI_PROJECT_URL \
+#       --build-arg CI_COMMIT_SHA=$CI_COMMIT_SHA \
+#       --build-arg CI_COMMIT_TAG=$CI_COMMIT_TAG \
+#       --file $DOCKER_DOCKERFILE \
+#       --tag $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
 
-.gitlab_release:
-    stage: release
-    image: registry.gitlab.com/gitlab-org/release-cli:latest
-    before_script:
-        - if [ "0$JOB_ROOT_DIR" == "0" ]; then ROOT_DIR=gitlab-ci; else ROOT_DIR=$JOB_ROOT_DIR ; fi
-        - echo "[DEBUG] ROOT_DIR[$ROOT_DIR]"
-        - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/$CI_JOB_NAME"
-        - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/tests"
-        - apk update
-        - apk add git curl
-        - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
-        - python -m ensurepip  && ln -sf pip3 /usr/bin/pip
-        - pip install --upgrade pip
-        - pip install -r $ROOT_DIR/gitlab_release/requirements.txt
-        # - pip install $ROOT_DIR/gitlab_release/python-module/cz_nfc/.
-        - pip install commitizen --force
-        - 'CLONE_URL="https://gitlab-ci-token:$GIT_COMMIT_TOKEN@gitlab.com/$CI_PROJECT_PATH.git"'
-        - echo "[DEBUG] CLONE_URL[$CLONE_URL]"
-        - git clone -b development $CLONE_URL repo
-        - cd repo
-        - git branch
-        - git config --global user.email "helpdesk@nofusscomputing.com"
-        - git config --global user.name "nfc_bot"
-        - git push --set-upstream origin development
-        - RELEASE_VERSION_CURRENT=$(cz version --project)        
-    script:
-        - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout --prerelease beta); else RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout); fi
-        - RELEASE_VERSION_NEW=$(cz version --project)
-        - export RELEASE_TAG=$RELEASE_VERSION_NEW
-        - echo "[DEBUG] RELEASE_VERSION_CURRENT[$RELEASE_VERSION_CURRENT]"
-        - echo "[DEBUG] RELEASE_CHANGELOG[$RELEASE_CHANGELOG]"
-        - echo "[DEBUG] RELEASE_VERSION_NEW[$RELEASE_VERSION_NEW]"
-        - echo "[DEBUG] RELEASE_TAG[$RELEASE_TAG]"
-        - RELEASE_TAG_SHA1=$(git log -n1 --format=format:"%H")
-        - echo "[DEBUG] RELEASE_TAG_SHA1[$RELEASE_TAG_SHA1]"
+#       docker buildx imagetools inspect $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
 
-        - |
-          if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then 
+#       # during docker multi platform build there are >=3 additional unknown images added to gitlab container registry. cleanup
+      
+#       DOCKER_MULTI_ARCH_IMAGES=$(docker buildx imagetools inspect "$DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG" --format "{{ range .Manifest.Manifests }}{{ if ne (print .Platform) \"&{unknown unknown  [] }\" }}$DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG@{{ println .Digest }}{{end}} {{end}}");
 
-            echo "[DEBUG] not running extra actions, no new version"; 
+#       docker buildx imagetools create $DOCKER_MULTI_ARCH_IMAGES --tag $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
 
-          else
+#       docker buildx imagetools inspect $DOCKER_IMAGE_BUILD_REGISTRY/$DOCKER_IMAGE_BUILD_NAME:$DOCKER_IMAGE_BUILD_TAG;
 
-            echo "[DEBUG] Creating new Version Label";
+#   rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
 
-            echo "----------------------------";
+#     # - if: # condition_master_branch_push
+#     #     $CI_COMMIT_BRANCH == "master" && 
+#     #     $CI_PIPELINE_SOURCE == "push"
+#     #   exists:
+#     #     - '{dockerfile,dockerfile.j2}'
+#     #   when: always
 
-            echo ${MY_COMMAND};
+#     - if:
+#         $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
+#           &&
+#         $CI_COMMIT_BRANCH == "development"
+#       when: never
 
-            echo "----------------------------";
+#     - if: # condition_not_master_or_dev_push
+#         $CI_COMMIT_BRANCH != "master" && 
+#         $CI_COMMIT_BRANCH != "development" && 
+#         $CI_PIPELINE_SOURCE == "push"
+#       exists:
+#         - '{dockerfile,dockerfile.j2}'
+#       changes:
+#         paths:
+#           - '{dockerfile,dockerfile.j2,includes/**/*}'
+#         compare_to: 'development'
+#       when: always
 
-            cat ${MY_COMMAND};
+#     - if: $CI_COMMIT_TAG
+#       exists:
+#         - '{dockerfile,dockerfile.j2}'
+#       when: always
 
-            echo "----------------------------";
+#     - if: # condition_dev_branch_push
+#         (
+#           $CI_COMMIT_BRANCH == "development"
+#             ||
+#           $CI_COMMIT_BRANCH == "master"
+#         )
+#          && 
+#         $CI_PIPELINE_SOURCE == "push"
+#       exists:
+#         - '{dockerfile,dockerfile.j2}'
+#       allow_failure: true
+#       when: on_success
 
-            ${MY_COMMAND};
-
-            echo "----------------------------";
-          fi
-
-        - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No tag to delete, version was not bumped"; else git tag -d $RELEASE_TAG; fi
-
-        - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No push will be conducted, version was not bumped"; else git push; fi
-        - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No release will be created, version was not bumped"; else release-cli create --name "Release $RELEASE_TAG" --tag-name "$RELEASE_TAG" --tag-message "$RELEASE_CHANGELOG" --ref "$RELEASE_TAG_SHA1" --description "$RELEASE_CHANGELOG"; fi
-        - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git checkout master; fi
-        - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git push --set-upstream origin master; fi
-        - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git merge --no-ff development; fi
-        - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git push origin master; fi
-    after_script:
-        - rm -Rf repo
-    rules:
-        - if: '$JOB_STOP_GITLAB_RELEASE'
-          when: never
-
-        - if: "$CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'"
-          when: never
-
-        - if: # condition_master_branch_push
-            $CI_COMMIT_BRANCH == "master" && 
-            $CI_PIPELINE_SOURCE == "push"
-          allow_failure: false
-          when: on_success
-
-        - if: # condition_dev_branch_push
-            $CI_COMMIT_BRANCH == "development" && 
-            $CI_PIPELINE_SOURCE == "push"
-          when: manual
-          allow_failure: true
-
-        # for testing
-        # - if: '$CI_COMMIT_BRANCH != "master"'
-        #   when: always
-        #   allow_failure: true
-        - when: never
-
-#
-# Release
-#
-Gitlab Release:
-  extends:
-    - .gitlab_release
+#     - when: never
 
 
 
@@ -233,60 +127,168 @@ Gitlab Release:
 
 
 
+# .gitlab_release:
+#     stage: release
+#     image: registry.gitlab.com/gitlab-org/release-cli:latest
+#     before_script:
+#         - if [ "0$JOB_ROOT_DIR" == "0" ]; then ROOT_DIR=gitlab-ci; else ROOT_DIR=$JOB_ROOT_DIR ; fi
+#         - echo "[DEBUG] ROOT_DIR[$ROOT_DIR]"
+#         - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/$CI_JOB_NAME"
+#         - mkdir -p "$CI_PROJECT_DIR/artifacts/$CI_JOB_STAGE/tests"
+#         - apk update
+#         - apk add git curl
+#         - apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+#         - python -m ensurepip  && ln -sf pip3 /usr/bin/pip
+#         - pip install --upgrade pip
+#         - pip install -r $ROOT_DIR/gitlab_release/requirements.txt
+#         # - pip install $ROOT_DIR/gitlab_release/python-module/cz_nfc/.
+#         - pip install commitizen --force
+#         - 'CLONE_URL="https://gitlab-ci-token:$GIT_COMMIT_TOKEN@gitlab.com/$CI_PROJECT_PATH.git"'
+#         - echo "[DEBUG] CLONE_URL[$CLONE_URL]"
+#         - git clone -b development $CLONE_URL repo
+#         - cd repo
+#         - git branch
+#         - git config --global user.email "helpdesk@nofusscomputing.com"
+#         - git config --global user.name "nfc_bot"
+#         - git push --set-upstream origin development
+#         - RELEASE_VERSION_CURRENT=$(cz version --project)        
+#     script:
+#         - if [ "$CI_COMMIT_BRANCH" == "development" ] ; then RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout --prerelease beta); else RELEASE_CHANGELOG=$(cz bump --changelog --changelog-to-stdout); fi
+#         - RELEASE_VERSION_NEW=$(cz version --project)
+#         - RELEASE_TAG=$RELEASE_VERSION_NEW
+#         - echo "[DEBUG] RELEASE_VERSION_CURRENT[$RELEASE_VERSION_CURRENT]"
+#         - echo "[DEBUG] RELEASE_CHANGELOG[$RELEASE_CHANGELOG]"
+#         - echo "[DEBUG] RELEASE_VERSION_NEW[$RELEASE_VERSION_NEW]"
+#         - echo "[DEBUG] RELEASE_TAG[$RELEASE_TAG]"
+#         - RELEASE_TAG_SHA1=$(git log -n1 --format=format:"%H")
+#         - echo "[DEBUG] RELEASE_TAG_SHA1[$RELEASE_TAG_SHA1]"
 
-Docker.Hub.Branch.Publish:
-  extends: .publish-docker-hub
-  needs: [ "Docker Container" ]
-  resource_group: build
-  rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
+#         - |
+#           if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then 
 
-    # - if: # condition_master_branch_push
-    #     $CI_COMMIT_BRANCH == "master" && 
-    #     $CI_PIPELINE_SOURCE == "push"
-    #   exists:
-    #     - '{dockerfile,dockerfile.j2}'
-    #   when: always
+#             echo "[DEBUG] not running extra actions, no new version"; 
 
-    - if:
-        $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
-          &&
-        $CI_COMMIT_BRANCH == "development"
-      when: never
+#           else
 
-    - if: $CI_COMMIT_TAG
-      exists:
-        - '{dockerfile,dockerfile.j2}'
-      when: always
+#             echo "[DEBUG] Creating new Version Label";
 
-    - if: # condition_dev_branch_push
-        $CI_COMMIT_BRANCH == "development" && 
-        $CI_PIPELINE_SOURCE == "push"
-      exists:
-        - '{dockerfile,dockerfile.j2}'
-      allow_failure: true
-      when: on_success
+#             echo "----------------------------";
 
-    - when: never
+#             echo ${MY_COMMAND};
+
+#             echo "----------------------------";
+
+#             cat ${MY_COMMAND};
+
+#             echo "----------------------------";
+
+#             ${MY_COMMAND};
+
+#             echo "----------------------------";
+#           fi
+
+#         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No tag to delete, version was not bumped"; else git tag -d $RELEASE_TAG; fi
+
+#         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No push will be conducted, version was not bumped"; else git push; fi
+#         - if [ "0$RELEASE_VERSION_CURRENT" == "0$RELEASE_VERSION_NEW" ]; then echo "[DEBUG] No release will be created, version was not bumped"; else release-cli create --name "Release $RELEASE_TAG" --tag-name "$RELEASE_TAG" --tag-message "$RELEASE_CHANGELOG" --ref "$RELEASE_TAG_SHA1" --description "$RELEASE_CHANGELOG"; fi
+#         - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git checkout master; fi
+#         - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git push --set-upstream origin master; fi
+#         - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git merge --no-ff development; fi
+#         - if [ "$CI_COMMIT_BRANCH" == "master" ] ; then git push origin master; fi
+#     after_script:
+#         - rm -Rf repo
+#     rules:
+#         - if: '$JOB_STOP_GITLAB_RELEASE'
+#           when: never
+
+#         - if: "$CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'"
+#           when: never
+
+#         - if: # condition_master_branch_push
+#             $CI_COMMIT_BRANCH == "master" && 
+#             $CI_PIPELINE_SOURCE == "push"
+#           allow_failure: false
+#           when: on_success
+
+#         - if: # condition_dev_branch_push
+#             $CI_COMMIT_BRANCH == "development" && 
+#             $CI_PIPELINE_SOURCE == "push"
+#           when: manual
+#           allow_failure: true
+
+#         # for testing
+#         # - if: '$CI_COMMIT_BRANCH != "master"'
+#         #   when: always
+#         #   allow_failure: true
+#         - when: never
+
+# #
+# # Release
+# #
+# Gitlab Release:
+#   extends:
+#     - .gitlab_release
 
 
-Github (Push --mirror):
-  extends:
-    - .git_push_mirror
-  needs: []
-  rules:
-        - if: '$JOB_STOP_GIT_PUSH_MIRROR'
-          when: never
 
-        - if: $GIT_SYNC_URL == null
-          when: never
 
-        - if: # condition_master_or_dev_push
-            $CI_COMMIT_BRANCH
-              && 
-            $CI_PIPELINE_SOURCE == "push"
-          when: always
 
-        - when: never
+
+
+
+# Docker.Hub.Branch.Publish:
+#   extends: .publish-docker-hub
+#   needs: [ "Docker Container" ]
+#   resource_group: build
+#   rules: # rules manually synced from docker/publish.gitlab-ci.yaml removing git tag
+
+#     # - if: # condition_master_branch_push
+#     #     $CI_COMMIT_BRANCH == "master" && 
+#     #     $CI_PIPELINE_SOURCE == "push"
+#     #   exists:
+#     #     - '{dockerfile,dockerfile.j2}'
+#     #   when: always
+
+#     - if:
+#         $CI_COMMIT_AUTHOR =='nfc_bot <helpdesk@nofusscomputing.com>'
+#           &&
+#         $CI_COMMIT_BRANCH == "development"
+#       when: never
+
+#     - if: $CI_COMMIT_TAG
+#       exists:
+#         - '{dockerfile,dockerfile.j2}'
+#       when: always
+
+#     - if: # condition_dev_branch_push
+#         $CI_COMMIT_BRANCH == "development" && 
+#         $CI_PIPELINE_SOURCE == "push"
+#       exists:
+#         - '{dockerfile,dockerfile.j2}'
+#       allow_failure: true
+#       when: on_success
+
+#     - when: never
+
+
+# Github (Push --mirror):
+#   extends:
+#     - .git_push_mirror
+#   needs: []
+#   rules:
+#         - if: '$JOB_STOP_GIT_PUSH_MIRROR'
+#           when: never
+
+#         - if: $GIT_SYNC_URL == null
+#           when: never
+
+#         - if: # condition_master_or_dev_push
+#             $CI_COMMIT_BRANCH
+#               && 
+#             $CI_PIPELINE_SOURCE == "push"
+#           when: always
+
+#         - when: never
 
 
 Website.Submodule.Deploy:
