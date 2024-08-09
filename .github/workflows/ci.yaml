@@ -1,0 +1,26 @@
+---
+
+name: 'CI'
+
+
+on:
+  push:
+    branches:
+      - '**'
+    tags:
+      - '*'
+
+
+jobs:
+
+
+  docker:
+    name: 'Docker'
+    uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
+    with:
+      DOCKER_BUILD_IMAGE_NAME: "nofusscomputing/centurion-erp"
+      DOCKER_PUBLISH_REGISTRY: "ghcr.io"
+      DOCKER_PUBLISH_IMAGE_NAME: "nofusscomputing/centurion-erp"
+    secrets:
+      DOCKER_PUBLISH_USERNAME: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
+      DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_USERNAME }}
