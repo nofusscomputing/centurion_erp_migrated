@@ -1,0 +1,31 @@
+---
+
+name: 'Bump'
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      CZ_PRE_RELEASE:
+        default: none
+        required: false
+        description: Create Pre-Release {alpha,beta,rc,none}
+      CZ_INCREMENT:
+        default: none
+        required: false
+        description: Type of bump to conduct {MAJOR,MINOR,PATCH,none}
+  push:
+    branches:
+      - 'master'
+
+
+jobs:
+
+  bump:
+    name: 'Bump'
+    uses: nofusscomputing/action_bump/.github/workflows/bump.yaml@development
+    with:
+      CZ_PRE_RELEASE: ${{ inputs.CZ_PRE_RELEASE }}
+      CZ_INCREMENT: ${{ inputs.CZ_INCREMENT }}
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
