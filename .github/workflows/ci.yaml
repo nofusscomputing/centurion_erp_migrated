@@ -24,3 +24,10 @@ jobs:
     secrets:
       DOCKER_PUBLISH_USERNAME: ${{ secrets.NFC_DOCKERHUB_TOKEN }}
       DOCKER_PUBLISH_PASSWORD: ${{ secrets.NFC_DOCKERHUB_USERNAME }}
+
+
+  python:
+    name: 'Python'
+    uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
