@@ -32,7 +32,7 @@ This project is hosted on [Github](https://github.com/NofussComputing/centurion_
 
 **Stable Branch**
 
-![GitHub branch status](https://img.shields.io/github/check-runs/nofusscomputing/centurion_erp/master?style=plastic&logo=github&label=Build&color=000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?sort=semver&display_name=release&style=plastic&logo=github&label=Build&color=000) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage.json&style=plastic)
+![GitHub branch status](https://img.shields.io/github/check-runs/nofusscomputing/centurion_erp/master?style=plastic&logo=github&label=Build&color=000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?sort=date&style=plastic&logo=github&label=Release&color=000) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage.json&style=plastic)
  ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_unit_test.json)
 
 
@@ -42,7 +42,7 @@ This project is hosted on [Github](https://github.com/NofussComputing/centurion_
 
 
 
-![GitHub branch status](https://img.shields.io/github/check-runs/nofusscomputing/centurion_erp/development?style=plastic&logo=github&label=Build&color=000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?include_prereleases&sort=semver&display_name=release&style=plastic&logo=github&label=Build&color=000) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage.json&style=plastic)
+![GitHub branch status](https://img.shields.io/github/check-runs/nofusscomputing/centurion_erp/development?style=plastic&logo=github&label=Build&color=000) ![GitHub Release](https://img.shields.io/github/v/release/nofusscomputing/centurion_erp?include_prereleases&sort=date&style=plastic&logo=github&label=Release&color=000) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage.json&style=plastic)
  ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_unit_test.json)
 
 
