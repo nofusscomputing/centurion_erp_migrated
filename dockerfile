@@ -5,6 +5,11 @@ ARG CI_COMMIT_TAG=''
 FROM python:3.11-alpine3.19 as build
 
 
+RUN pip --disable-pip-version-check list --outdated --format=json | \
+    python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
+    xargs -n1 pip install --no-cache-dir -U;
+
+
 RUN apk add --update \
         bash \
         git \
@@ -83,7 +88,10 @@ COPY --from=build /tmp/python_builds /tmp/python_builds
 
 COPY includes/ /
 
-RUN apk update --no-cache; \
+RUN pip --disable-pip-version-check list --outdated --format=json | \
+    python -c "import json, sys; print('\n'.join([x['name'] for x in json.load(sys.stdin)]))" | \
+    xargs -n1 pip install --no-cache-dir -U; \
+  apk update --no-cache; \
   apk add --no-cache \
     mariadb-client \
     mariadb-dev \
