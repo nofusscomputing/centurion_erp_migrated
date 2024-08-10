@@ -1,0 +1,37 @@
+
+---
+
+name: Triage
+
+
+on:
+  issues:
+    types:
+      - opened
+      - reopened
+      - transferred
+      - milestoned
+      - demilestoned
+      - closed
+      - assigned
+  pull_request: 
+    types:
+      - opened
+      - edited
+      - assigned
+      - reopened
+      - closed
+
+
+
+jobs:
+
+
+  project:
+    name: Project
+    uses: nofusscomputing/action_project/.github/workflows/project.yaml@development
+    with:
+      PROJECT_URL: https://github.com/orgs/nofusscomputing/projects/3
+    secrets:
+      WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
