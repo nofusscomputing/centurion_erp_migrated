@@ -1,3 +1,10 @@
+## 1.0.0-b12 (2024-08-10)
+
+### Fix
+
+- **api**: ensure org mixin is inherited by software view
+- **base**: correct project links to github
+
 ## 1.0.0-b11 (2024-08-10)
 
 ## 1.0.0-b10 (2024-08-09)
