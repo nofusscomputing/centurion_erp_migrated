@@ -32,9 +32,9 @@ include:
     file:
       - .gitlab-ci_common.yaml
       # - template/automagic.gitlab-ci.yaml
-  - local: gitlab-ci/automation/.gitlab-ci-ansible.yaml
-  - local: gitlab-ci/template/mkdocs-documentation.gitlab-ci.yaml
-  - local: gitlab-ci/lint/ansible.gitlab-ci.yaml
+      - automation/.gitlab-ci-ansible.yaml
+      - template/mkdocs-documentation.gitlab-ci.yaml
+      - lint/ansible.gitlab-ci.yaml
       
 
 
