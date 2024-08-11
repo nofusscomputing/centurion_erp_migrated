@@ -8,14 +8,18 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Unit tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
-User Interface (UI) test are written to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
+User Interface (UI) test are written _if applicable_ to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
+
+In most cases functional tests will not need to be written, however you should confirm this with a maintainer.
+
+Integration tests **will** be required if the development introduces code that interacts with an independent third-party application.
 
 
 ## Writing Tests
 
 We use class based tests. Each class will require a `setUpTestData` method for test setup. To furhter assist in the writing of tests, we have written the test cases for common items as an abstract class. You are advised to review the [test cases](./api/tests/index.md) and if it's applicable to the item you have added, than add the test case class to be inherited by your test class.
 
-naming of test classes is in `CamelCase` in format `<Model Name><what's being tested>` for example the class name for device model history entry tests would be `DeviceHistory`.
+Naming of test classes is in `CamelCase` in format `<Model Name><what's being tested>` for example the class name for device model history entry tests would be `DeviceHistory`.
 
 Test setup is written in a method called `setUpTestData` and is to contain the setup for all tests within the test class.
 
@@ -51,21 +55,39 @@ class DeviceHistory(TestCase, HistoryEntry, HistoryEntryParentItem):
 
 Each module is to contain a tests directory of the model being tested with a single file for grouping of what is being tested. for items that depend upon a parent model, the test file is to be within the child-models test directory named with format `test_<model>_<parent app>_<parent model name>`
 
-_example file system structure for the device model that relies upon access app model organization, core app model history and model notes._
+_example file system structure showing the layout of the tests directory for a module_
 
 ``` text
-
+.
 ├── tests
-│   ├── <model name>
-│   │   ├── test_<model name>_access_organization.py
-│   │   ├── test_<model name>_api_permission.py
-│   │   ├── test_<model name>_core_history.py
-│   │   ├── test_<model name>_core_notes.py
-│   │   ├── test_<model name>_permission.py
-│   │   └── test_device.py
-
+│   ├── functional
+│   │   ├── __init__.py
+│   │   └── <model name>
+│   │       └── test_<model name>_a_tast_name.py
+│   ├── __init__.py
+│   ├── integration
+│   │   ├── __init__.py
+│   │   └── <model name>
+│   │       └── test_<model name>_a_tast_name.py
+│   ├── ui
+│   │   ├── __init__.py
+│   │   └── <model name>
+│   │       └── test_<model name>_a_tast_name.py
+│   └── unit
+│       ├── __init__.py
+│       └── <model name>
+│           ├── test_<model name>_api.py
+│           ├── test_<model name>_permission_api.py
+│           ├── test_<model name>_permission.py
+│           ├── test_<model name>_core_history.py
+│           ├── test_<model name>_history_permission.py
+│           ├── test_<model name>.py
+│           └── test_<model name>_views.py
 
 ```
+
+Tests are broken up into the type the test is (sub-directory to test), and they are `unit`, `functional`, `UI` and `integration`. These sub-directories each contain a sub-directory for each model they are testing.
+
 
 Items to test include, and are not limited to:
 
