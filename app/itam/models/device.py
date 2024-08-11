@@ -53,6 +53,24 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             raise ValidationError(f'UUID Must be in {str(pattern)}')
 
 
+    def validate_hostname_format(self):
+
+        pattern = r'^[a-z]{1}[a-z|0-9|\-]+[a-z|0-9]{1}$'
+
+        if not re.match(pattern, str(self).lower()):
+
+            raise ValidationError(
+                '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
+                and have as interior characters only letters, digits, and hyphen.'''
+            )
+
+
+    name = models.CharField(
+        blank = False,
+        max_length = 50,
+        unique = True,
+        validators = [ validate_hostname_format ]
+    )
 
     serial_number = models.CharField(
         verbose_name = 'Serial Number',
