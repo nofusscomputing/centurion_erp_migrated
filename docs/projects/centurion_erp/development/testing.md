@@ -105,6 +105,10 @@ Items to test include, and are not limited to:
 
     _applicable if notes are able to be added to an item._
 
+- API Fields
+
+    _Field exists, Type is checked_
+
 
 ## Running Tests
 
