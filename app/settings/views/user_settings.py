@@ -101,6 +101,8 @@ class TokenAdd(AddView):
         form.instance.user = self.request.user
         form.instance.token = form.instance.token_hash(form.fields['gen_token'].initial)
 
+        self.model.validate_note_no_token(self, note=form.instance.note, token=form.fields['gen_token'].initial)
+
         return super().form_valid(form)
 
 
