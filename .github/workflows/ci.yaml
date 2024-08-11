@@ -10,6 +10,8 @@ on:
     tags:
       - '*'
 
+env:
+  GIT_SYNC_URL: "https://${{ secrets.GITLAB_USERNAME_ROBOT }}:${{ secrets.GITLAB_TOKEN_ROBOT }}@gitlab.com/nofusscomputing/projects/centurion_erp.git"
 
 jobs:
 
@@ -31,3 +33,77 @@ jobs:
     uses: nofusscomputing/action_python/.github/workflows/python.yaml@development
     secrets:
       WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+
+
+  gitlab-mirror:
+    if: ${{ github.repository == 'nofusscomputing/centurion_erp' }}
+    runs-on: ubuntu-latest
+    steps:
+
+
+      - name: Checks
+        shell: bash
+        run: |
+          if [ "0${{ env.GIT_SYNC_URL }}" == "0" ]; then
+
+            echo "[ERROR] you must define variable GIT_SYNC_URL for mirroring this repository.";
+
+            exit 1;
+
+          fi
+
+
+      - name: clone
+        shell: bash
+        run: |
+
+          git clone --mirror https://github.com/${{ github.repository }} repo;
+
+          ls -la repo/
+
+
+      - name: add remote
+        shell: bash
+        run: |
+
+          cd repo;
+
+          echo "**************************************** - git remote -v";
+
+          git remote -v;
+
+          echo "****************************************";
+
+          git remote add destination $GIT_SYNC_URL;
+
+
+      - name: push branches
+        shell: bash
+        run: |
+
+          cd repo;
+
+          echo "**************************************** - git branch";
+
+          git branch;
+
+          echo "****************************************";
+
+          # git push destination --all --force;
+
+          git push destination --mirror || true;
+
+
+      # - name: push tags
+      #   shell: bash
+      #   run: |
+
+      #     cd repo;
+
+      #     echo "**************************************** - git tag";
+
+      #     git tag;
+
+      #     echo "****************************************";
+
+      #     git push destination --tags --force;
