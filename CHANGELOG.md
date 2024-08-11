@@ -1,3 +1,12 @@
+## 1.0.0-b13 (2024-08-11)
+
+### Fix
+
+- **itam**: Ensure device name is formatted according to RFC1035 2.3.1
+- **itam**: Ensure device UUID is correctly formatted
+- **config_management**: Ensure that config group can't set self as parent
+- **settings**: ensure that the api token cant be saved to notes field
+
 ## 1.0.0-b12 (2024-08-10)
 
 ### Fix
