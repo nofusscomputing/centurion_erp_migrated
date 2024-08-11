@@ -8,15 +8,16 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 <span style="text-align: center;">
 
-![Project Status - Active](https://img.shields.io/badge/Project%20Status-Active-green?logo=gitlab&style=plastic)
+![Project Status - Active](https://img.shields.io/badge/Project%20Status-Active-green?logo=github&style=plastic)
 
-![Gitlab build status - stable](https://img.shields.io/badge/dynamic/json?color=ff782e&label=Stable%20Build&query=0.status&url=https%3A%2F%2Fgitlab.com%2Fapi%2Fv4%2Fprojects%2F57560288%2Fpipelines%3Fref%3Dmaster&logo=gitlab&style=plastic) ![Gitlab build status - development](https://img.shields.io/badge/dynamic/json?color=ff782e&label=Dev%20Build&query=0.status&url=https%3A%2F%2Fgitlab.com%2Fapi%2Fv4%2Fprojects%2F57560288%2Fpipelines%3Fref%3Ddevelopment&logo=gitlab&style=plastic)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nofusscomputing/centurion_erp/ci.yaml?branch=master&style=plastic&logo=github&label=Stable%20Build&color=%23000) ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nofusscomputing/centurion_erp/ci.yaml?branch=development&style=plastic&logo=github&label=Dev%20Build&color=%23000)
 
-![GitLab Issues](https://img.shields.io/gitlab/issues/open/nofusscomputing%2Fprojects%2Fcenturion_erp?style=plastic&logo=gitlab&label=Issues&color=fc6d26) [![GitLab Bugs](https://img.shields.io/gitlab/issues/open/nofusscomputing%2Fprojects%2Fcenturion_erp?labels=type%3A%3Abug&style=plastic&logo=gitlab&label=Bug%20Fixes%20Required&color=fc6d26)](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/issues/?sort=created_date&state=opened&label_name%5B%5D=type%3A%3Abug)
+![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/nofusscomputing/centurion_erp?style=plastic&logo=github&label=Open%20Issues&color=000) ![GitHub Issues or Pull Requests by label](https://img.shields.io/github/issues/nofusscomputing/centurion_erp/type%3A%3Abug?style=plastic&logo=github&label=Bug%20Fixes%20Required&color=000)
 
-![Gitlab Code Coverage](https://img.shields.io/gitlab/pipeline-coverage/nofusscomputing%2Fprojects%2Fcenturion_erp?branch=master&style=plastic&logo=gitlab&label=Test%20Coverage)
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage.json&style=plastic) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_unit_test.json)
 
-![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed)
+
+![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed) [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/centurion-erp)](https://artifacthub.io/packages/container/centurion-erp/centurion-erp)
 
 </span>
 
