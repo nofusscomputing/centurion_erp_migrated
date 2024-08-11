@@ -1,8 +1,10 @@
 import json
+import re
 
 from datetime import timedelta
 
 from django.db import models
+from django.forms import ValidationError
 
 from access.fields import *
 from access.models import TenancyObject
@@ -17,6 +19,8 @@ from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
+
+
 
 class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
@@ -39,6 +43,17 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 class Device(DeviceCommonFieldsName, SaveHistory):
 
+
+    def validate_uuid_format(self):
+
+        pattern = r'[0-9|a-f]{8}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{12}'
+
+        if not re.match(pattern, str(self)):
+
+            raise ValidationError(f'UUID Must be in {str(pattern)}')
+
+
+
     serial_number = models.CharField(
         verbose_name = 'Serial Number',
         max_length = 50,
@@ -58,6 +73,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         blank = True,
         unique = True,
         help_text = 'System GUID/UUID.',
+        validators = [ validate_uuid_format ]
     )
 
     device_model = models.ForeignKey(
