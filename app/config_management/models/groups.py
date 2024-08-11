@@ -195,6 +195,12 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             # Prevent organization change. ToDo: add feature so that config can change organizations
             self.organization = obj.organization
 
+        if self.parent is not None:
+
+            if self.pk == self.parent.pk:
+
+                raise ValidationError('Can not set self as parent')
+
         super().save(*args, **kwargs)
 
 
