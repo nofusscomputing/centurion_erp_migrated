@@ -51,7 +51,8 @@ class TeamAPI(TestCase):
 
         self.item = self.model.objects.create(
             organization=organization,
-            team_name = 'teamone'
+            team_name = 'teamone',
+            model_notes = 'random note'
         )
 
 
@@ -128,6 +129,24 @@ class TeamAPI(TestCase):
         """
 
         assert type(self.api_data['team_name']) is str
+
+
+    def test_api_field_exists_model_notes(self):
+        """ Test for existance of API Field
+
+        model_notes field must exist
+        """
+
+        assert 'model_notes' in self.api_data
+
+
+    def test_api_field_type_model_notes(self):
+        """ Test for type for API Field
+
+        model_notes field must be str
+        """
+
+        assert type(self.api_data['model_notes']) is str
 
 
     def test_api_field_exists_url(self):

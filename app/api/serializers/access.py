@@ -15,6 +15,7 @@ class TeamSerializerBase(serializers.ModelSerializer):
         model = Team
         fields = (
             'team_name',
+            'model_notes',
             'permissions',
             'url',
         )
@@ -75,6 +76,7 @@ class TeamSerializer(TeamSerializerBase):
         fields = (
             "id",
             "team_name",
+            'model_notes',
             'permissions',
             'permissions_url',
             'url',
