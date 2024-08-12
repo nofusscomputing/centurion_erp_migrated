@@ -1,22 +1,21 @@
 ---
 commitizen:
-  # name: cz_conventional_commits
-  name: cz_customize
-  prerelease_offset: 1
-  tag_format: $version
-  update_changelog_on_bump: false
-  version: 1.0.0-b13
-  version_scheme: semver
-  customize: 
-    change_type_order:
-      - "BREAKING CHANGE"
-      - "feat"
-      - "fix"
-      - "test"
-      - "refactor"
+  customize:
     change_type_map:
       feature: Features
       fix: Fixes
       refactor: Refactoring
       test: Tests
-    commit_parser: '^(?P<change_type>feat|fix|test|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?:\s(?P<message>.*)?'
+    change_type_order:
+    - BREAKING CHANGE
+    - feat
+    - fix
+    - test
+    - refactor
+    commit_parser: ^(?P<change_type>feat|fix|test|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?:\s(?P<message>.*)?
+  name: cz_customize
+  prerelease_offset: 1
+  tag_format: $version
+  update_changelog_on_bump: false
+  version: 1.0.0-b14
+  version_scheme: semver
