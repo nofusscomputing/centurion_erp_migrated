@@ -75,6 +75,13 @@ class ChangeView(View, generic.UpdateView):
 
         external_links_query = None
 
+        if 'tab' in self.request.GET:
+
+            context['open_tab'] = str(self.request.GET.get("tab")).lower()
+
+        else:
+             context['open_tab'] = None
+
 
         if self.model._meta.model_name == 'device':
 
