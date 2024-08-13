@@ -1,7 +1,10 @@
 from django import forms
 from django.forms import ValidationError
+from django.urls import reverse
 
 from itim.models.services import Service
+
+from app import settings
 
 from core.forms.common import CommonModelForm
 
@@ -79,3 +82,81 @@ class ServiceForm(CommonModelForm):
 
 
         return cleaned_data
+
+
+
+class DetailForm(ServiceForm):
+
+
+    tabs: dict = {
+        "details": {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'name',
+                        'config_key_variable',
+                        'template',
+                        'organization',
+                        'c_created',
+                        'c_modified'
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                }
+            ]
+        },
+        "rendered_config": {
+            "name": "Rendered Config",
+            "slug": "rendered_config",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config_variables',
+                    ],
+                    "json": [
+                        'config_variables'
+                    ]
+                }
+            ]
+        }
+    }
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+
+        self.fields['config_variables'] = forms.fields.JSONField(
+            widget = forms.Textarea(
+                attrs = {
+                    "cols": "80",
+                    "rows": "100"
+                }
+            ),
+            label = 'Rendered Configuration',
+            initial = self.instance.config_variables,
+        )
+
+        self.fields['c_created'] = forms.DateTimeField(
+            label = 'Created',
+            input_formats=settings.DATETIME_FORMAT,
+            disabled = True,
+            initial = self.instance.created,
+        )
+
+        self.fields['c_modified'] = forms.DateTimeField(
+            label = 'Modified',
+            input_formats=settings.DATETIME_FORMAT,
+            disabled = True,
+            initial = self.instance.modified,
+        )
+
+        self.tabs['details'].update({
+            "edit_url": reverse('ITIM:_service_change', args=(self.instance.pk,))
+        })

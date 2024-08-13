@@ -20,7 +20,7 @@
 
         {% else %}
 
-            <button class="content-navigation-tabs-link" onclick="openContentNavigationTab(event, '{{ tab.slug }}')">{{ tab.name }}</button>
+            <button id="tab-{{ tab.slug }}" class="content-navigation-tabs-link" onclick="openContentNavigationTab(event, '{{ tab.slug }}')">{{ tab.name }}</button>
 
         {% endif %}
 
@@ -29,5 +29,19 @@
 </div>
 
 {% block tabs %}{% endblock %}
+
+{% if open_tab %}
+
+    <script>
+      document.getElementById("tab-{{ open_tab }}").click();
+    </script>
+
+{% else %}
+
+    <script>
+        document.getElementById("defaultOpen").click();
+    </script>
+
+{% endif %}
 
 {% endblock %}
