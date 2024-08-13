@@ -152,10 +152,12 @@ nav:
 
       - projects/centurion_erp/development/models.md
 
+      - projects/centurion_erp/development/templates.md
+
       - projects/centurion_erp/development/testing.md
 
       - projects/centurion_erp/development/views.md
-    
+
     - User:
 
       - projects/centurion_erp/user/index.md

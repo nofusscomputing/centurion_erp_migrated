@@ -1,0 +1,72 @@
+{% load json %}
+{% load markdown %}
+
+{% if field.widget_type == 'textarea' or field.label == 'Notes' %}
+
+    {% if field.name in section.json and field.value %}
+
+    <pre style="width: 80%; text-align: left; display:inline; border: 1px solid #ccc; padding: 22px;">{{ field.value.strip | json_pretty | safe }}</pre>
+
+    {% elif field.name in section.markdown or field.label == 'Notes' %}
+
+        {% if field.label == 'Notes' %}
+
+            <div>
+                <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">
+                {{ field.label }}
+                </label>
+
+                <div style="display: inline-block; text-align: left;">
+                    {% if field.value %}
+                    {{ field.value | markdown | safe }}
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </div>
+            </div>
+
+        {% else %}
+
+            {% if field.value %}
+
+                {{ field.value | markdown | safe }}
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
+
+        {% endif %}
+
+    {% elif not field.value %}
+
+        &nbsp;
+
+    {% endif %}
+
+
+{% else %}
+
+
+    <div class="detail-view-field">
+        <label>{{ field.label }}</label>
+        <span>
+        {% if field.field.choices %} {# Display the selected choice text value #}
+            {% for id, value in field.field.choices %}
+
+                {% if field.value == id %}
+
+                    {{ value }}
+
+                {% endif %}
+
+            {%endfor%}
+
+        {% else %}
+            {{ field.value }}
+        {% endif %}
+        </span>
+    </div>
+
+{% endif %}
