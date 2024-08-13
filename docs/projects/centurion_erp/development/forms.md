@@ -51,6 +51,18 @@ All forms must meet the following requirements:
 
     ```
 
+## Details Form
+
+A details form is for the display of a models data. This form should inherit from a base form and contain any additional fields as is required for the display of the models data. Additional requirements are as follows:
+
+- `tab` is defined as a `dict` within the class. _See [Template](./templates.md#detail)._
+
+- There is an `__init__` class defined that sets up the additional fields.
+
+    !!! danger "Requirement"
+        Ensure that there is a call to the super-class `__init__` method so that the form is correctly initialised. i.e. `super().__init__(*args, **kwargs)`
+
+
 
 ## Abstract Classes
 
