@@ -160,3 +160,6 @@ class DetailForm(ServiceForm):
         self.tabs['details'].update({
             "edit_url": reverse('ITIM:_service_change', args=(self.instance.pk,))
         })
+
+        self.url_index_view = reverse('ITAM:Services')
+
