@@ -104,7 +104,5 @@ class DetailForm(DeviceForm):
             "edit_url": reverse('ITAM:_device_change', args=(self.instance.pk,))
         })
 
-        # self.model_name_plural = self.instance._meta.verbose_name_plural
-
         self.url_index_view = reverse('ITAM:Devices')
 
