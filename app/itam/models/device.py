@@ -43,6 +43,12 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 class Device(DeviceCommonFieldsName, SaveHistory):
 
+    class Meta:
+
+        abstract = False
+
+        verbose_name_plural = 'Devices'
+
 
     reserved_config_keys: list = [
         'software'

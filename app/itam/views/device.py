@@ -21,7 +21,7 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.forms.device_softwareadd import SoftwareAdd
 from itam.forms.device_softwareupdate import SoftwareUpdate
-from itam.forms.device.device import DeviceForm
+from itam.forms.device.device import DetailForm, DeviceForm
 from itam.forms.device.operating_system import Update as OperatingSystemForm
 
 from itim.models.services import Service
@@ -79,7 +79,7 @@ class View(ChangeView):
 
     template_name = 'itam/device.html.j2'
 
-    form_class = DeviceForm
+    form_class = DetailForm
 
     context_object_name = "device"
 
