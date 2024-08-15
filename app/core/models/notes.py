@@ -46,6 +46,9 @@ class Notes(NotesCommonFields):
             '-created'
         ]
 
+        verbose_name_plural = 'Notes'
+
+
 
     note = models.TextField(
         verbose_name = 'Note',
