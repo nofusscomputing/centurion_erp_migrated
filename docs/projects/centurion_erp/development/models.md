@@ -38,6 +38,10 @@ All models must meet the following requirements:
     !!! danger "Requirement"
         Multi-field validation, or validation that requires access to multiple fields must be done within the [form class](./forms.md#requirements).
 
+- contains a `Meta` sub-class with following parameters:
+
+    - `verbose_name_plural`
+
 
 ## History
 

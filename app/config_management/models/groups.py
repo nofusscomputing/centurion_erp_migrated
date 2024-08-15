@@ -35,6 +35,12 @@ class GroupsCommonFields(TenancyObject, models.Model):
 
 class ConfigGroups(GroupsCommonFields, SaveHistory):
 
+
+    class Meta:
+
+        verbose_name_plural = 'Config Groups'
+
+
     reserved_config_keys: list = [
         'software'
     ]
@@ -263,6 +269,8 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
             '-action',
             'software'
         ]
+
+        verbose_name_plural = 'Config Group Softwares'
 
 
     config_group = models.ForeignKey(
