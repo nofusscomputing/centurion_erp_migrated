@@ -98,3 +98,7 @@ class CommonModelForm(forms.ModelForm):
                       |
                     Q(manager=user)
                 )
+
+        if hasattr(self, 'instance'):
+
+            self.model_name_plural = self.instance._meta.verbose_name_plural
