@@ -57,7 +57,7 @@ class Change(ChangeView):
     model = Software
 
     permission_required = [
-        'itam.change_device',
+        'itam.change_software',
     ]
 
     template_name = 'form.html.j2'
