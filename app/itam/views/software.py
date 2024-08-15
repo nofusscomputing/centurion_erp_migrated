@@ -9,7 +9,7 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
-from itam.forms.software.update import SoftwareForm, SoftwareFormUpdate
+from itam.forms.software.update import DetailForm, SoftwareForm, SoftwareChange
 
 from settings.models.user_settings import UserSettings
 
@@ -51,11 +51,39 @@ class IndexView(IndexView):
 
 
 
+
+class Change(ChangeView):
+
+    model = Software
+
+    permission_required = [
+        'itam.change_device',
+    ]
+
+    template_name = 'form.html.j2'
+
+    form_class = SoftwareChange
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('ITAM:_software_view', args=(self.kwargs['pk'],))
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Edit ' + self.object.name
+
+        return context
+
+
+
 class View(ChangeView):
 
     context_object_name = "software"
 
-    form_class = SoftwareFormUpdate
+    form_class = DetailForm
 
     model = Software
 
