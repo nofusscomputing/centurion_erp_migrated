@@ -25,6 +25,11 @@ from settings.models.app_settings import AppSettings
 class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 
+    class Meta:
+
+        verbose_name_plural = 'Device Types'
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
@@ -43,9 +48,8 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 class Device(DeviceCommonFieldsName, SaveHistory):
 
-    class Meta:
 
-        abstract = False
+    class Meta:
 
         verbose_name_plural = 'Devices'
 
@@ -314,6 +318,9 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             'software'
         ]
 
+        verbose_name_plural = 'Device Softwares'
+
+
 
     class Actions(models.TextChoices):
         INSTALL = '1', 'Install'
@@ -388,6 +395,12 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Device Operating Systems'
+
 
     device = models.ForeignKey(
         Device,
