@@ -101,11 +101,6 @@ class DetailForm(SoftwareForm):
             initial = self.instance.organization
         )
 
-
-        if not self.instance.is_global:
-
-            self.fields['is_global'].widget.attrs['disabled'] = True
-
         self.fields['c_created'] = forms.DateTimeField(
             label = 'Created',
             input_formats=settings.DATETIME_FORMAT,
