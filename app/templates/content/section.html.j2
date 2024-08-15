@@ -1,6 +1,12 @@
 {% load json %}
 {% load markdown %}
 
+{% if not tab.sections %}
+
+<h3>{{ tab.name }}</h3>
+
+{% endif %}
+
 {% for section in tab.sections %}
 
 
