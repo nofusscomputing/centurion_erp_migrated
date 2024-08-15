@@ -26,7 +26,7 @@ class SoftwarePermissions(TestCase, ModelPermissions):
 
     url_name_add = '_software_add'
 
-    url_name_change = '_software_view'
+    url_name_change = '_software_change'
 
     url_name_delete = '_software_delete'
 
