@@ -161,5 +161,5 @@ class DetailForm(ServiceForm):
             "edit_url": reverse('ITIM:_service_change', args=(self.instance.pk,))
         })
 
-        self.url_index_view = reverse('ITAM:Services')
+        self.url_index_view = reverse('ITIM:Services')
 

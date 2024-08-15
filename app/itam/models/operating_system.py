@@ -42,6 +42,12 @@ class OperatingSystemFieldsName(OperatingSystemCommonFields):
 
 class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
+
+    class Meta:
+
+        verbose_name_plural = 'Operating Systems'
+
+
     publisher = models.ForeignKey(
         Manufacturer,
         on_delete=models.CASCADE,
@@ -56,6 +62,12 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
 
 class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Operating System Versions'
+
 
     operating_system = models.ForeignKey(
         OperatingSystem,

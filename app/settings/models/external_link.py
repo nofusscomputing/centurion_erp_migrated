@@ -7,6 +7,12 @@ from access.models import TenancyObject
 
 class ExternalLink(TenancyObject):
 
+
+    class Meta:
+
+        verbose_name_plural = 'External Links'
+
+
     id = models.AutoField(
         primary_key=True,
         unique=True,
