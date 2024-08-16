@@ -51,6 +51,7 @@ urlpatterns = [
     path("manufacturers", manufacturer.Index.as_view(), name="_manufacturers"),
     path("manufacturer/<int:pk>", manufacturer.View.as_view(), name="_manufacturer_view"),
     path("manufacturer/add/", manufacturer.Add.as_view(), name="_manufacturer_add"),
+    path("manufacturer/<int:pk>/edit", manufacturer.Change.as_view(), name="_manufacturer_change"),
     path("manufacturer/<int:pk>/delete", manufacturer.Delete.as_view(), name="_manufacturer_delete"),
 
     path("ports", ports.Index.as_view(), name="_ports"),
