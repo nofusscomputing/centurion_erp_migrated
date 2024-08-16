@@ -13,7 +13,7 @@ from itam.models.device import Device
 from settings.models.user_settings import UserSettings
 
 from config_management.forms.group_hosts import ConfigGroupHostsForm
-from config_management.forms.group.group import ConfigGroupForm
+from config_management.forms.group.group import ConfigGroupForm, DetailForm
 from config_management.models.groups import ConfigGroups, ConfigGroupHosts, ConfigGroupSoftware
 
 
@@ -102,7 +102,7 @@ class GroupAdd(AddView):
 
 
 
-class GroupView(ChangeView):
+class GroupChange(ChangeView):
 
     context_object_name = "group"
 
@@ -111,8 +111,37 @@ class GroupView(ChangeView):
     model = ConfigGroups
 
     permission_required = [
-        'config_management.view_configgroups',
         'config_management.change_configgroups',
+    ]
+
+    template_name = 'form.html.j2'
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = self.object.name
+
+        return context
+
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Config Management:_group_view', args=(self.kwargs['pk'],))
+
+
+
+class GroupView(ChangeView):
+
+    context_object_name = "group"
+
+    form_class = DetailForm
+
+    model = ConfigGroups
+
+    permission_required = [
+        'config_management.view_configgroups',
     ]
 
     template_name = 'config_management/group.html.j2'
