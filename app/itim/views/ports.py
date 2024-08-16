@@ -6,7 +6,7 @@ from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
-from itim.forms.ports import PortForm
+from itim.forms.ports import DetailForm, PortForm
 from itim.models.services import Port, Service
 
 from settings.models.user_settings import UserSettings
@@ -138,7 +138,7 @@ class View(ChangeView):
 
     context_object_name = "item"
 
-    form_class = PortForm
+    form_class = DetailForm
 
     model = Port
 
