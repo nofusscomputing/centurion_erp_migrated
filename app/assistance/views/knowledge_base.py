@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 
 from access.models import TeamUsers
 
-from assistance.forms.knowledge_base import KnowledgeBaseForm
+from assistance.forms.knowledge_base import DetailForm, KnowledgeBaseForm
 from assistance.models.knowledge_base import KnowledgeBase
 
 from core.forms.comment import AddNoteForm
@@ -139,7 +139,7 @@ class View(ChangeView):
 
     context_object_name = "kb"
 
-    form_class = KnowledgeBaseForm
+    form_class = DetailForm
 
     model = KnowledgeBase
 
@@ -168,7 +168,7 @@ class View(ChangeView):
         return context
 
 
-    @method_decorator(auth_decorator.permission_required("assistance.change_knowledgebase", raise_exception=True))
+    # @method_decorator(auth_decorator.permission_required("assistance.change_knowledgebase", raise_exception=True))
     def post(self, request, *args, **kwargs):
 
         item = KnowledgeBase.objects.get(pk=self.kwargs['pk'])
