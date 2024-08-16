@@ -37,6 +37,7 @@ urlpatterns = [
     path("device_type/<int:pk>", device_type.View.as_view(), name="_device_type_view"),
     path("device_type/add/", device_type.Add.as_view(), name="_device_type_add"),
     path("device_type/<int:pk>/delete", device_type.Delete.as_view(), name="_device_type_delete"),
+    path("device_type/<int:pk>/edit", device_type.Change.as_view(), name="_device_type_change"),
 
     path("kb/category", knowledge_base_category.Index.as_view(), name="KB Categories"),
     path("kb/category/add", knowledge_base_category.Add.as_view(), name="_knowledge_base_category_add"),
