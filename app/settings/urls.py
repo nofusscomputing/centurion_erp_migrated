@@ -46,6 +46,7 @@ urlpatterns = [
     path("software_category", software_categories.Index.as_view(), name="_software_categories"),
     path("software_category/<int:pk>", software_category.View.as_view(), name="_software_category_view"),
     path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),
+    path("software_category/<int:pk>/edit", software_category.Change.as_view(), name="_software_category_change"),
     path("software_category/<int:pk>/delete", software_category.Delete.as_view(), name="_software_category_delete"),
 
     path("manufacturers", manufacturer.Index.as_view(), name="_manufacturers"),
