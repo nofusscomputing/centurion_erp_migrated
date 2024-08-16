@@ -29,6 +29,7 @@ urlpatterns = [
 
     path("device_models", device_models.Index.as_view(), name="_device_models"),
     path("device_model/<int:pk>", device_model.View.as_view(), name="_device_model_view"),
+    path("device_model/<int:pk>/edit", device_model.Change.as_view(), name="_device_model_change"),
     path("device_model/add/", device_model.Add.as_view(), name="_device_model_add"),
     path("device_model/<int:pk>/delete", device_model.Delete.as_view(), name="_device_model_delete"),
 

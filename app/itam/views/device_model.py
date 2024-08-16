@@ -2,7 +2,7 @@ from django.contrib.auth import decorators as auth_decorator
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
-from itam.forms.device_model import DeviceModelForm
+from itam.forms.device_model import DetailForm, DeviceModelForm
 from itam.models.device_models import DeviceModel
 
 from core.views.common import AddView, ChangeView, DeleteView
@@ -11,7 +11,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class View(ChangeView):
+class Change(ChangeView):
 
     form_class = DeviceModelForm
 
@@ -20,11 +20,38 @@ class View(ChangeView):
     model = DeviceModel
 
     permission_required = [
-        'itam.view_devicemodel',
         'itam.change_devicemodel',
     ]
 
     template_name = 'form.html.j2'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = self.object.name
+
+        return context
+
+    def get_success_url(self, **kwargs):
+
+        return reverse('Settings:_device_model_view', args=(self.kwargs['pk'],))
+
+
+
+class View(ChangeView):
+
+    form_class = DetailForm
+
+    context_object_name = "device_model"
+
+    model = DeviceModel
+
+    permission_required = [
+        'itam.view_devicemodel',
+    ]
+
+    template_name = 'itam/device_model.html.j2'
 
 
     def get_context_data(self, **kwargs):
