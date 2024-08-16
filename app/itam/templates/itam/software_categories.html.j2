@@ -1,0 +1,150 @@
+{% extends 'detail.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+<form action="" method="post">
+  {% csrf_token %}
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+
+<div id="versions" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.versions %}
+
+    <input type="button" value="New Software Version" onclick="window.location='{% url 'ITAM:_software_version_add' pk=software.id %}';">
+
+    <table>
+        <thead>
+            <th>Version</th>
+            <th>Installations</th>
+            <th>Vulnerable</th>
+            <th>&nbsp;</th>
+        </thead>
+        {% for version in software_versions %}
+        <tr>
+            <td><a href="{% url 'ITAM:_software_version_view' software_id=software.id pk=version.id %}">{{ version.name }}</a></td>
+            <td>{{ version.installs }}</td>
+            <td>{% include 'icons/issue_link.html.j2' with issue=3 %}</td>
+            <td>&nbsp;</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+
+<div id="licences" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.licences %}
+
+    {% include 'icons/issue_link.html.j2' with issue=4 %}
+
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Available</th>
+            <th>&nbsp;</th>
+        </thead>
+        <tr>
+            <td>GPL-3</td>
+            <td>Open Source</td>
+            <td>1 / 5</td>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>MIT</td>
+            <td>Open Source</td>
+            <td>Unlimited</td>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>Windows Device</td>
+            <td>CAL</td>
+            <td>11 / 15</td>
+            <th>&nbsp;</th>
+        </tr>
+    </table>
+
+</div>
+
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+</div>
+
+
+<div id="installations" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.installations %}
+
+    <table>
+        <thead>
+            <th>Device</th>
+            <th>Organization</th>
+            <th title="Not Set/Install/Remove">Action</th>
+            <th>Installed Version</th>
+            <th title="Date Software Installed">Install Date</th>
+            <th>&nbsp;</th>
+        </thead>
+        {% if device_software %}
+        {% for device in device_software %}
+        <tr>
+            <td><a href="{% url 'ITAM:_device_view' pk=device.device.id %}">{{ device.device }}</a></td>
+            <td>{{ device.organization }}</td>
+            <td>
+            {% if device.get_action_display == 'Install' %}
+              {% include 'icons/success_text.html.j2' with icon_text=device.get_action_display %}
+            {% elif device.get_action_display == 'Remove'%}
+              {% include 'icons/cross_text.html.j2' with icon_text=device.get_action_display %}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+            <td>
+            {% if device.installedversion %}
+              {{ device.installedversion }}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+            <td>
+              {% if device.installed %}
+                {{ device.installed }}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="6">Nothing Found</td>
+        </tr>
+        {% endif %}
+    </table>
+
+</div>
+
+</form>
+{% endblock %}
