@@ -27,7 +27,7 @@ class OperatingSystemPermissions(TestCase, ModelPermissions):
 
     url_name_add = '_operating_system_add'
 
-    url_name_change = '_operating_system_view'
+    url_name_change = '_operating_system_change'
 
     url_name_delete = '_operating_system_delete'
 
