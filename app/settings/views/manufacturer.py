@@ -6,7 +6,7 @@ from django.views import generic
 
 from access.mixin import OrganizationPermission
 
-from core.forms.manufacturer import ManufacturerForm
+from core.forms.manufacturer import DetailForm, ManufacturerForm
 from core.models.manufacturer import Manufacturer
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
@@ -37,7 +37,7 @@ class Index(IndexView):
 
 
 
-class View(ChangeView):
+class Change(ChangeView):
 
     context_object_name = "manufacturer"
 
@@ -46,11 +46,44 @@ class View(ChangeView):
     model = Manufacturer
 
     permission_required = [
-        'core.view_manufacturer',
         'core.change_manufacturer',
     ]
 
     template_name = 'form.html.j2'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = self.object.name
+
+        return context
+
+    def get_success_url(self, **kwargs):
+
+        return f"/settings/manufacturer/{self.kwargs['pk']}"
+
+
+    @method_decorator(auth_decorator.permission_required("core.change_manufacturer", raise_exception=True))
+    def post(self, request, *args, **kwargs):
+
+        return super().post(request, *args, **kwargs)
+
+
+
+class View(ChangeView):
+
+    context_object_name = "manufacturer"
+
+    form_class = DetailForm
+
+    model = Manufacturer
+
+    permission_required = [
+        'core.view_manufacturer',
+    ]
+
+    template_name = 'core/manufacturer.html.j2'
 
 
     def get_context_data(self, **kwargs):
@@ -68,12 +101,6 @@ class View(ChangeView):
     def get_success_url(self, **kwargs):
 
         return f"/settings/manufacturer/{self.kwargs['pk']}"
-
-
-    @method_decorator(auth_decorator.permission_required("core.change_manufacturer", raise_exception=True))
-    def post(self, request, *args, **kwargs):
-
-        return super().post(request, *args, **kwargs)
 
 
 
