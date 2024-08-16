@@ -27,7 +27,7 @@ class ConfigGroupPermissions(TestCase, ModelPermissions):
 
     url_name_add = '_group_add'
 
-    url_name_change = '_group_view'
+    url_name_change = '_group_change'
 
     url_name_delete = '_group_delete'
 

@@ -14,27 +14,21 @@
 </div>
 
 
-
-{% if perms.assistance.change_knowledgebase %}
 <div id="notes" class="content-tab">
 
     {% include 'content/section.html.j2' with tab=form.tabs.notes %}
 
     {{ notes_form }}
-
     <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
-
     <div class="comments">
-        {% if notes %}
-        {% for note in notes%}
-        {% include 'note.html.j2' %}
-        {% endfor %}
-        {% endif %}
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
     </div>
 
 </div>
-{% endif %}
 
 </form>
 {% endblock %}
-

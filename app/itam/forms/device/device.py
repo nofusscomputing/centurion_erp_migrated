@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models import Q
 from django.urls import reverse
 
 from app import settings
@@ -105,4 +104,3 @@ class DetailForm(DeviceForm):
         })
 
         self.url_index_view = reverse('ITAM:Devices')
-
