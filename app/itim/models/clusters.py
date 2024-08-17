@@ -75,10 +75,10 @@ class Cluster(TenancyObject):
         ClusterType,
         blank = True,
         default = None,
-        help_text = 'Parent Cluster for this cluster',
+        help_text = 'Type of Cluster',
         null = True,
         on_delete = models.CASCADE,
-        verbose_name = 'Parent Cluster',
+        verbose_name = 'Cluster Type',
     )
 
     name = models.CharField(
@@ -99,7 +99,7 @@ class Cluster(TenancyObject):
         verbose_name = 'Configuration',
     )
 
-    node = models.ManyToManyField(
+    nodes = models.ManyToManyField(
         Device,
         blank = True,
         default = None,
@@ -116,6 +116,10 @@ class Cluster(TenancyObject):
         related_name = 'cluster_device',
         verbose_name = 'Devices',
     )
+
+    created = AutoCreatedField()
+
+    modified = AutoLastModifiedField()
 
 
     def __str__(self):
