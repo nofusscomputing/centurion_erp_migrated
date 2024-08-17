@@ -9,6 +9,27 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 This section of the documentation contains the details related to the templates used within Centurion ERP for rendering data for the end user to view.
 
 
+## Template Tags
+
+Within Centurion ERP, the following custom template tags exist:
+
+- `choice_ids`
+
+    _if the field is a choice field, you can convert the string value `[ <id>, <id> ]` to a usable list within the template_
+
+- `json`
+
+    _Renders the value in json format_
+
+- `markdown`
+
+    _renders the value as markdown_
+
+- `settings_value`
+
+    _fetches a value from `app/settings.py`_
+
+
 ## Templates
 
 - Base
@@ -16,7 +37,7 @@ This section of the documentation contains the details related to the templates 
 - Detail
 
 
-## Base
+### Base
 
 The base template is common to all templates and is responsible for the rendering of the common layout. Each subsequent template includes this template. This enables **ALL** pages within the site to share the same layout.
 
@@ -50,7 +71,7 @@ This view contains the following areas:
     This template should not be included directly as it is incomplete and requires subsequent templates to populate the contents of the orange area.
 
 
-## Detail
+### Detail
 
 This template is intended to be used to render the details of a single model. The layout of the detail view is as follows:
 
@@ -85,7 +106,7 @@ Base definition for defining a detail page is as follows:
     Need to navigate directly to a tab, add `tab=<slug>` to the url query string
 
 
-### Providing data for the view
+#### Providing data for the view
 
 For the view to render the page, you must define the data as part of the form class.
 
@@ -94,7 +115,7 @@ For the view to render the page, you must define the data as part of the form cl
  The variable name to use is `tabs` The layout/schema is as follows:
 
 
-#### Full Example
+##### Full Example
 
 This example is a full example with two tabs: `details` and `rendered_config`
 
