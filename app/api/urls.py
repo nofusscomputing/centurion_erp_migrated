@@ -5,6 +5,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from .views import access, config, index
 
+from api.views.settings import permissions
+from api.views.settings import index as settings
+
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
@@ -35,6 +38,9 @@ urlpatterns = [
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/", access.TeamDetail.as_view(), name='_api_team'),
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/permissions", access.TeamPermissionDetail.as_view(), name='_api_team_permission'),
     path("organization/team/", access.TeamList.as_view(), name='_api_teams'),
+
+    path("settings", settings.View.as_view(), name='_settings'),
+    path("settings/permissions", permissions.View.as_view(), name='_settings_permissions'),
 
 ]
 
