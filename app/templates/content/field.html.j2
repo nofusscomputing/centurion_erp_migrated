@@ -1,5 +1,6 @@
 {% load json %}
 {% load markdown %}
+{% load choice_ids %}
 
 {% if field.widget_type == 'textarea' or field.label == 'Notes' %}
 
@@ -53,18 +54,41 @@
         <label>{{ field.label }}</label>
         <span>
         {% if field.field.choices %} {# Display the selected choice text value #}
-            {% for id, value in field.field.choices %}
 
-                {% if field.value == id %}
+            {% if field.value %}
+            
+                {% for field_value in field.value|choice_ids %}
 
-                    {{ value }}
+                    {% for id, value in field.field.choices %}
 
-                {% endif %}
+                        {% if field_value == id %}
 
-            {%endfor%}
+                            {{ value }},
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endfor %}
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
 
         {% else %}
-            {{ field.value }}
+
+            {% if field.value is not None %}
+            
+                {{ field.value }}
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
+
         {% endif %}
         </span>
     </div>
