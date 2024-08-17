@@ -152,6 +152,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         blank = True,
     )
 
+    is_virtual = models.BooleanField(
+        blank = True,
+        default = False,
+        help_text = 'Is this device a virtual machine',
+        null = False,
+        verbose_name = 'Is Virtual',
+    )
+
+
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):
