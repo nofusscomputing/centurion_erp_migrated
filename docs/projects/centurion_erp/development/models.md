@@ -42,6 +42,8 @@ All models must meet the following requirements:
 
     - `verbose_name_plural`
 
+- If creating a new model, function `access.functions.permissions.permission_queryset()` has been updated to display the models permission(s)
+
 
 ## History
 
