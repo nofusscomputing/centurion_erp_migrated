@@ -22,6 +22,7 @@ class DeviceForm(CommonModelForm):
             'uuid',
             'device_type',
             'organization',
+            'is_virtual',
             'model_notes',
             'config',
         ]
@@ -50,6 +51,7 @@ class DetailForm(DeviceForm):
                     ],
                     "right": [
                         'model_notes',
+                        'is_virtual',
                     ]
                 }
             ]
