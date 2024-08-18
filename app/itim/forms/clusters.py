@@ -42,9 +42,11 @@ class ClusterForm(CommonModelForm):
 
         parent_cluster = cleaned_data.get("parent_cluster")
 
-        if parent_cluster == pk:
+        if pk:
 
-             raise ValidationError("Cluster can't have itself as its parent cluster")
+            if parent_cluster == pk:
+
+                raise ValidationError("Cluster can't have itself as its parent cluster")
 
         return cleaned_data
 
