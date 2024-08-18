@@ -12,7 +12,12 @@
 
     {% if forloop.first %}
 
-        <h3>{{ tab.name }}</h3>
+        <h3>
+            {{ tab.name }}
+        {% for external_link in external_links %}
+            <span style="font-weight: normal; float: right;">{% include 'icons/external_link.html.j2' with external_link=external_link %}</span>
+        {% endfor %}
+        </h3>
 
     {% else %}
 
