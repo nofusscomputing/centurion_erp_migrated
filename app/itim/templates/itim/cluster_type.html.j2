@@ -1,0 +1,22 @@
+{% extends 'detail.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
+</div>
+
+{% endblock %}
