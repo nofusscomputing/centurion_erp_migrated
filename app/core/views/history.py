@@ -47,6 +47,12 @@ class View(OrganizationPermission, generic.View):
 
             match self.kwargs['model_name']:
 
+                case 'cluster':
+
+                    from itim.models.clusters import Cluster
+
+                    self.model = Cluster
+
                 case 'configgroups':
 
                     self.model = ConfigGroups
