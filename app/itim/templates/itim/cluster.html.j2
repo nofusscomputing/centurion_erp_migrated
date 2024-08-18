@@ -63,6 +63,33 @@
     </div>
 
     <div style="display: block; width: 100%;">
+
+        <h3>Services</h3>
+
+        {% include 'icons/issue_link.html.j2' with issue=125 %}
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Ports</th>
+            </tr>
+            {% if item.services.all %}
+            {% for device in item.devices.all %}
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
+
+    <div style="display: block; width: 100%;">
         <h3>Config</h3>
         <pre>{{ item.config | json_pretty }}</pre>
     </div>
