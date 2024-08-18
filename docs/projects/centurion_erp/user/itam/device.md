@@ -27,6 +27,8 @@ For each device within your inventory, the following fields/tabs are available t
 
 - [Change History](../index.md#history)
 
+- Virtual Status
+
 
 ### Status at a glance
 
