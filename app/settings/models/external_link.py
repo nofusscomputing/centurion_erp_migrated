@@ -47,6 +47,13 @@ class ExternalLink(TenancyObject):
         verbose_name = 'Button Colour',
     )
 
+    cluster = models.BooleanField(
+        default = False,
+        blank = False,
+        help_text = 'Render link for clusters',
+        verbose_name = 'Clusters',
+    )
+
     devices = models.BooleanField(
         default = False,
         blank = False,

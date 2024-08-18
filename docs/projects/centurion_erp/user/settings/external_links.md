@@ -11,8 +11,10 @@ External Links allow an end user to specify by means of a jinja template a link 
 
 ## Create a link
 
-- Software context is under key `software`
+- Cluster context is under key `cluster`
 
 - Device context is under key `device`
+
+- Software context is under key `software`
 
 To add a templated link within the `Link Template` field enter your url, with the variable within jinja braces. for example to add a link that will expand with the devices id, specify `{{ device.id }}`. i.e. `https://domainname.tld/{{ device.id }}`. If the link is for software use key `software`. Available fields under context key all of those that are available at the time the page is rendered.
