@@ -29,8 +29,8 @@ class Migration(migrations.Migration):
                 ('organization', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='access.organization', validators=[access.models.TenancyObject.validatate_organization_exists])),
             ],
             options={
-                'verbose_name': 'ClusterType',
-                'verbose_name_plural': 'ClusterTypes',
+                'verbose_name': 'Cluster Type',
+                'verbose_name_plural': 'Cluster Types',
                 'ordering': ['name'],
             },
         ),
