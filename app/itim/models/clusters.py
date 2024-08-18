@@ -18,9 +18,9 @@ class ClusterType(TenancyObject):
             'name',
         ]
 
-        verbose_name = "ClusterType"
+        verbose_name = "Cluster Type"
 
-        verbose_name_plural = "ClusterTypes"
+        verbose_name_plural = "Cluster Types"
 
 
     id = models.AutoField(
@@ -38,6 +38,15 @@ class ClusterType(TenancyObject):
     )
 
     slug = AutoSlugField()
+
+    created = AutoCreatedField()
+
+    modified = AutoLastModifiedField()
+
+
+    def __str__(self):
+
+        return self.name
 
 
 

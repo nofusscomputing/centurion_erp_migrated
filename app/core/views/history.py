@@ -53,6 +53,12 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = Cluster
 
+                case 'clustertype':
+
+                    from itim.models.clusters import ClusterType
+
+                    self.model = ClusterType
+
                 case 'configgroups':
 
                     self.model = ConfigGroups
