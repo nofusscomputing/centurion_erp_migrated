@@ -21,8 +21,8 @@
                 <th>Name</th>
                 <th>Organization</th>
             </tr>
-            {% if item.nodes.all %}
-            {% for node in item.nodes.all %}
+            {% if cluster.nodes.all %}
+            {% for node in cluster.nodes.all %}
             <tr>
                 <td><a href="{% url 'ITAM:_device_view' node.pk %}">{{ node }}</a></td>
                 <td>{{ node.organization }}</td>
@@ -46,8 +46,8 @@
                 <th>Name</th>
                 <th>Organization</th>
             </tr>
-            {% if item.devices.all %}
-            {% for device in item.devices.all %}
+            {% if cluster.devices.all %}
+            {% for device in cluster.devices.all %}
             <tr>
                 <td><a href="{% url 'ITAM:_device_view' device.pk %}">{{ device }}</a></td>
                 <td>{{ device.organization }}</td>
@@ -73,8 +73,8 @@
                 <th>Name</th>
                 <th>Ports</th>
             </tr>
-            {% if item.services.all %}
-            {% for device in item.devices.all %}
+            {% if cluster.services.all %}
+            {% for device in cluster.devices.all %}
             <tr>
                 <td></td>
                 <td></td>
@@ -91,7 +91,7 @@
 
     <div style="display: block; width: 100%;">
         <h3>Config</h3>
-        <pre>{{ item.config | json_pretty }}</pre>
+        <pre>{{ cluster.config | json_pretty }}</pre>
     </div>
 
 </div>

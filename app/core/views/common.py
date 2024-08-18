@@ -83,7 +83,11 @@ class ChangeView(View, generic.UpdateView):
              context['open_tab'] = None
 
 
-        if self.model._meta.model_name == 'device':
+        if self.model._meta.model_name == 'cluster':
+
+            external_links_query = ExternalLink.objects.filter(cluster=True)
+
+        elif self.model._meta.model_name == 'device':
 
             external_links_query = ExternalLink.objects.filter(devices=True)
 
