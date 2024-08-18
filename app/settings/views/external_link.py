@@ -9,7 +9,7 @@ from access.mixin import OrganizationPermission
 
 from core.views.common import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
-from settings.forms.external_links import ExternalLinksForm
+from settings.forms.external_links import DetailForm, ExternalLinksForm
 from settings.models.external_link import ExternalLink
 
 
@@ -44,7 +44,7 @@ class View(ChangeView):
 
     context_object_name = "externallink"
 
-    form_class = ExternalLinksForm
+    form_class = DetailForm
 
     model = ExternalLink
 

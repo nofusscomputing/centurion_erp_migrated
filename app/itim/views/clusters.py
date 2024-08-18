@@ -134,7 +134,7 @@ class Index(IndexView):
 
 class View(ChangeView):
 
-    context_object_name = "item"
+    context_object_name = "cluster"
 
     form_class = DetailForm
 
