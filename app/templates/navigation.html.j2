@@ -45,7 +45,9 @@ span.navigation_icon {
     {% for group_urls in group.urls %}
     <li{% if group_urls.is_active %} class="active"{% endif %} style="padding-left: 40px">
     <span class="navigation_icon">
-    {% if group_urls.name == 'Devices' %}
+    {% if group_urls.name == 'Clusters' %}
+        {% include 'icons/clusters.svg' %}
+    {% elif group_urls.name == 'Devices' %}
         {% include 'icons/devices.svg' %}
     {% elif group_urls.name == 'Knowledge Base' %}
         {% include 'icons/information.svg' %}
