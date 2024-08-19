@@ -148,11 +148,13 @@ class Cluster(TenancyObject):
 
         rendered_config: dict = {}
 
-        if self.cluster_type.config:
+        if self.cluster_type:
 
-            rendered_config.update(
-                self.cluster_type.config
-            )
+            if self.cluster_type.config:
+
+                rendered_config.update(
+                    self.cluster_type.config
+                )
 
 
         for service in Service.objects.filter(cluster = self.pk):
