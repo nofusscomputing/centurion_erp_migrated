@@ -39,6 +39,16 @@ class ClusterType(TenancyObject):
 
     slug = AutoSlugField()
 
+
+    config = models.JSONField(
+        blank = True,
+        default = None,
+        help_text = 'Cluster Type Configuration that is applied to all clusters of this type',
+        null = True,
+        verbose_name = 'Configuration',
+    )
+
+
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
@@ -129,6 +139,28 @@ class Cluster(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    @property
+    def rendered_config(self):
+
+        rendered_config: dict = {}
+
+        if self.cluster_type.config:
+
+            rendered_config.update(
+                self.cluster_type.config
+            )
+
+        if self.config:
+
+            rendered_config.update(
+                self.config
+            )
+
+
+
+        return rendered_config
 
 
     def __str__(self):

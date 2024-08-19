@@ -47,6 +47,16 @@ class DetailForm(ClusterTypeForm):
                         'model_notes',
                     ]
                 },
+                {
+                    "layout": "single",
+                    "name": "Configuration",
+                    "fields": [
+                        'config'
+                    ],
+                    "json": [
+                        'config',
+                    ]
+                }
             ]
         },
         "notes": {

@@ -10,3 +10,21 @@ This component as part of ITIM is for the classification of a [cluster](./cluste
 
 !!! info
     This feature is ready for further features if desired. i.e. `Cluster Type` configuration. want to see this log a feature request on github.
+
+
+## Cluster Type
+
+Within the Cluster Type the following fields are available:
+
+- `Name` _name of the cluster type_
+
+- `Organization` _organization the cluster belongs to_
+
+- `Notes` _model notes for cluster type_
+
+- `configuration` _cluster type config_
+
+
+## Configuration
+
+Configuration can be applied to the cluster type. This configuration is then treated as a template for all clusters of the same type. If the same configuration key is also defined within the cluster, it will take precedence over the cluster type configuration.
