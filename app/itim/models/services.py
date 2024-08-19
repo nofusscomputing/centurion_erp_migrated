@@ -169,7 +169,7 @@ class Service(TenancyObject):
     )
 
     config_key_variable = models.CharField(
-        blank = False,
+        blank = True,
         help_text = 'Key name to use when merging with cluster/device config.',
         max_length = 50,
         null = True,
