@@ -84,10 +84,10 @@ class DetailForm(ClusterForm):
                 {
                     "layout": "single",
                     "fields": [
-                        'config_variables',
+                        'rendered_config',
                     ],
                     "json": [
-                        'config_variables'
+                        'rendered_config'
                     ]
                 }
             ]
@@ -135,6 +135,14 @@ class DetailForm(ClusterForm):
             disabled = True,
             initial = 'xx/yy CPU, xx/yy RAM, xx/yy Storage',
         )
+
+
+        self.fields['rendered_config'] = forms.fields.JSONField(
+            label = 'Available Resources',
+            disabled = True,
+            initial = self.instance.rendered_config,
+        )
+
 
         self.tabs['details'].update({
             "edit_url": reverse('ITIM:_cluster_change', args=(self.instance.pk,))

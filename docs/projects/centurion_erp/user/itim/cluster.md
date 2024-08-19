@@ -59,3 +59,5 @@ A Cluster service is a [service](./service.md) deployed to a cluster. See [#125]
 ### Configuration
 
 Cluster configuration is configuration that is used by Ansible to setup/deploy the cluster. The configuration is presented by Centurion ERP within a format that is designed for [our collection](../../../ansible/collections/centurion/index.md).
+
+Configuration if applied within the [cluster type](./clustertype.md#configuration) is used as the base and if also defined within the cluster will take precedence. This allows the cluster type configuration to be used as a base template for clusters of the same type.
