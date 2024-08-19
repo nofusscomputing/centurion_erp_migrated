@@ -32,10 +32,14 @@ Within the services the following fields are available:
 - dependent_service _A List of services this service depends upon_
 
 
-## Service Template
-
-A service can be setup as a template `is_template=True` for which then can be used as the base template for further service creations. Both config and Ports are inherited from the template with any conflict taking the current services values.
-
 ## Deployed to
 
 A service can be deployed to a Cluster or a Device. When assosiated with an item, within it's details page the services deployed to it are available.
+
+
+## Config
+
+A service can be setup as a template `is_template=True` for which then can be used as the base template for further service creations. Both config and Ports are inherited from the template with any conflict taking the current services values.
+
+A service assigned to a cluster will have it's config rendered as part of the [cluster configuration](./cluster.md#configuration).
+

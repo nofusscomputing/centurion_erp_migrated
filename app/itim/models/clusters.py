@@ -144,6 +144,8 @@ class Cluster(TenancyObject):
     @property
     def rendered_config(self):
 
+        from itim.models.services import Service
+
         rendered_config: dict = {}
 
         if self.cluster_type.config:
@@ -151,6 +153,14 @@ class Cluster(TenancyObject):
             rendered_config.update(
                 self.cluster_type.config
             )
+
+
+        for service in Service.objects.filter(cluster = self.pk):
+
+            if service.config_variables:
+
+                rendered_config.update( service.config_variables )
+
 
         if self.config:
 
