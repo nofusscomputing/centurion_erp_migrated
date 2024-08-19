@@ -66,18 +66,20 @@
 
         <h3>Services</h3>
 
-        {% include 'icons/issue_link.html.j2' with issue=125 %}
-
         <table>
             <tr>
                 <th>Name</th>
                 <th>Ports</th>
             </tr>
-            {% if cluster.services.all %}
-            {% for device in cluster.devices.all %}
+            {% if services %}
+            {% for service in services.all %}
             <tr>
-                <td></td>
-                <td></td>
+                <td><a href="{% url 'ITIM:_service_view' service.id %}">{{ service.name }}</a></td>
+                <td>
+                    {% for port in service.port.all %}
+                    {{ port.protocol }}/{{ port.number }} - {{ port.description }},
+                    {% endfor %}
+                </td>
             </tr>
             {% endfor%}
             {% else %}

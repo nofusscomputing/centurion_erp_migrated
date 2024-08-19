@@ -8,6 +8,7 @@ from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itim.forms.clusters import ClusterForm, DetailForm
 from itim.models.clusters import Cluster
+from itim.models.services import Service
 
 from settings.models.user_settings import UserSettings
 
@@ -158,6 +159,10 @@ class View(ChangeView):
         context['model_name'] = self.model._meta.model_name
 
         context['model_delete_url'] = reverse('ITIM:_cluster_delete', args=(self.kwargs['pk'],))
+
+        context['services'] = Service.objects.filter(
+            cluster = self.kwargs['pk']
+        )
 
 
         context['content_title'] = self.object.name
