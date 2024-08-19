@@ -44,6 +44,7 @@ class ServiceForm(CommonModelForm):
         dependent_service = cleaned_data.get("dependent_service")
         device = cleaned_data.get("device")
         cluster = cleaned_data.get("cluster")
+        config_key_variable = cleaned_data.get("config_key_variable")
         is_template = cleaned_data.get("is_template")
         template = cleaned_data.get("template")
         port = cleaned_data.get("port")
@@ -64,6 +65,10 @@ class ServiceForm(CommonModelForm):
             if not port:
 
                 raise ValidationError('Port(s) must be assigned to a service.')
+
+        if not is_template and not config_key_variable:
+
+            raise ValidationError('Configuration Key must be specified')
 
         if dependent_service:
 
