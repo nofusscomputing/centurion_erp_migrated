@@ -16,6 +16,17 @@ env:
 jobs:
 
 
+  mkdocs:
+    name: 'MKDocs'
+    permissions:
+      pull-requests: write
+      contents: write
+      statuses: write
+      checks: write
+      actions: write
+    uses: nofusscomputing/action_mkdocs/.github/workflows/reusable_mkdocs.yaml@development
+
+
   docker:
     name: 'Docker'
     uses: nofusscomputing/action_docker/.github/workflows/docker.yaml@development
