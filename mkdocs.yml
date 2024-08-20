@@ -3,8 +3,8 @@ INHERIT: website-template/mkdocs.yml
 docs_dir: 'docs'
 
 repo_name: Centurion ERP
-repo_url: https://gitlab.com/nofusscomputing/projects/centurion_erp
-edit_uri: '/-/ide/project/nofusscomputing/projects/centurion_erp/edit/development/-/docs/'
+repo_url: https://github.com/nofusscomputing/centurion_erp
+edit_uri: '/edit/development/docs/'
 
 plugins:
   mkdocstrings:
