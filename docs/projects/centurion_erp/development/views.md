@@ -50,6 +50,26 @@ All views are to meet the following requirements:
 - Add and change views to use a form class
 
 
+## Tests
+
+The following unit test cases exist for views:
+
+- [AddView](./api/tests/model_views.md#add-view)
+
+- [ChangeView](./api/tests/model_views.md#change-view)
+
+- [DeleteView](./api/tests/model_views.md#delete-view)
+
+- [Display View](./api/tests/model_views.md#display-view)
+
+- [IndexView](./api/tests/model_views.md#index-view)
+
+- [AllViews](./api/tests/model_views.md#all-views)
+
+!!! tip
+    The `AllViews` test class is an aggregation of all views. This class is the recommended test class to include if the model uses all available views.
+
+
 ## Docs to clean up
 
 !!! note

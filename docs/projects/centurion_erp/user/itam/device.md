@@ -41,6 +41,9 @@ To add a new model navigate to `settings -> ITAM -> Device Models`
 
 Operating System is also visible on this tab with the version `name` as intended to be full [semver](https://semver.org/).
 
+!!! note
+    If you change the devices organization the config groups the device is a part of will be removed.
+
 
 ### Software
 
@@ -69,7 +72,15 @@ This configuration can also be obtained from API endpoint `/api/config/<machine-
 
 ### Inventory
 
+!!! tip
+    Within your "user settings" you must have a default organization set. Without this the inventory will not be added as this is how the inventory logic determines which organization for the device to be created in.
+
 It's possible for a machine to be inventoried and have the report passed to the [inventory endpoint](../api.md#inventory-reports). This report will update the device within the interface and provides the option to use scheduled inventory gathering to keep the device up to date.
+
+Inventory processing is conducted by a background worker. As soon as the inventory is uploaded, the inventory processing is added to the background worker queue. Further information about the background worker can be found within its [documentation](../core/index.md#background-worker)
+
+!!! tip
+    Inventory not uploading? review the task logs by navigating to `Settings -> Application -> Task Logs`
 
 The report can contain the following information:
 

@@ -1,8 +1,10 @@
 import json
+import re
 
 from datetime import timedelta
 
 from django.db import models
+from django.forms import ValidationError
 
 from access.fields import *
 from access.models import TenancyObject
@@ -17,6 +19,8 @@ from itam.models.software import Software, SoftwareVersion
 from itam.models.operating_system import OperatingSystemVersion
 
 from settings.models.app_settings import AppSettings
+
+
 
 class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
@@ -39,6 +43,35 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 class Device(DeviceCommonFieldsName, SaveHistory):
 
+
+    def validate_uuid_format(self):
+
+        pattern = r'[0-9|a-f]{8}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{12}'
+
+        if not re.match(pattern, str(self)):
+
+            raise ValidationError(f'UUID Must be in {str(pattern)}')
+
+
+    def validate_hostname_format(self):
+
+        pattern = r'^[a-z]{1}[a-z|0-9|\-]+[a-z|0-9]{1}$'
+
+        if not re.match(pattern, str(self).lower()):
+
+            raise ValidationError(
+                '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
+                and have as interior characters only letters, digits, and hyphen.'''
+            )
+
+
+    name = models.CharField(
+        blank = False,
+        max_length = 50,
+        unique = True,
+        validators = [ validate_hostname_format ]
+    )
+
     serial_number = models.CharField(
         verbose_name = 'Serial Number',
         max_length = 50,
@@ -58,6 +91,7 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         blank = True,
         unique = True,
         help_text = 'System GUID/UUID.',
+        validators = [ validate_uuid_format ]
     )
 
     device_model = models.ForeignKey(
@@ -76,7 +110,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank= True,
         help_text = 'Type of device.',
-        
     )
 
 
@@ -85,6 +118,43 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank = True,
     )
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+        ):
+        """ Save Device Model
+
+        After saving the device update the related items so that they are a part
+        of the same organization as the device.
+        """
+
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
+
+        models_to_update =[ 
+            DeviceSoftware,
+            DeviceOperatingSystem
+        ]
+
+        for update_model in models_to_update:
+
+            obj = update_model.objects.filter(
+                device = self.id,
+            )
+
+            if obj.exists():
+
+                obj.update(
+                    is_global = False,
+                    organization = self.organization,
+                )
+
+        from config_management.models.groups import ConfigGroupHosts
+
+        ConfigGroupHosts.objects.filter(
+            host = self.id,
+        ).delete()
 
 
     def __str__(self):
@@ -258,6 +328,16 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         return self.device
 
 
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+        ):
+
+        self.is_global = False
+
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
+
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
@@ -300,3 +380,14 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         """ Fetch the parent object """
         
         return self.device
+
+
+    def save(
+            self, force_insert=False, force_update=False, using=None, update_fields=None
+        ):
+
+        self.is_global = False
+
+        super().save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )

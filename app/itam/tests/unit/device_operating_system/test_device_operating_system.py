@@ -5,6 +5,8 @@ from django.test import TestCase
 
 from access.models import Organization
 
+from app.tests.abstract.models import TenancyModel
+
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
 from itam.models.device import Device, DeviceOperatingSystem
@@ -12,7 +14,10 @@ from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
 
 
-class DeviceOperatingSystemModel(TestCase):
+class DeviceOperatingSystemModel(
+    TestCase,
+    TenancyModel,
+):
 
     model = DeviceOperatingSystem
 

@@ -3,16 +3,44 @@ import unittest
 
 from django.test import TestCase
 
-from access.models import TenancyObject
+from access.models import TenancyObject, TenancyManager
+
+from core.mixin.history_save import SaveHistory
 
 from unittest.mock import patch
 
 
 
-class TenancyObject(TestCase):
+class TenancyManagerTests(TestCase):
+
+    item = TenancyManager
+
+
+    def test_has_attribute_get_queryset(self):
+        """ Field organization exists """
+        
+        assert hasattr(self.item, 'get_queryset')
+
+
+    def test_is_function_get_queryset(self):
+        """ Attribute 'get_organization' is a function """
+        
+        assert callable(self.item.get_queryset)
+
+
+
+class TenancyObjectTests(TestCase):
 
     item = TenancyObject
 
+
+    def test_class_inherits_save_history(self):
+        """ Confirm class inheritence
+
+        TenancyObject must inherit SaveHistory
+        """
+
+        assert issubclass(TenancyObject, SaveHistory)
 
 
     def test_has_attribute_organization(self):
@@ -43,3 +71,23 @@ class TenancyObject(TestCase):
         """ Attribute 'get_organization' is a function """
         
         assert callable(self.item.get_organization)
+
+
+    @pytest.mark.skip(reason="figure out how to test abstract class")
+    def test_has_attribute_objects(self):
+        """ Attribute Check
+
+        attribute `objects` must be set to `access.models.TenancyManager()`
+        """
+
+        assert 'objects' in self.item
+
+
+    @pytest.mark.skip(reason="figure out how to test abstract class")
+    def test_attribute_not_none_objects(self):
+        """ Attribute Check
+
+        attribute `objects` must be set to `access.models.TenancyManager()`
+        """
+
+        assert self.item.objects is not None

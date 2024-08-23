@@ -9,24 +9,15 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 This documentation is targeted towards those whom administer the applications deployment.
 
 
-## Installation
+## Contents
 
-To install this application you must have a container engine installed, both docker and kubernetes are supported. The container image is available on [Docker Hub](https://hub.docker.com/r/nofusscomputing/centurion-erp) and can be pulled with `docker pull nofusscomputing/centurion-erp:latest`.
+- [Authentication](./authentication.md)
 
-Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. SQLLite and MariaDB/MySQL are supported.
+- [Backup](./backup.md)
 
-
-### Background workers
-
-This application requires that you deploy at least one background worker. The background worker requires access to a RabbitMQ message broker for the queueing and routing of messages (background jobs). If you are using our docker container to deploy this application, launch an additional container with `celery -A app worker -l INFO` as the entrypoint/command. Configuration for the worker resides in directory `/etc/itsm/` within the container. see below for the `CELERY_` configuration.
+- [Installation](./installation.md)
 
 
-### Settings file
+## Ansible Automation Platform / AWX
 
-The settings file is a python file `.py` and must remain a valid python file for the application to work.
-
-``` py title="settings.py"
-
---8<-- "includes/etc/itsm/settings.py"
-
-```
+We have built an [Ansible Collection](../../ansible/collections/centurion/index.md) for Centurion ERP that you could consider the bridge between the config within Centurion and the end device. This collection can be directly added to AAP / AWX as a project which enables accessing the features the collection has to offer. Please refer to the [collections documentation](../../ansible/collections/centurion/index.md) for further information.

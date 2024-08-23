@@ -37,13 +37,6 @@ def process_inventory(self, data, organization: int):
 
         organization = Organization.objects.get(id=organization)
 
-        if Device.objects.filter(slug=str(data.details.name).lower()).exists():
-
-            device = Device.objects.get(slug=str(data.details.name).lower())
-
-            # device = self.obj
-
-
         app_settings = AppSettings.objects.get(owner_organization = None)
 
         device_serial_number = None
@@ -57,9 +50,61 @@ def process_inventory(self, data, organization: int):
 
             device_uuid = str(data.details.uuid)
 
+
+        if device_serial_number: # Search for device by serial number.
+
+            device = Device.objects.filter(
+                serial_number__iexact=device_serial_number
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    serial_number__iexact=device_serial_number
+                )
+
+            else:
+
+                device = None
+
+
+        if device_uuid and not device: # Search for device by UUID.
+
+            device = Device.objects.filter(
+                uuid__iexact=device_uuid
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    uuid__iexact=device_uuid
+                )
+
+            else:
+
+                device = None
+
+
+        if not device: # Search for device by Name.
+
+            device = Device.objects.filter(
+                name__iexact=str(data.details.name).lower()
+            )
+
+            if device.exists():
+
+                device = Device.objects.get(
+                    name__iexact=str(data.details.name).lower()
+                )
+
+            else:
+
+                device = None
+
+
+
+
         if not device: # Create the device
-
-
 
             device = Device.objects.create(
                 name = data.details.name,
@@ -74,25 +119,75 @@ def process_inventory(self, data, organization: int):
 
             logger.info(f"Device: {device.name}, Serial: {device.serial_number}, UUID: {device.uuid}")
 
+            device_edited = False
+
+
             if not device.uuid and device_uuid:
 
                 device.uuid = device_uuid
 
-                device.save()
+                device_edited = True
 
 
             if not device.serial_number and device_serial_number:
 
                 device.serial_number = data.details.serial_number
 
+                device_edited = True
+
+
+            if str(device.name).lower() != str(data.details.name).lower(): # Update device Name
+
+                device.name = data.details.name
+
+                device_edited = True
+
+
+            if device_edited:
+
                 device.save()
 
 
-            if OperatingSystem.objects.filter( slug=data.operating_system.name ).exists():
+            operating_system = OperatingSystem.objects.filter(
+                name=data.operating_system.name,
+                is_global = True
+            )
 
-                operating_system = OperatingSystem.objects.get( slug=data.operating_system.name )
+            if operating_system.exists():
 
-            else: # Create Operating System
+                operating_system = OperatingSystem.objects.get(
+                    name=data.operating_system.name,
+                    is_global = True
+                )
+
+
+            else:
+
+                operating_system = None
+
+
+
+            if not operating_system:
+
+                operating_system = OperatingSystem.objects.filter(
+                    name=data.operating_system.name,
+                    organization = organization
+                )
+
+
+                if operating_system.exists():
+
+                    operating_system = OperatingSystem.objects.get(
+                        name=data.operating_system.name,
+                        organization = organization
+                    )
+
+                else:
+
+                    operating_system = None
+
+
+            if not operating_system:
 
                 operating_system = OperatingSystem.objects.create(
                     name = data.operating_system.name,
@@ -101,16 +196,24 @@ def process_inventory(self, data, organization: int):
                 )
 
 
-            if OperatingSystemVersion.objects.filter( name=data.operating_system.version_major, operating_system=operating_system ).exists():
+            operating_system_version = OperatingSystemVersion.objects.filter(
+                name=data.operating_system.version_major,
+                operating_system=operating_system
+            )
+
+            if operating_system_version.exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
-                    organization = organization,
-                    is_global = True,
-                    name = data.operating_system.version_major,
-                    operating_system = operating_system
+                    name=data.operating_system.version_major,
+                    operating_system=operating_system
                 )
 
-            else: # Create Operating System Version
+            else:
+
+                operating_system_version = None
+
+
+            if not operating_system_version:
 
                 operating_system_version = OperatingSystemVersion.objects.create(
                     organization = organization,
@@ -119,22 +222,22 @@ def process_inventory(self, data, organization: int):
                     operating_system = operating_system,
                 )
 
+            device_operating_system = DeviceOperatingSystem.objects.filter(
+                device=device,
+            )
 
-            if DeviceOperatingSystem.objects.filter( version=data.operating_system.version, device=device, operating_system_version=operating_system_version ).exists():
+            if device_operating_system.exists():
 
                 device_operating_system = DeviceOperatingSystem.objects.get(
                     device=device,
-                    version = data.operating_system.version,
-                    operating_system_version = operating_system_version,
                 )
 
-                if not device_operating_system.installdate: # Only update install date if empty
+            else:
 
-                    device_operating_system.installdate = timezone.now()
+                device_operating_system = None
 
-                    device_operating_system.save()
 
-            else: # Create Operating System Version
+            if not device_operating_system:
 
                 device_operating_system = DeviceOperatingSystem.objects.create(
                     organization = organization,
@@ -143,6 +246,26 @@ def process_inventory(self, data, organization: int):
                     operating_system_version = operating_system_version,
                     installdate = timezone.now()
                 )
+
+            if not device_operating_system.installdate: # Only update install date if empty
+
+                device_operating_system.installdate = timezone.now()
+
+                device_operating_system.save()
+
+
+            if device_operating_system.operating_system_version != operating_system_version:
+
+                device_operating_system.operating_system_version = operating_system_version
+
+                device_operating_system.save()
+
+
+            if device_operating_system.version != data.operating_system.version:
+
+                device_operating_system.version = data.operating_system.version
+
+                device_operating_system.save()
 
 
             if app_settings.software_is_global:

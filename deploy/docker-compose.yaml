@@ -1,0 +1,27 @@
+# docker exec -ti centurion-erp python manage.py migrate
+# docker exec -ti centurion-erp python manage.py createsuperuser
+version: "3.2"
+
+services:
+
+  centurion-erp:
+    image: centurion-erp:dev
+    build:
+      context: ../.
+      dockerfile: dockerfile
+    container_name: centurion-erp
+    hostname: centurion-erp
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./volumes/data:/data:rw
+      - ./volumes/etc/itsm:/etc/itsm:ro
+    restart: always
+    networks:
+      - default
+      - mariadb
+
+
+networks:
+  mariadb:
+    external: true

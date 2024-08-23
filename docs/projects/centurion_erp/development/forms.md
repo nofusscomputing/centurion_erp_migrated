@@ -15,7 +15,7 @@ All forms must meet the following requirements:
 
 - is defined as a class
 
-- inherits from `core.forms.common.CommonModelForm` _[docs](./api/form.md)_
+- inherits from [`core.forms.common.CommonModelForm`](./api/model_form.md)
 
 - contains a `Meta` sub-class with following parameters:
 
@@ -23,6 +23,15 @@ All forms must meet the following requirements:
 
     - `model`
 
-- Any additional filtering is done as part of an `__init__` method that also calls the super-class `__inti__` first
+- Any additional filtering is done as part of an `__init__` method that also calls the super-class [`__init__`](./api/model_form.md) first
 
-    - Any filtering of a field `queryset` is to filter the existing `queryset` not redefine it. i.e. `field[<field name>].queryset.filter()`
+    - Any filtering of a fields `queryset` is to filter the existing `queryset` not redefine it. i.e. `field[<field name>].queryset = field[<field name>].queryset.filter()`
+
+
+## Abstract Classes
+
+The following abstract classes exist for a forms inheritance:
+
+- [AdminGlobalModels](./api/admin_model_form.md#model-form)
+
+- [CommonModelForm](./api/model_form.md#model-form)

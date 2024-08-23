@@ -5,6 +5,8 @@ from django.test import TestCase
 
 from access.models import Organization
 
+from app.tests.abstract.models import TenancyModel
+
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
 from itam.models.device import Device, DeviceSoftware
@@ -12,10 +14,12 @@ from itam.models.software import Software
 
 
 
-class DeviceSoftwareModel(TestCase):
+class DeviceSoftwareModel(
+    TestCase,
+    TenancyModel,
+):
 
     model = DeviceSoftware
-
 
 
     @classmethod

@@ -1,5 +1,4 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import generic
@@ -22,21 +21,10 @@ class Index(IndexView):
     paginate_by = 10
 
     permission_required = [
-        'core.view_devicetype'
+        'core.view_manufacturer'
     ]
 
     template_name = 'settings/manufacturers.html.j2'
-
-
-    def get_queryset(self):
-
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter().order_by('name')
-
-        else:
-
-            return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
 
 
     def get_context_data(self, **kwargs):
@@ -49,7 +37,7 @@ class Index(IndexView):
 
 
 
-class View(OrganizationPermission, generic.UpdateView):
+class View(ChangeView):
 
     context_object_name = "manufacturer"
 
@@ -89,7 +77,7 @@ class View(OrganizationPermission, generic.UpdateView):
 
 
 
-class Add(OrganizationPermission, generic.CreateView):
+class Add(AddView):
 
     
     form_class = ManufacturerForm
@@ -116,7 +104,7 @@ class Add(OrganizationPermission, generic.CreateView):
         return context
 
 
-class Delete(OrganizationPermission, generic.DeleteView):
+class Delete(DeleteView):
 
     model = Manufacturer
 

@@ -3,7 +3,6 @@ import markdown
 
 from django.contrib.auth import decorators as auth_decorator
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -61,7 +60,7 @@ class IndexView(IndexView):
 
         else:
 
-            return Device.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return Device.objects.filter().order_by('name')
 
 
 

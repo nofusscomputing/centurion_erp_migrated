@@ -5,12 +5,17 @@ from django.test import TestCase
 
 from access.models import Organization
 
+from app.tests.abstract.models import TenancyModel
+
 from config_management.models.groups import ConfigGroups
 
 
 
 @pytest.mark.django_db
-class ConfigGroupsModel(TestCase):
+class ConfigGroupsModel(
+    TestCase,
+    TenancyModel
+):
 
     model = ConfigGroups
 

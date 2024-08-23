@@ -3,8 +3,8 @@ INHERIT: website-template/mkdocs.yml
 docs_dir: 'docs'
 
 repo_name: Centurion ERP
-repo_url: https://gitlab.com/nofusscomputing/projects/centurion_erp
-edit_uri: '/-/ide/project/nofusscomputing/projects/centurion_erp/edit/development/-/docs/'
+repo_url: https://github.com/nofusscomputing/centurion_erp
+edit_uri: '/edit/development/docs/'
 
 plugins:
   mkdocstrings:
@@ -56,6 +56,12 @@ nav:
 
       - projects/centurion_erp/administration/index.md
 
+      - projects/centurion_erp/administration/authentication.md
+
+      - projects/centurion_erp/administration/backup.md
+
+      - projects/centurion_erp/administration/installation.md
+
     - Development:
 
       - projects/centurion_erp/development/index.md
@@ -64,7 +70,9 @@ nav:
 
         - projects/centurion_erp/development/api/index.md
 
-        - projects/centurion_erp/development/api/form.md
+        - projects/centurion_erp/development/api/admin_model_form.md
+
+        - projects/centurion_erp/development/api/model_form.md
 
         - projects/centurion_erp/development/api/token_authentication.md
 
@@ -78,6 +86,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
 
+          - projects/centurion_erp/development/api/models/tenancy_object.md
+
         - projects/centurion_erp/development/api/common_views.md
 
         - Serializers:
@@ -89,6 +99,8 @@ nav:
         - Unit Testing:
 
           - projects/centurion_erp/development/api/tests/index.md
+
+          - projects/centurion_erp/development/api/tests/models.md
 
           - projects/centurion_erp/development/api/tests/model_history.md
 

@@ -4,9 +4,14 @@ from core.forms.common import CommonModelForm
 
 from itam.models.software import SoftwareCategory
 
+from settings.forms.admin_settings_global import AdminGlobalModels
 
 
-class SoftwareCategoryForm(CommonModelForm):
+
+class SoftwareCategoryForm(
+    AdminGlobalModels,
+    CommonModelForm
+):
 
     class Meta:
 

@@ -5,6 +5,8 @@ import string
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Field
+from django.forms import ValidationError
 
 from access.fields import *
 from access.models import TenancyObject
@@ -12,6 +14,37 @@ from access.models import TenancyObject
 
 
 class AuthToken(models.Model):
+
+
+    def validate_note_no_token(self, note, token):
+        """ Ensure plaintext token cant be saved to notes field.
+
+        called from app.settings.views.user_settings.TokenAdd.form_valid()
+
+        Args:
+            note (Field): _Note field_
+            token (Field): _Token field_
+
+        Raises:
+            ValidationError: _Validation failed_
+        """
+
+        validation: bool = True
+
+
+        if str(note) == str(token):
+
+            validation = False
+
+
+        if str(token)[:9] in str(note):    # Allow user to use up to 8 chars so they can reference it.
+
+            validation = False
+
+        if not validation:
+
+            raise ValidationError('Token can not be placed in the notes field.')
+
 
 
     id = models.AutoField(

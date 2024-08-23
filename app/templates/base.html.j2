@@ -76,6 +76,15 @@ section h2 span svg {
   fill: #177ee6;
 }
 
+.warning-bar {
+  background-color: #f1d599;
+  border: 1px solid #ecb785;
+  height: 30px;
+  line-height: 30px;
+  width: 100%;
+  padding: 0px 20px 0px 20px
+}
+
 </style>
 
     <section>
@@ -100,6 +109,11 @@ section h2 span svg {
         {% endblock content_header_icon %}
         {% endif %}
       </h2>
+      {% if user.is_authenticated %}
+        {% if not user_default_organization %}
+        <div class="warning-bar">You do not have a <b>default organization</b> set, go to <a href="{% url '_settings_user' pk=user_settings %}">user settings</a> to set one</div>
+        {% endif %}
+      {% endif %}
       {% block article %}
       <article id="content-body">
         {% block content %}{% endblock %}
@@ -119,7 +133,7 @@ section h2 span svg {
           <a title="Swagger API Documentation" href="/api/swagger/" target="_blank">
             {% include 'icons/swagger_docs.svg' %}
           </a>
-          <a title="Code Home" href="https://gitlab.com/nofusscomputing/projects/centurion_erp" target="_blank">
+          <a title="Code Home" href="{{ build_details.project_url }}" target="_blank">
             {% include 'icons/git.svg' %}
           </a>
         </span>
@@ -133,7 +147,7 @@ section h2 span svg {
           {% else %}
             development
           {% endif %}
-          ( {% if build_details.project_url %}<a href="{{ build_details.project_url }}/-/commit/{{ build_details.sha }}" target="_blank">{% endif %}
+          ( {% if build_details.project_url %}<a href="{{ build_details.project_url }}/commit/{{ build_details.sha }}" target="_blank">{% endif %}
           {{ build_details.sha }}
           {% if build_details.project_url %}</a>{% endif %} )
         </span>

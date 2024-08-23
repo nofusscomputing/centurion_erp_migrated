@@ -63,13 +63,103 @@ class Organization(SaveHistory):
         return self
 
 
-class TenancyObject(models.Model):
+
+class TenancyManager(models.Manager):
+    """Multi-Tennant Object Manager
+
+    This manager specifically caters for the multi-tenancy features of Centurion ERP.
+    """
+
+
+    def get_queryset(self):
+        """ Fetch the data
+
+        This function filters the data fetched from the database to that which is from the organizations
+        the user is a part of.
+
+        !!! danger "Requirement"
+            This method may be overridden however must still be called from the overriding function. i.e. `super().get_queryset()`
+
+        ## Workflow
+
+        This functions workflow is as follows:
+
+        - Fetch the user from the request
+
+        - Check if the user is authenticated
+
+        - Iterate over the users teams
+
+        - Store unique organizations from users teams
+
+        - return results
+
+        Returns:
+            (queryset): **super user**: return unfiltered data.
+            (queryset): **not super user**: return data from the stored unique organizations.
+        """
+
+        request = get_request()
+
+        user_organizations: list(str()) = []
+
+
+        if request:
+
+            user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+
+
+            if user.is_authenticated:
+
+                for team_user in TeamUsers.objects.filter(user=user):
+
+
+                    if team_user.team.organization.name not in user_organizations:
+
+
+                        if not user_organizations:
+
+                            self.user_organizations = []
+
+                        user_organizations += [ team_user.team.organization.id ]
+
+
+                if len(user_organizations) > 0 and not user.is_superuser:
+
+                    return super().get_queryset().filter(
+                        models.Q(organization__in=user_organizations)
+                        |
+                        models.Q(is_global = True)
+                    )
+
+        return super().get_queryset()
+
+
+
+class TenancyObject(SaveHistory):
+    """ Tenancy Model Abstrct class.
+
+    This class is for inclusion wihtin **every** model within Centurion ERP.
+    Provides the required fields, functions and methods for multi tennant objects.
+    Unless otherwise stated, **no** object within this class may be overridden.
+
+    Raises:
+        ValidationError: User failed to supply organization
+    """
+
+    objects = TenancyManager()
+    """ Multi-Tenanant Objects """
 
     class Meta:
         abstract = True
 
 
     def validatate_organization_exists(self):
+        """Ensure that the user did provide an organization
+
+        Raises:
+            ValidationError: User failed to supply organization.
+        """
 
         if not self:
             raise ValidationError('You must provide an organization')
@@ -99,7 +189,8 @@ class TenancyObject(models.Model):
         return self.organization
 
 
-class Team(Group, TenancyObject, SaveHistory):
+
+class Team(Group, TenancyObject):
     class Meta:
         # proxy = True
         verbose_name_plural = "Teams"

@@ -26,9 +26,9 @@ class ConfigGroupForm(CommonModelForm):
         super().__init__(*args, **kwargs)
 
 
-        if 'parent' in kwargs['initial']:
+        if hasattr(kwargs['instance'], 'id'):
 
             self.fields['parent'].queryset = self.fields['parent'].queryset.filter(
             ).exclude(
-                id=int(kwargs['initial']['parent'])
+                id=int(kwargs['instance'].id)
             )

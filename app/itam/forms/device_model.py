@@ -4,9 +4,15 @@ from core.forms.common import CommonModelForm
 
 from itam.models.device_models import DeviceModel
 
+from settings.forms.admin_settings_global import AdminGlobalModels
 
 
-class DeviceModelForm(CommonModelForm):
+
+class DeviceModelForm(
+    AdminGlobalModels,
+    CommonModelForm
+):
+
 
     class Meta:
 

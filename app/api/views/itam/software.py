@@ -3,6 +3,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, viewsets
 
+from access.mixin import OrganizationMixin
+
 from api.serializers.itam.software import SoftwareSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
@@ -10,7 +12,7 @@ from itam.models.software import Software
 
 
 
-class SoftwareViewSet(viewsets.ModelViewSet):
+class SoftwareViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [
         OrganizationPermissionAPI

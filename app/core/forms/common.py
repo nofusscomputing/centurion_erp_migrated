@@ -1,5 +1,4 @@
 from django import forms
-
 from django.db.models import Q
 
 from access.models import Organization, TeamUsers
@@ -27,12 +26,15 @@ class CommonModelForm(forms.ModelForm):
         Initialize the form using the super classes first then continue to initialize the form using logic
         contained within this method.
 
-
         ## Tenancy Objects
 
         Fields that contain an attribute called `organization` will have the objects filtered to
         the organizations the user is part of. If the object has `is_global=True`, that object will not be
         filtered out.
+
+
+        !!! danger "Requirement"
+            This method may be overridden however must still be called from the overriding function. i.e. `super().__init__(*args, **kwargs)`
         """
 
         user = kwargs.pop('user', None)
@@ -92,9 +94,7 @@ class CommonModelForm(forms.ModelForm):
             if self.organization_field in self.Meta.fields:
 
                 self.fields[self.organization_field].queryset = self.fields[self.organization_field].queryset.filter(
-                    Q(name__in=user_organizations)
+                    Q(id__in=user_organizations_id)
                       |
                     Q(manager=user)
                 )
-
-

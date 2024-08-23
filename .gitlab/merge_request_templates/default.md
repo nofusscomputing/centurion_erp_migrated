@@ -20,9 +20,11 @@
 
 <!-- dont remove tasks below strike through including the checkbox by enclosing in double tidle '~~' -->
 
-- [ ] ~"breaking-change" Any Breaking change(s)
+- [ ] Contains ~"breaking-change" Any Breaking change(s)?
 
     _Breaking Change must also be notated in the commit that introduces it and in [Conventional Commit Format](https://www.conventionalcommits.org/en/v1.0.0/)._
+
+    - [ ] Release notes updated
 
 - [ ] ~Documentation Documentation written
 
@@ -30,6 +32,6 @@
 
 - [ ] Milestone assigned
 
-- [ ] [Unit Test(s) Written](https://nofusscomputing.com/projects/django-template/development/testing/)
+- [ ] [Unit Test(s) Written](https://nofusscomputing.com/projects/centurion_erp/development/testing/)
 
     _ensure test coverage delta is not less than zero_

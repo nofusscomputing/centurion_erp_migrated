@@ -6,16 +6,14 @@ import pytest
 import unittest
 import requests
 
-# from django.contrib.auth import get_user_model
-# from django.core.exceptions import ValidationError
-# from access.models import Organization
-
-# from access.models import Organization
+from app.tests.abstract.models import TenancyModel
 
 from itam.models.device import Device
 
+
 class Device(
-    TestCase
+    TestCase,
+    TenancyModel,
 ):
 
     model = Device
@@ -39,6 +37,16 @@ class Device(
     #         organization=organization,
     #         name = 'deviceone'
     #     )
+
+    @pytest.mark.skip(reason="to be written")
+    def test_device_move_organization(user):
+        """Move Organization test
+
+        When a device moves organization, devicesoftware and devicesoftware table data
+        must also move organizations
+        """
+        pass
+
 
     @pytest.mark.skip(reason="to be written")
     def test_device_software_action(user):

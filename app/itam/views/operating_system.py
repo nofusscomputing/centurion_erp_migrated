@@ -1,5 +1,5 @@
 from django.contrib.auth import decorators as auth_decorator
-from django.db.models import Q, Count
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 
@@ -40,7 +40,7 @@ class IndexView(IndexView):
 
         else:
 
-            return OperatingSystem.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return OperatingSystem.objects.filter().order_by('name')
 
 
 
@@ -62,7 +62,21 @@ class View(ChangeView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        operating_system_versions = OperatingSystemVersion.objects.filter(operating_system=self.kwargs['pk']).order_by('name').annotate(installs=Count("deviceoperatingsystem"))
+        operating_system_versions = OperatingSystemVersion.objects.filter(
+            operating_system=self.kwargs['pk']
+        ).order_by(
+            'name'
+        ).annotate(
+            installs=Count(
+                "deviceoperatingsystem",
+                filter=Q(deviceoperatingsystem__device__organization__in = self.user_organizations())
+            ),
+            # filter=Q(deviceoperatingsystem__operating_system_version__organization__in = self.user_organizations())
+            # filter=Q(deviceoperatingsystem__operating_system_version__deviceoperatingsystem__device__organization__in = self.user_organizations()),
+            filter=Q(deviceoperatingsystem__operating_system_version__organization__in = self.user_organizations()),
+            
+        )
+        
         context['operating_system_versions'] = operating_system_versions
 
         installs = DeviceOperatingSystem.objects.filter(operating_system_version__operating_system_id=self.kwargs['pk'])

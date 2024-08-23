@@ -1,6 +1,8 @@
 import pytest
 import unittest
 
+from access.models import TenancyManager
+
 
 
 class TenancyObject:
@@ -66,3 +68,21 @@ class TenancyObject:
         Must not be able to edit an item without an organization
         """
         pass
+
+
+    def test_has_attr_organization(self):
+        """ TenancyObject attribute check
+
+        TenancyObject has function objects
+        """
+
+        assert hasattr(self.model, 'objects')
+
+
+    def test_attribute_is_type_objects(self):
+        """ Attribute Check
+
+        attribute `objects` must be set to `access.models.TenancyManager()`
+        """
+
+        assert type(self.model.objects) is TenancyManager

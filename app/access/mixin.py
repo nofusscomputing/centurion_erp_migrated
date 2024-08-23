@@ -80,7 +80,9 @@ class OrganizationMixin():
 
                             id = int(self.request.POST.get(field))
 
-                
+        except:
+
+            pass
 
 
         return id

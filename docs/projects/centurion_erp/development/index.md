@@ -8,12 +8,14 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 This section of the documentation contains different items related to the development of this application. The target audience is anyone whom wishes to develop any part of the application.
 
+Centurion ERP is a Django Application. We have added a lot of little tid bits that aid in the development process. i.e. abstract classes, tests etc. This allows for decreased development times as items that are common are what could easily be considered templated with the only additional requirement is to add that objests differences.
 
-## Handy links
+
+## Areas of the code
 
 - [Application API Documentation](./api/index.md)
 
-- [Forms](./api/form.md)
+- [Forms](./forms.md)
 
 - [Models](./models.md)
 

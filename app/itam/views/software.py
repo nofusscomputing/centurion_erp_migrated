@@ -47,7 +47,7 @@ class IndexView(IndexView):
 
         else:
 
-            return Software.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            return Software.objects.filter().order_by('name')
 
 
 
@@ -71,9 +71,12 @@ class View(ChangeView):
         context = super().get_context_data(**kwargs)
 
         software_versions = SoftwareVersion.objects.filter(
-            software=self.kwargs['pk']
+            software=self.kwargs['pk'],
         ).annotate(
-            installs=Count("installedversion")
+            installs=Count(
+                "installedversion", 
+                filter=Q(installedversion__organization__in = self.user_organizations())
+            )
         )
 
         context['software_versions'] = software_versions
@@ -98,9 +101,9 @@ class View(ChangeView):
             )
 
         elif not self.request.user.is_superuser:
+
             context['device_software'] = DeviceSoftware.objects.filter(
-                Q(device__in=self.user_organizations(),
-                software=self.kwargs['pk'])
+                software=self.kwargs['pk']
             ).order_by(
                 'device',
                 'organization'
