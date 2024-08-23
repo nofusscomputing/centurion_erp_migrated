@@ -14,4 +14,4 @@ def json_pretty(value):
 
         return str('{}')
 
-    return json.dumps(json.loads(value), indent=4, sort_keys=True)
+    return json.dumps(json.loads(value.replace("'", '"')), indent=4, sort_keys=True)

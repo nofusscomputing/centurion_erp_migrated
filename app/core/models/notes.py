@@ -10,6 +10,9 @@ from itam.models.device import Device
 from itam.models.software import Software
 from itam.models.operating_system import OperatingSystem
 
+from itim.models.services import Service
+
+
 
 class NotesCommonFields(TenancyObject, models.Model):
 
@@ -42,6 +45,9 @@ class Notes(NotesCommonFields):
         ordering = [
             '-created'
         ]
+
+        verbose_name_plural = 'Notes'
+
 
 
     note = models.TextField(
@@ -82,6 +88,14 @@ class Notes(NotesCommonFields):
 
     device = models.ForeignKey(
         Device,
+        on_delete=models.CASCADE,
+        default = None,
+        null = True,
+        blank= True
+    )
+
+    service = models.ForeignKey(
+        Service,
         on_delete=models.CASCADE,
         default = None,
         null = True,

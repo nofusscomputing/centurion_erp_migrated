@@ -27,6 +27,8 @@ For each device within your inventory, the following fields/tabs are available t
 
 - [Change History](../index.md#history)
 
+- Virtual Status
+
 
 ### Status at a glance
 
@@ -68,6 +70,8 @@ Display of both installed software and software actions is within a single row, 
 This tab displays in `JSON` format configuration that is ready for use. Config from the [Config Management](../config_management/index.md) module is also included and rendered as part of this config. The intended audience is Ansible users with the fields provided matching established Ansible modules, if they exist.
 
 This configuration can also be obtained from API endpoint `/api/config/<machine-slug>` where `<machine-slug>` would match the Ansible `inventory_hostname`.
+
+The device can also have configuration defined. this configuration is intended to replicate Ansible `hostvars`. After all of the configuration has been rendered from the other modules that contain config, the devices configuration is applied last. In essence the devices configuration will always override any duplicated configuration.
 
 
 ### Inventory

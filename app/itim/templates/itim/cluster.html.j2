@@ -1,0 +1,108 @@
+{% extends 'detail.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+    <hr />
+
+    <div style="display: block; width: 100%;">
+
+        <h3>Nodes</h3>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Organization</th>
+            </tr>
+            {% if cluster.nodes.all %}
+            {% for node in cluster.nodes.all %}
+            <tr>
+                <td><a href="{% url 'ITAM:_device_view' node.pk %}">{{ node }}</a></td>
+                <td>{{ node.organization }}</td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
+
+    <div style="display: block; width: 100%;">
+
+        <h3>Devices</h3>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Organization</th>
+            </tr>
+            {% if cluster.devices.all %}
+            {% for device in cluster.devices.all %}
+            <tr>
+                <td><a href="{% url 'ITAM:_device_view' device.pk %}">{{ device }}</a></td>
+                <td>{{ device.organization }}</td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
+
+    <div style="display: block; width: 100%;">
+
+        <h3>Services</h3>
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Ports</th>
+            </tr>
+            {% if services %}
+            {% for service in services.all %}
+            <tr>
+                <td><a href="{% url 'ITIM:_service_view' service.id %}">{{ service.name }}</a></td>
+                <td>
+                    {% for port in service.port.all %}
+                    {{ port.protocol }}/{{ port.number }} - {{ port.description }},
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+
+    </div>
+
+    <div style="display: block; width: 100%;">
+        <h3>Config</h3>
+        <pre>{{ cluster.config | json_pretty }}</pre>
+    </div>
+
+</div>
+
+
+<div id="rendered_config" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.rendered_config %}
+
+</div>
+
+{% endblock %}

@@ -1,118 +1,116 @@
-{% extends 'base.html.j2' %}
+{% extends 'detail.html.j2' %}
 
-{% block title %}{{ operating_system.name }}{% endblock %}
+{% load json %}
+{% load markdown %}
 
-{% block content %}
 
-<script>
-
-  function openCity(evt, cityName) {
-
-    var i, tabcontent, tablinks;
-
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-  }
-
-</script>
-
-<div class="tab">
-  <button onclick="window.location='{% url 'ITAM:Operating Systems' %}';" style="vertical-align: middle; padding: auto; margin: 0px">
-    <svg xmlns="http://www.w3.org/2000/svg" height="25px" viewBox="0 -960 960 960" width="25px" style="vertical-align: middle; margin: 0px; padding: 0px border: none; " fill="#6a6e73">
-            <path d="m313-480 155 156q11 11 11.5 27.5T468-268q-11 11-28 11t-28-11L228-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T468-692q11 11 11 28t-11 28L313-480Zm264 0 155 156q11 11 11.5 27.5T732-268q-11 11-28 11t-28-11L492-452q-6-6-8.5-13t-2.5-15q0-8 2.5-15t8.5-13l184-184q11-11 27.5-11.5T732-692q11 11 11 28t-11 28L577-480Z"/>
-        </svg> Back to Operating Systems</button>
-    <button id="defaultOpen" class="tablinks" onclick="openCity(event, 'Details')">Details</button>
-    <button class="tablinks" onclick="openCity(event, 'Versions')">Versions</button>
-    <button class="tablinks" onclick="openCity(event, 'Licences')">Licences</button>
-    <button class="tablinks" onclick="openCity(event, 'Notes')">Notes</button>
-    <button class="tablinks" onclick="openCity(event, 'Installations')">Installations</button>
-</div>
-
-<form method="post">
-<div id="Details" class="tabcontent">
-  <h3>Details</h3>
-  
+{% block tabs %}
+<form action="" method="post">
   {% csrf_token %}
-  {{ form }}
-  <br>
-  <input type="submit" value="Submit">
 
-  <script>
-    document.getElementById("defaultOpen").click();
-  </script>
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
 
 </div>
 
-<div id="Versions" class="tabcontent">
-  <h3>Versions</h3>
-  <input type="button" value="New Operating System Version" onclick="window.location='{% url 'ITAM:_operating_system_version_add' pk=operating_system.id %}';">
-  
-  <table>
-    <thead>
-      <th>Version</th>
-      <th>Installations</th>
-      <th>Vulnerable</th>
-      <th>&nbsp;</th>
-    </thead>
-    {% for version in operating_system_versions %}
-    <tr>
-      <td><a href="{% url 'ITAM:_operating_system_version_view' operating_system_id=operating_system.id pk=version.id %}">{{ version.name }}</a></td>
-      <td>{% if version.installs == 0%}-{% else %}{{ version.installs }}{% endif %}</td>
-      <td>&nbsp;</td>
-      <td><a href="{% url 'ITAM:_operating_system_version_delete' operating_system_id=operating_system.id pk=version.id %}">DELETE</a></td>
-    </tr>
-    {% endfor %}
-  </table>
+
+<div id="versions" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.versions %}
+
+    <table>
+        <thead>
+            <th>Version</th>
+            <th>Installations</th>
+            <th>Vulnerable</th>
+            <th>&nbsp;</th>
+        </thead>
+        {% for version in operating_system_versions %}
+        <tr>
+            <td><a href="{% url 'ITAM:_operating_system_version_view' operating_system_id=operating_system.id pk=version.id %}">{{ version.name }}</a></td>
+            <td>{% if version.installs == 0%}-{% else %}{{ version.installs }}{% endif %}</td>
+            <td>&nbsp;</td>
+            <td><a href="{% url 'ITAM:_operating_system_version_delete' operating_system_id=operating_system.id pk=version.id %}">DELETE</a></td>
+        </tr>
+        {% endfor %}
+    </table>
 
 </div>
 
-<div id="Licences" class="tabcontent">
-  <h3>Licences</h3>
-  {% include 'icons/issue_link.html.j2' with issue=4 %}
-  <table>
-    <thead>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Available</th>
-      <th>&nbsp;</th>
-    </thead>
-    <tr>
-      <td>GPL-3</td>
-      <td>Open Source</td>
-      <td>1 / 5</td>
-      <th>&nbsp;</th>
-    </tr>
-    <tr>
-      <td>MIT</td>
-      <td>Open Source</td>
-      <td>Unlimited</td>
-      <th>&nbsp;</th>
-    </tr>
-    <tr>
-      <td>Windows Device</td>
-      <td>CAL</td>
-      <td>11 / 15</td>
-      <th>&nbsp;</th>
-    </tr>
-  </table>
-  
+
+<div id="licences" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.licences %}
+
+    {% include 'icons/issue_link.html.j2' with issue=4 %}
+
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Available</th>
+            <th>&nbsp;</th>
+        </thead>
+        <tr>
+            <td>GPL-3</td>
+            <td>Open Source</td>
+            <td>1 / 5</td>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>MIT</td>
+            <td>Open Source</td>
+            <td>Unlimited</td>
+            <th>&nbsp;</th>
+        </tr>
+        <tr>
+            <td>Windows Device</td>
+            <td>CAL</td>
+            <td>11 / 15</td>
+            <th>&nbsp;</th>
+        </tr>
+    </table>
+
 </div>
 
 
-  <div id="Notes" class="tabcontent">
-    <h3>
-      Notes
-    </h3>
+<div id="installations" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.installations %}
+
+    <table>
+          <thead>
+            <th>Device</th>
+            <th>Organization</th>
+            <th>Version</th>
+            <th title="Date Software Installed">Installed</th>
+            <th>&nbsp;</th>
+        </thead>
+        {% for install in installs %}
+        <tr>
+            <td><a href="{% url 'ITAM:_device_view' pk=install.device_id %}">{{ install.device }}</a></td>
+            <td>{{ install.organization }}</td>
+            <td>{{ install.version }}</td>
+            <td>
+            {% if install.installdate %}
+              {{ install.installdate }}
+            {% else %}
+              -
+            {% endif %}
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</div>
+
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
     {{ notes_form }}
     <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
     <div class="comments">
@@ -123,36 +121,8 @@
       {% endif %}
     </div>
 
-  </div>
-
-
-<div id="Installations" class="tabcontent">
-  <h3>Installations</h3>
-  <table>
-    <thead>
-      <th>Device</th>
-      <th>Organization</th>
-      <th>Version</th>
-      <th title="Date Software Installed">Installed</th>
-      <th>&nbsp;</th>
-    </thead>
-    {% for install in installs %}
-    <tr>
-      <td><a href="{% url 'ITAM:_device_view' pk=install.device_id %}">{{ install.device }}</a></td>
-      <td>{{ install.organization }}</td>
-      <td>{{ install.version }}</td>
-      <td>
-      {% if install.installdate %}
-        {{ install.installdate }}
-      {% else %}
-        -
-      {% endif %}
-      </td>
-      <td>&nbsp;</td>
-    </tr>
-    {% endfor %}
-  </table>
 </div>
-</form>
 
+</form>
 {% endblock %}
+

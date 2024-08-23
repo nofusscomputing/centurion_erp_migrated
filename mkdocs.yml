@@ -82,6 +82,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/core_history_save.md
 
+          - projects/centurion_erp/development/api/models/external_links.md
+
           - projects/centurion_erp/development/api/models/itam_device.md
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
@@ -150,10 +152,12 @@ nav:
 
       - projects/centurion_erp/development/models.md
 
+      - projects/centurion_erp/development/templates.md
+
       - projects/centurion_erp/development/testing.md
 
       - projects/centurion_erp/development/views.md
-    
+
     - User:
 
       - projects/centurion_erp/user/index.md
@@ -167,6 +171,12 @@ nav:
         - projects/centurion_erp/user/access/organization.md
 
         - projects/centurion_erp/user/access/team.md
+
+      - Assistance:
+
+        - projects/centurion_erp/user/assistance/index.md
+
+        - projects/centurion_erp/user/assistance/knowledge_base.md
 
       - projects/centurion_erp/user/configuration.md
 
@@ -188,7 +198,25 @@ nav:
 
         - projects/centurion_erp/user/itam/software.md
 
-      - projects/centurion_erp/user/settings.md
+      - ITIM:
+
+        - projects/centurion_erp/user/itim/index.md
+
+        - projects/centurion_erp/user/itim/cluster.md
+
+        - projects/centurion_erp/user/itim/clustertype.md
+
+        - projects/centurion_erp/user/itim/port.md
+
+        - projects/centurion_erp/user/itim/service.md
+
+      - Settings:
+
+        - projects/centurion_erp/user/settings/index.md
+
+        - projects/centurion_erp/user/settings/app_settings.md
+
+        - projects/centurion_erp/user/settings/external_links.md
 
 
 - Operations: 

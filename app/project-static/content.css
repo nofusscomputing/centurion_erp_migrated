@@ -65,6 +65,119 @@ input[type=submit] {
   height: 30px;
   margin: 10px;
 }
+
+
+
+
+/* Style the navigation tabs at the top of a content page */
+.content-navigation-tabs {
+  display: block;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  /* background-color: #f1f1f1; */
+  width: 100%;
+  text-align: left;
+  padding: 0px;
+  margin: 0px
+}
+
+
+.content-navigation-tabs-link {
+  border: 0px;
+  margin: none;
+  padding: none;
+}
+
+/* Style the buttons that are used to open the tab content */
+.content-navigation-tabs button {
+  display: inline;
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 0px;
+  padding: 0px;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: inherit;
+  color: #6a6e73;
+}
+
+
+/* Change background color of buttons on hover */
+.content-navigation-tabs button:hover {
+  /* background-color: #ddd; */
+  border-bottom: 3px solid #ccc;
+}
+
+
+/* Create an active/current tablink class */
+.content-navigation-tabs button.active {
+  /* background-color: #ccc; */
+  border-bottom: 3px solid #177ee6;
+}
+
+
+
+/* Style content for each tab */
+.content-tab {
+  width: 100%;
+  display: none;
+  padding-bottom: 0px;
+  border: none;
+  border-top: none;
+}
+
+.content-tab hr {
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+.content-tab pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Style for section fields on details page */
+.detail-view-field {
+  display: unset;
+  height: 30px;
+  line-height: 30px;
+  padding: 0px 20px 40px 20px;
+
+}
+
+.detail-view-field label {
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  margin: 10px;
+  height: 30px;
+  line-height: 30px;
+
+}
+
+.detail-view-field span {
+  display: inline-block;
+  width: 340px;
+  margin: 10px;
+  border-bottom: 1px solid #ccc;
+  height: 30px;
+  line-height: 30px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
 /*******************************************************************************
 
 EoF refactored
@@ -124,61 +237,6 @@ input[type=checkbox]:checked::after {
 
 
 
-/* Style the tab */
-.tab {
-  display: block;
-  overflow: hidden;
-  border-bottom: 1px solid #ccc;
-  /* background-color: #f1f1f1; */
-  width: 100%;
-  text-align: left;
-  padding: 0px;
-  margin: 0px
-}
-
-.tablinks {
-  border: 0px;
-  margin: none;
-  padding: none;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-  display: inline;
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin: 0px;
-  padding: 0px;
-  padding: 14px 16px;
-  transition: 0.3s;
-  font-size: inherit;
-  color: #6a6e73;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  /* background-color: #ddd; */
-  border-bottom: 3px solid #ccc;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  /* background-color: #ccc; */
-  border-bottom: 3px solid #177ee6;
-}
-
-/* Style the tab content */
-.tabcontent {
-  width: 100%;
-  display: none;
-  /* padding: 6px 12px; */
-  padding-bottom: 0px;
-  border: none;
-  border-top: none;
-}
 
 table {
   width: 100%;

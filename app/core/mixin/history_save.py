@@ -41,6 +41,18 @@ class SaveHistory(models.Model):
 
                 value = bool(before[entry])
 
+            elif (
+                    "{" in str(after[entry]) 
+                        and
+                    "}" in str(after[entry])
+                ) or (
+                    "[" in str(after[entry])
+                        and
+                    "]" in str(after[entry])
+                ):
+
+                value = str(after[entry]).replace("'", '\"')
+
             else:
 
                 value = str(before[entry])
@@ -61,6 +73,18 @@ class SaveHistory(models.Model):
             elif type(after[entry]) == type(bool()):
 
                 value = bool(after[entry])
+
+            elif (
+                    "{" in str(after[entry]) 
+                        and
+                    "}" in str(after[entry])
+                ) or (
+                    "[" in str(after[entry])
+                        and
+                    "]" in str(after[entry])
+                ):
+
+                value = str(after[entry]).replace("'", '\"')
 
             else:
 

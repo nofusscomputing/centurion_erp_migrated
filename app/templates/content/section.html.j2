@@ -1,0 +1,104 @@
+{% load json %}
+{% load markdown %}
+
+{% if not tab.sections %}
+
+<h3>{{ tab.name }}</h3>
+
+{% endif %}
+
+{% for section in tab.sections %}
+
+
+    {% if forloop.first %}
+
+        <h3>
+            {{ tab.name }}
+        {% for external_link in external_links %}
+            <span style="font-weight: normal; float: right;">{% include 'icons/external_link.html.j2' with external_link=external_link %}</span>
+        {% endfor %}
+        </h3>
+
+    {% else %}
+
+        <hr />
+        <h3>{{ section.name }}</h3>
+
+    {% endif %}
+
+<div style="align-items:flex-start; align-content: center; display: flexbox; width: 100%">
+
+    {% if section.layout == 'single' %}
+
+        {% for section_field in section.fields %}
+        {% for field in form %}
+
+            {% if field.name in section_field %}
+
+                {% include 'content/field.html.j2' %}
+
+            {% endif %}
+
+        {% endfor %}
+        {% endfor %}
+
+    {% elif section.layout == 'double' %}
+
+        {% if section.left  %}
+
+        <div style="display: inline; width: 40%; margin: 30px;">
+
+            {% for section_field in section.left %}
+            {% for field in form %}
+
+                {% if field.name in section_field %}
+                
+                    {% include 'content/field.html.j2' %}
+
+                {% endif %}
+
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if section.right %}
+
+        <div style="display: inline; width: 40%; margin: 30px; text-align: left;">
+
+            {% for section_field in section.right %}
+            {% for field in form %}
+
+                {% if field.name in section_field %}
+                
+                    {% include 'content/field.html.j2' %}
+
+                {% endif %}
+
+            {% endfor %}
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+    {% endif %}
+
+    {% if forloop.first %}
+
+        {% if tab.edit_url %}
+
+            <div style="display:block;">
+                <input type="button" value="Edit" onclick="window.location='{{ tab.edit_url }}';">
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+</div>
+
+{% endfor %}

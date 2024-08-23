@@ -1,13 +1,13 @@
 from django import forms
-from django.contrib.auth.models import Permission
 from django.db.models import Q
 from django.forms import inlineformset_factory
-
-from app import settings
 
 from .team_users import TeamUsersForm, TeamUsers
 
 from access.models import Team
+from access.functions import permissions
+
+from app import settings
 
 from core.forms.common import CommonModelForm
 
@@ -66,37 +66,4 @@ class TeamForm(CommonModelForm):
 
         self.fields['permissions'].widget.attrs = {'style': "height: 200px;"}
 
-        apps = [
-            'access',
-            'config_management',
-            'core',
-            'django_celery_results',
-            'itam',
-            'settings',
-        ]
-
-        exclude_models = [
-            'appsettings',
-            'chordcounter',
-            'groupresult',
-            'organization'
-            'settings',
-            'usersettings',
-        ]
-
-        exclude_permissions = [
-            'add_organization',
-            'add_taskresult',
-            'change_organization',
-            'change_taskresult',
-            'delete_organization',
-            'delete_taskresult',
-        ]
-
-        self.fields['permissions'].queryset = Permission.objects.filter(
-            content_type__app_label__in=apps,
-        ).exclude(
-            content_type__model__in=exclude_models
-        ).exclude(
-            codename__in = exclude_permissions
-        )
+        self.fields['permissions'].queryset = permissions.permission_queryset()

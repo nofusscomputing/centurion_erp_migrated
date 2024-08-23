@@ -1,5 +1,5 @@
 from django import forms
-from django.db.models import Q
+from django.urls import reverse
 
 from app import settings
 
@@ -9,7 +9,7 @@ from itam.models.operating_system import OperatingSystem
 
 
 
-class OperatingSystemFormCommon(CommonModelForm):
+class OperatingSystemForm(CommonModelForm):
 
     class Meta:
 
@@ -27,27 +27,99 @@ class OperatingSystemFormCommon(CommonModelForm):
 
 
 
-class Update(OperatingSystemFormCommon):
+# class Update(OperatingSystemFormCommon):
+
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#         self.fields['_created'] = forms.DateTimeField(
+#             label="Created",
+#             input_formats=settings.DATETIME_FORMAT,
+#             initial=kwargs['instance'].created,
+#             disabled=True
+#         )
+
+#         self.fields['_modified'] = forms.DateTimeField(
+#             label="Modified",
+#             input_formats=settings.DATETIME_FORMAT,
+#             initial=kwargs['instance'].modified,
+#             disabled=True
+#         )
+
+
+#         if kwargs['instance'].is_global:
+
+#             self.fields['is_global'].widget.attrs['disabled'] = True
+
+
+class DetailForm(OperatingSystemForm):
+
+    tabs: dict = {
+        "details": {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'name',
+                        'publisher',
+                        'serial_number',
+                        'organization',
+                        'c_created',
+                        'c_modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                }
+            ]
+        },
+        "versions": {
+            "name": "Versions",
+            "slug": "versions",
+            "sections": []
+        },
+        "licences": {
+            "name": "Licences",
+            "slug": "licences",
+            "sections": []
+        },
+        "installations": {
+            "name": "Installations",
+            "slug": "installations",
+            "sections": []
+        },
+        "notes": {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    }
 
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
 
-        self.fields['_created'] = forms.DateTimeField(
-            label="Created",
+
+        self.fields['c_created'] = forms.DateTimeField(
+            label = 'Created',
             input_formats=settings.DATETIME_FORMAT,
-            initial=kwargs['instance'].created,
-            disabled=True
+            disabled = True,
+            initial = self.instance.created,
         )
 
-        self.fields['_modified'] = forms.DateTimeField(
-            label="Modified",
+        self.fields['c_modified'] = forms.DateTimeField(
+            label = 'Modified',
             input_formats=settings.DATETIME_FORMAT,
-            initial=kwargs['instance'].modified,
-            disabled=True
+            disabled = True,
+            initial = self.instance.modified,
         )
 
+        self.tabs['details'].update({
+            "edit_url": reverse('ITAM:_operating_system_change', args=(self.instance.pk,))
+        })
 
-        if kwargs['instance'].is_global:
-
-            self.fields['is_global'].widget.attrs['disabled'] = True
+        self.url_index_view = reverse('ITAM:Operating Systems')

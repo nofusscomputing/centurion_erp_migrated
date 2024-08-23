@@ -37,6 +37,12 @@ class SoftwareCommonFields(TenancyObject, models.Model):
 class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
 
+    class Meta:
+
+        verbose_name_plural = 'Software Categories'
+
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
@@ -54,6 +60,12 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
 
 class Software(SoftwareCommonFields, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Softwares'
+
 
     publisher = models.ForeignKey(
         Manufacturer,
@@ -90,6 +102,12 @@ class Software(SoftwareCommonFields, SaveHistory):
 
 
 class SoftwareVersion(SoftwareCommonFields, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Software Versions'
+
 
     software = models.ForeignKey(
         Software,

@@ -25,6 +25,11 @@ from settings.models.app_settings import AppSettings
 class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 
+    class Meta:
+
+        verbose_name_plural = 'Device Types'
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
@@ -42,6 +47,25 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
 
 class Device(DeviceCommonFieldsName, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Devices'
+
+
+    reserved_config_keys: list = [
+        'software'
+    ]
+
+    def validate_config_keys_not_reserved(self):
+
+        value: dict = self
+
+        for invalid_key in Device.reserved_config_keys:
+
+            if invalid_key in value.keys():
+                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
 
 
     def validate_uuid_format(self):
@@ -113,11 +137,29 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     )
 
 
+    config = models.JSONField(
+        blank = True,
+        default = None,
+        null = True,
+        validators=[ validate_config_keys_not_reserved ],
+        verbose_name = 'Host Configuration',
+        help_text = 'Configuration for this device'
+    )
+
     inventorydate = models.DateTimeField(
         verbose_name = 'Last Inventory Date',
         null = True,
         blank = True,
     )
+
+    is_virtual = models.BooleanField(
+        blank = True,
+        default = False,
+        help_text = 'Is this device a virtual machine',
+        null = False,
+        verbose_name = 'Is Virtual',
+    )
+
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -254,6 +296,25 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
             config['software'] = merge_software(group_software, host_software)
 
+            if self.config:
+
+                config.update(self.config)
+
+            from itim.models.services import Service
+            services = Service.objects.filter(
+                device = self.pk
+            )
+
+            for service in services:
+
+                if service.config_variables:
+
+                    service_config:dict = {
+                        service.config_key_variable: service.config_variables
+                    }
+
+                    config.update(service_config)
+
         return config
 
 
@@ -265,6 +326,9 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             '-action',
             'software'
         ]
+
+        verbose_name_plural = 'Device Softwares'
+
 
 
     class Actions(models.TextChoices):
@@ -340,6 +404,12 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
 
 class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
+
+
+    class Meta:
+
+        verbose_name_plural = 'Device Operating Systems'
+
 
     device = models.ForeignKey(
         Device,

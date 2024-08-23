@@ -26,7 +26,7 @@ class ManufacturerPermissions(TestCase, ModelPermissions):
 
     url_name_add = '_manufacturer_add'
 
-    url_name_change = '_manufacturer_view'
+    url_name_change = '_manufacturer_change'
 
     url_name_delete = '_manufacturer_delete'
 

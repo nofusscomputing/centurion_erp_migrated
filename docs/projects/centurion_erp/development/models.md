@@ -33,6 +33,22 @@ All models must meet the following requirements:
 
 - No `queryset` is to return data that the user has not got access to. _see [queryset()](./api/models/tenancy_object.md#tenancy-object-manager)_
 
+- Single Field validation is conducted if required.
+
+    !!! danger "Requirement"
+        Multi-field validation, or validation that requires access to multiple fields must be done within the [form class](./forms.md#requirements).
+
+- contains a `Meta` sub-class with following parameters:
+
+    - `verbose_name_plural`
+
+- If creating a new model, function `access.functions.permissions.permission_queryset()` has been updated to display the models permission(s)
+
+
+## History
+
+Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.
+
 
 ## Tests
 
