@@ -1,3 +1,83 @@
+## 1.1.0 (2024-08-23)
+
+### feat
+
+- **itim**: Dont attempt to apply cluster type config if no type specified.
+- **itim**: Service config rendered as part of cluster config
+- **itim**: dont force config key, validate when it's required
+- **itim**: Services assignable to cluster
+- **itim**: Ability to add configuration to cluster type
+- **itim**: Ability to add external link to cluster
+- **itim**: Ability to add and configure Cluster Types
+- **itim**: Add cluster to history save
+- **itim**: prevent cluster from setting itself as parent
+- **itim**: Ability to add and configure cluster
+- **itam**: Track if device is virtual
+- **api**: Endpoint to fetch user permissions
+- **development**: Add function to filter permissions to those used by centurion
+- **development**: Add new template tag `choice_ids` for string list casting
+- **development**: Render `model_name_plural` as part of back button
+- **development**: add to form field `model_name_plural`
+- **development**: render heading if section included
+- **base**: create detail view templates
+- **itam**: Render Service Config with device config
+- **itam**: Display deployed services for devices
+- **itim**: Prevent circular service dependencies
+- **itim**: Port number validation to check for valid port numbers
+- **itim**: Prevent Service template from being assigned as dependent service
+- **itim**: Add service template support
+- **itim**: Ports for service management
+- **itim**: Service Management
+- **assistance**: Filter KB articles to target user
+- **assistance**: Add date picker to date fields for KB articles
+- **assistance**: Dont display expired articles for "view" users
+- **base**: add code highlighting to markdown
+- **assistance**: Categorised Knowledge base articles
+- **itim**: Add menu entry
+- **itam**: Ability to add device configuration
+- **settings**: New model to allow adding templated links to devices and software
+
+### Fixes
+
+- **settings**: return the rendering of external links to models
+- **core**: Ensure when saving history json is correctly formatted
+- **itim**: Fix name typo in Add Service button
+- Ensure tenancy models have `Meta.verbose_name_plural` attribute
+- **base**: Use correct url for back button
+- **itim**: ensure that the service template config is also rendered as part of device config
+- **itim**: dont render link if no device
+- **itim**: Dont show self within service dependencies
+- **assistance**: Only return distinct values when limiting KB articles
+
+### Refactoring
+
+- **itim**: Add Cluster type to index page
+- **itam**: Knowledge Base now uses details template
+- **itam**: Device Type now uses details template
+- **itam**: Operating System now uses details template
+- **itim**: Service Port now uses details template
+- **itam**: Device Model now uses details template
+- **config_management**: Config Groups now uses details template
+- **itam**: Software Categories now uses details template
+- **itam**: manufacturer now uses details template
+- **itam**: software now uses details template
+- **itam**: device now use details template
+- **itim**: services now use details template
+
+### Tests
+
+- **itim**: Cluster Types unit tests
+- **itim**: Cluster unit tests
+- **itam**: Correct Device Type Model permissions test to use "change" view
+- **itam**: Correct Operating System Model permissions test to use "change" view
+- **config_management**: Correct Device Model permissions test to use "change" view
+- **config_management**: Correct Config Group permissions test to use "change" view
+- **itam**: Correct Software Category permissions test to use "change" view
+- **core**: Correct manufacturer permissions test to use "change" view
+- **itam**: Correct software permissions test to use "change" view
+- **model**: test for checking if Meta sub-class has variable verbose_name_plural
+- **external_link**: add tests
+
 ## 1.0.0 (2024-08-23)
 
 ## 1.0.0-b14 (2024-08-12)
