@@ -1,5 +1,7 @@
+import importlib
 import pytest
 import unittest
+
 
 from access.models import TenancyObject
 from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectTestCases
@@ -38,6 +40,40 @@ class TenancyModel(
 
     model = None
     """ Model to test """
+
+
+    def test_field_exists_verbose_name_plural(self):
+        """Test for existance of field in `<model>.Meta`
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name_plural` must be defined in `Meta` class.
+        """
+
+        assert 'verbose_name_plural' in self.model._meta.original_attrs
+
+
+    def test_field_not_empty_verbose_name_plural(self):
+        """Test field `<model>.Meta` is not empty
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name_plural` must be defined in `Meta` class.
+        """
+
+        assert self.model._meta.original_attrs['verbose_name_plural'] is not None
+
+
+    def test_field_type_verbose_name_plural(self):
+        """Test field `<model>.Meta` is not empty
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name_plural` must be of type str.
+        """
+
+        assert type(self.model._meta.original_attrs['verbose_name_plural']) is str
+
 
 
 

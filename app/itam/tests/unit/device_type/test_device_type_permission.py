@@ -26,7 +26,7 @@ class DeviceTypePermissions(TestCase, ModelPermissions):
 
     url_name_add = '_device_type_add'
 
-    url_name_change = '_device_type_view'
+    url_name_change = '_device_type_change'
 
     url_name_delete = '_device_type_delete'
 

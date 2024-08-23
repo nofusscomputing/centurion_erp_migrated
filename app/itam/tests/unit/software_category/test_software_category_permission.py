@@ -29,7 +29,7 @@ class SoftwareCategoryPermissions(TestCase, ModelPermissions):
 
     url_name_add = '_software_category_add'
 
-    url_name_change = '_software_category_view'
+    url_name_change = '_software_category_change'
 
     url_name_delete = '_software_category_delete'
 

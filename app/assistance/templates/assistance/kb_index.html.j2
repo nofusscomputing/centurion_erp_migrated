@@ -1,0 +1,47 @@
+{% extends 'base.html.j2' %}
+
+{% block content %}
+
+<input type="button" value="New Article" onclick="window.location='{% url 'Assistance:_knowledge_base_add' %}';">
+<table class="data">
+    <tr>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Organization</th>
+        <th>&nbsp;</th>
+    </tr>
+    {% if items %}
+    {% for item in items %}
+    <tr>
+        <td><a href="{% url 'Assistance:_knowledge_base_view' pk=item.id %}">{{ item.title }}</a></td>
+        <td><a href="{% url 'Settings:_knowledge_base_category_view' pk=item.category.id %}">{{ item.category }}</a></td>
+        <td>{{ item.organization }}</td>
+        <td>&nbsp;</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+        <td colspan="4">Nothing Found</td>
+    </tr>
+    {% endif %}
+</table>
+<br>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

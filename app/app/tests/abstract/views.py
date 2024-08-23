@@ -563,3 +563,33 @@ class AllViews(
     index_view: str = None
     """ Index Class name to test """
 
+
+    @pytest.mark.skip(reason='write test')
+    def test_view_index_attribute_missing_permission_required(self):
+        """ Attribute missing Test
+        
+        Ensure that `permission_required` attribute is not defined within the view.
+
+        this can be done by mocking the inherited class with the `permission_required` attribute
+        set to a value that if it changed would be considered defined in the created view.
+
+        ## Why?
+
+        This attribute can be dynamically added based of of the view name along with attributes
+        `model._meta.model_name` and `str(__class__.__name__).lower()`. 
+
+        Additional test:
+        - ensure that the attribute does get automagically created.
+        - ensure that the classes name is one of add, change, delete, display or index.
+        """
+
+
+    @pytest.mark.skip(reason='write test')
+    def test_view_index_attribute_missing_template_name(self):
+        """ Attribute missing Test
+        
+        Ensure that `template_name` attribute is not defined within the view if the value
+        is `form.html.j2`
+
+        this valuse is already defined in the base form
+        """

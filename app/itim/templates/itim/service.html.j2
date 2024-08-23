@@ -1,0 +1,75 @@
+{% extends 'detail.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+    <hr />
+
+    <div style="display: block; width: 100%;">
+        <h3>Ports</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            {% if item.port.all and not item.template %}
+            {% for port in item.port.all %}
+            <tr>
+                <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ port }}</a></td>
+                <td>{{ port.description }}</td>
+            </tr>
+            {% endfor %}
+            {% elif not item.port.all and item.template %}
+            {% for port in item.template.port.all %}
+            <tr>
+                <td><a href="{% url 'Settings:_port_view' item.pk %}">{{ port }}</a></td>
+                <td>{{ port.description }}</td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    <div style="display: block; width: 100%;">
+        <h3>Dependent Services</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Organization</th>
+            </tr>
+            {% if item.dependent_service.all %}
+            {% for service in item.dependent_service.all %}
+            <tr>
+                <td><a href="{% url 'ITIM:_service_view' service.pk %}">{{ service }}</a></td>
+                <td>{{ service.organization }}</td>
+            </tr>
+            {% endfor%}
+            {% else %}
+            <tr>
+            <td colspan="2"> Nothing Found</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+</div>
+
+
+<div id="rendered_config" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.rendered_config %}
+
+</div>
+
+{% endblock %}

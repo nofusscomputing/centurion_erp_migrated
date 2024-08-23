@@ -34,6 +34,9 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
             'name'
         ]
 
+        verbose_name_plural = 'Manufacturers'
+
+
     name = models.CharField(
         blank = False,
         max_length = 50,

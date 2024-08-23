@@ -1,0 +1,18 @@
+<style>
+.inner-text {
+    background-color: #fff;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-right: 15px;
+    margin-right: -5px;
+    padding: 1px 5px 1px 5px;
+}
+
+</style>
+
+<span class="icon-text external-link" style="background-color: {% if external_link.colour %}{{ external_link.colour }}{% else %}#177ee6{% endif %};">
+    <span class="icon-external-link" style="margin-left: 5px;">
+        {% include 'icons/link.svg' %}
+    </span>
+        <a class="inner-text" href="{{ external_link.link }}" target="_blank"> {{ external_link.name }}</a>
+</span>

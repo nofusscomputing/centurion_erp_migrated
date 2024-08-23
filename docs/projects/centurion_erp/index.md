@@ -34,12 +34,14 @@ Centurion ERP contains the following modules:
 
 - [IT Asset Management (ITAM)](./user/itam/index.md)
 
+- [Knowledge Base](./user/assistance/knowledge_base.md)
+
 
 - **Core Features:**
 
     - [API](./user/api.md)
 
-    - [Application wide settings](./user/settings.md)
+    - [Application wide settings](./user/settings/app_settings.md)
 
     - History
 
@@ -75,75 +77,71 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
 - **Planned Modules:**
 
-    - Accounting _[see #88](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/88)_
+    - Accounting _[see #88](https://github.com/nofusscomputing/centurion_erp/issues/88)_
 
-        General Ledger - _[see #116](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/116)_
+        General Ledger - _[see #116](https://github.com/nofusscomputing/centurion_erp/issues/116)_
 
-    - Asset Management _[see #89](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/88)_
+    - Asset Management _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_
 
-    - Change Management _[see #90](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/90)_
+    - Change Management _[see #90](https://github.com/nofusscomputing/centurion_erp/issues/90)_
 
     - Config Management
 
-        - Host Config _[see #44](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/44)_
-
     - Core
 
-        - Location Management (Regions, Sites and Locations) _[see #62](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/62)_
+        - Location Management (Regions, Sites and Locations) _[see #62](https://github.com/nofusscomputing/centurion_erp/issues/62)_
 
-    - Customer Relationship Management (CRM) _[see #91](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/91)_
+    - Customer Relationship Management (CRM) _[see #91](https://github.com/nofusscomputing/centurion_erp/issues/91)_
 
-    - Database Management _[see #72](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/72)_
+    - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
 
-    - Development Operations (DevOPS) _[see #68](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/58)_
+    - Development Operations (DevOPS) _[see #68](https://github.com/nofusscomputing/centurion_erp/issues/58)_
 
-        - Repository Management _[see #115](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/115)_
+        - Repository Management _[see #115](https://github.com/nofusscomputing/centurion_erp/issues/115)_
 
-    - Human Resource Management _[see #92](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/92)_
+    - Human Resource Management _[see #92](https://github.com/nofusscomputing/centurion_erp/issues/92)_
 
-    - Incident Management _[see #93](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/93)_
-
-    - Information Management _[see #10](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/10)_
+    - Incident Management _[see #93](https://github.com/nofusscomputing/centurion_erp/issues/93)_
 
     - IT Asset Management (ITAM)
 
-        - Licence Management _[see #4](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/4)_
+        - Licence Management _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_
 
-    - IT Infrastructure Management (ITIM) _[see #61](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/61)_
+    - IT Infrastructure Management (ITIM) _[see #61](https://github.com/nofusscomputing/centurion_erp/issues/61)_
 
-        - Cluster Management _[see #71](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/71)_
+        - Cluster Management _[see #71](https://github.com/nofusscomputing/centurion_erp/issues/71)_
 
-        - Database Management _[see #72](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/72)_
+        - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
 
-        - Service Management _[see #19](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/19)_
+        - Service Management _[see #19](https://github.com/nofusscomputing/centurion_erp/issues/19)_
 
-        - Software Package Management _[see #96](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/96)_
+        - Software Package Management _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_
 
-        - Role Management _[see #70](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/70)_
+        - Role Management _[see #70](https://github.com/nofusscomputing/centurion_erp/issues/70)_
 
-        - Virtual Machine Management _[see #73](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/73)_
+        - Virtual Machine Management _[see #73](https://github.com/nofusscomputing/centurion_erp/issues/73)_
 
         - Vulnerability Management
 
-            - Software _[see #3](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/3)_
+            - Software _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_
 
-    - Order Management _[see #94](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/94)_
+    - Order Management _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_
 
-        - Supplier Management _[see #123](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/123)_
+        - Supplier Management _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_
 
-    - Project Management _[see #14](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/14)_
+    - Project Management _[see #14](https://github.com/nofusscomputing/centurion_erp/issues/14)_
 
-    - Problem Management  _[see #95](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/95)_
+    - Problem Management  _[see #95](https://github.com/nofusscomputing/centurion_erp/issues/95)_
 
-    - Request Management _[see #96](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/96)_
+    - Request Management _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_
 
 
 - **Planned Integrations:**
 
-    - ArgoCD _[see #77](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/77)_
+    - ArgoCD _[see #77](https://github.com/nofusscomputing/centurion_erp/issues/77)_
 
         [ArgoCD](https://github.com/argoproj-labs) is a Continuous Deployment system for ensuring objects deployed to kubernetes remain in the desired state.
 
-    - AWX  _[see #113](https://gitlab.com/nofusscomputing/projects/django_template/-/issues/113)_
+    - AWX  _[see #113](https://github.com/nofusscomputing/centurion_erp/issues/113)_
 
         [AWX](https://github.com/ansible/awx) is an Automation Orchestration system that uses Ansible for its configuration.

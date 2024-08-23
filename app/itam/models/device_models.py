@@ -20,6 +20,9 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
             'name',
         ]
 
+        verbose_name_plural = 'Device Models'
+
+
     manufacturer = models.ForeignKey(
         Manufacturer,
         on_delete=models.CASCADE,

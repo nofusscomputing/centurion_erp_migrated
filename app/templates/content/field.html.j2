@@ -1,0 +1,96 @@
+{% load json %}
+{% load markdown %}
+{% load choice_ids %}
+
+{% if field.widget_type == 'textarea' or field.label == 'Notes' %}
+
+    {% if field.name in section.json and field.value %}
+
+    <pre style="width: 80%; text-align: left; display:inline; border: 1px solid #ccc; padding: 22px;">{{ field.value.strip | json_pretty | safe }}</pre>
+
+    {% elif field.name in section.markdown or field.label == 'Notes' %}
+
+        {% if field.label == 'Notes' %}
+
+            <div>
+                <label style="font-weight: bold; width: 100%; border-bottom: 1px solid #ccc; display: block; text-align: inherit;">
+                {{ field.label }}
+                </label>
+
+                <div style="display: inline-block; text-align: left;">
+                    {% if field.value %}
+                    {{ field.value | markdown | safe }}
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
+                </div>
+            </div>
+
+        {% else %}
+
+            {% if field.value %}
+
+                <div style="display:block; width: 95%; text-align: left;">{{ field.value | markdown | safe }}</div>
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
+
+        {% endif %}
+
+    {% elif not field.value %}
+
+        &nbsp;
+
+    {% endif %}
+
+
+{% else %}
+
+
+    <div class="detail-view-field">
+        <label>{{ field.label }}</label>
+        <span>
+        {% if field.field.choices %} {# Display the selected choice text value #}
+
+            {% if field.value %}
+            
+                {% for field_value in field.value|choice_ids %}
+
+                    {% for id, value in field.field.choices %}
+
+                        {% if field_value == id %}
+
+                            {{ value }},
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                {% endfor %}
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
+
+        {% else %}
+
+            {% if field.value is not None %}
+            
+                {{ field.value }}
+
+            {% else %}
+
+                &nbsp;
+
+            {% endif %}
+
+        {% endif %}
+        </span>
+    </div>
+
+{% endif %}

@@ -1,0 +1,55 @@
+{% extends 'detail.html.j2' %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+<form action="" method="post">
+  {% csrf_token %}
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+
+<div id="services" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.services %}
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Organization</th>
+        </tr>
+        {% for service in services %}
+        <tr>
+            <td><a href="{% url 'ITIM:_service_view' service.pk %}">{{ service.name }}</a></td>
+            <td>{{ service.organization }}</td>
+        </tr>
+        {% endfor%}
+    </table>
+
+</div>
+
+
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
+    {{ notes_form }}
+    <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+    <div class="comments">
+      {% if notes %}
+      {% for note in notes%}
+      {% include 'note.html.j2' %}
+      {% endfor %}
+      {% endif %}
+    </div>
+
+</div>
+
+</form>
+{% endblock %}
