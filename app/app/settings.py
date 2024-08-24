@@ -360,8 +360,6 @@ if DEBUG:
 
     # Apps Under Development
     INSTALLED_APPS += [
-        'project_management.apps.ProjectManagementConfig',
-        'information.apps.InformationConfig',
     ]
 
 

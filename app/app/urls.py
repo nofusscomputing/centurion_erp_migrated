@@ -74,10 +74,6 @@ if settings.DEBUG:
     urlpatterns += [
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
-        path("project_management/", include("project_management.urls")),
-        # Apps Under Development
-        path("itim/", include("itim.urls")),
-        path("information/", include("information.urls")),
     ]
 
 # must be after above
