@@ -76,11 +76,13 @@ class CommonModelForm(forms.ModelForm):
 
                         if hasattr(field.queryset.model, 'is_global'):
 
-                            self.fields[field_name].queryset = field.queryset.filter(
-                                Q(organization__in=user_organizations_id)
-                                |
-                                Q(is_global = True)
-                            )
+                            if field.queryset.model.is_global is not None:
+
+                                self.fields[field_name].queryset = field.queryset.filter(
+                                    Q(organization__in=user_organizations_id)
+                                    |
+                                    Q(is_global = True)
+                                )
 
                         else:
 
