@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{% static 'base.css' %}">
   <link rel="stylesheet" href="{% static 'code.css' %}">
   <link rel="stylesheet" href="{% static 'content.css' %}">
+  {% block additional-stylesheet %}{% endblock additional-stylesheet %}
   <script src="{% static 'functions.js' %}"></script>
   {% endif %}
 
