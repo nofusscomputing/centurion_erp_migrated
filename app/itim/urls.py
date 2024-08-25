@@ -1,5 +1,6 @@
 from django.urls import path
 
+from core.views import ticket, ticket_comment
 
 from itim.views import clusters, services
 
@@ -27,6 +28,14 @@ urlpatterns = [
     path('ticket/<str:ticket_type>/<int:ticket_id>/comment/add', ticket_comment.Add.as_view(), name="_ticket_comment_incident_add"),
     path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:pk>/edit', ticket_comment.Change.as_view(), name="_ticket_comment_incident_change"),
     path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:parent_id>/add', ticket_comment.Add.as_view(), name="_ticket_comment_incident_reply_add"),
+
+    path('ticket/problem', ticket.Index.as_view(), kwargs={'ticket_type': 'problem'}, name="Problems"),
+    path('ticket/<str:ticket_type>/add', ticket.Add.as_view(), name="_ticket_problem_add"),
+    path('ticket/<str:ticket_type>/<int:pk>/edit', ticket.Change.as_view(), name="_ticket_problem_change"),
+    path('ticket/<str:ticket_type>/<int:pk>', ticket.View.as_view(), name="_ticket_problem_view"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/add', ticket_comment.Add.as_view(), name="_ticket_comment_problem_add"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:pk>/edit', ticket_comment.Change.as_view(), name="_ticket_comment_problem_change"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:parent_id>/add', ticket_comment.Add.as_view(), name="_ticket_comment_problem_reply_add"),
 
     path("services", services.Index.as_view(), name="Services"),
     path("service/add", services.Add.as_view(), name="_service_add"),
