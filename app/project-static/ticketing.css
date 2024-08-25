@@ -1,0 +1,477 @@
+
+#linked-tickets {
+    display: table;
+    padding: 0px;
+    margin: 0px;
+}
+
+#linked-tickets .ticket {
+    display: inline-block;
+    line-height: 30px;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+}
+
+
+#linked-tickets .ticket svg{
+    display: inline;
+    width: 20px;
+    height: 30px;
+
+}
+
+
+#linked-tickets .icon {
+    display: inline-block;
+    width: 20px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+}
+
+#linked-tickets .icon svg{
+    display: inline;
+    width: 20px;
+    height: 30px;
+
+}
+
+
+#linked-tickets .icon.icon-related svg{
+    background-color: #afdbff;
+    border-radius: 10px;
+    fill: #0b91ff;
+    height: 20px;
+}
+
+#linked-tickets .icon.icon-blocks svg{
+    background-color: #fcd5b1;
+    border-radius: 10px;
+    fill: #e79b37;
+    height: 20px;
+}
+
+#linked-tickets .icon.icon-blocked_by svg{
+    background-color: #f3c6c6;
+    border-radius: 10px;
+    fill: #ff1c1c;
+    height: 20px;
+}
+
+
+#ticket-additional-data {
+    padding-right: 10px;
+    font-size: 12pt;
+}
+
+
+#ticket-additional-data div {
+    margin-top: 10px;
+    padding: 0px;
+}
+
+
+#ticket-content {
+  display: flex;
+  height: auto;
+  margin: 20px;
+  padding: 0px;
+  width: auto;
+}
+
+
+#ticket-content div {
+  display: inline-block;
+}
+
+
+#ticket-data {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+
+
+#ticket-data div {
+    display: block;
+}
+
+
+#ticket-description {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin: 0px 10px 0px 0px;
+    padding: 10px;
+}
+
+
+
+#data-block {
+    border: 1px solid #ccc;
+    padding: 0px;
+}
+
+
+#data-block h3 button {
+    float: right;
+    height: 20px;
+    margin-bottom: auto;
+    margin-top: auto;
+
+
+}
+
+
+#data-block div {
+    margin: 0px;
+    padding: 0px;
+    padding-left: 10px;
+}
+
+
+#data-block.linked-item div#item {
+    display: inline-block;
+    text-align: center;
+    width: 33%;
+}
+
+
+#ticket-comments {
+    padding: 10px;
+}
+
+
+#ticket-comments ul {
+    padding: 0px;
+    padding-left: 30px;
+    margin: 0px;
+}
+
+
+#ticket-comments li  {
+    line-height: 30px;
+    margin: 0px;
+    margin-bottom: 30px;
+    padding-left: 10px;
+}
+
+
+#data-block h3 {
+    background-color: #177ee6;
+    color: #fff;
+    display: flex;
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    padding-left: 5px;
+}
+
+
+#data-block h3 #text {
+    height: inherit;
+    line-height: inherit;
+    padding: 0px;
+    width: 100%;
+
+}
+
+
+#data-block h3 #icons {
+    height: inherit;
+    line-height: inherit;
+    margin-right: 0px;
+    margin-left: auto;
+    text-align: right;
+    width: 200px;
+}
+
+#data-block h3 #icons svg {
+    height: 30px;
+    margin: 0px;
+    margin-right: 5px;
+    width: 20px;
+    fill: #fff;
+}
+
+
+#ticket-comments #comment {
+    border: 1px solid #177ee6;
+}
+
+#ticket-comments #comment h4 {
+    background-color: #177ee6;
+    border: none;
+    color: #fff;
+    display: flex;
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    padding-left: 5px;
+}
+
+
+#comment h4 #text {
+    height: inherit;
+    line-height: inherit;
+    padding: 0px;
+    text-align: left;
+    width: 100%;
+}
+
+
+#comment h4 #icons {
+    border: none;
+    display: inline-block;
+    height: inherit;
+    line-height: inherit;
+    margin-right: 0px;
+    margin-left: auto;
+    text-align: right;
+    width: 200px;
+}
+
+
+#ticket-comments #comment h4 #icons svg {
+    fill: #fff;
+    height: 30px;
+    margin: 0px;
+    margin-right: 5px;
+    width: 20px;
+}
+
+
+#discussion {
+    margin: 0px;
+}
+
+
+#discussion h4 {
+    border-left: 1px solid #177fe66e;
+    border-right: 1px solid #177fe66e;
+    display: block;
+    margin: 0px;
+    margin-right: 0px;
+    margin-left: auto;
+    height: 30px;
+    line-height: inherit;
+    text-align: right;
+    padding: 0px;
+}
+
+
+#discussion svg {
+    width: 20px;
+    height: 30px;
+    margin: 0px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+
+#ticket-meta {
+  background-color: #fff;
+  width: 400px;
+  border: 1px solid #ccc;
+  margin-right: 0px;
+  margin-left: auto;
+  padding: 0px;
+}
+
+
+#ticket-meta h3 {
+    line-height: 30px;
+    height: 30px;
+    margin: 0px;
+    text-align: center;
+}
+
+
+#ticket-meta fieldset {
+    display: block;
+    margin: 10px;
+    line-height: 30px;
+    border: none;
+}
+
+
+#ticket-meta fieldset label {
+    width: 100%;
+    display: block;
+    line-height: inherit;
+    font-weight: bold;
+}
+
+
+#ticket-meta fieldset span {
+    width: 100%;
+    display: block;
+    line-height: inherit;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+
+
+#ticket-meta h3.incident-ticket {
+    background-color: #f7baba;
+}
+
+
+#ticket-meta h3.request-ticket {
+    background-color: #f7e9ba;
+}
+
+
+#ticket-meta h3.change-ticket {
+    background-color: #badff7;
+}
+
+
+#ticket-meta h3.problem-ticket {
+    background-color: #f7d0ba;
+}
+
+
+#ticket-meta h3.issue-ticket {
+    background-color: #baf7db;
+}
+
+
+#ticket-meta h3.project_task-ticket {
+    background-color: #c5baf7;
+}
+
+
+.comment-type-default {
+    background-color: #fff;
+}
+
+
+.comment-type-Notification {
+    background-color: #96c7ff;
+}
+
+
+.comment-type-Solution {
+    background-color: #b7ff96;
+}
+
+
+.comment-type-Task {
+    background-color: #f8ff96;
+}
+
+
+#comment fieldset {
+    border: none;
+    display: inline-block;
+    line-height: 14pt;
+    width: 200px;
+    font-size: 10pt;
+}
+
+
+#comment fieldset label {
+    display: block;
+    font-weight: bold;
+    line-height: inherit;
+}
+
+
+#comment fieldset span {
+    display: block;
+    line-height: inherit;
+    
+}
+
+
+#comment hr {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin: 0px 5px 0px 5px;
+}
+
+
+#ticket-content #markdown h1 {
+    background-color: inherit;
+    color: inherit;
+    font-size: 24px;
+    line-height: 24px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown h2 {
+    background-color: inherit;
+    color: inherit;
+    font-size: 20px;
+    line-height: 20px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown h3 {
+    background-color: inherit;
+    color: inherit;
+    font-size: 18px;
+    line-height: 18px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown h4 {
+    background-color: inherit;
+    color: #000;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown h5 {
+    background-color: inherit;
+    color: #000;
+    font-size: 14px;
+    line-height: 14px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown li {
+    background-color: inherit;
+    font-size: 14px;
+    line-height: 25px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+#ticket-content #markdown p {
+    background-color: inherit;
+    font-size: 14px;
+    line-height: 25px;
+    padding: 0px;
+    margin: 0px;
+    text-align: left;
+
+}

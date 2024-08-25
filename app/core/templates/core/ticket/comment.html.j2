@@ -1,0 +1,55 @@
+
+
+<div id="ticket-comments">
+    <ul>
+        <li>John smith add x as related to this ticket</li>
+
+        {% for comment in ticket.comments %}
+
+            <li>
+                {% include 'core/ticket/comment/comment.html.j2' %}
+
+                {% if comment.threads %}
+                <div id="discussion" style="/*background-color: #fff;*/">
+                    <h4 style="display: flex; padding-left: 5px;">
+                    Replies
+                    {% include 'icons/ticket/expanded.svg' %}
+                    </h4>
+                </div>
+                <div style="padding-left: 40px; border-left: 1px solid #177fe66e; border-bottom: 1px solid #177fe66e;">
+                {% if comment.threads %}
+                {% for thread in comment.threads %}
+
+                    
+                    {% include 'core/ticket/comment/comment.html.j2' with comment=thread %}
+
+
+                {% endfor %}
+
+                {% endif %}
+                <div >
+                    <div style="padding: 10px; padding-top: 10px">
+                        <input type="button" value="Comment" onclick="window.location='{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=comment';">
+                        <input type="button" value="Task" onclick="window.location='{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=task';">
+                    </div>
+                </div>
+
+                {% endif %}
+            </li>
+
+        {% endfor %}
+
+        <li class="mention">Jane smith mentioned this ticket in xx</li>
+        <li class="mention">sdasfdgdfgdfg dfg dfg dfg d</li>
+    </ul>
+
+    <div id="comment" style="padding: 20px;">
+
+        <input type="button" value="Comment" onclick="window.location='{% url 'Assistance:_ticket_comment_request_add' ticket_type ticket.id %}?comment_type=comment';">
+        <input type="button" value="Task" onclick="window.location='{% url 'Assistance:_ticket_comment_request_add' ticket_type ticket.id %}?comment_type=task';">
+        <input type="button" value="Notification" onclick="window.location='{% url 'Assistance:_ticket_comment_request_add' ticket_type ticket.id %}?comment_type=notification';">
+        <input type="button" value="Resolve" onclick="window.location='{% url 'Assistance:_ticket_comment_request_add' ticket_type ticket.id %}?comment_type=solution';">
+
+    </div>
+
+</div>

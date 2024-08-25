@@ -100,6 +100,11 @@ class Project(ProjectCommonFieldsName):
     )
 
 
+    def __str__(self):
+
+        return self.name
+
+
     @property
     def percent_completed(self) -> str: # Auto-Calculate
         """ How much of the project is completed.

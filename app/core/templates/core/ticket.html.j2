@@ -1,0 +1,142 @@
+{% extends 'base.html.j2' %}
+
+{% block additional-stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ticketing.css' %}">
+{% endblock additional-stylesheet %}
+
+{% load tickets %}
+
+{% block article %}
+
+<div id="ticket-content">
+
+    <div id="ticket-data">
+
+        <div id="ticket-description">
+            <div style="/*background-color:yellow;*/ align-items:center; height: 30px; padding: 0px;">
+                <input style="float: right; position: relative; margin: 0px;" type="button" value="Edit" onclick="window.location='{{ edit_url }}';">
+            </div>
+            <div id="markdown" style="padding: 0px; margin: 0px">{{ ticket.description | markdown | safe }}</div>
+        </div>
+
+        <div id="ticket-additional-data">
+
+            <div id="data-block">
+                <h3>
+                    <div id="text">Related Tickets</div>
+                    <div id="icons">
+                        <a href="{% url '_ticket_related_add' ticket_type=ticket_type ticket_id=ticket.id %}">{% include 'icons/ticket/add.svg' %}</a>
+                    </div>
+                </h3>
+
+                {% if ticket.related_tickets %}
+                {% for related_ticket in ticket.related_tickets %}
+                <div id="linked-tickets">
+                    <div class="icon icon-{{ related_ticket.how_related }}">{% include related_ticket.icon_filename %}</div>
+                    <div class="ticket">
+                        {% if related_ticket.how_related == 'blocked_by' %}
+                        Blocked by
+                        {% elif related_ticket.how_related == 'blocks' %}
+                        Blocks
+                        {% elif related_ticket.how_related == 'related' %}
+                        Related to
+                        {% endif %}
+                        &nbsp;
+                        {{ related_ticket.title }}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div>Nothing Found</div>
+                {% endif %}
+
+            </div>
+
+
+            <div id="data-block" class="linked-item">
+                <h3>
+                    <div id="text">Linked Items</div>
+                    <div id="icons">{% include 'icons/place-holder.svg' %}{% include 'icons/place-holder.svg' %}</div>
+                </h3>
+                <div id="item">
+                    An item
+                </div>
+                <div id="item">
+                    another item
+                </div>
+                <div id="item">
+                    another item
+                </div>
+                <div id="item">
+                    another item
+                </div>
+                <div id="item">
+                    another item
+                </div>
+                <div id="item">
+                    another item
+                </div>
+            </div>
+
+        </div>
+
+        {% include 'core/ticket/comment.html.j2' %}
+
+    </div>
+
+
+    <div id="ticket-meta">
+    <h3 class="{{ ticket_type }}-ticket">{{ ticket_type }}</h3>
+
+        <fieldset>
+            <label>Assigned</label>
+            <span>
+            {% if ticket.assigned_users %}
+                {% for user in ticket.assigned_users.all %}
+                    {{ user }} 
+                {% endfor%}
+            {% endif %}
+            {% if ticket.assigned_teams %}
+                {% for team in ticket.assigned_teams.all %}
+                    {{ team }} 
+                {% endfor%}
+            {% endif %}
+            </span>
+        </fieldset>
+        <fieldset>
+            <label>Status</label>
+            <span>{{ticket.get_status_display }}</span>
+        </fieldset>
+        <fieldset>
+            <label>Labels</label>
+            <span>val</span>
+        </fieldset>
+        <fieldset>
+            <label>Project</label>
+            <span>
+                {% if ticket.project %}
+                <a href="{% url 'Project Management:_project_view' pk=ticket.project_id %}">{{ ticket.project }}</a>
+                {% else %}
+                -
+                {% endif %}
+            </span>
+        </fieldset>
+        <fieldset>
+            <label>Priority</label>
+            <span>U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>
+        </fieldset>
+        <fieldset>
+            <label>Milestone</label>
+            <span>val</span>
+        </fieldset>
+        <fieldset>
+            <label>Roadmap(s)</label>
+            <span>val</span>
+        </fieldset>
+
+    </div>
+
+
+</div>
+{% endblock %}
