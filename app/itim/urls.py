@@ -20,6 +20,14 @@ urlpatterns = [
     path("clusters/<int:pk>/delete", clusters.Delete.as_view(), name="_cluster_delete"),
     path("clusters/<int:pk>", clusters.View.as_view(), name="_cluster_view"),
 
+    path('ticket/incident', ticket.Index.as_view(), kwargs={'ticket_type': 'incident'}, name="Incidents"),
+    path('ticket/<str:ticket_type>/add', ticket.Add.as_view(), name="_ticket_incident_add"),
+    path('ticket/<str:ticket_type>/<int:pk>/edit', ticket.Change.as_view(), name="_ticket_incident_change"),
+    path('ticket/<str:ticket_type>/<int:pk>', ticket.View.as_view(), name="_ticket_incident_view"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/add', ticket_comment.Add.as_view(), name="_ticket_comment_incident_add"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:pk>/edit', ticket_comment.Change.as_view(), name="_ticket_comment_incident_change"),
+    path('ticket/<str:ticket_type>/<int:ticket_id>/comment/<int:parent_id>/add', ticket_comment.Add.as_view(), name="_ticket_comment_incident_reply_add"),
+
     path("services", services.Index.as_view(), name="Services"),
     path("service/add", services.Add.as_view(), name="_service_add"),
     path("service/<int:pk>/edit", services.Change.as_view(), name="_service_change"),
