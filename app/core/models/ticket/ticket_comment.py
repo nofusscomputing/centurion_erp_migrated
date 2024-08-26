@@ -121,12 +121,30 @@ class TicketComment(
         Ticket,
         blank= True,
         default = None,
-        help_text = 'Parent ID for creating discussion threads',
+        help_text = 'Ticket this comment belongs to',
         null = True,
         on_delete = models.CASCADE,
         validators = [ validation_ticket_id ],
-        verbose_name = 'Parent Comment',
+        verbose_name = 'Ticket',
     )
+
+
+    external_ref = models.IntegerField(
+        blank = True,
+        default=None,
+        help_text = 'External System reference',
+        null=True,
+        verbose_name = 'Reference Number',
+    ) # external reference or null. i.e. github issue number
+
+    external_system = models.IntegerField(
+        blank = True,
+        choices=Ticket.Ticket_ExternalSystem,
+        default=None,
+        help_text = 'External system this item derives',
+        null=True,
+        verbose_name = 'External System',
+    ) 
 
     comment_type = models.IntegerField(
         blank = False,
