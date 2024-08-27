@@ -6,10 +6,8 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField
 from access.models import TenancyObject, Team
 
-from .change_ticket import ChangeTicket
+
 from .markdown import TicketMarkdown
-from .problem_ticket import ProblemTicket
-from .request_ticket import RequestTicket
 
 from project_management.models.projects import Project
 
@@ -119,9 +117,6 @@ class TicketCommonFields(models.Model):
 class Ticket(
     TenancyObject,
     TicketCommonFields,
-    ChangeTicket,
-    ProblemTicket,
-    RequestTicket,
     TicketMarkdown,
 ):
 
@@ -753,3 +748,10 @@ class RelatedTickets(TenancyObject):
         related_name = 'to_ticket_id',
         verbose_name = 'Related Ticket',
     )
+
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.from_ticket_id

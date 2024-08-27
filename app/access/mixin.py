@@ -248,9 +248,11 @@ class OrganizationMixin():
 
             return True
 
-        if self.request.user.has_perms(perms) and len(self.kwargs) == 0 and str(self.request.method).lower() == 'get':
+        if self.request.user.has_perms(perms) and str(self.request.method).lower() == 'get':
 
-            return True
+            if len(self.kwargs) == 0 or (len(self.kwargs) == 1 and 'ticket_type' in self.kwargs):
+
+                return True
 
         for required_permission in self.permission_required:
 

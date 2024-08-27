@@ -44,6 +44,9 @@ class CommentForm(CommonModelForm):
 
         self.fields['ticket'].widget = self.fields['ticket'].hidden_widget()
 
+        self.fields['parent'].widget = self.fields['parent'].hidden_widget()
+        self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
+
         if 'qs_comment_type' in kwargs['initial']:
 
             comment_type = kwargs['initial']['qs_comment_type']

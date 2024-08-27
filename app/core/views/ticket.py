@@ -21,21 +21,35 @@ class Add(AddView):
     form_class = TicketForm
 
     model = Ticket
-    permission_required = [
-        'itam.add_device',
-    ]
-    template_name = 'form.html.j2'
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.add_ticket_' + self.kwargs['ticket_type']),
+        ]
 
 
     def get_initial(self):
-        return {
-            'organization': UserSettings.objects.get(user = self.request.user).default_organization,
+
+        initial = super().get_initial()
+
+        initial.update({
             'type_ticket': self.kwargs['ticket_type'],
-        }
+        })
+
+        return initial
+
 
     def form_valid(self, form):
         form.instance.is_global = False
         return super().form_valid(form)
+
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
     def get_success_url(self, **kwargs):
@@ -64,9 +78,12 @@ class Change(ChangeView):
 
     model = Ticket
 
-    permission_required = [
-        'itim.change_cluster',
-    ]
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.change_ticket_' + self.kwargs['ticket_type']),
+        ]
 
 
     def get_context_data(self, **kwargs):
@@ -76,6 +93,12 @@ class Change(ChangeView):
         context['content_title'] = str(self.object)
 
         return context
+
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
     def get_initial(self):
@@ -103,11 +126,15 @@ class Index(OrganizationPermission, generic.ListView):
 
     model = Ticket
 
-    permission_required = [
-        'django_celery_results.view_taskresult',
-    ]
-
     template_name = 'core/ticket/index.html.j2'
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.view_ticket_' + self.kwargs['ticket_type']),
+        ]
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -152,15 +179,19 @@ class View(ChangeView):
 
     model = Ticket
 
-    permission_required = [
-        'itam.view_device',
-    ]
-
     template_name = 'core/ticket.html.j2'
 
     form_class = DetailForm
 
     context_object_name = "ticket"
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.view_ticket_' + self.kwargs['ticket_type']),
+        ]
+
 
 
     def get_context_data(self, **kwargs):

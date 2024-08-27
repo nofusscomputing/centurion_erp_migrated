@@ -1,15 +1,20 @@
 from django import forms
 from django.db.models import Q
+from django.forms import ValidationError
 
 from app import settings
 
 from core.forms.common import CommonModelForm
+from core.forms.validate_ticket import TicketValidation
 
 from core.models.ticket.ticket import Ticket, RelatedTickets
 
 
 
-class TicketForm(CommonModelForm):
+class TicketForm(
+    CommonModelForm,
+    TicketValidation,
+):
 
     prefix = 'ticket'
 
@@ -18,7 +23,9 @@ class TicketForm(CommonModelForm):
         fields = '__all__'
 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+
+        self.request = request
 
         super().__init__(*args, **kwargs)
 
@@ -41,6 +48,7 @@ class TicketForm(CommonModelForm):
         self.fields['description'].widget.attrs = {'style': "height: 800px; width: 900px"}
 
         self.fields['opened_by'].initial = kwargs['user'].pk
+        self.fields['opened_by'].widget = self.fields['opened_by'].hidden_widget()
 
         self.fields['ticket_type'].widget = self.fields['ticket_type'].hidden_widget()
 
@@ -116,15 +124,69 @@ class TicketForm(CommonModelForm):
 
                 del self.fields[field]
 
+
     def clean(self):
         
         cleaned_data = super().clean()
 
         return cleaned_data
 
+
     def is_valid(self) -> bool:
 
         is_valid = super().is_valid()
+
+        ticket_type_choice_id = int(self.cleaned_data['ticket_type'] - 1)
+
+        ticket_type = str(self.fields['ticket_type'].choices.choices.pop(ticket_type_choice_id)[1]).lower().replace(' ', '_')
+
+        if self.instance.pk:
+        
+            self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
+
+        self.validate_ticket()
+
+        if ticket_type == 'change':
+
+            self.validate_change_ticket()
+
+        elif ticket_type == 'incident':
+
+            self.validate_incident_ticket()
+
+        elif ticket_type == 'issue':
+
+            # self.validate_issue_ticket()
+            raise ValidationError(
+                'This Ticket type is not yet available'
+            )
+
+        elif ticket_type == 'merge_request':
+
+            # self.validate_merge_request_ticket()
+            raise ValidationError(
+                'This Ticket type is not yet available'
+            )
+
+        elif ticket_type == 'problem':
+
+            self.validate_problem_ticket()
+
+        elif ticket_type == 'project_task':
+
+            # self.validate_project_task_ticket()
+            raise ValidationError(
+                'This Ticket type is not yet available'
+            )
+
+        elif ticket_type == 'request':
+
+            self.validate_request_ticket()
+
+        else:
+
+            raise ValidationError('Ticket Type must be set')
+
 
         return is_valid
 

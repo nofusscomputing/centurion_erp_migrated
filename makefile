@@ -14,6 +14,7 @@ prepare:
 	${ACTIVATE_VENV};
 	pip install -r website-template/gitlab-ci/mkdocs/requirements.txt;
 	pip install -r gitlab-ci/lint/requirements.txt;
+	pip install -r gitlab-ci/mkdocs/requirements.txt;
 	pip install -r requirements.txt;
 	pip install -r requirements_test.txt;
 	npm install markdownlint-cli2;

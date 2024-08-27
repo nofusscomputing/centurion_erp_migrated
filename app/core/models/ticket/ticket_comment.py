@@ -398,6 +398,14 @@ class TicketComment(
         
         return query
 
+
+    @property
+    def parent_object(self):
+        """ Fetch the parent object """
+        
+        return self.ticket
+
+
     @property
     def threads(self):
 
