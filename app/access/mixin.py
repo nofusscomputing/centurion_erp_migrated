@@ -327,6 +327,12 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
 
         if not request.user.is_authenticated:
                 return self.handle_no_permission()
+
+        if len(self.permission_required) == 0:
+
+            if hasattr(self, 'get_dynamic_permissions'):
+
+                self.permission_required = self.get_dynamic_permissions()
         
         if len(self.permission_required) > 0:
 
