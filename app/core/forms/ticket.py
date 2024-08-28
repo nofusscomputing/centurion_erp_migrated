@@ -117,10 +117,19 @@ class TicketForm(
 
             ticket_type += self.Meta.model.tech_fields
 
+        fields_allowed = self.fields_allowed
 
-        for field in original_fields:
+
+        for field in fields_allowed:    # Remove fields not intended for the ticket type
 
             if field not in ticket_type:
+
+                fields_allowed.remove(field)
+
+
+        for field in original_fields:    # Remove fields user cant edit unless field is hidden
+
+            if field not in fields_allowed and not self.fields[field].widget.is_hidden:
 
                 del self.fields[field]
 

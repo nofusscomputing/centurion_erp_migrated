@@ -182,9 +182,22 @@ class OrganizationMixin():
 
 
     # ToDo: Ensure that the group has access to item
-    def has_organization_permission(self, organization: int=None) -> bool:
+    def has_organization_permission(self, organization: int = None, permissions_required: list = None) -> bool:
+        """ Check if user has permission within organization.
+
+        Args:
+            organization (int, optional): Organization to check. Defaults to None.
+            permissions_required (list, optional): if doing object level permissions, pass in required permission. Defaults to None.
+
+        Returns:
+            bool: True for yes.
+        """
 
         has_permission = False
+
+        if permissions_required is None:
+
+            permissions_required = self.get_permission_required()
 
         if not organization:
 
@@ -203,7 +216,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == organization or organization == 0):
+                    if assembled_permission in permissions_required and (team['organization_id'] == organization or organization == 0):
 
                         return True
 
@@ -263,9 +276,15 @@ class OrganizationMixin():
 
             return True
 
-        perms = self.get_permission_required()
+        if permissions_required:
 
-        if self.has_organization_permission():
+            perms = permissions_required
+
+        else:
+
+            perms = self.get_permission_required()
+
+        if self.has_organization_permission(permissions_required = perms):
 
             return True
 
