@@ -159,6 +159,10 @@ class OrganizationMixin():
 
         user_organizations = []
 
+        if hasattr(self, '_user_organizations'):
+
+            return self._user_organizations
+
         teams = Team.objects
 
         for group in self.request.user.groups.all():
@@ -168,6 +172,11 @@ class OrganizationMixin():
             self.user_groups = self.user_groups + [group.id]
 
             user_organizations = user_organizations + [team.organization.id]
+
+        if len(user_organizations) > 0:
+
+            self._user_organizations = user_organizations
+
 
         return user_organizations
 
