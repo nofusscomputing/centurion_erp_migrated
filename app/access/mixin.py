@@ -33,6 +33,10 @@ class OrganizationMixin():
 
         id = None
 
+        if hasattr(self, '_object_organization'):
+
+            return self._object_organization
+
         try:
 
             if hasattr(self, 'get_queryset'):
@@ -61,6 +65,10 @@ class OrganizationMixin():
 
                         id = 0
 
+            if hasattr(self, 'instance') and id is None:    # Form Instance
+
+                id = self.instance.get_organization()
+
 
         except AttributeError:
 
@@ -83,6 +91,10 @@ class OrganizationMixin():
         except:
 
             pass
+
+        if id is not None:
+
+            self._object_organization = id
 
 
         return id
