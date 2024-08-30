@@ -657,6 +657,7 @@ class Ticket(
 
 
             how_related:str = str(related_ticket.get_how_related_display()).lower()
+            ticket_title: str = related_ticket.to_ticket_id.title
 
 
             if related_ticket.to_ticket_id_id == self.id:
@@ -664,6 +665,7 @@ class Ticket(
                 if str(related_ticket.get_how_related_display()).lower() == 'blocks':
 
                     how_related = 'blocked by'
+                    ticket_title = related_ticket.from_ticket_id.title
 
                 elif str(related_ticket.get_how_related_display()).lower() == 'blocked by':
 
@@ -674,7 +676,7 @@ class Ticket(
                 {
                     'id': related_ticket.id,
                     'type': related_ticket.to_ticket_id.get_ticket_type_display().lower(),
-                    'title': related_ticket.to_ticket_id.title,
+                    'title': ticket_title,
                     'how_related': how_related.replace(' ', '_'),
                     'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg')
                 }
