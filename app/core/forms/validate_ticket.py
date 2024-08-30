@@ -29,6 +29,7 @@ class TicketValidation(
         'date_closed',
         'external_ref',
         'external_system',
+        'status',
         'impact',
         'opened_by',
         'planned_start_date',
@@ -44,6 +45,7 @@ class TicketValidation(
     triage_fields: list = [
         'assigned_users',
         'assigned_teams',
+        'status',
         'impact',
         'opened_by',
         'planned_start_date',
@@ -59,13 +61,17 @@ class TicketValidation(
     @property
     def fields_allowed(self):
 
+        if not hasattr(self, '_ticket_type'):
+            
+            self._ticket_type = self.initial['type_ticket']
+
 
         fields_allowed: list = []
 
 
         if self.has_organization_permission(
             organization=self.instance.organization.id,
-            permissions_required = [ 'core.add_ticket_'+ self.initial['type_ticket'] ],
+            permissions_required = [ 'core.add_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = self.add_fields
@@ -73,7 +79,7 @@ class TicketValidation(
 
         if self.has_organization_permission(
             organization=self.instance.organization.id,
-            permissions_required = [ 'core.change_ticket_'+ self.initial['type_ticket'] ],
+            permissions_required = [ 'core.change_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             if len(fields_allowed) == 0:
@@ -86,21 +92,21 @@ class TicketValidation(
 
         if self.has_organization_permission(
             organization=self.instance.organization.id,
-            permissions_required = [ 'core.delete_ticket_'+ self.initial['type_ticket'] ],
+            permissions_required = [ 'core.delete_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.delete_fields
 
         if self.has_organization_permission(
             organization=self.instance.organization.id,
-            permissions_required = [ 'core.import_ticket_'+ self.initial['type_ticket'] ],
+            permissions_required = [ 'core.import_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.import_fields
 
         if self.has_organization_permission(
             organization=self.instance.organization.id,
-            permissions_required = [ 'core.triage_ticket_'+ self.initial['type_ticket'] ],
+            permissions_required = [ 'core.triage_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.triage_fields
@@ -143,10 +149,74 @@ class TicketValidation(
 
 
 
+    def validate_field_status(self):
+        """Validate status field
+
+        Ticket status depends upon ticket type.
+        Ensure that the corrent status is used.
+        """
+
+        is_valid = False
+
+        if not hasattr(self, '_ticket_type'):
+            
+            self._ticket_type = self.initial['type_ticket']
+
+        
+        
+        if self._ticket_type == 'request':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Request._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'incident':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Incident._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'problem':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Problem._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'change':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Change._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'issue':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Issue._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'merge':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Merge._value2member_map_:
+
+                is_valid = True
+
+        elif self._ticket_type == 'project_task':
+
+            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.ProjectTask._value2member_map_:
+
+                is_valid = True
+
+
+        
+        return is_valid
+
+
     def validate_ticket(self):
         """Validations common to all ticket types."""
 
         self.validate_field_permission()
+
+        self.validate_field_status()
 
 
 

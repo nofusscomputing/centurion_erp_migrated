@@ -230,6 +230,33 @@ class Ticket(
 
         """
 
+        class All(models.IntegerChoices):
+
+            DRAFT             = TicketValues._DRAFT_INT, TicketValues._DRAFT_STR
+            NEW               = TicketValues._NEW_INT, TicketValues._NEW_STR
+            ASSIGNED          = TicketValues._ASSIGNED_INT, TicketValues._ASSIGNED_STR
+            ASSIGNED_PLANNING = TicketValues._ASSIGNED_PLANNING_INT, TicketValues._ASSIGNED_PLANNING_STR
+            PENDING           = TicketValues._PENDING_INT, TicketValues._PENDING_STR
+            SOLVED            = TicketValues._SOLVED_INT, TicketValues._SOLVED_STR
+            CLOSED            = TicketValues._CLOSED_INT, TicketValues._CLOSED_STR
+            INVALID           = TicketValues._INVALID_INT, TicketValues._INVALID_STR
+
+            # Problem
+            ACCEPTED          = TicketValues._ACCEPTED_INT, TicketValues._ACCEPTED_STR
+            OBSERVATION       = TicketValues._OBSERVATION_INT, TicketValues._OBSERVATION_STR
+
+            # change
+            EVALUATION    = TicketValues._EVALUATION_INT, TicketValues._EVALUATION_STR
+            APPROVALS     = TicketValues._APPROVALS_INT, TicketValues._APPROVALS_STR
+            TESTING       = TicketValues._TESTING_INT, TicketValues._TESTING_STR
+            QUALIFICATION = TicketValues._QUALIFICATION_INT, TicketValues._QUALIFICATION_STR
+            APPLIED       = TicketValues._APPLIED_INT, TicketValues._APPLIED_STR
+            REVIEW        = TicketValues._REVIEW_INT, TicketValues._REVIEW_STR
+            CANCELLED     = TicketValues._CANCELLED_INT, TicketValues._CANCELLED_STR
+            REFUSED       = TicketValues._REFUSED_INT, TicketValues._REFUSED_STR
+
+
+
         class Request(models.IntegerChoices):
 
             DRAFT             = TicketValues._DRAFT_INT, TicketValues._DRAFT_STR
@@ -372,8 +399,8 @@ class Ticket(
 
     status = models.IntegerField( # will require validation by ticket type as status for types will be different
         blank = False,
-        choices=TicketStatus.Request,
-        default = TicketStatus.Request.NEW,
+        choices=TicketStatus.All,
+        default = TicketStatus.All.NEW,
         help_text = 'Status of ticket',
         # null=True,
         verbose_name = 'Status',
