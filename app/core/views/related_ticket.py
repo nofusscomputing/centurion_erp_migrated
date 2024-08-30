@@ -42,7 +42,7 @@ class Add(AddView):
 
         if self.kwargs['ticket_type'] == 'request':
 
-            return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.object.id,))
+            return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.kwargs['ticket_id'],))
         
         else:
 
