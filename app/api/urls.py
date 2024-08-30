@@ -19,7 +19,7 @@ from .views.itam import inventory
 app_name = "API"
 
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 
 router.register('', index.Index, basename='_api_home')
 router.register('device', DeviceViewSet, basename='device')

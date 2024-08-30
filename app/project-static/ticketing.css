@@ -103,10 +103,24 @@
     background-color: #fff;
     border: 1px solid #ccc;
     margin: 0px 10px 0px 0px;
-    padding: 10px;
+    padding: 0px;
 }
 
 
+#ticket-description h3 {
+    font-size: inherit;
+    font-weight: normal;
+    height: 30px;
+    line-height: 30px;
+    margin: 0px;
+    padding: 0px 10px 0px 10px;
+    text-align: left;
+}
+
+#ticket-description div {
+    /*background-color: tomato;*/
+    padding: 10px;
+}
 
 #data-block {
     border: 1px solid #ccc;
@@ -315,32 +329,32 @@
 }
 
 
-#ticket-meta h3.incident-ticket {
+h3.incident-ticket {
     background-color: #f7baba;
 }
 
 
-#ticket-meta h3.request-ticket {
+h3.request-ticket {
     background-color: #f7e9ba;
 }
 
 
-#ticket-meta h3.change-ticket {
+h3.change-ticket {
     background-color: #badff7;
 }
 
 
-#ticket-meta h3.problem-ticket {
+h3.problem-ticket {
     background-color: #f7d0ba;
 }
 
 
-#ticket-meta h3.issue-ticket {
+h3.issue-ticket {
     background-color: #baf7db;
 }
 
 
-#ticket-meta h3.project_task-ticket {
+h3.project_task-ticket {
     background-color: #c5baf7;
 }
 

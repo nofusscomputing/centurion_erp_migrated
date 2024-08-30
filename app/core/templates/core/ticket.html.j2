@@ -14,10 +14,11 @@
     <div id="ticket-data">
 
         <div id="ticket-description">
-            <div style="/*background-color:yellow;*/ align-items:center; height: 30px; padding: 0px;">
+            <h3 class="{{ ticket_type }}-ticket">opened by {{ ticket.opened_by }} on {{ ticket.created }}</h3>
+            <div>
                 <input style="float: right; position: relative; margin: 0px;" type="button" value="Edit" onclick="window.location='{{ edit_url }}';">
             </div>
-            <div id="markdown" style="padding: 0px; margin: 0px">{{ ticket.description | markdown | safe }}</div>
+            <div id="markdown">{{ ticket.description | markdown | safe }}</div>
         </div>
 
         <div id="ticket-additional-data">
