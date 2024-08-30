@@ -381,6 +381,10 @@ class TicketComment(
     ]
 
 
+    @property
+    def action_comment(self):
+
+        return self.user.username + ' ' + self.body + ' on ' +  str(self.created)
 
 
     @property

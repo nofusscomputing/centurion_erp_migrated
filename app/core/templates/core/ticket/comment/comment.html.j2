@@ -4,7 +4,7 @@
 
 {% if comment.get_comment_type_display == 'Action' %}
 
-    {{ comment.body | markdown | safe }}
+    <span>{{ comment.action_comment | markdown | safe }}</span>
 
 {% elif comment.get_comment_type_display == 'Comment' or comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' or comment.get_comment_type_display == 'Solution' %}
 <div id="comment" class="comment-type-default comment-type-{{ comment.get_comment_type_display }}">

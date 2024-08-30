@@ -6,6 +6,7 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField
 from access.models import TenancyObject, Team
 
+from core.middleware.get_request import get_request
 
 from .markdown import TicketMarkdown
 
@@ -638,6 +639,17 @@ class Ticket(
 
 
     @property
+    def comments(self):
+
+        from core.models.ticket.ticket_comment import TicketComment
+
+        return TicketComment.objects.filter(
+            ticket = self.id,
+            parent = None,
+        )
+
+
+    @property
     def markdown_description(self) -> str:
 
         return self.render_markdown(self.description)
@@ -685,16 +697,68 @@ class Ticket(
         return related_tickets
 
 
-    @property
-    def comments(self):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        before = {}
+
+        try:
+            before = self.__class__.objects.get(pk=self.pk).__dict__.copy()
+        except Exception:
+            pass
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        after = self.__dict__.copy()
+
+        changed_fields: list = []
+
+        for field, value in before.items():
+
+            if before[field] != after[field] and field != '_state':
+
+                changed_fields = changed_fields + [ field ]
+
+        request = get_request()
 
         from core.models.ticket.ticket_comment import TicketComment
 
-        return TicketComment.objects.filter(
-            ticket = self.id,
-            parent = None,
-        )
+        for field in changed_fields:
 
+            comment_field_value: str = None
+
+            if field == 'impact':
+
+                comment_field_value = f"changed {field} to {self.get_impact_display()}"
+
+            if field == 'urgency':
+
+                comment_field_value = f"changed {field} to {self.get_urgency_display()}"
+
+            if field == 'priority':
+
+                comment_field_value = f"changed {field} to {self.get_priority_display()}"
+
+
+            if field == 'status':
+
+                comment_field_value = f"changed {field} to {self.get_status_display()}"
+
+            if field == 'project_id':
+
+                comment_field_value = f"changed {field.replace('_id','')} to {self.project}"
+
+
+            if comment_field_value:
+
+                comment = TicketComment.objects.create(
+                    ticket = self,
+                    comment_type = TicketComment.CommentType.ACTION,
+                    body = comment_field_value,
+                    source = TicketComment.CommentSource.DIRECT,
+                    user = request.user,
+                )
+
+                comment.save()
 
 
 class RelatedTickets(TenancyObject):
@@ -757,3 +821,54 @@ class RelatedTickets(TenancyObject):
         """ Fetch the parent object """
         
         return self.from_ticket_id
+
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        if self.how_related == self.Related.BLOCKED_BY:
+
+            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocked by #{self.to_ticket_id.id}"
+            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocking #{self.from_ticket_id.id}"
+
+        elif self.how_related == self.Related.BLOCKS:
+
+            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocking #{self.to_ticket_id.id}"
+            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocked by #{self.from_ticket_id.id}"
+
+        elif self.how_related == self.Related.RELATED:
+
+            comment_field_value_from = f" added #{self.from_ticket_id.id} as related to #{self.to_ticket_id.id}"
+            comment_field_value_to = f" added #{self.to_ticket_id.id} as related to #{self.from_ticket_id.id}"
+
+
+        request = get_request()
+
+        from core.models.ticket.ticket_comment import TicketComment
+
+        if comment_field_value_from:
+
+            comment = TicketComment.objects.create(
+                ticket = self.from_ticket_id,
+                comment_type = TicketComment.CommentType.ACTION,
+                body = comment_field_value_from,
+                source = TicketComment.CommentSource.DIRECT,
+                user = request.user,
+            )
+
+            comment.save()
+
+
+        if comment_field_value_to:
+
+            comment = TicketComment.objects.create(
+                ticket = self.to_ticket_id,
+                comment_type = TicketComment.CommentType.ACTION,
+                body = comment_field_value_to,
+                source = TicketComment.CommentSource.DIRECT,
+                user = request.user,
+            )
+
+            comment.save()
+
