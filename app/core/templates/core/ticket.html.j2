@@ -33,7 +33,7 @@
 
                 {% if ticket.related_tickets %}
                 {% for related_ticket in ticket.related_tickets %}
-                <div id="linked-tickets">
+                <div id="linked-tickets" class="{{ related_ticket.type }}-ticket">
                     <div class="icon icon-{{ related_ticket.how_related }}">{% include related_ticket.icon_filename %}</div>
                     <div class="ticket">
                         {% if related_ticket.how_related == 'blocked_by' %}
@@ -43,8 +43,16 @@
                         {% elif related_ticket.how_related == 'related' %}
                         Related to
                         {% endif %}
-                        &nbsp;
-                        {{ related_ticket.title }}
+                        <a href="{% if related_ticket.type == 'request' %}
+                            {% url 'Assistance:_ticket_request_view' ticket_type=related_ticket.type pk=related_ticket.id %}
+                        {% elif related_ticket.type == 'change' %}
+                            {% url 'ITIM:_ticket_change_view' ticket_type=related_ticket.type pk=related_ticket.id %}
+                        {% elif related_ticket.type == 'incident' %}
+                            {% url 'ITIM:_ticket_incident_view' ticket_type=related_ticket.type pk=related_ticket.id %}
+                        {% elif related_ticket.type == 'problem' %}
+                            {% url 'ITIM:_ticket_problem_view' ticket_type=related_ticket.type pk=related_ticket.id %}
+                        {% endif %}
+                        ">{{ related_ticket.title }}</a>
                     </div>
                 </div>
                 {% endfor %}

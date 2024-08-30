@@ -38,7 +38,6 @@
 
 }
 
-
 #linked-tickets .icon.icon-related svg{
     background-color: #afdbff;
     border-radius: 10px;
@@ -58,6 +57,41 @@
     border-radius: 10px;
     fill: #ff1c1c;
     height: 20px;
+}
+
+
+#linked-tickets .ticket #ticket-icon {
+    display: inline-block;
+    width: 20px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px 5px 0px 0px;
+    height: 20px;
+}
+/*
+#ticket-icon div {
+    background-color: #e79b37;
+    display: inline;
+    width: 20px;
+    line-height: 30px;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+
+}*/
+
+#linked-tickets .ticket #ticket-icon svg {
+    /*background-color: #e79b37;*/
+    /*background-color: tomato;*/
+    display: inline;
+    /*width: 20px;*/
+    height: 22px;
+    padding: 1px;
+    border: none;
+    border-radius: 10px;
+    /*line-height: 20px;*/
+
 }
 
 
@@ -329,32 +363,32 @@
 }
 
 
-h3.incident-ticket {
+.incident-ticket {
     background-color: #f7baba;
 }
 
 
-h3.request-ticket {
+.request-ticket {
     background-color: #f7e9ba;
 }
 
 
-h3.change-ticket {
+.change-ticket {
     background-color: #badff7;
 }
 
 
-h3.problem-ticket {
+.problem-ticket {
     background-color: #f7d0ba;
 }
 
 
-h3.issue-ticket {
+.issue-ticket {
     background-color: #baf7db;
 }
 
 
-h3.project_task-ticket {
+.project_task-ticket {
     background-color: #c5baf7;
 }
 
