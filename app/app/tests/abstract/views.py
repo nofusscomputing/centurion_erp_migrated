@@ -134,6 +134,34 @@ class AddView:
         assert type(viewclass.template_name) is str
 
 
+    def test_view_add_function_get_initial_exists(self):
+        """Ensure that get_initial exists
+
+        Field `get_initial` must be defined as the base class is used for setup.
+        """
+
+        module = __import__(self.add_module, fromlist=[self.add_view])
+
+        view_class = getattr(module, 'Add')
+
+        assert hasattr(view_class, 'get_initial')
+
+
+    def test_view_add_function_get_initial_callable(self):
+        """Ensure that get_initial is a function
+
+        Field `get_initial` must be callable as it's used for setup.
+        """
+
+        module = __import__(self.add_module, fromlist=[self.add_view])
+
+        view_class = getattr(module, 'Add')
+
+        func = getattr(view_class, 'get_initial')
+
+        assert callable(func)
+
+
 
 class ChangeView:
     """ Testing of Display view """
@@ -521,6 +549,9 @@ class IndexView:
         viewclass = getattr(module, self.index_view)
 
         assert type(viewclass.template_name) is str
+
+
+
 
 
 
