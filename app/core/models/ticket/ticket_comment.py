@@ -409,6 +409,12 @@ class TicketComment(
         
         return self.ticket
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        self.organization = self.ticket.organization
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
 
     @property
     def threads(self):
