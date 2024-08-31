@@ -53,7 +53,6 @@ class DeviceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Device
-        depth = 1
         fields =  [
             'id',
             'is_global',
