@@ -388,9 +388,9 @@ class TicketComment(
 
 
     @property
-    def markdown_description(self) -> str:
+    def markdown_body(self) -> str:
 
-        return self.render_markdown(self.description)
+        return self.render_markdown(self.body)
 
     @property
     def comment_template_queryset(self):

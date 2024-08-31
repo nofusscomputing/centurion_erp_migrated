@@ -5,7 +5,6 @@
     <link rel="stylesheet" href="{% static 'ticketing.css' %}">
 {% endblock additional-stylesheet %}
 
-{% load markdown %}
 
 {% block article %}
 
@@ -18,7 +17,7 @@
             <div>
                 <input style="float: right; position: relative; margin: 0px;" type="button" value="Edit" onclick="window.location='{{ edit_url }}';">
             </div>
-            <div id="markdown">{{ ticket.description | markdown | safe }}</div>
+            <div id="markdown">{{ ticket.markdown_description | safe }}</div>
         </div>
 
         <div id="ticket-additional-data">

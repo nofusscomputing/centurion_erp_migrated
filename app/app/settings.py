@@ -358,10 +358,6 @@ if DEBUG:
         "127.0.0.1",
     ]
 
-    # Apps Under Development
-    INSTALLED_APPS += [
-    ]
-
 
 if SSO_ENABLED:
 

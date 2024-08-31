@@ -1,4 +1,4 @@
-
+import markdown as md
 
 
 class TicketMarkdown:
@@ -8,12 +8,8 @@ class TicketMarkdown:
     """
 
 
-    def render_markdown(self, markdown):
+    def render_markdown(self, markdown_text):
 
-        # Requires context of ticket for ticket markdown
 
-        # Requires context of ticket for comment
 
-        # requires context of project for project task comment
-
-        pass
+        return md.markdown(markdown_text, extensions=['markdown.extensions.fenced_code', 'codehilite'])
