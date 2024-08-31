@@ -10,6 +10,19 @@ from .models import Organization, Team
 class OrganizationMixin():
     """Base Organization class"""
 
+    parent_model: str = None
+    """ Parent Model
+
+    This attribute defines the parent model for the model in question. The parent model when defined
+    will be used as the object to obtain the permissions from.
+    """
+
+    parent_model_pk_kwarg: str = 'pk'
+    """Parent Model kwarg
+
+    This value is used to define the kwarg that is used as the parent objects primary key (pk).
+    """
+
     request = None
 
     user_groups = []
@@ -26,7 +39,7 @@ class OrganizationMixin():
             parent_model (Model): with PK from kwargs['pk']
         """
 
-        return self.parent_model.objects.get(pk=self.kwargs['pk'])
+        return self.parent_model.objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
 
 
     def object_organization(self) -> int:
@@ -43,7 +56,7 @@ class OrganizationMixin():
                 self.get_queryset()
 
 
-            if hasattr(self, 'parent_model'):
+            if self.parent_model:
                 obj = self.get_parent_obj()
 
                 id = obj.get_organization().id
