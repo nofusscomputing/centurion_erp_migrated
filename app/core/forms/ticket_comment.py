@@ -108,7 +108,7 @@ class CommentForm(CommonModelForm):
 
         for field in original_fields:
 
-            if field not in comment_fields:
+            if field not in comment_fields and not self.fields[field].widget.is_hidden:
 
                 del self.fields[field]
 
