@@ -229,6 +229,33 @@
 }
 
 
+#rendered-ticket-link {
+    display: flexbox;
+    line-height: 30px;
+}
+
+#rendered-ticket-link #icon {
+    display: inline-block;
+    line-height: 30px;
+    margin: 0px;
+    vertical-align: middle;
+}
+
+#rendered-ticket-link #icon svg {
+    height: 20px;
+    margin: 0px;
+    margin: 0px;
+    line-height: inherit;
+}
+
+#rendered-ticket-link #text{
+    display: inline-block;
+    height: 20px;
+    line-height: inherit;
+    font-size: inherit;
+}
+
+
 #ticket-comments #comment {
     border: 1px solid #177ee6;
 }
