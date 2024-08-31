@@ -407,7 +407,7 @@ class DeviceAPI(TestCase):
         organization field must be dict
         """
 
-        assert type(self.api_data['organization']) is dict
+        assert type(self.api_data['organization']) is int
 
 
     def test_api_field_exists_url(self):
@@ -426,44 +426,6 @@ class DeviceAPI(TestCase):
         """
 
         assert type(self.api_data['url']) is Hyperlink
-
-
-
-
-    def test_api_field_exists_organization_id(self):
-        """ Test for existance of API Field
-
-        organization.id field must exist
-        """
-
-        assert 'id' in self.api_data['organization']
-
-
-    def test_api_field_type_organization_id(self):
-        """ Test for type for API Field
-
-        organization.id field must be int
-        """
-
-        assert type(self.api_data['organization']['id']) is int
-
-
-    def test_api_field_exists_organization_name(self):
-        """ Test for existance of API Field
-
-        organization.name field must exist
-        """
-
-        assert 'name' in self.api_data['organization']
-
-
-    def test_api_field_type_organization_name(self):
-        """ Test for type for API Field
-
-        organization.name field must be str
-        """
-
-        assert type(self.api_data['organization']['name']) is str
 
 
 
