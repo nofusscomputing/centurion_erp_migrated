@@ -51,6 +51,7 @@ All forms must meet the following requirements:
 
     ```
 
+
 ## Details Form
 
 A details form is for the display of a models data. This form should inherit from a base form and contain any additional fields as is required for the display of the models data. Additional requirements are as follows:
@@ -61,7 +62,6 @@ A details form is for the display of a models data. This form should inherit fro
 
     !!! danger "Requirement"
         Ensure that there is a call to the super-class `__init__` method so that the form is correctly initialised. i.e. `super().__init__(*args, **kwargs)`
-
 
 
 ## Abstract Classes

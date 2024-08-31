@@ -110,9 +110,7 @@ Base definition for defining a detail page is as follows:
 
 For the view to render the page, you must define the data as part of the form class.
 
-
-
- The variable name to use is `tabs` The layout/schema is as follows:
+The variable name to use is `tabs` The layout/schema is as follows:
 
 
 ##### Full Example

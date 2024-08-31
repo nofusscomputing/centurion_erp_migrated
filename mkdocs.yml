@@ -60,6 +60,8 @@ nav:
 
       - projects/centurion_erp/administration/backup.md
 
+      - projects/centurion_erp/administration/core/ticketing.md
+
       - projects/centurion_erp/administration/installation.md
 
     - Development:
@@ -188,6 +190,8 @@ nav:
 
         - projects/centurion_erp/user/core/index.md
 
+        - projects/centurion_erp/user/core/tickets.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md
@@ -209,6 +213,12 @@ nav:
         - projects/centurion_erp/user/itim/port.md
 
         - projects/centurion_erp/user/itim/service.md
+
+      - Project Management:
+
+        - projects/centurion_erp/user/project_management/index.md
+
+        - projects/centurion_erp/user/project_management/project.md
 
       - Settings:
 
