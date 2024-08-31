@@ -1,12 +1,25 @@
 from django.core.exceptions import PermissionDenied
 from django.forms import ValidationError
 
+from rest_framework import serializers
+
 from access.mixin import OrganizationMixin
 
 
 class TicketValidation(
     OrganizationMixin,
 ):
+    """Ticket Form/Serializer Validation
+
+    Validate a ticket form or api viewset
+
+    Raises:
+        PermissionDenied: User has no allowable fields to edit
+        PermissionDenied: User is lacking permission to edit a field
+        serializers.ValidationError: Status field has a value set that does not meet the ticket type
+        ValidationError: Status field has a value set that does not meet the ticket type
+
+    """
 
     original_object = None
 
@@ -162,50 +175,68 @@ class TicketValidation(
             
             self._ticket_type = self.initial['type_ticket']
 
-        
-        
+
+        if hasattr(self, 'cleaned_data'):
+
+            field = self.cleaned_data['status']
+
+        else:
+
+            field = self.validated_data['status']
+
+
         if self._ticket_type == 'request':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Request._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Request._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'incident':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Incident._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Incident._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'problem':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Problem._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Problem._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'change':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Change._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Change._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'issue':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Issue._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Issue._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'merge':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.Merge._value2member_map_:
+            if field in self.Meta.model.TicketStatus.Merge._value2member_map_:
 
                 is_valid = True
 
         elif self._ticket_type == 'project_task':
 
-            if self.cleaned_data['status'] in self.Meta.model.TicketStatus.ProjectTask._value2member_map_:
+            if field in self.Meta.model.TicketStatus.ProjectTask._value2member_map_:
 
                 is_valid = True
 
+        
+        if not is_valid:
+
+            if hasattr(self, 'validated_data'):
+
+                raise serializers.ValidationError('Incorrect Status set')
+
+            else:
+
+                raise ValidationError('Incorrect Status set')
 
         
         return is_valid
@@ -214,9 +245,50 @@ class TicketValidation(
     def validate_ticket(self):
         """Validations common to all ticket types."""
 
-        self.validate_field_permission()
+        is_valid = False
 
-        self.validate_field_status()
+        if hasattr(self, 'validated_data'):
+
+            changed_data: list = []
+
+            changed_data_exempt = [
+                'ticket_comments',
+                'url',
+            ]
+
+            for field in self.validated_data:
+
+                if field in changed_data_exempt:
+                    continue
+
+                if (
+                    self.validated_data[field] != getattr(self.original_object, field)
+                    and (
+                        type(self.validated_data[field]) in [str, int, bool]
+                    )
+                ) :
+
+                    changed_data = changed_data + [ field ]
+
+            if len(changed_data) > 0:
+
+                self.changed_data = changed_data
+
+        validate_field_permission = False
+        if self.validate_field_permission():
+
+            validate_field_permission = True
+
+
+        validate_field_status = False
+        if self.validate_field_status():
+
+            validate_field_status = True
+
+        if validate_field_permission and validate_field_status:
+            is_valid = True
+
+        return is_valid
 
 
 

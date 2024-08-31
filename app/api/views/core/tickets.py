@@ -19,6 +19,15 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
+    def get_permission_required(self):
+
+        self.permission_required = [
+            'core.view_ticket_request',
+        ]
+
+        return super().get_permission_required()
+
+
     queryset = Ticket.objects.all()
 
     serializer_class = TicketSerializer

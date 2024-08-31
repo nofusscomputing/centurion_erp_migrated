@@ -4,11 +4,15 @@ from rest_framework import serializers
 
 from api.serializers.itim.ticket_comment import TicketCommentSerializer
 
+from core.forms.validate_ticket import TicketValidation
 from core.models.ticket.ticket import Ticket
 
 
 
-class TicketSerializer(serializers.ModelSerializer):
+class TicketSerializer(
+    serializers.ModelSerializer,
+    TicketValidation,
+):
     
     url = serializers.HyperlinkedIdentityField(
         view_name="API:_api_core_tickets-detail", format="html"
@@ -59,3 +63,22 @@ class TicketSerializer(serializers.ModelSerializer):
             'id',
             'url',
         ]
+
+
+    def is_valid(self, *, raise_exception=True) -> bool:
+
+        self.request = self._context['request']
+
+        is_valid = super().is_valid(raise_exception=raise_exception)
+
+        ticket_type_choice_id = int(self.instance.ticket_type - 1)
+
+        self._ticket_type = str(self.fields['ticket_type'].choices[self.instance.ticket_type]).lower().replace(' ', '_')
+
+        if self.instance.pk:
+        
+            self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
+
+        is_valid = self.validate_ticket()
+
+        return is_valid
