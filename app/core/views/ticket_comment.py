@@ -8,7 +8,7 @@ from django_celery_results.models import TaskResult
 from access.mixin import OrganizationPermission
 
 from core.forms.ticket_comment import CommentForm, DetailForm
-from core.models.ticket.ticket_comment import TicketComment
+from core.models.ticket.ticket_comment import TicketComment, Ticket
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from settings.models.user_settings import UserSettings
@@ -20,10 +20,20 @@ class Add(AddView):
     form_class = CommentForm
 
     model = TicketComment
-    permission_required = [
-        'itam.add_device',
-    ]
+
+    parent_model = Ticket
+
+    parent_model_pk_kwarg = 'ticket_id'
+
     template_name = 'form.html.j2'
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.add_ticketcomment'),
+        ]
+
 
 
     def get_initial(self):
@@ -72,9 +82,13 @@ class Change(ChangeView):
 
     model = TicketComment
 
-    permission_required = [
-        'itim.change_cluster',
-    ]
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.change_ticketcomment'),
+        ]
 
 
     def get_context_data(self, **kwargs):
