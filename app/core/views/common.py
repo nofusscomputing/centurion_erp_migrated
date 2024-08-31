@@ -14,6 +14,10 @@ from settings.models.user_settings import UserSettings
 class View(OrganizationPermission):
     """ Abstract class common to all views
 
+    ## Functions
+
+    - `get_dynamic_permissions()` A function to build and return the permissions for the view
+
     !!! Danger
         Don't directly use this class within your view as it's already assigned to the views that require it.
     """
