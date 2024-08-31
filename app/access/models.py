@@ -196,6 +196,15 @@ class TenancyObject(SaveHistory):
     def get_organization(self) -> Organization:
         return self.organization
 
+    
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        if self.organization is None:
+
+            raise ValidationError('Organization not defined')
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
 
 
 class Team(Group, TenancyObject):
