@@ -124,7 +124,7 @@ class TenancyManager(models.Manager):
                         user_organizations += [ team_user.team.organization.id ]
 
 
-                if len(user_organizations) > 0 and not user.is_superuser:
+                if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
 
                     if self.model.is_global:
 
