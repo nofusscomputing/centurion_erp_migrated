@@ -38,6 +38,10 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
 
+        if 'ticket_id' in self.kwargs:
+
+            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
+
         if 'pk' in self.kwargs:
 
             self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
