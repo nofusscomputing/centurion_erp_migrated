@@ -159,7 +159,7 @@ class TicketValidation(
 
         Raises:
             PermissionDenied: Access Denied when user has no ticket permissions assigned
-            PermissionDenied: _description_
+            PermissionDenied: User tried to edit a field they dont have permission to edit.
         """
 
         fields_allowed = self.fields_allowed
