@@ -1,6 +1,6 @@
 
 <span id="rendered-ticket-link">
-    <span id="icon">{% include 'icons/ticket/ticket.svg' %}</span>
+    <span id="icon" class="ticket-status ticket-status-{{ ticket_status }}">{% include 'core/ticket/icon_status.html.j2' %}</span>
     <span id="text">
         <a href=" {% if ticket_type == 'change' %}
             {% url 'ITIM:_ticket_change_view' ticket_type='change' pk=id %}

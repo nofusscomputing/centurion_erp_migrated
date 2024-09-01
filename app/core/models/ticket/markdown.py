@@ -32,7 +32,8 @@ class TicketMarkdown:
         context: dict = {
             'id': ticket.id,
             'name': ticket,
-            'ticket_type': str(ticket.get_ticket_type_display()).lower()
+            'ticket_type': str(ticket.get_ticket_type_display()).lower(),
+            'ticket_status': str(ticket.get_status_display()).lower(),
         }
 
         html_link = render_to_string('core/ticket/renderers/ticket_link.html.j2', context)

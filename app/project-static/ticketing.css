@@ -234,25 +234,69 @@
     line-height: 30px;
 }
 
-#rendered-ticket-link #icon {
-    display: inline-block;
-    line-height: 30px;
-    margin: 0px;
-    vertical-align: middle;
-}
-
-#rendered-ticket-link #icon svg {
-    height: 20px;
-    margin: 0px;
-    margin: 0px;
-    line-height: inherit;
-}
-
 #rendered-ticket-link #text{
     display: inline-block;
     height: 20px;
     line-height: inherit;
     font-size: inherit;
+}
+
+#icon.ticket-status {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 30px;
+    margin: 0px;
+    vertical-align: middle;
+}
+
+#rendered-ticket-link #icon.ticket-status svg {
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    line-height: inherit;
+}
+
+#icon.ticket-status-assigned svg {
+    background-color: #e1ffb2;
+    border: none;
+    border-radius: 10px;
+    fill: #2e9200;
+}
+
+#icon.ticket-status-draft svg {
+    background-color: #cacaca;
+    border: none;
+    border-radius: 10px;
+    fill: #4d4d4d;
+}
+
+#icon.ticket-status-new svg {
+    background-color: #b2dcff;
+    border: none;
+    border-radius: 10px;
+    fill: #004492;
+}
+
+#icon.ticket-status-pending svg {
+    background-color: #ffceb2;
+    border: none;
+    border-radius: 10px;
+    fill: #d86100;
+}
+
+#icon.ticket-status-solved svg {
+    background-color: #c9b2ff;
+    border: none;
+    border-radius: 10px;
+    fill: #640092;
+}
+
+#icon.ticket-status-closed svg {
+    background-color: #c9b2ff;
+    border: none;
+    border-radius: 10px;
+    fill: #640092;
 }
 
 

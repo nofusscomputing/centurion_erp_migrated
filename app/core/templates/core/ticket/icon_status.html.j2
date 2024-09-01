@@ -1,0 +1,13 @@
+{% if ticket_status == 'new' %}
+    {% include 'icons/ticket/add.svg' %}
+    {% elif ticket_status == 'assigned' %}
+    {% include 'icons/ticket/status_assigned.svg' %}
+    {% elif ticket_status == 'closed' %}
+    {% include 'icons/ticket/status_solved.svg' %}
+    {% elif ticket_status == 'draft' %}
+    {% include 'icons/ticket/add.svg' %}
+    {% elif ticket_status == 'pending' %}
+    {% include 'icons/ticket/status_pending.svg' %}
+    {% elif ticket_status == 'solved' %}
+    {% include 'icons/ticket/status_solved.svg' %}
+{% endif %}
