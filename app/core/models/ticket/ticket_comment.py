@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.forms import ValidationError
 
-from access.fields import AutoCreatedField
+from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
 from .markdown import TicketMarkdown
@@ -165,7 +165,7 @@ class TicketComment(
 
     created = AutoCreatedField()
 
-    modified = AutoCreatedField()
+    modified = AutoLastModifiedField()
 
     private = models.BooleanField(
         blank = False,
