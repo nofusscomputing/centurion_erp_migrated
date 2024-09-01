@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Q
 from django.forms import ValidationError
 
-from access.fields import AutoCreatedField
+from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
 from core.middleware.get_request import get_request
@@ -109,9 +109,11 @@ class TicketCommonFields(models.Model):
         verbose_name = 'Number',
     )
 
-    created = AutoCreatedField()
+    created = AutoCreatedField(
+        editable = True,
+    )
 
-    modified = AutoCreatedField()
+    modified = AutoLastModifiedField()
 
 
 
