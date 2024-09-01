@@ -53,6 +53,7 @@ class TicketValidation(
         'real_finish_date',
         'subscribed_users',
         'subscribed_teams',
+        'ticket_type',
     ]
 
     triage_fields: list = [
