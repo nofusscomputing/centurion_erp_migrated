@@ -71,13 +71,18 @@ class TicketSerializer(
 
         is_valid = super().is_valid(raise_exception=raise_exception)
 
-        ticket_type_choice_id = int(self.instance.ticket_type - 1)
+        if self.instance:
 
-        self._ticket_type = str(self.fields['ticket_type'].choices[self.instance.ticket_type]).lower().replace(' ', '_')
-
-        if self.instance.pk:
-        
+            ticket_type_choice_id = int(self.instance.ticket_type)
             self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
+
+        else:
+
+            ticket_type_choice_id = int(self.initial_data['ticket_type'])
+            self.original_object = None
+
+        self._ticket_type = str(self.fields['ticket_type'].choices[ticket_type_choice_id]).lower().replace(' ', '_')
+
 
         is_valid = self.validate_ticket()
 

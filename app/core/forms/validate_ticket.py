@@ -82,9 +82,22 @@ class TicketValidation(
 
         fields_allowed: list = []
 
+        if self.instance is not None:
+
+            ticket_organization = self.instance.organization
+
+        else:
+
+            ticket_organization = self.validated_data['organization']
+
+
+        if ticket_organization is None:
+
+            ticket_organization = self.initial['organization']
+
 
         if self.has_organization_permission(
-            organization=self.instance.organization.id,
+            organization=ticket_organization.id,
             permissions_required = [ 'core.add_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
@@ -92,7 +105,7 @@ class TicketValidation(
 
 
         if self.has_organization_permission(
-            organization=self.instance.organization.id,
+            organization=ticket_organization.id,
             permissions_required = [ 'core.change_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
@@ -105,21 +118,21 @@ class TicketValidation(
                 fields_allowed = fields_allowed + self.change_fields
 
         if self.has_organization_permission(
-            organization=self.instance.organization.id,
+            organization=ticket_organization.id,
             permissions_required = [ 'core.delete_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.delete_fields
 
         if self.has_organization_permission(
-            organization=self.instance.organization.id,
+            organization=ticket_organization.id,
             permissions_required = [ 'core.import_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.import_fields
 
         if self.has_organization_permission(
-            organization=self.instance.organization.id,
+            organization=ticket_organization.id,
             permissions_required = [ 'core.triage_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
@@ -262,14 +275,21 @@ class TicketValidation(
                 if field in changed_data_exempt:
                     continue
 
-                if (
-                    self.validated_data[field] != getattr(self.original_object, field)
-                    and (
-                        type(self.validated_data[field]) in [str, int, bool]
-                    )
-                ) :
+                if self.original_object is not None:
+                    if (
+                        self.validated_data[field] != getattr(self.original_object, field)
+                        and (
+                            type(self.validated_data[field]) in [str, int, bool]
+                        )
+                    ) :
 
-                    changed_data = changed_data + [ field ]
+                        changed_data = changed_data + [ field ]
+                else:
+
+
+                    if type(self.validated_data[field]) in [str, int, bool]:
+
+                        changed_data = changed_data + [ field ]
 
             if len(changed_data) > 0:
 
