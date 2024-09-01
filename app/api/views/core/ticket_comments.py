@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from rest_framework import generics, viewsets
 
@@ -24,16 +24,58 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
     serializer_class = TicketCommentSerializer
 
 
-    @extend_schema( description='Fetch all tickets', methods=["GET"])
+    @extend_schema(
+        summary='Create a ticket comment',
+        description = """This model includes all of the ticket comment types. 
+        Due to this not all fields will be available and what fields are available
+        depends upon the comment type.
+        """,
+        request = TicketCommentSerializer,
+        responses = {
+            201: OpenApiResponse(description='Ticket comment created', response=TicketCommentSerializer),
+            403: OpenApiResponse(description='User tried to edit field they dont have access to'),
+        }
+    )
+    def create(self, request, *args, **kwargs):
+
+        super().create(request, *args, **kwargs)
+
+
+    @extend_schema(
+        summary='Fetch all of a tickets comments',
+        methods=["GET"],
+        responses = {
+            200: OpenApiResponse(description='Success', response=TicketCommentSerializer),
+        }
+    )
     def list(self, request, ticket_id):
 
         return super().list(request)
 
 
-    @extend_schema( description='Fetch the selected ticket', methods=["GET"])
+    @extend_schema(
+        summary='Fetch the selected ticket Comment',
+        methods=["GET"],
+        responses = {
+            200: OpenApiResponse(description='Success', response=TicketCommentSerializer),
+        }
+    )
     def retrieve(self, request, *args, **kwargs):
 
         return super().retrieve(request, *args, **kwargs)
+
+
+    @extend_schema(
+        summary='Update a ticket Comment',
+        description = """This model includes all of the ticket comment types. 
+        Due to this not all fields will be available and what fields are available
+        depends upon the comment type.
+        """,
+        methods=["PUT"],
+    )
+    def update(self, request, *args, **kwargs):
+
+        super().update(request, *args, **kwargs)
 
 
     def get_queryset(self):

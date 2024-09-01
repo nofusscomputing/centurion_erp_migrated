@@ -8,6 +8,10 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Models within Centurion ERP:
 
+- core
+
+    - [Ticket](./ticket.md)
+
 - itam
 
     - [Device](./itam_device.md)

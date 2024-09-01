@@ -26,13 +26,17 @@ class TicketCommentSerializer(serializers.ModelSerializer):
     
     def __init__(self, instance=None, data=empty, **kwargs):
 
-        if 'view' in self._kwargs['context']:
+        if 'context' in self._kwargs:
 
-            ticket = Ticket.objects.get(pk=int(self._kwargs['context']['view'].kwargs['ticket_id']))
-            self.fields.fields['organization'].initial = ticket.organization.id
+            if 'view' in self._kwargs['context']:
 
-            self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
+                if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
-            self.fields.fields['ticket'].initial = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                    ticket = Ticket.objects.get(pk=int(self._kwargs['context']['view'].kwargs['ticket_id']))
+                    self.fields.fields['organization'].initial = ticket.organization.id
+
+                    self.fields.fields['ticket'].initial = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+
+                    self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
         
         super().__init__(instance=instance, data=data, **kwargs)

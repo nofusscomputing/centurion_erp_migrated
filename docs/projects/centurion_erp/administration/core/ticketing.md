@@ -25,6 +25,112 @@ In addition the following items within Centurion ERP use the ticketing system:
 - Project Task
 
 
+## Ticket Fields
+
+Fields available for all ticket types:
+
+- `status`
+
+- `title`
+
+- `description`
+
+- `urgency`
+
+- `impact`
+
+- `priority`
+
+- `external_ref`
+
+- `external_system`
+
+- `ticket_type`
+
+- `project`
+
+- `opened_by`
+
+- `subscribed_users`
+
+- `subscribed_teams`
+
+- `assigned_users`
+
+- `assigned_teams`
+
+- `is_deleted`
+
+- `date_closed`
+
+- `planned_start_date`
+
+- `planned_finish_date`
+
+- `real_start_date`
+
+- `real_finish_date`
+
+
+### Ticket Status
+
+::: app.core.models.ticket.ticket.Ticket.TicketStatus
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true
+
+
+### Ticket Urgency
+
+::: app.core.models.ticket.ticket.Ticket.TicketUrgency
+    options:
+        heading_level: 4
+        inherited_members: false
+        show_bases: false
+        show_submodules: false
+        summary: true
+        show_category_heading: false
+
+
+### Ticket Impact
+
+::: app.core.models.ticket.ticket.Ticket.TicketImpact
+    options:
+        heading_level: 4
+        inherited_members: false
+        show_bases: false
+        show_submodules: false
+        summary: true
+        show_category_heading: false
+
+
+### Ticket Priority
+
+::: app.core.models.ticket.ticket.Ticket.TicketPriority
+    options:
+        heading_level: 4
+        inherited_members: false
+        show_bases: false
+        show_submodules: false
+        summary: true
+        show_category_heading: false
+
+
+### Ticket External System
+
+::: app.core.models.ticket.ticket.Ticket.Ticket_ExternalSystem
+    options:
+        heading_level: 4
+        inherited_members: false
+        show_bases: false
+        show_submodules: false
+        summary: true
+        show_category_heading: false
+
+
 ## Permissions
 
 Centurion's Tickets have the following permissions:
