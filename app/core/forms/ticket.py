@@ -51,6 +51,7 @@ class TicketForm(
         self.fields['opened_by'].widget = self.fields['opened_by'].hidden_widget()
 
         self.fields['ticket_type'].widget = self.fields['ticket_type'].hidden_widget()
+        self.fields['organization'].widget = self.fields['organization'].hidden_widget()
 
 
         original_fields = self.fields.copy()
