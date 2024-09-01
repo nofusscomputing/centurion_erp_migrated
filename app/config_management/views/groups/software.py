@@ -9,7 +9,7 @@ from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 from core.views.common import AddView, ChangeView, DeleteView
 
 
-class GroupSoftwareAdd(AddView):
+class Add(AddView):
 
     form_class = SoftwareAdd
 
@@ -65,7 +65,7 @@ class GroupSoftwareAdd(AddView):
 
 
 
-class GroupSoftwareChange(ChangeView):
+class Change(ChangeView):
 
     form_class = SoftwareUpdate
 
@@ -104,7 +104,7 @@ class GroupSoftwareChange(ChangeView):
 
 
 
-class GroupSoftwareDelete(DeleteView):
+class Delete(DeleteView):
 
     model = ConfigGroupSoftware
 

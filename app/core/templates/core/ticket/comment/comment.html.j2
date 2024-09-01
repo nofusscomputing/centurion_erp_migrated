@@ -1,0 +1,115 @@
+{% if comment %}
+
+{% if comment.get_comment_type_display == 'Action' %}
+
+    <span>{{ comment.markdown_body | safe }}</span>
+
+{% elif comment.get_comment_type_display == 'Comment' or comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' or comment.get_comment_type_display == 'Solution' %}
+<div id="comment" class="comment-type-default comment-type-{{ comment.get_comment_type_display }}">
+
+    <h4>
+        <div id="text">
+        {{ comment.user }} 
+        {% if comment.get_comment_type_display == 'Task' %}
+        created a task 
+        {% elif comment.get_comment_type_display == 'Solution' %}
+        solved 
+        {% else %}
+        wrote 
+        {% endif %}
+        on {{ comment.created }}
+        </div>
+        <div id="icons">
+            {%if not comment.parent_id %}
+                <a title="Reply with Comment" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=comment">
+                    {% include 'icons/ticket/reply.svg' %}
+                </a>
+                <a title="Reply with Task" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=task">
+                    {% include 'icons/ticket/task.svg' %}
+                </a>
+                <a title="Reply with Notification" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=notification">
+                    {% include 'icons/ticket/notification.svg' %}
+                </a>
+            {% endif %}
+            <a title="Edit Comment" href="{% url 'Assistance:_ticket_comment_request_change' ticket_type ticket.id comment.id %}">
+            {% include 'icons/ticket/edit.svg' %}
+            </a>
+        </div>
+        
+    </h4>
+
+    <div style="line-height:30px;">
+        {% if comment.get_comment_type_display != 'Notification' %}
+        <fieldset>
+            <label>Source</label>
+            <span>{{ comment.get_source_display }}</span>
+        </fieldset>
+        {% endif %}
+        {% if comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' %}
+        <fieldset>
+            <label>Status</label>
+            <span>{{ comment.get_status_display }}</span>
+        </fieldset>
+        {% if comment.get_comment_type_display == 'Task' %}
+        <fieldset>
+            <label>Responsible User</label>
+            <span>{{ comment.responsible_user }}</span>
+        </fieldset>
+         {% endif %}
+        <fieldset>
+            <label>
+            {% if comment.get_comment_type_display == 'Task' %}
+                Responsible Team
+            {% elif comment.get_comment_type_display == 'Notification' %}
+                Notify Team
+            {% endif %}
+            </label>
+            <span>{{ comment.responsible_team }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Category</label>
+            <span>{{ comment.category }}</span>
+        </fieldset>
+    </div>
+
+    <hr />
+
+    <div id="markdown" style="margin: 15px; padding: 10px; background-color: #fff;">
+        {{ comment.markdown_body | safe }}
+    </div>
+
+    <hr />
+
+    <div>
+        {% if comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' %}
+        <fieldset>
+            <label>Planned Start</label>
+            <span>{{ comment.planned_start_date }}</span>
+        </fieldset>
+        {% if comment.get_comment_type_display == 'Task' %}
+        <fieldset>
+            <label>Planned Finish</label>
+            <span>{{ comment.planned_finish_date }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Actual Start</label>
+            <span>{{ comment.real_start_date }}</span>
+        </fieldset>
+        <fieldset>
+            <label>Actual Finish</label>
+            <span>{{ comment.real_finish_date }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Duration</label>
+            <span>{{ comment.duration }}</span>
+        </fieldset>
+    </div>
+
+</div>
+
+{% endif %}
+ 
+{% endif %}

@@ -358,12 +358,6 @@ if DEBUG:
         "127.0.0.1",
     ]
 
-    # Apps Under Development
-    INSTALLED_APPS += [
-        'project_management.apps.ProjectManagementConfig',
-        'information.apps.InformationConfig',
-    ]
-
 
 if SSO_ENABLED:
 

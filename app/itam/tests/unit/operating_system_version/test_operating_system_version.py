@@ -39,6 +39,7 @@ class OperatingSystemVersionModel(
         self.item = self.model.objects.create(
             name = "12",
             operating_system = self.parent_item,
+            organization=organization,
         )
 
 

@@ -1,0 +1,15 @@
+
+<span id="rendered-ticket-link">
+    <span id="icon" class="ticket-status ticket-status-{{ ticket_status }}">{% include 'core/ticket/icon_status.html.j2' %}</span>
+    <span id="text">
+        <a href=" {% if ticket_type == 'change' %}
+            {% url 'ITIM:_ticket_change_view' ticket_type='change' pk=id %}
+            {% elif ticket_type == 'incident' %}
+            {% url 'ITIM:_ticket_incident_view' ticket_type='incident' pk=id %}
+            {% elif ticket_type == 'problem' %}
+            {% url 'ITIM:_ticket_problem_view' ticket_type='problem' pk=id %}
+            {% elif ticket_type == 'request' %}
+            {% url 'Assistance:_ticket_request_view' ticket_type='request' pk=id %}
+            {% endif %}">#{{ id }} {{ ticket_type }} {{ name }}</a>
+    </span>
+</span>

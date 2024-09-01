@@ -46,9 +46,6 @@ class CommonModelForm(forms.ModelForm):
 
             if team_user.team.organization.name not in user_organizations:
 
-                if not user_organizations:
-
-                    self.user_organizations = []
 
                 user_organizations += [ team_user.team.organization.name ]
                 user_organizations_id += [ team_user.team.organization.id ]
@@ -76,11 +73,13 @@ class CommonModelForm(forms.ModelForm):
 
                         if hasattr(field.queryset.model, 'is_global'):
 
-                            self.fields[field_name].queryset = field.queryset.filter(
-                                Q(organization__in=user_organizations_id)
-                                |
-                                Q(is_global = True)
-                            )
+                            if field.queryset.model.is_global is not None:
+
+                                self.fields[field_name].queryset = field.queryset.filter(
+                                    Q(organization__in=user_organizations_id)
+                                    |
+                                    Q(is_global = True)
+                                )
 
                         else:
 

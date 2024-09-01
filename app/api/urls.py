@@ -7,6 +7,9 @@ from .views import access, config, index
 
 from api.views.settings import permissions
 from api.views.settings import index as settings
+from api.views.core import index as core
+from api.views.core import tickets as core_tickets
+from api.views.core import ticket_comments as core_ticket_comments
 
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
@@ -16,15 +19,24 @@ from .views.itam import inventory
 app_name = "API"
 
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 
 router.register('', index.Index, basename='_api_home')
 router.register('device', DeviceViewSet, basename='device')
 router.register('software', software.SoftwareViewSet, basename='software')
+router.register('core/tickets', core_tickets.View, basename='_api_core_tickets')
+router.register('core/tickets/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_core_ticket_comments')
 
 
 
 urlpatterns = [
+
+    path("core", core.Index.as_view(), name="_api_core"),
+
+    #
+    # Sof Old Paths to be refactored
+    #
+
     path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
 
     path("configuration/", config.ConfigGroupsList.as_view(), name='_api_config_groups'),

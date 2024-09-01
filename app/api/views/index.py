@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
 from rest_framework import generics, permissions, routers, viewsets
@@ -31,6 +30,7 @@ class Index(viewsets.ViewSet):
         return Response(
         {
             # "teams": reverse("_api_teams", request=request),
+            'core': reverse("API:_api_core", request=request),
             "devices": reverse("API:device-list", request=request),
             "config_groups": reverse("API:_api_config_groups", request=request),
             "organizations": reverse("API:_api_orgs", request=request),

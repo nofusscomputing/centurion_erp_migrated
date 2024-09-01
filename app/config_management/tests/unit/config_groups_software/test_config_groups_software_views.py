@@ -16,13 +16,13 @@ class ConfigGroupsSoftwareViews(
 ):
 
     add_module = 'config_management.views.groups.software'
-    add_view = 'GroupSoftwareAdd'
+    add_view = 'Add'
 
     change_module = add_module
-    change_view = 'GroupSoftwareChange'
+    change_view = 'Change'
 
     delete_module = add_module
-    delete_view = 'GroupSoftwareDelete'
+    delete_view = 'Delete'
 
     # display_module = add_module
     # display_view = 'GroupView'

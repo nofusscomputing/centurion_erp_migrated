@@ -43,7 +43,8 @@ class DeviceSoftwareModel(
 
         self.item = self.model.objects.create(
             software = self.software_item,
-            device = self.parent_item
+            device = self.parent_item,
+            organization=organization,
         )
 
 

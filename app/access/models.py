@@ -124,13 +124,21 @@ class TenancyManager(models.Manager):
                         user_organizations += [ team_user.team.organization.id ]
 
 
-                if len(user_organizations) > 0 and not user.is_superuser:
+                if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
 
-                    return super().get_queryset().filter(
-                        models.Q(organization__in=user_organizations)
-                        |
-                        models.Q(is_global = True)
-                    )
+                    if self.model.is_global:
+
+                        return super().get_queryset().filter(
+                            models.Q(organization__in=user_organizations)
+                            |
+                            models.Q(is_global = True)
+                        )
+
+                    else:
+
+                        return super().get_queryset().filter(
+                            models.Q(organization__in=user_organizations)
+                        )
 
         return super().get_queryset()
 
@@ -187,6 +195,15 @@ class TenancyObject(SaveHistory):
 
     def get_organization(self) -> Organization:
         return self.organization
+
+    
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        if self.organization is None:
+
+            raise ValidationError('Organization not defined')
+
+        super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
 
 
