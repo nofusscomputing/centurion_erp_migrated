@@ -1,8 +1,9 @@
 from django.urls import reverse
 
 from rest_framework import serializers
+from rest_framework.fields import empty
 
-from core.models.ticket.ticket_comment import TicketComment
+from core.models.ticket.ticket_comment import Ticket, TicketComment
 
 
 
@@ -21,3 +22,17 @@ class TicketCommentSerializer(serializers.ModelSerializer):
         model = TicketComment
         
         fields = '__all__'
+
+    
+    def __init__(self, instance=None, data=empty, **kwargs):
+
+        if 'view' in self._kwargs['context']:
+
+            ticket = Ticket.objects.get(pk=int(self._kwargs['context']['view'].kwargs['ticket_id']))
+            self.fields.fields['organization'].initial = ticket.organization.id
+
+            self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
+
+            self.fields.fields['ticket'].initial = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+        
+        super().__init__(instance=instance, data=data, **kwargs)
