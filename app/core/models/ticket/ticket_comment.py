@@ -163,7 +163,9 @@ class TicketComment(
         verbose_name = 'Comment',
     )
 
-    created = AutoCreatedField()
+    created = AutoCreatedField(
+        editable = True,
+    )
 
     modified = AutoLastModifiedField()
 
