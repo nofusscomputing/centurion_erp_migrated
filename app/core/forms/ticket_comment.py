@@ -4,11 +4,16 @@ from django.db.models import Q
 from app import settings
 
 from core.forms.common import CommonModelForm
+from core.forms.validate_ticket_comment import TicketCommentValidation
 
 from core.models.ticket.ticket_comment import TicketComment
 
 
-class CommentForm(CommonModelForm):
+
+class CommentForm(
+    CommonModelForm,
+    TicketCommentValidation
+):
 
     prefix = 'ticket'
 
@@ -121,6 +126,12 @@ class CommentForm(CommonModelForm):
     def is_valid(self) -> bool:
 
         is_valid = super().is_valid()
+
+        validate_ticket_comment: bool = self.validate_ticket_comment()
+
+        if not validate_ticket_comment:
+
+            is_valid = validate_ticket_comment
 
         return is_valid
 
