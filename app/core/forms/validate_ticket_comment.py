@@ -16,11 +16,23 @@ class TicketCommentValidation(
     _comment_type:str = None
     """Human readable comment type. i.e. `request` in lowercase"""
 
+    _has_add_permission: bool = False
+
+    _has_change_permission: bool = False
+
+    _has_delete_permission: bool = False
+
+    _has_import_permission: bool = False
+
+    _has_triage_permission: bool = False
+
     _ticket_organization = None
     """Ticket Organization as a organization object"""
 
     _ticket_type: str = None
     """Human readable type of ticket. i.e. `request` in lowercase"""
+
+    request = None
 
     add_fields: list = [
         'body',
@@ -86,21 +98,20 @@ class TicketCommentValidation(
             list(str): A list of allowed fields for the user
         """
 
+        if self.request is None:
+
+            raise ValueError('Attribute self.request must be set')
+
+
         fields_allowed: list = []
 
 
-        if self.has_organization_permission(
-            organization=self._ticket_organization.id,
-            permissions_required = [ 'core.add_ticket_'+ self._ticket_type ],
-        ) and not self.request.user.is_superuser:
+        if self._has_add_permission and not self.request.user.is_superuser:
 
             fields_allowed = self.add_fields
 
 
-        if self.has_organization_permission(
-            organization=self._ticket_organization.id,
-            permissions_required = [ 'core.change_ticketcomment' ],
-        ) and not self.request.user.is_superuser:
+        if self._has_change_permission:
 
             if len(fields_allowed) == 0:
 
@@ -110,24 +121,15 @@ class TicketCommentValidation(
 
                 fields_allowed = fields_allowed + self.change_fields
 
-        if self.has_organization_permission(
-            organization=self._ticket_organization.id,
-            permissions_required = [ 'core.delete_ticketcomment' ],
-        ) and not self.request.user.is_superuser:
+        if self._has_delete_permission and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.delete_fields
 
-        if self.has_organization_permission(
-            organization=self._ticket_organization.id,
-            permissions_required = [ 'core.import_ticketcomment' ],
-        ) and not self.request.user.is_superuser:
+        if self._has_import_permission and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.import_fields
 
-        if self.has_organization_permission(
-            organization=self._ticket_organization.id,
-            permissions_required = [ 'core.triage_ticket_'+ self._ticket_type ],
-        ) and not self.request.user.is_superuser:
+        if self._has_triage_permission and not self.request.user.is_superuser:
 
             fields_allowed = fields_allowed + self.triage_fields
 
@@ -199,6 +201,66 @@ class TicketCommentValidation(
         return comment_fields
 
 
+    @property
+    def ticket_comment_permissions(self):
+
+        if self._ticket_organization is None:
+
+            raise ValueError('Attribute self._ticket_organization must be set')
+
+        
+        if self.request is None:
+
+            raise ValueError('Attribute self.request must be set')
+
+
+        if self.has_organization_permission(
+            organization=self._ticket_organization.id,
+            permissions_required = [ 'core.add_ticket_'+ self._ticket_type ],
+        ) and not self.request.user.is_superuser:
+
+            self._has_add_permission = True
+
+        if (
+            self.has_organization_permission(
+            organization=self._ticket_organization.id,
+            permissions_required = [ 'core.change_ticketcomment' ],
+            ) or
+            self.request.user.id == self.instance.user.id
+        ) and not self.request.user.is_superuser:
+
+            self._has_change_permission = True
+
+        if self.has_organization_permission(
+            organization=self._ticket_organization.id,
+            permissions_required = [ 'core.delete_ticketcomment' ],
+        ) and not self.request.user.is_superuser:
+
+            self._has_delete_permission = True
+
+        if self.has_organization_permission(
+            organization=self._ticket_organization.id,
+            permissions_required = [ 'core.import_ticketcomment' ],
+        ) and not self.request.user.is_superuser:
+
+            self._has_import_permission = True
+
+        if self.has_organization_permission(
+            organization=self._ticket_organization.id,
+            permissions_required = [ 'core.triage_ticket_'+ self._ticket_type ],
+        ) and not self.request.user.is_superuser:
+
+            self._has_triage_permission = True
+
+        if (
+            not self._has_triage_permission and (
+                self._comment_type == 'notification' or
+                self._comment_type == 'task' or
+                self._comment_type == 'solution'
+            )
+        ) and not self.request.user.is_superuser:
+
+            raise PermissionDenied("You dont have permission for comment types: notification, task and solution")
 
 
     def validate_field_permission(self):

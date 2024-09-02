@@ -28,6 +28,21 @@ class CommentForm(
 
         super().__init__(*args, **kwargs)
 
+        self._ticket_organization = self.fields['ticket'].queryset.model.objects.get(pk=int(self.initial['ticket'])).organization
+
+        self._ticket_type = kwargs['initial']['type_ticket']
+
+        if 'qs_comment_type' in kwargs['initial']:
+
+            self._comment_type = kwargs['initial']['qs_comment_type']
+
+        else:
+
+            self._comment_type = str(self.instance.get_comment_type_display()).lower()
+
+        self.ticket_comment_permissions
+
+
         self.fields['planned_start_date'].widget = forms.widgets.DateTimeInput(attrs={'type': 'datetime-local', 'format': "%Y-%m-%dT%H:%M"})
         self.fields['planned_start_date'].input_formats = settings.DATETIME_FORMAT
         self.fields['planned_start_date'].format="%Y-%m-%dT%H:%M"
@@ -53,18 +68,6 @@ class CommentForm(
 
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
-
-        self._ticket_organization = self.fields['ticket'].queryset.model.objects.get(pk=int(self.initial['ticket'])).organization
-
-        self._ticket_type = kwargs['initial']['type_ticket']
-
-        if 'qs_comment_type' in kwargs['initial']:
-
-            self._comment_type = kwargs['initial']['qs_comment_type']
-
-        else:
-
-            self._comment_type = str(self.instance.get_comment_type_display()).lower()
 
 
         if self._comment_type == 'task':
