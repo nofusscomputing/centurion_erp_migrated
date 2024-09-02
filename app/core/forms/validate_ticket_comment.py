@@ -113,13 +113,7 @@ class TicketCommentValidation(
 
         if self._has_change_permission and not self.request.user.is_superuser:
 
-            if len(fields_allowed) == 0:
-
-                fields_allowed = self.add_fields + self.change_fields
-
-            else:
-
-                fields_allowed = fields_allowed + self.change_fields
+            fields_allowed = self.change_fields
 
         if self._has_delete_permission and not self.request.user.is_superuser:
 

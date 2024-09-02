@@ -88,8 +88,14 @@ class Change(ChangeView):
     model = TicketComment
 
 
-
     def get_dynamic_permissions(self):
+
+        if (
+            self.request.user.is_authenticated and
+            self.get_object().user.id == self.request.user.id
+        ):
+
+            return []
 
         return [
             str('core.change_ticketcomment'),
