@@ -46,8 +46,7 @@ class TicketComment(
 
 
     class CommentType(models.IntegerChoices):
-        """Type of Comment
-        
+        """        
         Comment types are as follows:
 
         - Action

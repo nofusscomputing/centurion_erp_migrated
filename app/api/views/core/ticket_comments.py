@@ -72,6 +72,10 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         depends upon the comment type.
         """,
         methods=["PUT"],
+        responses = {
+            200: OpenApiResponse(description='Ticket comment updated', response=TicketCommentSerializer),
+            403: OpenApiResponse(description='User tried to edit field they dont have access to'),
+        }
     )
     def update(self, request, *args, **kwargs):
 

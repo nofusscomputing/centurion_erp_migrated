@@ -263,11 +263,18 @@ class TicketCommentValidation(
             raise PermissionDenied("You dont have permission for comment types: notification, task and solution")
 
 
-    def validate_field_permission(self):
-        pass
+    def validate_ticket_comment(self) -> bool:
 
+        is_valid: bool = True
 
+        self.ticket_comment_permissions
 
-    def validate_ticket_comment(self):
+        fields_allowed = self.fields_allowed
 
-        pass
+        for field in self.change_fields:
+
+            if field not in fields_allowed:
+
+                raise PermissionDenied(f'You tried to edit a field ({field}) that you dont have access to edit')
+
+        return is_valid
