@@ -30,6 +30,14 @@ class Add(AddView):
 
     def get_dynamic_permissions(self):
 
+        if self.request.user.is_authenticated:
+
+            ticket = Ticket.objects.get(pk=int(self.kwargs['ticket_id']))
+
+            if ticket.opened_by.id == self.request.user.id:
+
+                return []
+
         return [
             str('core.add_ticketcomment'),
         ]

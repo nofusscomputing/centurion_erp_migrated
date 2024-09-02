@@ -220,7 +220,7 @@ class TicketCommentValidation(
             organization=self._ticket_organization.id,
             permissions_required = [ 'core.change_ticketcomment' ],
             ) or
-            self.request.user.id == self.instance.user.id
+            self.request.user.id == self.instance.user_id
         ) and not self.request.user.is_superuser:
 
             self._has_change_permission = True
