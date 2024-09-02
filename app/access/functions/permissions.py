@@ -21,6 +21,7 @@ def permission_queryset():
     exclude_models = [
         'appsettings',
         'chordcounter',
+        'comment',
         'groupresult',
         'organization'
         'settings',

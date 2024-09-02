@@ -35,6 +35,11 @@ class Add(AddView):
         ]
 
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
 
     def get_initial(self):
 
@@ -98,6 +103,12 @@ class Change(ChangeView):
         context['content_title'] = str(self.object)
 
         return context
+
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
     def get_initial(self):

@@ -22,7 +22,9 @@ class CommentForm(
         fields = '__all__'
 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+
+        self.request = request
 
         super().__init__(*args, **kwargs)
 
