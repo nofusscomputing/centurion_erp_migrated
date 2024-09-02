@@ -54,6 +54,8 @@ class CommentForm(
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
 
+        self._ticket_organization = self.fields['ticket'].queryset.model.objects.get(pk=int(self.initial['ticket'])).organization
+
         self._ticket_type = kwargs['initial']['type_ticket']
 
         if 'qs_comment_type' in kwargs['initial']:
