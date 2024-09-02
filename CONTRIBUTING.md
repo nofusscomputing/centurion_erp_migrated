@@ -21,7 +21,7 @@ from the root of the project to start a test server use:
 ``` bash
 
 # activate python venv
-/tmp/centurion_erp/bin/activate
+source /tmp/centurion_erp/bin/activate
 
 # enter app dir
 cd app

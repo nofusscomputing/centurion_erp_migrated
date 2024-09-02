@@ -52,70 +52,45 @@ class CommentForm(
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
 
+        self._ticket_type = kwargs['initial']['type_ticket']
+
         if 'qs_comment_type' in kwargs['initial']:
 
-            comment_type = kwargs['initial']['qs_comment_type']
+            self._comment_type = kwargs['initial']['qs_comment_type']
 
         else:
 
-            comment_type = str(self.instance.get_comment_type_display()).lower()
+            self._comment_type = str(self.instance.get_comment_type_display()).lower()
 
+
+        if self._comment_type == 'task':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
+
+        elif self._comment_type == 'comment':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
+
+        elif self._comment_type == 'solution':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
+
+        elif self._comment_type == 'notification':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
+
+
+        allowed_fields = self.fields_allowed
 
         original_fields = self.fields.copy()
-        comment_fields = []
-
-
-        if (
-            kwargs['initial']['type_ticket'] == 'request'
-                or
-            kwargs['initial']['type_ticket'] == 'incident'
-                or
-            kwargs['initial']['type_ticket'] == 'problem'
-                or
-            kwargs['initial']['type_ticket'] == 'change'
-                or
-            kwargs['initial']['type_ticket'] == 'project_task'
-        ):
-
-            if comment_type == 'task':
-
-                comment_fields = self.Meta.model.fields_itsm_task
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
-
-            elif comment_type == 'comment':
-
-                comment_fields = self.Meta.model.common_itsm_fields
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
-
-
-            elif comment_type == 'solution':
-
-                comment_fields = self.Meta.model.common_itsm_fields
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
-
-            elif comment_type == 'notification':
-
-                comment_fields = self.Meta.model.fields_itsm_notification
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
-
-        elif kwargs['initial']['type_ticket'] == 'issue':
-
-            comment_fields = self.Meta.model.fields_git_issue
-
-        elif kwargs['initial']['type_ticket'] == 'merge':
-
-            comment_fields = self.Meta.model.fields_git_merge
 
 
         for field in original_fields:
 
-            if field not in comment_fields and not self.fields[field].widget.is_hidden:
+            if field not in allowed_fields and not self.fields[field].widget.is_hidden:
 
                 del self.fields[field]
+
 
     def clean(self):
         
