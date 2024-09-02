@@ -69,6 +69,12 @@ class CommentForm(
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
 
+        if not self._has_import_permission or not self._has_triage_permission:
+            self.fields['source'].initial = TicketComment.CommentSource.HELPDESK
+            self.fields['source'].widget = self.fields['source'].hidden_widget()
+
+
+
 
         if self._comment_type == 'task':
 
