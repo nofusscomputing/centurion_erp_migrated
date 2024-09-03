@@ -1,4 +1,36 @@
 
+#badge {
+    display: table;
+    padding: 0px 5px 0px 0px;
+    margin: 0px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+}
+
+#badge #text {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 5px;
+}
+
+#badge #icon {
+    display: inline-block;
+    width: 20px;
+    vertical-align: middle;
+    padding: 0px;
+    margin: 0px;
+}
+
+#badge .icon svg{
+    display: inline;
+    width: 20px;
+    height: 30px;
+
+}
+
+
 #linked-tickets {
     display: table;
     padding: 0px;

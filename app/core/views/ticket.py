@@ -112,6 +112,47 @@ class Change(ChangeView):
         return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'], self.kwargs['pk'],))
 
 
+class Delete(DeleteView):
+
+    model = Ticket
+
+
+    def get_dynamic_permissions(self):
+
+        return [
+            str('core.delete_ticket_' + self.kwargs['ticket_type']),
+        ]
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'Delete ' + str(self.object)
+
+        return context
+
+
+    def get_success_url(self, **kwargs):
+
+        if self.kwargs['ticket_type'] == 'request':
+
+            return reverse('Assistance:Requests')
+        
+        else:
+
+            if self.kwargs['ticket_type'] == 'change':
+                path = 'Changes'
+
+            elif self.kwargs['ticket_type'] == 'incident':
+                path = 'Incidents'
+
+            elif self.kwargs['ticket_type'] == 'problem':
+                path = 'Problems'
+
+            return reverse('ITIM:' + path)
+
+
 
 class Index(OrganizationPermission, generic.ListView):
 

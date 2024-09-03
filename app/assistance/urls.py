@@ -17,6 +17,7 @@ urlpatterns = [
     path('ticket/request', ticket.Index.as_view(), kwargs={'ticket_type': 'request'}, name="Requests"),
     path('ticket/<str:ticket_type>/add', ticket.Add.as_view(), name="_ticket_request_add"),
     path('ticket/<str:ticket_type>/<int:pk>/edit', ticket.Change.as_view(), name="_ticket_request_change"),
+    path('ticket/<str:ticket_type>/<int:pk>/delete', ticket.Delete.as_view(), name="_ticket_request_delete"),
     path('ticket/<str:ticket_type>/<int:pk>', ticket.View.as_view(), name="_ticket_request_view"),
 
     path('ticket/<str:ticket_type>/<int:ticket_id>/comment/add', ticket_comment.Add.as_view(), name="_ticket_comment_request_add"),

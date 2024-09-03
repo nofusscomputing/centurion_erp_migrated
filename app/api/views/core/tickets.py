@@ -19,7 +19,7 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
-    def get_permission_required(self):
+    def get_dynamic_permissions(self):
 
         self.permission_required = [
             'core.view_ticket_request',

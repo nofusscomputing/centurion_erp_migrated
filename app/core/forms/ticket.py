@@ -147,50 +147,46 @@ class TicketForm(
 
         is_valid = super().is_valid()
 
-        ticket_type_choice_id = int(self.cleaned_data['ticket_type'] - 1)
-
-        ticket_type = str(self.fields['ticket_type'].choices.choices.pop(ticket_type_choice_id)[1]).lower().replace(' ', '_')
-
         if self.instance.pk:
         
             self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
 
         self.validate_ticket()
 
-        if ticket_type == 'change':
+        if self._ticket_type == 'change':
 
             self.validate_change_ticket()
 
-        elif ticket_type == 'incident':
+        elif self._ticket_type == 'incident':
 
             self.validate_incident_ticket()
 
-        elif ticket_type == 'issue':
+        elif self._ticket_type == 'issue':
 
             # self.validate_issue_ticket()
             raise ValidationError(
                 'This Ticket type is not yet available'
             )
 
-        elif ticket_type == 'merge_request':
+        elif self._ticket_type == 'merge_request':
 
             # self.validate_merge_request_ticket()
             raise ValidationError(
                 'This Ticket type is not yet available'
             )
 
-        elif ticket_type == 'problem':
+        elif self._ticket_type == 'problem':
 
             self.validate_problem_ticket()
 
-        elif ticket_type == 'project_task':
+        elif self._ticket_type == 'project_task':
 
             # self.validate_project_task_ticket()
             raise ValidationError(
                 'This Ticket type is not yet available'
             )
 
-        elif ticket_type == 'request':
+        elif self._ticket_type == 'request':
 
             self.validate_request_ticket()
 
