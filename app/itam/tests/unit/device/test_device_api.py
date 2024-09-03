@@ -44,7 +44,7 @@ class DeviceAPI(TestCase):
         self.item = self.model.objects.create(
             organization=organization,
             name = 'deviceone',
-            uuid = 'val',
+            uuid = '2981571b-9737-4aef-b937-1540c14ad9b9',
             serial_number = 'another val'
         )
 
@@ -99,20 +99,20 @@ class DeviceAPI(TestCase):
 
 
 
-        # add_permissions = Permission.objects.get(
-        #         codename = 'add_' + self.model._meta.model_name,
-        #         content_type = ContentType.objects.get(
-        #             app_label = self.model._meta.app_label,
-        #             model = self.model._meta.model_name,
-        #         )
-        #     )
+        add_permissions = Permission.objects.get(
+                codename = 'add_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
 
-        # add_team = Team.objects.create(
-        #     team_name = 'add_team',
-        #     organization = organization,
-        # )
+        add_team = Team.objects.create(
+            team_name = 'add_team',
+            organization = organization,
+        )
 
-        # add_team.permissions.set([add_permissions])
+        add_team.permissions.set([add_permissions])
 
 
 
@@ -158,11 +158,11 @@ class DeviceAPI(TestCase):
             user = self.view_user
         )
 
-        # self.add_user = User.objects.create_user(username="test_user_add", password="password")
-        # teamuser = TeamUsers.objects.create(
-        #     team = add_team,
-        #     user = self.add_user
-        # )
+        self.add_user = User.objects.create_user(username="test_user_add", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = add_team,
+            user = self.add_user
+        )
 
         # self.change_user = User.objects.create_user(username="test_user_change", password="password")
         # teamuser = TeamUsers.objects.create(
@@ -482,3 +482,100 @@ class DeviceAPI(TestCase):
         """
 
         assert type(self.api_data['groups'][0]['url']) is Hyperlink
+
+
+
+    def test_api_create_device_existing_uuid_matches_status_200(self):
+        """Creation of existing device
+
+        Matching of device is by name and UUID.
+
+        When a device is created and it existss within the DB, don't recreate it.
+        return the object with status HTTP/200
+        """
+
+        client = Client()
+        url = reverse('API:device-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data={
+            'name': self.item.name,
+            'uuid': self.item.uuid,
+            'organization': self.item.organization.id,
+
+        })
+
+        assert response.status_code == 200
+
+
+    def test_api_create_device_existing_uuid_matches_correct_item(self):
+        """Creation of existing device
+
+        Matching of device is by name and UUID.
+
+        When a device is created and it existss within the DB, don't recreate it.
+        Ensure correct device is returned
+        """
+
+        client = Client()
+        url = reverse('API:device-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data={
+            'name': self.item.name,
+            'uuid': self.item.uuid,
+            'organization': self.item.organization.id,
+
+        })
+
+        assert int(response.data['id']) == int(self.item.id)
+
+
+    def test_api_create_device_existing_serial_number_matches_status_200(self):
+        """Creation of existing device
+
+        Matching of device is by name and Serial Number.
+
+        When a device is created and it existss within the DB, don't recreate it.
+        return the object with status HTTP/200
+        """
+
+        client = Client()
+        url = reverse('API:device-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data={
+            'name': self.item.name,
+            'serial_number': self.item.serial_number,
+            'organization': self.item.organization.id,
+
+        })
+
+        assert response.status_code == 200
+
+
+    def test_api_create_device_existing_serial_number_matches_correct_item(self):
+        """Creation of existing device
+
+        Matching of device is by name and Serial_number.
+
+        When a device is created and it existss within the DB, don't recreate it.
+        Ensure correct device is returned
+        """
+
+        client = Client()
+        url = reverse('API:device-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data={
+            'name': self.item.name,
+            'serial_number': self.item.serial_number,
+            'organization': self.item.organization.id,
+
+        })
+
+        assert int(response.data['id']) == int(self.item.id)
