@@ -95,6 +95,12 @@ class TicketValidation(
 
             ticket_organization = self.initial['organization']
 
+        if ticket_organization is None:
+
+            if 'organization' in self.data:
+
+                ticket_organization = self.fields['organization'].queryset.model.objects.get(pk=self.data['organization'])
+
 
         if self.has_organization_permission(
             organization=ticket_organization.id,
@@ -189,14 +195,19 @@ class TicketValidation(
             
             self._ticket_type = self.initial['type_ticket']
 
+        try:
 
-        if hasattr(self, 'cleaned_data'):
+            if hasattr(self, 'cleaned_data'):
 
-            field = self.cleaned_data['status']
+                field = self.cleaned_data['status']
 
-        else:
+            else:
 
-            field = self.validated_data['status']
+                field = self.validated_data['status']
+
+        except KeyError:
+
+            field = self.fields['status'].initial.value
 
 
         if self._ticket_type == 'request':
