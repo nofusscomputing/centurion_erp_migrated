@@ -57,11 +57,11 @@ class DeviceViewSet(OrganizationMixin, viewsets.ModelViewSet):
                     serial_number = str(self.request.POST['serial_number'])
                 )
 
-                if len(current_device) == 1:
+        if len(current_device) == 1:
 
-                    instance = current_device.get()
-                    serializer = self.get_serializer(instance)
-                    return Response(serializer.data)
+            instance = current_device.get()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
 
         return super().create(request, *args, **kwargs)
 
