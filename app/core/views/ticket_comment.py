@@ -30,10 +30,23 @@ class Add(AddView):
 
     def get_dynamic_permissions(self):
 
+        if self.request.user.is_authenticated:
+
+            ticket = Ticket.objects.get(pk=int(self.kwargs['ticket_id']))
+
+            if ticket.opened_by.id == self.request.user.id:
+
+                return []
+
         return [
             str('core.add_ticketcomment'),
         ]
 
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
     def get_initial(self):
@@ -83,8 +96,14 @@ class Change(ChangeView):
     model = TicketComment
 
 
-
     def get_dynamic_permissions(self):
+
+        if (
+            self.request.user.is_authenticated and
+            self.get_object().user.id == self.request.user.id
+        ):
+
+            return []
 
         return [
             str('core.change_ticketcomment'),
@@ -98,6 +117,12 @@ class Change(ChangeView):
         context['content_title'] = str(self.object)
 
         return context
+
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
 
     def get_initial(self):

@@ -170,7 +170,7 @@ class TicketValidation(
 
         for field in self.changed_data:
 
-            if field not in fields_allowed:
+            if field not in fields_allowed and not self.fields['status'].widget.is_hidden:
 
                 raise PermissionDenied(f'cant edit field: {field}')
 

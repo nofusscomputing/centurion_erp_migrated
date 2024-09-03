@@ -70,11 +70,11 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     def validate_uuid_format(self):
 
-        pattern = r'[0-9|a-f]{8}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{4}\-[0-9|a-f]{12}'
+        pattern = r'[0-9|a-f|A-F]{8}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{4}\-[0-9|a-f|A-F]{12}'
 
         if not re.match(pattern, str(self)):
 
-            raise ValidationError(f'UUID Must be in {str(pattern)}')
+            raise ValidationError(f'UUID must be formated to match regex {str(pattern)}')
 
 
     def validate_hostname_format(self):
@@ -169,6 +169,11 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         After saving the device update the related items so that they are a part
         of the same organization as the device.
         """
+
+        if self.uuid is not None:
+
+            self.uuid = str(self.uuid).lower()
+
 
         super().save(
             force_insert=False, force_update=False, using=None, update_fields=None

@@ -19,3 +19,15 @@ The ticketing system within Centurion ERP is common to all ticket types. The dif
         show_submodules: false
         summary: true
 
+
+## Ticket Comments
+
+Within Centurion ERP the ticket comment model is common to all comment types. As with tickets the differences are the available fields, which depend upon comment type and permissions.
+
+::: app.core.models.ticket.ticket_comment.TicketComment.CommentType
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true

@@ -22,9 +22,26 @@ class CommentForm(
         fields = '__all__'
 
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+
+        self.request = request
 
         super().__init__(*args, **kwargs)
+
+        self._ticket_organization = self.fields['ticket'].queryset.model.objects.get(pk=int(self.initial['ticket'])).organization
+
+        self._ticket_type = kwargs['initial']['type_ticket']
+
+        if 'qs_comment_type' in kwargs['initial']:
+
+            self._comment_type = kwargs['initial']['qs_comment_type']
+
+        else:
+
+            self._comment_type = str(self.instance.get_comment_type_display()).lower()
+
+        self.ticket_comment_permissions
+
 
         self.fields['planned_start_date'].widget = forms.widgets.DateTimeInput(attrs={'type': 'datetime-local', 'format': "%Y-%m-%dT%H:%M"})
         self.fields['planned_start_date'].input_formats = settings.DATETIME_FORMAT
@@ -52,70 +69,41 @@ class CommentForm(
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
 
-        if 'qs_comment_type' in kwargs['initial']:
+        if not self._has_import_permission or not self._has_triage_permission:
+            self.fields['source'].initial = TicketComment.CommentSource.HELPDESK
+            self.fields['source'].widget = self.fields['source'].hidden_widget()
 
-            comment_type = kwargs['initial']['qs_comment_type']
 
-        else:
 
-            comment_type = str(self.instance.get_comment_type_display()).lower()
 
+        if self._comment_type == 'task':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
+
+        elif self._comment_type == 'comment':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
+
+        elif self._comment_type == 'solution':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
+
+        elif self._comment_type == 'notification':
+
+            self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
+
+
+        allowed_fields = self.fields_allowed
 
         original_fields = self.fields.copy()
-        comment_fields = []
-
-
-        if (
-            kwargs['initial']['type_ticket'] == 'request'
-                or
-            kwargs['initial']['type_ticket'] == 'incident'
-                or
-            kwargs['initial']['type_ticket'] == 'problem'
-                or
-            kwargs['initial']['type_ticket'] == 'change'
-                or
-            kwargs['initial']['type_ticket'] == 'project_task'
-        ):
-
-            if comment_type == 'task':
-
-                comment_fields = self.Meta.model.fields_itsm_task
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
-
-            elif comment_type == 'comment':
-
-                comment_fields = self.Meta.model.common_itsm_fields
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
-
-
-            elif comment_type == 'solution':
-
-                comment_fields = self.Meta.model.common_itsm_fields
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
-
-            elif comment_type == 'notification':
-
-                comment_fields = self.Meta.model.fields_itsm_notification
-
-                self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
-
-        elif kwargs['initial']['type_ticket'] == 'issue':
-
-            comment_fields = self.Meta.model.fields_git_issue
-
-        elif kwargs['initial']['type_ticket'] == 'merge':
-
-            comment_fields = self.Meta.model.fields_git_merge
 
 
         for field in original_fields:
 
-            if field not in comment_fields and not self.fields[field].widget.is_hidden:
+            if field not in allowed_fields and not self.fields[field].widget.is_hidden:
 
                 del self.fields[field]
+
 
     def clean(self):
         

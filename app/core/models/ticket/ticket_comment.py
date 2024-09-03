@@ -46,8 +46,7 @@ class TicketComment(
 
 
     class CommentType(models.IntegerChoices):
-        """Type of Comment
-        
+        """        
         Comment types are as follows:
 
         - Action
@@ -416,6 +415,13 @@ class TicketComment(
         self.organization = self.ticket.organization
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        if self.comment_type == self.CommentType.SOLUTION:
+
+            update_ticket =  self.ticket.__class__.objects.get(pk=self.ticket.id)
+            update_ticket.status = int(Ticket.TicketStatus.All.SOLVED.value)
+
+            update_ticket.save()
 
 
     @property
