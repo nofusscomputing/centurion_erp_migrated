@@ -114,7 +114,7 @@
         </fieldset>
         <fieldset>
             <label>Status</label>
-            <span>{{ticket.get_status_display }}</span>
+            <span>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|lower %}</span>
         </fieldset>
         <fieldset>
             <label>Labels</label>

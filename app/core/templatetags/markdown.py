@@ -10,3 +10,8 @@ register = template.Library()
 @stringfilter
 def markdown(value):
     return md.markdown(value, extensions=['markdown.extensions.fenced_code', 'codehilite'])
+
+@register.filter()
+@stringfilter
+def lower(value):
+    return str(value).lower()
