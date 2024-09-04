@@ -30,9 +30,10 @@ class Index(viewsets.ViewSet):
         return Response(
         {
             # "teams": reverse("_api_teams", request=request),
-            'core': reverse("API:_api_core", request=request),
+            'assistance': reverse("API:_api_assistance", request=request),
             "devices": reverse("API:device-list", request=request),
             "config_groups": reverse("API:_api_config_groups", request=request),
+            'itim': reverse("API:_api_itim", request=request),
             "organizations": reverse("API:_api_orgs", request=request),
             "settings": reverse('API:_settings', request=request),
             "software": reverse("API:software-list", request=request),

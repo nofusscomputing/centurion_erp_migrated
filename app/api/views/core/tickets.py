@@ -6,7 +6,7 @@ from rest_framework import generics, viewsets
 
 from access.mixin import OrganizationMixin
 
-from api.serializers.itim.ticket import TicketSerializer
+from api.serializers.core.ticket import TicketSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 from core.models.ticket.ticket import Ticket
@@ -68,9 +68,9 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
             200: OpenApiResponse(description='Success', response=TicketSerializer),
         }
     )
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
 
-        return super().list(request)
+        return super().list(request, *args, **kwargs)
 
 
     @extend_schema(
@@ -89,10 +89,56 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        return self.queryset
+        if self.kwargs['ticket_type'] == 'change':
+
+            ticket_type = self.queryset.model.TicketType.CHANGE.value
+
+        elif self.kwargs['ticket_type'] == 'incident':
+
+            ticket_type = self.queryset.model.TicketType.INCIDENT.value
+
+        elif self.kwargs['ticket_type'] == 'problem':
+
+            ticket_type = self.queryset.model.TicketType.PROBLEM.value
+
+        elif self.kwargs['ticket_type'] == 'request':
+
+            ticket_type = self.queryset.model.TicketType.REQUEST.value
+
+        else:
+
+            raise ValueError('Unknown ticket type. kwarg `ticket_type` must be set')
+
+        return self.queryset.filter(
+            ticket_type = ticket_type
+        )
 
 
     def get_view_name(self):
+
+
+        # if self.kwargs['ticket_type'] == 'change':
+
+        #     ticket_type = 'Request'
+
+        # elif self.kwargs['ticket_type'] == 'incident':
+
+        #     ticket_type = 'Incident'
+
+        # elif self.kwargs['ticket_type'] == 'problem':
+
+        #     ticket_type = 'Problem'
+
+        # elif self.kwargs['ticket_type'] == 'request':
+
+        #     ticket_type = 'Request'
+
+
+        # if self.detail:
+        #     return ticket_type + " Ticket"
+        
+        # return ticket_type + ' Tickets'
+
         if self.detail:
             return "Ticket"
         
