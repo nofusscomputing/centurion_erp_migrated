@@ -28,9 +28,9 @@ class Index(views.APIView):
     def get(self, request, *args, **kwargs):
 
         body: dict = {
-            'changes': reverse('API:_api_itim_change-list', request=request, kwargs={'ticket_type': 'change'}),
-            'incidents': reverse('API:_api_itim_incident-list', request=request, kwargs={'ticket_type': 'incident'}),
-            'problems': reverse('API:_api_itim_problem-list', request=request, kwargs={'ticket_type': 'problem'}),
+            'changes': reverse('API:_api_itim_change-list', request=request),
+            'incidents': reverse('API:_api_itim_incident-list', request=request),
+            'problems': reverse('API:_api_itim_problem-list', request=request),
         }
 
         return Response(body)

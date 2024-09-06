@@ -29,7 +29,7 @@ class Index(views.APIView):
     def get(self, request, *args, **kwargs):
 
         body: dict = {
-            'requests': reverse('API:_api_assistance_request-list', request=request, kwargs={'ticket_type': 'request'})
+            'requests': reverse('API:_api_assistance_request-list', request=request)
         }
 
         return Response(body)
