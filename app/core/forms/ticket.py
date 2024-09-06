@@ -113,7 +113,7 @@ class TicketForm(
 
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROJECT_TASK
 
-        self.fields['status'].widget = self.fields['status'].hidden_widget()
+        # self.fields['status'].widget = self.fields['status'].hidden_widget()
 
         if kwargs['user'].is_superuser:
 

@@ -296,6 +296,41 @@
     fill: #2e9200;
 }
 
+#icon.ticket-status-assigned_planning svg {
+    background-color: #e1ffb2;
+    border: none;
+    border-radius: 10px;
+    fill: #2e9200;
+}
+
+#icon.ticket-status-approvals svg {
+    background-color: #ffceb2;
+    border: none;
+    border-radius: 10px;
+    fill: #d86100;
+}
+
+#icon.ticket-status-accepted svg {
+    background-color: #e1ffb2;
+    border: none;
+    border-radius: 10px;
+    fill: #2e9200;
+}
+
+#icon.ticket-status-evaluation svg {
+    background-color: #b2d6ff;
+    border: none;
+    border-radius: 10px;
+    fill: #007592;
+}
+
+#icon.ticket-status-testing svg {
+    background-color: #b2d3ff;
+    border: none;
+    border-radius: 10px;
+    fill: #8c00ff;
+}
+
 #icon.ticket-status-draft svg {
     background-color: #cacaca;
     border: none;
@@ -329,6 +364,13 @@
     border: none;
     border-radius: 10px;
     fill: #640092;
+}
+
+#icon.ticket-status-invalid svg {
+    background-color: #ffb2b6;
+    border: none;
+    border-radius: 10px;
+    fill: #920000;
 }
 
 

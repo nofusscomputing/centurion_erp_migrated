@@ -15,3 +15,9 @@ def markdown(value):
 @stringfilter
 def lower(value):
     return str(value).lower()
+
+@register.filter()
+@stringfilter
+def ticket_status(value):
+
+    return str(value).lower().replace('(', '').replace(')', '').replace(' ', '_')

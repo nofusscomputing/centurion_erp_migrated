@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'ticketing.css' %}">
 {% endblock additional-stylesheet %}
 
+{% load markdown %}
 
 {% block article %}
 
@@ -114,7 +115,7 @@
         </fieldset>
         <fieldset>
             <label>Status</label>
-            <span>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|lower %}</span>
+            <span>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|ticket_status %}</span>
         </fieldset>
         <fieldset>
             <label>Labels</label>
