@@ -13,20 +13,8 @@ from api.tests.abstract.api_permissions import APIPermissions
 from core.models.ticket.ticket import Ticket
 
 
-class TicketPermissionsAPI(TestCase, APIPermissions):
+class TicketPermissionsAPI(APIPermissions):
 
-
-    model = Ticket
-
-    ticket_type: str = 'request'
-
-    ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
-
-    app_namespace = 'API'
-    
-    url_name = '_api_core_tickets-detail'
-
-    url_list = '_api_core_tickets-list'
 
     change_data = {'title': 'ticket change'}
 
@@ -78,15 +66,17 @@ class TicketPermissionsAPI(TestCase, APIPermissions):
         )
 
 
-        # self.url_kwargs = {'pk': self.item.id}
+        self.url_kwargs = {'ticket_type': self.ticket_type,}
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}
 
         self.add_data = {
             'title': 'an add ticket',
             'organization': self.organization.id,
             'opened_by': self.add_user.id,
-            'status': int(Ticket.TicketStatus.All.NEW.value)
+            'status': int(Ticket.TicketStatus.All.NEW.value),
+            'ticket_type': self.ticket_type_enum,
+            'description': 'the description'
         }
 
         view_permissions = Permission.objects.get(
@@ -187,3 +177,67 @@ class TicketPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ChangeTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
+
+    model = Ticket
+
+    ticket_type: str = 'change'
+
+    ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
+
+    app_namespace = 'API'
+    
+    url_name = '_api_itim_change-detail'
+
+    url_list = '_api_itim_change-list'
+
+
+
+class IncidentTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
+
+    model = Ticket
+
+    ticket_type: str = 'incident'
+
+    ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
+
+    app_namespace = 'API'
+    
+    url_name = '_api_itim_incident-detail'
+
+    url_list = '_api_itim_incident-list'
+
+
+
+class ProblemTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
+
+    model = Ticket
+
+    ticket_type: str = 'problem'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
+
+    app_namespace = 'API'
+    
+    url_name = '_api_itim_problem-detail'
+
+    url_list = '_api_itim_problem-list'
+
+
+
+class RequestTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
+
+    model = Ticket
+
+    ticket_type: str = 'request'
+
+    ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
+
+    app_namespace = 'API'
+    
+    url_name = '_api_assistance_request-detail'
+
+    url_list = '_api_assistance_request-list'
