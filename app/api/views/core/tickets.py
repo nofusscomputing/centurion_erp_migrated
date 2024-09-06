@@ -21,8 +21,28 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_dynamic_permissions(self):
 
+        if self.action == 'create':
+
+            action_keyword = 'add'
+
+        elif self.action == 'destroy':
+
+            action_keyword = 'delete'
+
+        elif self.action == 'partial_update':
+
+            action_keyword = 'change'
+
+        elif self.action == 'retrieve':
+
+            action_keyword = 'view'
+
+        else:
+
+            raise ValueError('unable to determin the action_keyword')
+
         self.permission_required = [
-            'core.view_ticket_request',
+            'core.' + action_keyword + '_ticket_' + self.kwargs['ticket_type'],
         ]
 
         return super().get_permission_required()
@@ -53,7 +73,7 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
     )
     def create(self, request, *args, **kwargs):
 
-        super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
     @extend_schema(
