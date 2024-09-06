@@ -114,7 +114,6 @@
 
 #ticket-additional-data {
     padding-right: 10px;
-    font-size: 12pt;
 }
 
 
@@ -130,6 +129,7 @@
   margin: 20px;
   padding: 0px;
   width: auto;
+  font-size: 12pt;
 }
 
 
