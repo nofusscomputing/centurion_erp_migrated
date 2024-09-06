@@ -1,10 +1,11 @@
 
 #badge {
     display: table;
-    padding: 0px 5px 0px 0px;
+    padding: 1px 5px 0px 2px;
     margin: 0px;
     border: 1px solid #ccc;
     border-radius: 15px;
+    /* height:fit-content; */
 }
 
 #badge #text {
@@ -24,9 +25,8 @@
 }
 
 #badge .icon svg{
-    display: inline;
     width: 20px;
-    height: 30px;
+    height: 20px;
 
 }
 
@@ -428,7 +428,6 @@
 #ticket-meta fieldset {
     display: block;
     margin: 10px;
-    line-height: 30px;
     border: none;
 }
 
@@ -436,15 +435,15 @@
 #ticket-meta fieldset label {
     width: 100%;
     display: block;
-    line-height: inherit;
+    line-height: 30px;
     font-weight: bold;
 }
 
 
-#ticket-meta fieldset span {
-    width: 100%;
+#ticket-meta fieldset span.text {
+   /*width: 100%;*/
     display: block;
-    line-height: inherit;
+    line-height: 30px;
     border: none;
     border-bottom: 1px solid #ccc;
 }
