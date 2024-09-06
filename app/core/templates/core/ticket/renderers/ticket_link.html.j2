@@ -10,6 +10,6 @@
             {% url 'ITIM:_ticket_problem_view' ticket_type='problem' pk=id %}
             {% elif ticket_type == 'request' %}
             {% url 'Assistance:_ticket_request_view' ticket_type='request' pk=id %}
-            {% endif %}">#{{ id }} {{ ticket_type }} {{ name }}</a>
+            {% endif %}">{{ ticket_type }} {{ name }}, <span style="color: #777;">#{{ id }}</span></a>
     </span>
 </span>

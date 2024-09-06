@@ -1,10 +1,11 @@
 
 #badge {
     display: table;
-    padding: 0px 5px 0px 0px;
+    padding: 1px 5px 0px 2px;
     margin: 0px;
     border: 1px solid #ccc;
     border-radius: 15px;
+    /* height:fit-content; */
 }
 
 #badge #text {
@@ -24,9 +25,8 @@
 }
 
 #badge .icon svg{
-    display: inline;
     width: 20px;
-    height: 30px;
+    height: 20px;
 
 }
 
@@ -114,7 +114,6 @@
 
 #ticket-additional-data {
     padding-right: 10px;
-    font-size: 12pt;
 }
 
 
@@ -130,6 +129,7 @@
   margin: 20px;
   padding: 0px;
   width: auto;
+  font-size: 12pt;
 }
 
 
@@ -296,6 +296,41 @@
     fill: #2e9200;
 }
 
+#icon.ticket-status-assigned_planning svg {
+    background-color: #e1ffb2;
+    border: none;
+    border-radius: 10px;
+    fill: #2e9200;
+}
+
+#icon.ticket-status-approvals svg {
+    background-color: #ffceb2;
+    border: none;
+    border-radius: 10px;
+    fill: #d86100;
+}
+
+#icon.ticket-status-accepted svg {
+    background-color: #e1ffb2;
+    border: none;
+    border-radius: 10px;
+    fill: #2e9200;
+}
+
+#icon.ticket-status-evaluation svg {
+    background-color: #b2d6ff;
+    border: none;
+    border-radius: 10px;
+    fill: #007592;
+}
+
+#icon.ticket-status-testing svg {
+    background-color: #b2d3ff;
+    border: none;
+    border-radius: 10px;
+    fill: #8c00ff;
+}
+
 #icon.ticket-status-draft svg {
     background-color: #cacaca;
     border: none;
@@ -329,6 +364,13 @@
     border: none;
     border-radius: 10px;
     fill: #640092;
+}
+
+#icon.ticket-status-invalid svg {
+    background-color: #ffb2b6;
+    border: none;
+    border-radius: 10px;
+    fill: #920000;
 }
 
 
@@ -428,7 +470,6 @@
 #ticket-meta fieldset {
     display: block;
     margin: 10px;
-    line-height: 30px;
     border: none;
 }
 
@@ -436,15 +477,15 @@
 #ticket-meta fieldset label {
     width: 100%;
     display: block;
-    line-height: inherit;
+    line-height: 30px;
     font-weight: bold;
 }
 
 
-#ticket-meta fieldset span {
-    width: 100%;
+#ticket-meta fieldset span.text {
+   /*width: 100%;*/
     display: block;
-    line-height: inherit;
+    line-height: 30px;
     border: none;
     border-bottom: 1px solid #ccc;
 }

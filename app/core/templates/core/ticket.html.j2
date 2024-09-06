@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{% static 'ticketing.css' %}">
 {% endblock additional-stylesheet %}
 
+{% load markdown %}
 
 {% block article %}
 
@@ -99,7 +100,7 @@
 
         <fieldset>
             <label>Assigned</label>
-            <span>
+            <span class="text">
             {% if ticket.assigned_users %}
                 {% for user in ticket.assigned_users.all %}
                     {{ user }} 
@@ -114,15 +115,15 @@
         </fieldset>
         <fieldset>
             <label>Status</label>
-            <span>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|lower %}</span>
+            <span>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|ticket_status %}</span>
         </fieldset>
         <fieldset>
             <label>Labels</label>
-            <span>val</span>
+            <span class="text">val</span>
         </fieldset>
         <fieldset>
             <label>Project</label>
-            <span>
+            <span class="text">
                 {% if ticket.project %}
                 <a href="{% url 'Project Management:_project_view' pk=ticket.project_id %}">{{ ticket.project }}</a>
                 {% else %}
@@ -132,15 +133,15 @@
         </fieldset>
         <fieldset>
             <label>Priority</label>
-            <span>U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>
+            <span class="text">U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>
         </fieldset>
         <fieldset>
             <label>Milestone</label>
-            <span>val</span>
+            <span class="text">val</span>
         </fieldset>
         <fieldset>
             <label>Roadmap(s)</label>
-            <span>val</span>
+            <span class="text">val</span>
         </fieldset>
 
     </div>

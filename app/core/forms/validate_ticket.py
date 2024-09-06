@@ -176,7 +176,21 @@ class TicketValidation(
 
         for field in self.changed_data:
 
-            if field not in fields_allowed and not self.fields['status'].widget.is_hidden:
+            allowed: bool = False
+
+            if hasattr(self.fields[field], 'widget'):
+
+                if field in fields_allowed or self.fields[field].widget.is_hidden:
+
+                    allowed = True
+
+            else:
+
+                if field in fields_allowed or self.fields[field].required:
+
+                    allowed = True
+
+            if not allowed:
 
                 raise PermissionDenied(f'cant edit field: {field}')
 
@@ -207,7 +221,8 @@ class TicketValidation(
 
         except KeyError:
 
-            field = self.fields['status'].initial.value
+            # field = self.fields['status'].default.value
+            field = getattr(self.Meta.model, 'status').field.default.value
 
 
         if self._ticket_type == 'request':
@@ -285,6 +300,18 @@ class TicketValidation(
 
                 if field in changed_data_exempt:
                     continue
+
+                if field == 'is_deleted':
+
+                    if not self.validated_data['is_deleted']:
+
+                        continue
+
+                if field == 'ticket_type':
+
+                    if self.validated_data['ticket_type'] == self._context['view']._ticket_type_value:
+
+                        continue
 
                 if self.original_object is not None:
                     if (

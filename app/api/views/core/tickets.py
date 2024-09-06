@@ -1,12 +1,12 @@
-from django.shortcuts import get_object_or_404
-
-from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from rest_framework import generics, viewsets
 
 from access.mixin import OrganizationMixin
 
-from api.serializers.itim.ticket import TicketSerializer
+from api.serializers.assistance.request import RequestTicketSerializer
+from api.serializers.itim.change import ChangeTicketSerializer
+from api.serializers.itim.incident import IncidentTicketSerializer
+from api.serializers.itim.problem import ProblemTicketSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 from core.models.ticket.ticket import Ticket
@@ -21,8 +21,40 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_dynamic_permissions(self):
 
+        if self.action == 'create':
+
+            action_keyword = 'add'
+
+        elif self.action == 'destroy':
+
+            action_keyword = 'delete'
+
+        elif self.action == 'list':
+
+            action_keyword = 'view'
+
+        elif self.action == 'partial_update':
+
+            action_keyword = 'change'
+
+        elif self.action == 'retrieve':
+
+            action_keyword = 'view'
+
+        elif self.action == 'update':
+
+            action_keyword = 'change'
+
+        elif self.action is None:
+
+            action_keyword = 'view'
+
+        else:
+
+            raise ValueError('unable to determin the action_keyword')
+
         self.permission_required = [
-            'core.view_ticket_request',
+            'core.' + action_keyword + '_ticket_' + self._ticket_type,
         ]
 
         return super().get_permission_required()
@@ -30,70 +62,59 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     queryset = Ticket.objects.all()
 
-    serializer_class = TicketSerializer
 
+    def get_serializer(self, *args, **kwargs):
 
-    # def get_object(self, queryset=None, **kwargs):
-    #     item = self.kwargs.get('pk')
-    #     return get_object_or_404(Ticket, pk=item)
+        if self._ticket_type == 'change':
+            
+            self.serializer_class = ChangeTicketSerializer
 
+            self._ticket_type_value = Ticket.TicketType.CHANGE.value
 
-    @extend_schema(
-        summary='Create a ticket',
-        description = """This model includes all of the ticket comment types. 
-        Due to this not all fields will be available and what fields are available
-        depends upon the comment type. see
-        [administration docs](https://nofusscomputing.com/projects/centurion_erp/administration/core/ticketing/index.html) for more info.
-        """,
-        request = TicketSerializer,
-        responses = {
-            201: OpenApiResponse(description='Ticket created', response=TicketSerializer),
-            403: OpenApiResponse(description='User tried to edit field they dont have access to'),
-        }
-    )
-    def create(self, request, *args, **kwargs):
+        elif self._ticket_type == 'incident':
+            
+            self.serializer_class = IncidentTicketSerializer
+            self._ticket_type_value = Ticket.TicketType.INCIDENT.value
 
-        super().create(request, *args, **kwargs)
+        elif self._ticket_type == 'problem':
+            
+            self.serializer_class = ProblemTicketSerializer
+            self._ticket_type_value = Ticket.TicketType.PROBLEM.value
 
+        elif self._ticket_type == 'request':
+            
+            self.serializer_class = RequestTicketSerializer
+            self._ticket_type_value = Ticket.TicketType.REQUEST.value
 
-    @extend_schema(
-        summary='Fetch all tickets',
-        description = """This model includes all of the ticket comment types. 
-        Due to this not all fields will be available and what fields are available
-        depends upon the comment type. see
-        [administration docs](https://nofusscomputing.com/projects/centurion_erp/administration/core/ticketing/index.html) for more info.
-        """,
-        methods=["GET"],
-        responses = {
-            200: OpenApiResponse(description='Success', response=TicketSerializer),
-        }
-    )
-    def list(self, request):
+        else:
 
-        return super().list(request)
+            raise ValueError('unable to determin the serializer_class')
 
-
-    @extend_schema(
-        summary='Fetch the selected ticket',
-        description = """This model includes all of the ticket comment types. 
-        Due to this not all fields will be available and what fields are available
-        depends upon the comment type. see
-        [administration docs](https://nofusscomputing.com/projects/centurion_erp/administration/core/ticketing/index.html) for more info.
-        """,
-        methods=["GET"]
-    )
-    def retrieve(self, request, *args, **kwargs):
-
-        return super().retrieve(request, *args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
 
 
     def get_queryset(self):
 
-        return self.queryset
+        if self._ticket_type == 'change':
 
+            ticket_type = self.queryset.model.TicketType.CHANGE.value
 
-    def get_view_name(self):
-        if self.detail:
-            return "Ticket"
-        
-        return 'Tickets'
+        elif self._ticket_type == 'incident':
+
+            ticket_type = self.queryset.model.TicketType.INCIDENT.value
+
+        elif self._ticket_type == 'problem':
+
+            ticket_type = self.queryset.model.TicketType.PROBLEM.value
+
+        elif self._ticket_type == 'request':
+
+            ticket_type = self.queryset.model.TicketType.REQUEST.value
+
+        else:
+
+            raise ValueError('Unknown ticket type. kwarg `ticket_type` must be set')
+
+        return self.queryset.filter(
+            ticket_type = ticket_type
+        )

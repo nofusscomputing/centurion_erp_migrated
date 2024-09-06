@@ -6,7 +6,7 @@ from rest_framework import generics, viewsets
 
 from access.mixin import OrganizationMixin
 
-from api.serializers.itim.ticket_comment import TicketCommentSerializer
+from api.serializers.core.ticket_comment import TicketCommentSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 from core.models.ticket.ticket_comment import TicketComment
@@ -48,9 +48,9 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
             200: OpenApiResponse(description='Success', response=TicketCommentSerializer),
         }
     )
-    def list(self, request, ticket_id):
+    def list(self, request, *args, **kwargs):
 
-        return super().list(request)
+        return super().list(request, *args, **kwargs)
 
 
     @extend_schema(
