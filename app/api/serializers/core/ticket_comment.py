@@ -40,7 +40,6 @@ class TicketCommentSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(
             reverse('API:' + view_name + '-detail',
                 kwargs={
-                    'ticket_type': self._kwargs['context']['view'].kwargs['ticket_type'],
                     'ticket_id': item.ticket.id,
                     'pk': item.id
                 }

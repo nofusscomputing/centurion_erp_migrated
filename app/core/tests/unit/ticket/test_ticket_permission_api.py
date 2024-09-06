@@ -66,16 +66,15 @@ class TicketPermissionsAPI(APIPermissions):
         )
 
 
-        self.url_kwargs = {'ticket_type': self.ticket_type,}
+        # self.url_kwargs = {}
 
-        self.url_view_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}
+        self.url_view_kwargs = {'pk': self.item.id}
 
         self.add_data = {
             'title': 'an add ticket',
             'organization': self.organization.id,
             'opened_by': self.add_user.id,
             'status': int(Ticket.TicketStatus.All.NEW.value),
-            'ticket_type': self.ticket_type_enum,
             'description': 'the description'
         }
 

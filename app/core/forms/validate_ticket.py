@@ -307,6 +307,12 @@ class TicketValidation(
 
                         continue
 
+                if field == 'ticket_type':
+
+                    if self.validated_data['ticket_type'] == self._context['view']._ticket_type_value:
+
+                        continue
+
                 if self.original_object is not None:
                     if (
                         self.validated_data[field] != getattr(self.original_object, field)

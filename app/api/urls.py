@@ -9,8 +9,9 @@ from api.views.settings import permissions
 from api.views.settings import index as settings
 
 from api.views import assistance, itim
-from api.views.core import tickets as core_tickets
+from api.views.assistance import request_ticket
 from api.views.core import ticket_comments as core_ticket_comments
+from api.views.itim import change_ticket, incident_ticket, problem_ticket
 
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
@@ -24,19 +25,19 @@ router = DefaultRouter(trailing_slash=False)
 
 router.register('', index.Index, basename='_api_home')
 
-router.register('assistance/(?P<ticket_type>request)', core_tickets.View, basename='_api_assistance_request')
-router.register('assistance/(?P<ticket_type>request)/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_assistance_request_ticket_comments')
+router.register('assistance/request', request_ticket.View, basename='_api_assistance_request')
+router.register('assistance/request/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_assistance_request_ticket_comments')
 
 router.register('device', DeviceViewSet, basename='device')
 
-router.register('itim/(?P<ticket_type>change)', core_tickets.View, basename='_api_itim_change')
-router.register('itim/(?P<ticket_type>change)/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_change_ticket_comments')
+router.register('itim/change', change_ticket.View, basename='_api_itim_change')
+router.register('itim/change/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_change_ticket_comments')
 
-router.register('itim/(?P<ticket_type>incident)', core_tickets.View, basename='_api_itim_incident')
-router.register('itim/(?P<ticket_type>incident)/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_incident_ticket_comments')
+router.register('itim/incident', incident_ticket.View, basename='_api_itim_incident')
+router.register('itim/incident/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_incident_ticket_comments')
 
-router.register('itim/(?P<ticket_type>problem)', core_tickets.View, basename='_api_itim_problem')
-router.register('itim/(?P<ticket_type>problem)/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_problem_ticket_comments')
+router.register('itim/problem', problem_ticket.View, basename='_api_itim_problem')
+router.register('itim/problem/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_problem_ticket_comments')
 
 router.register('software', software.SoftwareViewSet, basename='software')
 

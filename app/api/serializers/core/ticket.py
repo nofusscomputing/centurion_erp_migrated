@@ -1,6 +1,7 @@
 from django.urls import reverse
 
 from rest_framework import serializers
+from rest_framework.fields import empty
 
 from api.serializers.core.ticket_comment import TicketCommentSerializer
 
@@ -46,7 +47,6 @@ class TicketSerializer(
             reverse(
                 'API:' + view_name + '-detail',
                 kwargs={
-                    'ticket_type': self._kwargs['context']['view'].kwargs['ticket_type'],
                     'pk': item.id
                 }
             )
@@ -85,7 +85,6 @@ class TicketSerializer(
             reverse(
                 'API:' + view_name + '-list',
                 kwargs={
-                    'ticket_type': self._kwargs['context']['view'].kwargs['ticket_type'],
                     'ticket_id': item.id
                 }
             )
@@ -135,6 +134,13 @@ class TicketSerializer(
             'url',
         ]
 
+    
+    def __init__(self, instance=None, data=empty, **kwargs):
+
+        self.fields.fields['status'].initial = Ticket.TicketStatus.All.NEW
+        
+        super().__init__(instance=instance, data=data, **kwargs)
+
 
     def is_valid(self, *, raise_exception=True) -> bool:
 
@@ -142,17 +148,17 @@ class TicketSerializer(
 
         is_valid = super().is_valid(raise_exception=raise_exception)
 
+        self.validated_data['ticket_type'] = self._context['view']._ticket_type_value
+
         if self.instance:
 
-            ticket_type_choice_id = int(self.instance.ticket_type)
             self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
 
         else:
 
-            ticket_type_choice_id = int(self.initial_data['ticket_type'])
             self.original_object = None
 
-        self._ticket_type = str(self.fields['ticket_type'].choices[ticket_type_choice_id]).lower().replace(' ', '_')
+        self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
 
 
         is_valid = self.validate_ticket()
