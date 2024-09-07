@@ -812,6 +812,39 @@ class Ticket(
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
 
 
+    def ticketassigned(self, instance) -> bool:
+        """ Check if the ticket has any assigned user(s)/team(s)"""
+
+        users = len(instance.assigned_users.all())
+        teams = len(instance.assigned_teams.all())
+
+        if users < 1 and teams < 1:
+            
+            return False
+
+        return True
+
+
+    def assigned_status_update(self, instance) -> None:
+        """Update Ticket status based off of assigned
+
+        - If the ticket has any assigned team(s)/user(s), update the status to assigned.
+        - If the ticket does not have any assigned team(s)/user(s), update the status to new.
+
+        This method only updates the status if the existing status is New or Assigned.
+        """
+
+        assigned = self.ticketassigned(instance)
+
+        if not assigned and instance.status == Ticket.TicketStatus.All.ASSIGNED:
+            instance.status = Ticket.TicketStatus.All.NEW
+            instance.save()
+
+        elif assigned and instance.status == Ticket.TicketStatus.All.NEW:
+            instance.status = Ticket.TicketStatus.All.ASSIGNED
+            instance.save()
+
+
     def action_comment_ticket_users(self, sender, instance, action, reverse, model, pk_set, **kwargs):
         """ Ticket *_users many2many field
 
@@ -843,6 +876,9 @@ class Ticket(
                 elif action == 'post_add':
 
                     comment_field_value = f"Assigned @" + str(user.username)
+
+
+                self.assigned_status_update(instance)
 
 
             elif sender.__name__ == 'Ticket_subscribed_users':
@@ -903,6 +939,9 @@ class Ticket(
                 elif action == 'post_add':
 
                     comment_field_value = f"Assigned team @" + str(team.team_name)
+
+
+                self.assigned_status_update()
 
 
             elif sender.__name__ == 'Ticket_subscribed_teams':
