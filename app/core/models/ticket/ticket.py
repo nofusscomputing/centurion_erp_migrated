@@ -808,6 +808,8 @@ class Ticket(
         signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.assigned_users.through)
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.assigned_teams.through)
 
+        signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.subscribed_users.through)
+        signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
 
 
     def action_comment_ticket_users(self, sender, instance, action, reverse, model, pk_set, **kwargs):
@@ -841,6 +843,17 @@ class Ticket(
                 elif action == 'post_add':
 
                     comment_field_value = f"Assigned @" + str(user.username)
+
+
+            elif sender.__name__ == 'Ticket_subscribed_users':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Removed @{str(user.username)} as watching"
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Added @{str(user.username)} as watching"
 
 
             if comment_field_value:
@@ -890,6 +903,17 @@ class Ticket(
                 elif action == 'post_add':
 
                     comment_field_value = f"Assigned team @" + str(team.team_name)
+
+
+            elif sender.__name__ == 'Ticket_subscribed_teams':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Removed team @{str(team.team_name)} as watching"
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Added team @{str(team.team_name)} as watching"
 
 
             if comment_field_value:
