@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, signals
 from django.forms import ValidationError
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -804,6 +804,108 @@ class Ticket(
                 )
 
                 comment.save()
+
+        signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.assigned_users.through)
+        signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.assigned_teams.through)
+
+
+
+    def action_comment_ticket_users(self, sender, instance, action, reverse, model, pk_set, **kwargs):
+        """ Ticket *_users many2many field
+
+        - Create the action comment
+        - Update ticket status to New/Assigned
+        """
+
+        pk: int = 0
+
+        user: list(User) = None
+        comment_field_value: str = None
+
+        if pk_set:
+
+            pk = next(iter(pk_set))
+
+            request = get_request()
+
+            if pk:
+
+                user = User.objects.get(pk = pk)
+
+            if sender.__name__ == 'Ticket_assigned_users':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Unassigned @" + str(user.username)
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Assigned @" + str(user.username)
+
+
+            if comment_field_value:
+
+                from core.models.ticket.ticket_comment import TicketComment
+
+                comment = TicketComment.objects.create(
+                    ticket = instance,
+                    comment_type = TicketComment.CommentType.ACTION,
+                    body = comment_field_value,
+                    source = TicketComment.CommentSource.DIRECT,
+                    user = request.user,
+                )
+
+                comment.save()
+
+
+
+    def action_comment_ticket_teams(self, sender, instance, action, reverse, model, pk_set, **kwargs):
+        """Ticket *_teams many2many field
+
+        - Create the action comment
+        - Update ticket status to New/Assigned
+        """
+
+        pk: int = 0
+
+        team: list(Team) = None
+        comment_field_value: str = None
+
+        if pk_set:
+
+            pk = next(iter(pk_set))
+
+            request = get_request()
+
+            if pk:
+
+                team = Team.objects.get(pk = pk)
+
+            if sender.__name__ == 'Ticket_assigned_teams':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Unassigned team @" + str(team.team_name)
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Assigned team @" + str(team.team_name)
+
+
+            if comment_field_value:
+
+                from core.models.ticket.ticket_comment import TicketComment
+
+                comment = TicketComment.objects.create(
+                    ticket = instance,
+                    comment_type = TicketComment.CommentType.ACTION,
+                    body = comment_field_value,
+                    source = TicketComment.CommentSource.DIRECT,
+                    user = request.user,
+                )
+
+                comment.save()
+
 
 
 class RelatedTickets(TenancyObject):
