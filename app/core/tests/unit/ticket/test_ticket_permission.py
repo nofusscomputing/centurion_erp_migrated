@@ -2,6 +2,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
+# from django.core.exceptions import ValidationError
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
@@ -15,9 +16,14 @@ from app.tests.abstract.model_permissions import ModelPermissions
 
 from core.models.ticket.ticket import Ticket
 
+from core.tests.unit.ticket.ticket_permission.field_based_permissions import TicketFieldBasedPermissions
+
+
+
 
 class TicketPermissions(
     ModelPermissions,
+    TicketFieldBasedPermissions
 ):
 
     ticket_type:str = None
@@ -101,11 +107,11 @@ class TicketPermissions(
 
         self.url_change_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}
 
-        self.change_data = {'title': 'an change to ticket', 'organization': self.organization.id}
+        self.change_data = {'title': 'an change to ticket'}
 
         self.url_delete_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}
 
-        self.delete_data = {'title': 'a delete to ticket', 'organization': self.organization.id}
+        self.delete_data = {'title': 'a delete to ticket'}
 
 
         view_permissions = Permission.objects.get(
@@ -198,6 +204,181 @@ class TicketPermissions(
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+        # Import user/permissions
+
+        import_permissions = Permission.objects.get(
+                codename = 'import_' + self.model._meta.model_name + '_' + self.ticket_type,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+        import_team = Team.objects.create(
+            team_name = 'import_team',
+            organization = organization,
+        )
+
+        import_team.permissions.set([change_permissions, import_permissions])
+
+
+        self.import_user = User.objects.create_user(username="test_user_import", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = import_team,
+            user = self.import_user
+        )
+
+        # Triage user/permissions
+
+        triage_permissions = Permission.objects.get(
+                codename = 'triage_' + self.model._meta.model_name + '_' + self.ticket_type,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+        triage_team = Team.objects.create(
+            team_name = 'triage_team',
+            organization = organization,
+        )
+
+        triage_team.permissions.set([change_permissions, triage_permissions])
+
+
+        self.triage_user = User.objects.create_user(username="test_user_triage", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = triage_team,
+            user = self.triage_user
+        )
+
+
+
+
+    @pytest.mark.skip(reason="To be written")
+    def test_permission_triage(self):
+
+        pass
+
+
+    @pytest.mark.skip(reason="To be written")
+    def test_permission_purge(self):
+
+        pass
+
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_assign_user_added(self):
+        """Action Comment test
+        Confirm an action comment is created when a user is added as assigned
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_assign_user_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a user is removed as assigned
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_assign_team_added(self):
+        """Action Comment test
+        Confirm an action comment is created when a team is added as assigned
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_assign_team_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a team is removed as assigned
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_subscribe_user_added(self):
+        """Action Comment test
+        Confirm an action comment is created when a user is added as subscribed
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_subscribe_user_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a user is removed as subscribed
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_subscribe_team_added(self):
+        """Action Comment test
+        Confirm an action comment is created when a team is added as subscribed
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_subscribe_team_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a team is removed as subscribed
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_status_change(self):
+        """Action Comment test
+        Confirm an action comment is created when the ticket status changes
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_related_ticket_added(self):
+        """Action Comment test
+        Confirm an action comment is created when a related ticket is added
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_related_ticket_removed(self):
+        """Action Comment test
+        Confirm an action comment is created when a related ticket is removed
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_ticket_creation_field_edit_denied(self):
+        """Action Comment test
+        Confirm an action comment is created when a user is added as assigned
+        """
+
+        pass
+
 
 
 
