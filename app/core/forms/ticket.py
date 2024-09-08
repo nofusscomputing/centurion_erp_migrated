@@ -125,12 +125,18 @@ class TicketForm(
 
             if field not in ticket_type:
 
-                fields_allowed.remove(field)
+                self._fields_allowed.remove(field)
 
 
         for field in original_fields:    # Remove fields user cant edit unless field is hidden
 
-            if field not in fields_allowed and not self.fields[field].widget.is_hidden:
+            if (
+                (
+                    field not in self._fields_allowed and not self.fields[field].widget.is_hidden
+                )
+                    or
+                field not in ticket_type
+            ):
 
                 del self.fields[field]
 

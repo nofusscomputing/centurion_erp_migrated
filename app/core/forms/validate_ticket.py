@@ -74,6 +74,10 @@ class TicketValidation(
     @property
     def fields_allowed(self):
 
+        if hasattr(self, '_fields_allowed'):
+
+            return self._fields_allowed
+
         if not hasattr(self, '_ticket_type'):
             
             self._ticket_type = self.initial['type_ticket']
@@ -152,6 +156,8 @@ class TicketValidation(
             all_fields = all_fields + self.triage_fields
 
             fields_allowed = fields_allowed + all_fields
+
+        self._fields_allowed = fields_allowed
 
         return fields_allowed
 
