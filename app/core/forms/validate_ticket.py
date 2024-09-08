@@ -138,7 +138,9 @@ class TicketValidation(
             permissions_required = [ 'core.import_ticket_'+ self._ticket_type ],
         ) and not self.request.user.is_superuser:
 
-            fields_allowed = fields_allowed + self.import_fields
+            if hasattr(self, 'serializer_choice_field'):
+
+                fields_allowed = fields_allowed + self.import_fields
 
         if self.has_organization_permission(
             organization=ticket_organization.id,
