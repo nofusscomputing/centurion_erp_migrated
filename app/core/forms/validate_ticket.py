@@ -1,5 +1,4 @@
-from django.core.exceptions import PermissionDenied
-from django.forms import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 
 from rest_framework import serializers
 
@@ -172,27 +171,37 @@ class TicketValidation(
 
         if len(fields_allowed) == 0:
 
-            raise PermissionDenied('Access Denied')
+            raise ValidationError('Access Denied to all fields', code='access_denied_all_fields')
 
         for field in self.changed_data:
 
             allowed: bool = False
 
-            if hasattr(self.fields[field], 'widget'):
+            if field in self.fields:
 
-                if field in fields_allowed or self.fields[field].widget.is_hidden:
+                if hasattr(self.fields[field], 'widget'):
 
-                    allowed = True
+                    if field in fields_allowed or self.fields[field].widget.is_hidden:
 
-            else:
+                        allowed = True
 
-                if field in fields_allowed or self.fields[field].required:
+                else:
 
-                    allowed = True
+                    if field in fields_allowed or self.fields[field].required:
+
+                        allowed = True
 
             if not allowed:
 
-                raise PermissionDenied(f'cant edit field: {field}')
+                raise ValidationError(
+                    f'cant edit field: {field}',
+                    code=f'cant_edit_field_{field}',
+                )
+
+                return False
+
+
+        return True
 
 
 
@@ -287,51 +296,64 @@ class TicketValidation(
 
         is_valid = False
 
+        fields: list = []
+
         if hasattr(self, 'validated_data'):
 
-            changed_data: list = []
+            fields = self.validated_data
 
-            changed_data_exempt = [
-                'ticket_comments',
-                'url',
-            ]
+        else:
 
-            for field in self.validated_data:
+            fields = self.data
 
-                if field in changed_data_exempt:
+        changed_data: list = []
+
+        changed_data_exempt = [
+            'csrfmiddlewaretoken',
+            'ticket_comments',
+            'url',
+        ]
+
+        for field in fields:
+
+            if str(field).startswith('ticket-'):
+
+                field = str(field).replace('ticket-','')
+
+            if field in changed_data_exempt:
+                continue
+
+            if field == 'is_deleted':
+
+                if self.fields['is_deleted']:
+
                     continue
 
-                if field == 'is_deleted':
+            if field == 'ticket_type':
 
-                    if not self.validated_data['is_deleted']:
+                if self.fields['ticket_type']:
 
-                        continue
+                    continue
 
-                if field == 'ticket_type':
+            if self.original_object is not None:
+                if (
+                    fields[field] != getattr(self.original_object, field)
+                    and (
+                        type(fields[field]) in [str, int, bool]
+                    )
+                ) :
 
-                    if self.validated_data['ticket_type'] == self._context['view']._ticket_type_value:
-
-                        continue
-
-                if self.original_object is not None:
-                    if (
-                        self.validated_data[field] != getattr(self.original_object, field)
-                        and (
-                            type(self.validated_data[field]) in [str, int, bool]
-                        )
-                    ) :
-
-                        changed_data = changed_data + [ field ]
-                else:
+                    changed_data = changed_data + [ field ]
+            else:
 
 
-                    if type(self.validated_data[field]) in [str, int, bool]:
+                if type(fields[field]) in [str, int, bool]:
 
-                        changed_data = changed_data + [ field ]
+                    changed_data = changed_data + [ field ]
 
-            if len(changed_data) > 0:
+        if len(changed_data) > 0:
 
-                self.changed_data = changed_data
+            self.changed_data = changed_data
 
         validate_field_permission = False
         if self.validate_field_permission():

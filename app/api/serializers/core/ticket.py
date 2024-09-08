@@ -95,9 +95,6 @@ class TicketSerializer(
 
         model = Ticket
 
-        extra_kwargs = {
-            'status': {'required': True}
-        } 
 
         fields =  [
             'id',
@@ -138,6 +135,7 @@ class TicketSerializer(
     def __init__(self, instance=None, data=empty, **kwargs):
 
         self.fields.fields['status'].initial = Ticket.TicketStatus.All.NEW
+        self.fields.fields['status'].default = Ticket.TicketStatus.All.NEW
         
         super().__init__(instance=instance, data=data, **kwargs)
 

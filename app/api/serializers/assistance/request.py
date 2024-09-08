@@ -12,10 +12,6 @@ class RequestTicketSerializer(
 
         model = Ticket
 
-        extra_kwargs = {
-            'status': {'required': True}
-        } 
-
         fields =  [
             'id',
             'assigned_teams',

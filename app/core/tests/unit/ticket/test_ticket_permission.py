@@ -16,7 +16,9 @@ from app.tests.abstract.model_permissions import ModelPermissions
 from core.models.ticket.ticket import Ticket
 
 
-class TicketPermissions(ModelPermissions):
+class TicketPermissions(
+    ModelPermissions,
+):
 
     ticket_type:str = None
 
@@ -95,7 +97,6 @@ class TicketPermissions(ModelPermissions):
             'title': 'an add ticket',
             'organization': self.organization.id,
             'opened_by': self.add_user.id,
-            'status': int(Ticket.TicketStatus.All.NEW.value)
         }
 
         self.url_change_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}

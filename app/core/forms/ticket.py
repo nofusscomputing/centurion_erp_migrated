@@ -16,7 +16,6 @@ class TicketForm(
     TicketValidation,
 ):
 
-    prefix = 'ticket'
 
     class Meta:
         model = Ticket
