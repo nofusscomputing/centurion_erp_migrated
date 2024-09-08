@@ -618,11 +618,18 @@ class Ticket(
         'title',
         'description',
         'opened_by',
-        'ticket_type'
+        'ticket_type',
+        'assigned_users',
+        'assigned_teams',
     ]
 
     common_itsm_fields: list(str()) = common_fields + [
+        'status',
         'urgency',
+        'priority',
+        'impact',
+        'subscribed_teams',
+        'subscribed_users',
 
     ]
 
