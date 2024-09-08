@@ -189,7 +189,27 @@ class TicketValidation(
 
                 if hasattr(self.fields[field], 'widget'):
 
-                    if field in fields_allowed or self.fields[field].widget.is_hidden:
+                    if self.fields[field].widget.is_hidden:
+
+                        changed_value = None
+
+                        if type(self.fields[field].initial) is bool:
+
+                            changed_value: bool = bool(self.data[field])
+
+                        elif type(self.fields[field].initial) is int:
+
+                            changed_value: int = int(self.data[field])
+
+                        elif type(self.fields[field].initial) is str:
+
+                            changed_value: str = str(self.data[field])
+
+                        if changed_value == self.fields[field].initial or field in fields_allowed:
+
+                            allowed = True
+
+                    if field in fields_allowed:
 
                         allowed = True
 
@@ -337,19 +357,27 @@ class TicketValidation(
 
                     continue
 
-            if field == 'ticket_type':
-
-                if self.fields['ticket_type']:
-
-                    continue
-
             if self.original_object is not None:
+
+                field_value: str = str(fields[field])
+
+                if type(getattr(self.original_object, field)) is bool:
+
+                    field_value: bool = bool(fields[field])
+
+                elif type(getattr(self.original_object, field)) is int:
+
+                    field_value: int = int(fields[field])
+
                 if (
-                    fields[field] != getattr(self.original_object, field)
-                    and (
-                        type(fields[field]) in [str, int, bool]
-                    )
-                ) :
+                    (
+                        field_value != getattr(self.original_object, field)
+                        and (
+                            type(field_value) in [str, int, bool]
+                        )
+                    ) or
+                    field in self.data
+                ):
 
                     changed_data = changed_data + [ field ]
             else:
