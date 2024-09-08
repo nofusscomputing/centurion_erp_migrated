@@ -518,7 +518,10 @@ class TicketFieldPermissionsAddUser:
         """
 
         field_name: str = 'ticket_type'
-        field_value = int(Ticket.TicketType.REQUEST)
+        field_value = int(Ticket.TicketType.REQUEST.value)
+
+        if self.ticket_type_enum == int(Ticket.TicketType.REQUEST.value):
+            field_value = int(Ticket.TicketType.INCIDENT.value)
 
         client = Client(raise_request_exception=True)
         url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
@@ -1150,7 +1153,10 @@ class TicketFieldPermissionsChangeUser:
         """
 
         field_name: str = 'ticket_type'
-        field_value = int(Ticket.TicketType.REQUEST)
+        field_value = int(Ticket.TicketType.REQUEST.value)
+
+        if self.ticket_type_enum == int(Ticket.TicketType.REQUEST.value):
+            field_value = int(Ticket.TicketType.INCIDENT.value)
 
 
         client = Client(raise_request_exception=True)
@@ -1790,7 +1796,10 @@ class TicketFieldPermissionsImportUser:
         """
 
         field_name: str = 'ticket_type'
-        field_value = int(Ticket.TicketType.REQUEST)
+        field_value = int(Ticket.TicketType.REQUEST.value)
+
+        if self.ticket_type_enum == int(Ticket.TicketType.REQUEST.value):
+            field_value = int(Ticket.TicketType.INCIDENT.value)
 
 
         client = Client(raise_request_exception=True)
@@ -2356,7 +2365,10 @@ class TicketFieldPermissionsTriageUser:
         """
 
         field_name: str = 'ticket_type'
-        field_value = int(Ticket.TicketType.REQUEST)
+        field_value = int(Ticket.TicketType.REQUEST.value)
+
+        if self.ticket_type_enum == int(Ticket.TicketType.REQUEST.value):
+            field_value = int(Ticket.TicketType.INCIDENT.value)
 
 
         client = Client(raise_request_exception=True)
