@@ -618,6 +618,7 @@ class Ticket(
         'title',
         'description',
         'opened_by',
+        'project',
         'ticket_type',
         'assigned_users',
         'assigned_teams',
