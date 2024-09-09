@@ -332,20 +332,70 @@ class TicketPermissions(
 
         assert self.item.status == Ticket.TicketStatus.All.ASSIGNED
 
+
+    def test_ticket_action_comment_assign_user_removed_status_change(self):
         """Action Comment test
-        Confirm an action comment is created when a user is added as assigned
+        Confirm a 'status changed' action comment is created when a user is removed as assigned
         """
 
-        pass
+        self.item.assigned_users.add(self.add_user.id)
+
+        self.item.assigned_users.remove(self.add_user.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed status to new", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_assign_user_removed(self):
+    # @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_assign_user_removed_user_unassigned(self):
         """Action Comment test
-        Confirm an action comment is created when a user is removed as assigned
+        Confirm a 'user unassigned' action comment is created when a user is removed as assigned
         """
 
-        pass
+        self.item.assigned_users.add(self.add_user.id)
+
+        self.item.assigned_users.remove(self.add_user.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"unassigned @" + self.add_user.username, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_user_remove_status_update(self):
+        """Action Comment test
+        When a user is unassigned and the status is 'assigned', the ticket status must update
+        to 'new'
+        """
+
+        self.item.assigned_users.add(self.add_user.id)
+
+        self.item.assigned_users.remove(self.add_user.id)
+
+        assert self.item.status == Ticket.TicketStatus.All.NEW
+
 
 
     @pytest.mark.skip(reason='to be written')
