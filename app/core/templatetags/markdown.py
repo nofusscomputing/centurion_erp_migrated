@@ -42,10 +42,17 @@ def to_duration(value):
         str: Duration value in format 00h 00m 00s
     """
 
-    hours = int(int(value)//3600)
+    hour = int(3600)
+    minute = int(60)
 
-    minutes = int((int(value)%3600)//60)
+    if '-' in value:
+        hour = int(-3600)
+        minute = int(-60)
 
-    seconds = int((int(value)%3600)%60)
+    hours = int(int(value)//hour)
+
+    minutes = int((int(value)%hour)//minute)
+
+    seconds = int((int(value)%hour)%minute)
 
     return str("{:02d}h {:02d}m {:02d}s".format(hours, minutes, seconds))

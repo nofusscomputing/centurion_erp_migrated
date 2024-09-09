@@ -822,6 +822,16 @@ class TicketPermissions(
 
 
     @pytest.mark.skip(reason='to be written')
+    def test_ticket_action_comment_project_added(self):
+        """Action Comment test
+        Confirm a 'project added' action comment is created for the ticket
+        when a project is added
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='to be written')
     def test_ticket_action_comment_related_ticket_removed(self):
         """Action Comment test
         Confirm an action comment is created when a related ticket is removed
