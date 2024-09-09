@@ -564,20 +564,53 @@ class TicketPermissions(
                 action_comment = True
 
         assert action_comment
+
+
+    def test_ticket_action_comment_subscribed_teams_added_team_subscribed(self):
         """Action Comment test
-        Confirm an action comment is created when a team is added as subscribed
+        Confirm a 'team subscribed' action comment is created when a team is added as subscribed
         """
 
-        pass
+        self.item.subscribed_teams.add(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"added team @" + self.change_team.team_name + " as watching" , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_subscribe_team_removed(self):
+    def test_ticket_action_comment_subscribed_teams_removed_team_unsubscribed(self):
         """Action Comment test
-        Confirm an action comment is created when a team is removed as subscribed
+        Confirm a 'team unsubscribed' action comment is created when a team is removed as subscribed
         """
 
-        pass
+        self.item.subscribed_teams.add(self.change_team.id)
+        self.item.subscribed_teams.remove(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"removed team @" + self.change_team.team_name + " as watching" , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
 
