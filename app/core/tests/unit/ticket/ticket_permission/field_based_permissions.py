@@ -1857,7 +1857,7 @@ class TicketFieldPermissionsTriageUser:
         assert response.status_code == 200
 
 
-    def test_field_permission_priority_triage_user_denied(self):
+    def test_field_permission_priority_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field priority.
@@ -1885,7 +1885,7 @@ class TicketFieldPermissionsTriageUser:
 
 
 
-    def test_field_permission_assigned_users_triage_user_denied(self):
+    def test_field_permission_assigned_users_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field assigned_users.
@@ -1912,7 +1912,7 @@ class TicketFieldPermissionsTriageUser:
         assert response.status_code == 200
 
 
-    def test_field_permission_assigned_teams_triage_user_denied(self):
+    def test_field_permission_assigned_teams_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field assigned_teams.
@@ -2087,7 +2087,7 @@ class TicketFieldPermissionsTriageUser:
             assert False, f"reason: {exception}"
 
 
-    def test_field_permission_opened_by_triage_user_denied(self):
+    def test_field_permission_opened_by_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field opened_by.
@@ -2290,7 +2290,7 @@ class TicketFieldPermissionsTriageUser:
             assert False, f"reason: {exception}"
 
 
-    def test_field_permission_subscribed_users_triage_user_denied(self):
+    def test_field_permission_subscribed_users_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field subscribed_users.
@@ -2317,7 +2317,7 @@ class TicketFieldPermissionsTriageUser:
         assert response.status_code == 200
 
 
-    def test_field_permission_subscribed_teams_triage_user_denied(self):
+    def test_field_permission_subscribed_teams_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field subscribed_teams.
