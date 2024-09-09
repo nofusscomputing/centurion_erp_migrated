@@ -16,7 +16,7 @@ from app.tests.abstract.model_permissions import ModelPermissions
 
 from project_management.models.projects import Project
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import TicketFieldBasedPermissions
@@ -92,6 +92,15 @@ class TicketPermissions(
             organization=organization,
             title = 'A ' + self.ticket_type + ' ticket',
             description = 'the ticket body',
+            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+        self.second_item = self.model.objects.create(
+            organization=organization,
+            title = 'A second ' + self.ticket_type + ' ticket',
+            description = 'the ticket body of item two',
             ticket_type = int(Ticket.TicketType.REQUEST.value),
             opened_by = self.add_user,
             status = int(Ticket.TicketStatus.All.NEW.value)
@@ -613,24 +622,211 @@ class TicketPermissions(
         assert action_comment
 
 
-
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_status_change(self):
+    def test_ticket_action_comment_related_ticket_added_type_related_source(self):
         """Action Comment test
-        Confirm an action comment is created when the ticket status changes
+        Confirm an 'related' action comment is created for the source ticket
+        when a ticket is added with type 'related'.
         """
 
-        pass
+        from_ticket = self.item
+        to_ticket = self.second_item
 
 
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.RELATED,
+            organization=self.organization,
+        )
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_related_ticket_added(self):
+        comments = TicketComment.objects.filter(
+            ticket=from_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{from_ticket.id} as related to #{to_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_related_ticket_added_type_related_destination(self):
         """Action Comment test
-        Confirm an action comment is created when a related ticket is added
+        Confirm an 'related' action comment is created for the destination ticket
+        when a ticket is added with type 'related'.
         """
 
-        pass
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.RELATED,
+            organization=self.organization,
+        )
+
+        comments = TicketComment.objects.filter(
+            ticket=to_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{to_ticket.id} as related to #{from_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_related_ticket_added_type_blocks_source(self):
+        """Action Comment test
+        Confirm a 'related' action comment is created for the source ticket
+        when a ticket is added with type 'blocks'.
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.BLOCKS,
+            organization=self.organization,
+        )
+
+        comments = TicketComment.objects.filter(
+            ticket=from_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{from_ticket.id} as blocking #{to_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_related_ticket_added_type_blocks_destination(self):
+        """Action Comment test
+        Confirm an 'related' action comment is created for the destination ticket
+        when a ticket is added with type 'blocks'.
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.BLOCKS,
+            organization=self.organization,
+        )
+
+        comments = TicketComment.objects.filter(
+            ticket=to_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{to_ticket.id} as blocked by #{from_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_related_ticket_added_type_blocked_by_source(self):
+        """Action Comment test
+        Confirm a 'related' action comment is created for the source ticket
+        when a ticket is added with type 'blocked_by'.
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.BLOCKED_BY,
+            organization=self.organization,
+        )
+
+        comments = TicketComment.objects.filter(
+            ticket=from_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{from_ticket.id} as blocked by #{to_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_related_ticket_added_type_blocked_by_destination(self):
+        """Action Comment test
+        Confirm an 'related' action comment is created for the destination ticket
+        when a ticket is added with type 'blocked_by'.
+        """
+
+        from_ticket = self.item
+        to_ticket = self.second_item
+
+        related_ticket = RelatedTickets.objects.create(
+            from_ticket_id = from_ticket,
+            to_ticket_id = to_ticket,
+            how_related = RelatedTickets.Related.BLOCKED_BY,
+            organization=self.organization,
+        )
+
+        comments = TicketComment.objects.filter(
+            ticket=to_ticket.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        comment_body: str = f'added #{to_ticket.id} as blocking #{from_ticket.id}'
+
+        for comment in comments:
+
+            if re.match(comment_body, str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
     @pytest.mark.skip(reason='to be written')
@@ -640,16 +836,6 @@ class TicketPermissions(
         """
 
         pass
-
-
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_creation_field_edit_denied(self):
-        """Action Comment test
-        Confirm an action comment is created when a user is added as assigned
-        """
-
-        pass
-
 
 
 
