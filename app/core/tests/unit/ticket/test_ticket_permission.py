@@ -153,6 +153,8 @@ class TicketPermissions(
 
         change_team.permissions.set([change_permissions])
 
+        self.change_team = change_team
+
 
 
         delete_permissions = Permission.objects.get(
@@ -397,9 +399,62 @@ class TicketPermissions(
         assert self.item.status == Ticket.TicketStatus.All.NEW
 
 
+    def test_ticket_action_comment_assign_team_added_status_change(self):
+        """Action Comment test
+        Confirm a 'status changed' action comment is created when a user is added as assigned
+        """
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_assign_team_added(self):
+        self.item.assigned_teams.add(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed status to assigned", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_team_added_team_assigned(self):
+        """Action Comment test
+        Confirm a 'team assigned' action comment is created when a team is added as assigned
+        """
+
+        self.item.assigned_teams.add(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"assigned team @" + self.change_team.team_name , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_team_added_status_update(self):
+        """Action Comment test
+        When a team is assigned and the status is 'new', the ticket status must update
+        to 'assigned'
+        """
+
+        self.item.assigned_teams.add(self.change_team.id)
+
+        assert self.item.status == Ticket.TicketStatus.All.ASSIGNED
+
         """Action Comment test
         Confirm an action comment is created when a team is added as assigned
         """
