@@ -802,12 +802,26 @@ class Ticket(
 
             if comment_field_value:
 
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
                 comment = TicketComment.objects.create(
                     ticket = self,
                     comment_type = TicketComment.CommentType.ACTION,
                     body = comment_field_value,
                     source = TicketComment.CommentSource.DIRECT,
-                    user = request.user,
+                    user = comment_user,
                 )
 
                 comment.save()
@@ -903,12 +917,26 @@ class Ticket(
 
                 from core.models.ticket.ticket_comment import TicketComment
 
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
                 comment = TicketComment.objects.create(
                     ticket = instance,
                     comment_type = TicketComment.CommentType.ACTION,
                     body = comment_field_value,
                     source = TicketComment.CommentSource.DIRECT,
-                    user = request.user,
+                    user = comment_user,
                 )
 
                 comment.save()
@@ -966,12 +994,26 @@ class Ticket(
 
                 from core.models.ticket.ticket_comment import TicketComment
 
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
                 comment = TicketComment.objects.create(
                     ticket = instance,
                     comment_type = TicketComment.CommentType.ACTION,
                     body = comment_field_value,
                     source = TicketComment.CommentSource.DIRECT,
-                    user = request.user,
+                    user = comment_user,
                 )
 
                 comment.save()
@@ -1062,6 +1104,22 @@ class RelatedTickets(TenancyObject):
 
         request = get_request()
 
+
+        if request:
+
+            if request.user.pk:
+
+                comment_user = request.user
+
+            else:
+
+                comment_user = None
+
+        else:
+
+            comment_user = None
+
+
         from core.models.ticket.ticket_comment import TicketComment
 
         if comment_field_value_from:
@@ -1071,7 +1129,7 @@ class RelatedTickets(TenancyObject):
                 comment_type = TicketComment.CommentType.ACTION,
                 body = comment_field_value_from,
                 source = TicketComment.CommentSource.DIRECT,
-                user = request.user,
+                user = comment_user,
             )
 
             comment.save()
@@ -1084,7 +1142,7 @@ class RelatedTickets(TenancyObject):
                 comment_type = TicketComment.CommentType.ACTION,
                 body = comment_field_value_to,
                 source = TicketComment.CommentSource.DIRECT,
-                user = request.user,
+                user = comment_user,
             )
 
             comment.save()
