@@ -16,6 +16,8 @@ class TicketComment(
 ):
 
 
+    save_model_history: bool = False
+
     class Meta:
 
         ordering = [
