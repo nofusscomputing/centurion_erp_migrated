@@ -1,8 +1,8 @@
-# from django.conf import settings
+import re
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-# from django.core.exceptions import ValidationError
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
@@ -17,6 +17,7 @@ from app.tests.abstract.model_permissions import ModelPermissions
 from project_management.models.projects import Project
 
 from core.models.ticket.ticket import Ticket
+from core.models.ticket.ticket_comment import TicketComment
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import TicketFieldBasedPermissions
 
@@ -275,9 +276,62 @@ class TicketPermissions(
         pass
 
 
+    def test_ticket_action_comment_assign_user_added_status_change(self):
+        """Action Comment test
+        Confirm a 'status changed' action comment is created when a user is added as assigned
+        """
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_assign_user_added(self):
+        self.item.assigned_users.add(self.add_user.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed status to assigned", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_user_added_user_assigned(self):
+        """Action Comment test
+        Confirm a 'user assigned' action comment is created when a user is added as assigned
+        """
+
+        self.item.assigned_users.add(self.add_user.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"assigned @" + self.add_user.username , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_user_added_status_update(self):
+        """Action Comment test
+        When a user is assigned and the status is 'new', the ticket status must update
+        to 'assigned'
+        """
+
+        self.item.assigned_users.add(self.add_user.id)
+
+        assert self.item.status == Ticket.TicketStatus.All.ASSIGNED
+
         """Action Comment test
         Confirm an action comment is created when a user is added as assigned
         """
