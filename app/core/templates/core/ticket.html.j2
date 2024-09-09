@@ -14,7 +14,12 @@
     <div id="ticket-data">
 
         <div id="ticket-description">
-            <h3 class="{{ ticket_type }}-ticket">opened by {{ ticket.opened_by }} on {{ ticket.created }}</h3>
+            <h3 class="{{ ticket_type }}-ticket">
+            <span class="sub-script">opened by</span> {{ ticket.opened_by }} <span class="sub-script">on</span> {{ ticket.created }} 
+            {% if ticket.created|date_time_seconds != ticket.modified|date_time_seconds %}
+            <span class="sub-script">Updated</span> {{ ticket.modified }}
+            {% endif %}
+            </h3>
             <div>
                 <input style="float: right; position: relative; margin: 0px;" type="button" value="Edit" onclick="window.location='{{ edit_url }}';">
             </div>
@@ -134,6 +139,10 @@
         <fieldset>
             <label>Priority</label>
             <span class="text">U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>
+        </fieldset>
+        <fieldset>
+            <label>Duration</label>
+            <span class="text">{{ ticket.duration_ticket|to_duration }}</span>
         </fieldset>
         <fieldset>
             <label>Milestone</label>

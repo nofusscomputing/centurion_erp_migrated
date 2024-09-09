@@ -11,6 +11,19 @@ class TenancyObject:
     model = None
     """ Model to be tested """
 
+    should_model_history_be_saved: bool = True
+    """ Should model history be saved.
+
+    By default this should always be 'True', however in special
+    circumstances, this may not be desired.
+    """
+
+
+    def test_history_save(self):
+        """Confirm the desired intent for saving model history."""
+
+        assert self.model.save_model_history == self.should_model_history_be_saved
+
 
     def test_has_attr_get_organization(self):
         """ TenancyObject attribute check

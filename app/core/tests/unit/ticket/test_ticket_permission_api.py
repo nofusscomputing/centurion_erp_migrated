@@ -74,7 +74,6 @@ class TicketPermissionsAPI(APIPermissions):
             'title': 'an add ticket',
             'organization': self.organization.id,
             'opened_by': self.add_user.id,
-            'status': int(Ticket.TicketStatus.All.NEW.value),
             'description': 'the description'
         }
 

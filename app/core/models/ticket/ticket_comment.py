@@ -16,6 +16,8 @@ class TicketComment(
 ):
 
 
+    save_model_history: bool = False
+
     class Meta:
 
         ordering = [
@@ -254,9 +256,9 @@ class TicketComment(
 
     user = models.ForeignKey(
         User,
-        blank= False,
+        blank= True,
         help_text = 'Who made the comment',
-        null = False,
+        null = True,
         on_delete = models.DO_NOTHING,
         related_name = 'comment_user',
         verbose_name = 'User',

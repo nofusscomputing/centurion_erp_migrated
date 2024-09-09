@@ -4,7 +4,7 @@ PATH_VENV := /tmp/centurion_erp
 
 ACTIVATE_VENV :=. ${PATH_VENV}/bin/activate
 
-.PHONY: clean prepare docs ansible-lint lint
+.PHONY: clean prepare docs ansible-lint lint test
 
 
 prepare:
@@ -38,11 +38,16 @@ docs: docs-lint
 
 lint: markdown-mkdocs-lint
 
+test:
+	pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit
+
 
 clean:
 	rm -rf ${PATH_VENV}
+	rm -rf artifacts
 	rm -rf pages
 	rm -rf build
 	rm -rf node_modules
 	rm -f package-lock.json
 	rm -f package.json
+	rm -rf .pytest_cache

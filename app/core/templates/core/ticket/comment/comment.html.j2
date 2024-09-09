@@ -1,5 +1,7 @@
 {% if comment %}
 
+{% load markdown %}
+
 {% if comment.get_comment_type_display == 'Action' %}
 
     <span>{{ comment.markdown_body | safe }}</span>
@@ -10,14 +12,17 @@
     <h4>
         <div id="text">
         {{ comment.user }} 
-        {% if comment.get_comment_type_display == 'Task' %}
+        <span class="sub-script">{% if comment.get_comment_type_display == 'Task' %}
         created a task 
         {% elif comment.get_comment_type_display == 'Solution' %}
         solved 
         {% else %}
         wrote 
         {% endif %}
-        on {{ comment.created }}
+        on</span> {{ comment.created }} 
+        {% if comment.created|date_time_seconds != comment.modified|date_time_seconds %}
+            <span class="sub-script">Updated</span> {{ comment.modified }}
+        {% endif %}
         </div>
         <div id="icons">
             {%if not comment.parent_id %}
@@ -104,7 +109,7 @@
         {% endif %}
         <fieldset>
             <label>Duration</label>
-            <span>{{ comment.duration }}</span>
+            <span>{{ comment.duration|to_duration }}</span>
         </fieldset>
     </div>
 

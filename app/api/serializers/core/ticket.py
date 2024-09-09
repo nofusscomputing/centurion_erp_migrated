@@ -95,9 +95,6 @@ class TicketSerializer(
 
         model = Ticket
 
-        extra_kwargs = {
-            'status': {'required': True}
-        } 
 
         fields =  [
             'id',
@@ -138,7 +135,8 @@ class TicketSerializer(
     def __init__(self, instance=None, data=empty, **kwargs):
 
         self.fields.fields['status'].initial = Ticket.TicketStatus.All.NEW
-        
+        self.fields.fields['status'].default = Ticket.TicketStatus.All.NEW
+
         super().__init__(instance=instance, data=data, **kwargs)
 
 
@@ -147,8 +145,6 @@ class TicketSerializer(
         self.request = self._context['request']
 
         is_valid = super().is_valid(raise_exception=raise_exception)
-
-        self.validated_data['ticket_type'] = self._context['view']._ticket_type_value
 
         if self.instance:
 
@@ -162,5 +158,7 @@ class TicketSerializer(
 
 
         is_valid = self.validate_ticket()
+
+        self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
 
         return is_valid

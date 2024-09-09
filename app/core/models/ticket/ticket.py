@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -122,6 +122,8 @@ class Ticket(
     TicketCommonFields,
     TicketMarkdown,
 ):
+
+    save_model_history: bool = False
 
 
     class Meta:
@@ -618,11 +620,19 @@ class Ticket(
         'title',
         'description',
         'opened_by',
-        'ticket_type'
+        'project',
+        'ticket_type',
+        'assigned_users',
+        'assigned_teams',
     ]
 
     common_itsm_fields: list(str()) = common_fields + [
+        'status',
         'urgency',
+        'priority',
+        'impact',
+        'subscribed_teams',
+        'subscribed_users',
 
     ]
 
@@ -686,13 +696,32 @@ class Ticket(
     @property
     def comments(self):
 
+        if hasattr(self, '_ticket_comments'):
+
+            return self._ticket_comments
+
         from core.models.ticket.ticket_comment import TicketComment
 
-        return TicketComment.objects.filter(
+        self._ticket_comments = TicketComment.objects.filter(
             ticket = self.id,
             parent = None,
         )
 
+        return self._ticket_comments
+
+
+    @property
+    def duration_ticket(self) -> str:
+
+        comments = self.comments
+
+        duration = comments.aggregate(Sum('duration'))['duration__sum']
+
+        if not duration:
+
+            duration = 0
+
+        return str(duration)
 
     @property
     def markdown_description(self) -> str:
@@ -795,15 +824,222 @@ class Ticket(
 
             if comment_field_value:
 
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
                 comment = TicketComment.objects.create(
                     ticket = self,
                     comment_type = TicketComment.CommentType.ACTION,
                     body = comment_field_value,
                     source = TicketComment.CommentSource.DIRECT,
-                    user = request.user,
+                    user = comment_user,
                 )
 
                 comment.save()
+
+        signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.assigned_users.through)
+        signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.assigned_teams.through)
+
+        signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.subscribed_users.through)
+        signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
+
+
+    def ticketassigned(self, instance) -> bool:
+        """ Check if the ticket has any assigned user(s)/team(s)"""
+
+        users = len(instance.assigned_users.all())
+        teams = len(instance.assigned_teams.all())
+
+        if users < 1 and teams < 1:
+            
+            return False
+
+        return True
+
+
+    def assigned_status_update(self, instance) -> None:
+        """Update Ticket status based off of assigned
+
+        - If the ticket has any assigned team(s)/user(s), update the status to assigned.
+        - If the ticket does not have any assigned team(s)/user(s), update the status to new.
+
+        This method only updates the status if the existing status is New or Assigned.
+        """
+
+        assigned = self.ticketassigned(instance)
+
+        if not assigned and instance.status == Ticket.TicketStatus.All.ASSIGNED:
+            instance.status = Ticket.TicketStatus.All.NEW
+            instance.save()
+
+        elif assigned and instance.status == Ticket.TicketStatus.All.NEW:
+            instance.status = Ticket.TicketStatus.All.ASSIGNED
+            instance.save()
+
+
+    def action_comment_ticket_users(self, sender, instance, action, reverse, model, pk_set, **kwargs):
+        """ Ticket *_users many2many field
+
+        - Create the action comment
+        - Update ticket status to New/Assigned
+        """
+
+        pk: int = 0
+
+        user: list(User) = None
+        comment_field_value: str = None
+
+        if pk_set:
+
+            pk = next(iter(pk_set))
+
+            request = get_request()
+
+            if pk:
+
+                user = User.objects.get(pk = pk)
+
+            if sender.__name__ == 'Ticket_assigned_users':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Unassigned @" + str(user.username)
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Assigned @" + str(user.username)
+
+
+                self.assigned_status_update(instance)
+
+
+            elif sender.__name__ == 'Ticket_subscribed_users':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Removed @{str(user.username)} as watching"
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Added @{str(user.username)} as watching"
+
+
+            if comment_field_value:
+
+                from core.models.ticket.ticket_comment import TicketComment
+
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
+                comment = TicketComment.objects.create(
+                    ticket = instance,
+                    comment_type = TicketComment.CommentType.ACTION,
+                    body = comment_field_value,
+                    source = TicketComment.CommentSource.DIRECT,
+                    user = comment_user,
+                )
+
+                comment.save()
+
+
+
+    def action_comment_ticket_teams(self, sender, instance, action, reverse, model, pk_set, **kwargs):
+        """Ticket *_teams many2many field
+
+        - Create the action comment
+        - Update ticket status to New/Assigned
+        """
+
+        pk: int = 0
+
+        team: list(Team) = None
+        comment_field_value: str = None
+
+        if pk_set:
+
+            pk = next(iter(pk_set))
+
+            request = get_request()
+
+            if pk:
+
+                team = Team.objects.get(pk = pk)
+
+            if sender.__name__ == 'Ticket_assigned_teams':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Unassigned team @" + str(team.team_name)
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Assigned team @" + str(team.team_name)
+
+
+                self.assigned_status_update(instance)
+
+
+            elif sender.__name__ == 'Ticket_subscribed_teams':
+
+                if action == 'post_remove':
+
+                    comment_field_value = f"Removed team @{str(team.team_name)} as watching"
+
+                elif action == 'post_add':
+
+                    comment_field_value = f"Added team @{str(team.team_name)} as watching"
+
+
+            if comment_field_value:
+
+                from core.models.ticket.ticket_comment import TicketComment
+
+                if request:
+
+                    if request.user.pk:
+
+                        comment_user = request.user
+
+                    else:
+
+                        comment_user = None
+
+                else:
+
+                    comment_user = None
+
+                comment = TicketComment.objects.create(
+                    ticket = instance,
+                    comment_type = TicketComment.CommentType.ACTION,
+                    body = comment_field_value,
+                    source = TicketComment.CommentSource.DIRECT,
+                    user = comment_user,
+                )
+
+                comment.save()
+
 
 
 class RelatedTickets(TenancyObject):
@@ -874,21 +1110,37 @@ class RelatedTickets(TenancyObject):
 
         if self.how_related == self.Related.BLOCKED_BY:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocked by #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocking #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as blocked by #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as blocking #{self.from_ticket_id.id}"
 
         elif self.how_related == self.Related.BLOCKS:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocking #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocked by #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as blocking #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as blocked by #{self.from_ticket_id.id}"
 
         elif self.how_related == self.Related.RELATED:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as related to #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as related to #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as related to #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as related to #{self.from_ticket_id.id}"
 
 
         request = get_request()
+
+
+        if request:
+
+            if request.user.pk:
+
+                comment_user = request.user
+
+            else:
+
+                comment_user = None
+
+        else:
+
+            comment_user = None
+
 
         from core.models.ticket.ticket_comment import TicketComment
 
@@ -899,7 +1151,7 @@ class RelatedTickets(TenancyObject):
                 comment_type = TicketComment.CommentType.ACTION,
                 body = comment_field_value_from,
                 source = TicketComment.CommentSource.DIRECT,
-                user = request.user,
+                user = comment_user,
             )
 
             comment.save()
@@ -912,7 +1164,7 @@ class RelatedTickets(TenancyObject):
                 comment_type = TicketComment.CommentType.ACTION,
                 body = comment_field_value_to,
                 source = TicketComment.CommentSource.DIRECT,
-                user = request.user,
+                user = comment_user,
             )
 
             comment.save()

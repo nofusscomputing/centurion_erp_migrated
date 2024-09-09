@@ -17,7 +17,7 @@ class TicketCommentCommon(
     model = TicketComment
 
 
-    def text_ticket_field_type_opened_by(self):
+    def test_ticket_field_type_opened_by(self):
         """Replies to comments only to occur on primary comment
 
         If a comment has a 'parent_id' set, ensure the comment can't be replied to

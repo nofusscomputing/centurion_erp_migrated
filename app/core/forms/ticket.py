@@ -16,7 +16,6 @@ class TicketForm(
     TicketValidation,
 ):
 
-    prefix = 'ticket'
 
     class Meta:
         model = Ticket
@@ -71,7 +70,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.Incident
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.INCIDENT
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.INCIDENT.value
 
         elif kwargs['initial']['type_ticket'] == 'problem':
 
@@ -79,7 +78,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.Problem
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROBLEM
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROBLEM.value
 
         elif kwargs['initial']['type_ticket'] == 'change':
 
@@ -87,7 +86,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.Change
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.CHANGE
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.CHANGE.value
 
         elif kwargs['initial']['type_ticket'] == 'issue':
 
@@ -95,7 +94,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.Git
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.ISSUE
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.ISSUE.value
 
         elif kwargs['initial']['type_ticket'] == 'merge':
 
@@ -103,7 +102,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.Git
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.MERGE_REQUEST
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.MERGE_REQUEST.value
 
         elif kwargs['initial']['type_ticket'] == 'project_task':
 
@@ -111,7 +110,7 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.ProjectTask
 
-            self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROJECT_TASK
+            self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROJECT_TASK.value
 
         # self.fields['status'].widget = self.fields['status'].hidden_widget()
 
@@ -126,12 +125,18 @@ class TicketForm(
 
             if field not in ticket_type:
 
-                fields_allowed.remove(field)
+                self._fields_allowed.remove(field)
 
 
         for field in original_fields:    # Remove fields user cant edit unless field is hidden
 
-            if field not in fields_allowed and not self.fields[field].widget.is_hidden:
+            if (
+                (
+                    field not in self._fields_allowed and not self.fields[field].widget.is_hidden
+                )
+                    or
+                field not in ticket_type
+            ):
 
                 del self.fields[field]
 
