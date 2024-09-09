@@ -976,7 +976,7 @@ class Ticket(
                     comment_field_value = f"Assigned team @" + str(team.team_name)
 
 
-                self.assigned_status_update()
+                self.assigned_status_update(instance)
 
 
             elif sender.__name__ == 'Ticket_subscribed_teams':
