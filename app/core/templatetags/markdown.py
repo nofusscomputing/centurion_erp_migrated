@@ -21,3 +21,9 @@ def lower(value):
 def ticket_status(value):
 
     return str(value).lower().replace('(', '').replace(')', '').replace(' ', '_')
+
+@register.filter()
+@stringfilter
+def date_time_seconds(value):
+
+    return str(value).split('.')[0]
