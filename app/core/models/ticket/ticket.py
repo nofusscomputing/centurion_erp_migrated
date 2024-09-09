@@ -1088,18 +1088,18 @@ class RelatedTickets(TenancyObject):
 
         if self.how_related == self.Related.BLOCKED_BY:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocked by #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocking #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as blocked by #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as blocking #{self.from_ticket_id.id}"
 
         elif self.how_related == self.Related.BLOCKS:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as blocking #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as blocked by #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as blocking #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as blocked by #{self.from_ticket_id.id}"
 
         elif self.how_related == self.Related.RELATED:
 
-            comment_field_value_from = f" added #{self.from_ticket_id.id} as related to #{self.to_ticket_id.id}"
-            comment_field_value_to = f" added #{self.to_ticket_id.id} as related to #{self.from_ticket_id.id}"
+            comment_field_value_from = f"added #{self.from_ticket_id.id} as related to #{self.to_ticket_id.id}"
+            comment_field_value_to = f"added #{self.to_ticket_id.id} as related to #{self.from_ticket_id.id}"
 
 
         request = get_request()
