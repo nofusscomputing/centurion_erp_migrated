@@ -519,27 +519,51 @@ class TicketPermissions(
         assert self.item.status == Ticket.TicketStatus.All.NEW
 
 
-
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_subscribe_user_added(self):
+    def test_ticket_action_comment_subscribed_users_added_user_subscribed(self):
         """Action Comment test
-        Confirm an action comment is created when a user is added as subscribed
+        Confirm a 'user subscribed' action comment is created when a user is added as subscribed
         """
 
-        pass
+        self.item.subscribed_users.add(self.add_user.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"added @" + self.add_user.username + " as watching" , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_subscribe_user_removed(self):
+    def test_ticket_action_comment_subscribed_users_removed_user_unsubscribed(self):
         """Action Comment test
-        Confirm an action comment is created when a user is removed as subscribed
+        Confirm a 'user unsubscribed' action comment is created when a user is removed as subscribed
         """
 
-        pass
+        self.item.subscribed_users.add(self.add_user.id)
+        self.item.subscribed_users.remove(self.add_user.id)
 
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_subscribe_team_added(self):
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"removed @" + self.add_user.username + " as watching" , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
         """Action Comment test
         Confirm an action comment is created when a team is added as subscribed
         """
