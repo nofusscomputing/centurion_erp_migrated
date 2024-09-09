@@ -14,6 +14,8 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from app.tests.abstract.model_permissions import ModelPermissions
 
+from project_management.models.projects import Project
+
 from core.models.ticket.ticket import Ticket
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import TicketFieldBasedPermissions
@@ -92,6 +94,11 @@ class TicketPermissions(
             ticket_type = int(Ticket.TicketType.REQUEST.value),
             opened_by = self.add_user,
             status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+        self.project = Project.objects.create(
+            name = 'ticket permissions project name',
+            organization = organization
         )
 
 

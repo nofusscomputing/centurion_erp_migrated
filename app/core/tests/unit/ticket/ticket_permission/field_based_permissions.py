@@ -355,7 +355,6 @@ class TicketFieldPermissionsAddUser:
             assert exception.code == 'cant_edit_field_' + field_name
 
 
-    @pytest.mark.skip(reason='Add project to setuptest')
     def test_field_permission_project_add_user_denied(self):
         """ Check correct permission for add 
 
@@ -363,7 +362,7 @@ class TicketFieldPermissionsAddUser:
         """
 
         field_name: str = 'project'
-        field_value = '2024-09-08T13:19:00'
+        field_value = self.project.id
 
         client = Client(raise_request_exception=True)
         url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
@@ -960,7 +959,6 @@ class TicketFieldPermissionsChangeUser:
             assert False, f"reason: {exception}"
 
 
-    @pytest.mark.skip(reason='Add project to setuptest')
     def test_field_permission_project_change_user_denied(self):
         """ Check correct permission for add 
 
@@ -968,7 +966,7 @@ class TicketFieldPermissionsChangeUser:
         """
 
         field_name: str = 'project'
-        field_value = '2024-09-08T13:19:00'
+        field_value = self.project.id
 
 
         client = Client(raise_request_exception=True)
@@ -1603,7 +1601,6 @@ class TicketFieldPermissionsImportUser:
             assert False, f"reason: {exception}"
 
 
-    @pytest.mark.skip(reason='Add project to setuptest')
     def test_field_permission_project_import_user_denied(self):
         """ Check correct permission for add 
 
@@ -1611,7 +1608,7 @@ class TicketFieldPermissionsImportUser:
         """
 
         field_name: str = 'project'
-        field_value = '2024-09-08T13:19:00'
+        field_value = self.project.id
 
 
         client = Client(raise_request_exception=True)
@@ -2200,7 +2197,7 @@ class TicketFieldPermissionsTriageUser:
         """
 
         field_name: str = 'project'
-        field_value = '2024-09-08T13:19:00'
+        field_value = self.project.id
 
 
         client = Client(raise_request_exception=True)
