@@ -25,6 +25,7 @@ class SaveHistory(models.Model):
         """
 
         remove_keys = [
+            '_django_version',
             '_state',
             'created',
             'modified'
