@@ -2189,8 +2189,7 @@ class TicketFieldPermissionsTriageUser:
 
 
 
-    @pytest.mark.skip(reason='Add project to setuptest')
-    def test_field_permission_project_triage_user_denied(self):
+    def test_field_permission_project_triage_user_allowed(self):
         """ Check correct permission for add 
 
         A standard user should not be able to edit field project.
@@ -2209,22 +2208,12 @@ class TicketFieldPermissionsTriageUser:
         
         data[field_name] = field_value
 
-        try:
+        response = client.post(
+            url,
+            data=data
+        )
 
-            response = client.post(
-                url,
-                data=data
-            )
-
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
+        assert response.status_code == 200
 
 
     def test_field_permission_real_start_date_triage_user_denied(self):

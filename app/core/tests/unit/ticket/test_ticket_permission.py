@@ -273,14 +273,6 @@ class TicketPermissions(
         )
 
 
-
-
-    @pytest.mark.skip(reason="To be written")
-    def test_permission_triage(self):
-
-        pass
-
-
     @pytest.mark.skip(reason="To be written")
     def test_permission_purge(self):
 
