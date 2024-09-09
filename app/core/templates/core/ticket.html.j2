@@ -141,6 +141,10 @@
             <span class="text">U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>
         </fieldset>
         <fieldset>
+            <label>Duration</label>
+            <span class="text">{{ ticket.duration_ticket|to_duration }}</span>
+        </fieldset>
+        <fieldset>
             <label>Milestone</label>
             <span class="text">val</span>
         </fieldset>

@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q, signals
+from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -696,13 +696,32 @@ class Ticket(
     @property
     def comments(self):
 
+        if hasattr(self, '_ticket_comments'):
+
+            return self._ticket_comments
+
         from core.models.ticket.ticket_comment import TicketComment
 
-        return TicketComment.objects.filter(
+        self._ticket_comments = TicketComment.objects.filter(
             ticket = self.id,
             parent = None,
         )
 
+        return self._ticket_comments
+
+
+    @property
+    def duration_ticket(self) -> str:
+
+        comments = self.comments
+
+        duration = comments.aggregate(Sum('duration'))['duration__sum']
+
+        if not duration:
+
+            duration = 0
+
+        return str(duration)
 
     @property
     def markdown_description(self) -> str:
