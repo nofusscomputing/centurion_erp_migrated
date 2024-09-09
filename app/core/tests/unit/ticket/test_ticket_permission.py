@@ -455,20 +455,68 @@ class TicketPermissions(
 
         assert self.item.status == Ticket.TicketStatus.All.ASSIGNED
 
+
+    def test_ticket_action_comment_assign_team_remove_status_change(self):
         """Action Comment test
-        Confirm an action comment is created when a team is added as assigned
+        Confirm a 'status changed' action comment is created when a user is removed as assigned
         """
 
-        pass
+        self.item.assigned_teams.add(self.change_team.id)
+
+        self.item.assigned_teams.remove(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"changed status to new", str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
 
 
-    @pytest.mark.skip(reason='to be written')
-    def test_ticket_action_comment_assign_team_removed(self):
+    def test_ticket_action_comment_assign_team_remove_team_assigned(self):
         """Action Comment test
-        Confirm an action comment is created when a team is removed as assigned
+        Confirm a 'team assigned' action comment is created when a team is removed as assigned
         """
 
-        pass
+        self.item.assigned_teams.add(self.change_team.id)
+
+        self.item.assigned_teams.remove(self.change_team.id)
+
+        comments = TicketComment.objects.filter(
+            ticket=self.item.pk,
+            comment_type = TicketComment.CommentType.ACTION
+        )
+
+        action_comment: bool = False
+
+        for comment in comments:
+
+            if re.match(r"unassigned team @" + self.change_team.team_name , str(comment.body).lower()):
+
+                action_comment = True
+
+        assert action_comment
+
+
+    def test_ticket_action_comment_assign_team_remove_status_update(self):
+        """Action Comment test
+        When a team is unassigned and the status is 'assigned', the ticket status must update
+        to 'new'
+        """
+
+        self.item.assigned_teams.add(self.change_team.id)
+
+        self.item.assigned_teams.remove(self.change_team.id)
+
+        assert self.item.status == Ticket.TicketStatus.All.NEW
 
 
 
