@@ -35,6 +35,7 @@ class Index(viewsets.ViewSet):
             "config_groups": reverse("API:_api_config_groups", request=request),
             'itim': reverse("API:_api_itim", request=request),
             "organizations": reverse("API:_api_orgs", request=request),
+            'project_management': reverse("API:_api_project_management", request=request),
             "settings": reverse('API:_settings', request=request),
             "software": reverse("API:software-list", request=request),
         }

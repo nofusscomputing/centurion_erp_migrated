@@ -8,7 +8,7 @@ from .views import access, config, index
 from api.views.settings import permissions
 from api.views.settings import index as settings
 
-from api.views import assistance, itim
+from api.views import assistance, itim, project_management
 from api.views.assistance import request_ticket
 from api.views.core import ticket_comments as core_ticket_comments
 from api.views.itim import change_ticket, incident_ticket, problem_ticket
@@ -66,6 +66,8 @@ urlpatterns = [
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/", access.TeamDetail.as_view(), name='_api_team'),
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/permissions", access.TeamPermissionDetail.as_view(), name='_api_team_permission'),
     path("organization/team/", access.TeamList.as_view(), name='_api_teams'),
+
+    path("project_management", project_management.index.Index.as_view(), name="_api_project_management"),
 
     path("settings", settings.View.as_view(), name='_settings'),
     path("settings/permissions", permissions.View.as_view(), name='_settings_permissions'),
