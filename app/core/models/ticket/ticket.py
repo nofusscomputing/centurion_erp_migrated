@@ -166,6 +166,8 @@ class Ticket(
             ('view_ticket_change', 'Can view all change ticket'),
         ]
 
+        unique_together = ('external_system', 'external_ref',)
+
         verbose_name = "Ticket"
 
         verbose_name_plural = "Tickets"
