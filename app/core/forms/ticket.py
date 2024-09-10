@@ -186,10 +186,7 @@ class TicketForm(
 
         elif self._ticket_type == 'project_task':
 
-            # self.validate_project_task_ticket()
-            raise ValidationError(
-                'This Ticket type is not yet available'
-            )
+            self.validate_project_task_ticket()
 
         elif self._ticket_type == 'request':
 

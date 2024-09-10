@@ -57,7 +57,11 @@ class Add(AddView):
         if self.kwargs['ticket_type'] == 'request':
 
             return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.object.id,))
-        
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_task_view', args=(self.object.project.id, self.kwargs['ticket_type'],self.object.id,))
+
         else:
 
             return reverse('ITIM:_ticket_' + str(self.kwargs['ticket_type']).lower() + '_view', args=(self.kwargs['ticket_type'],self.object.id,))
@@ -139,6 +143,10 @@ class Delete(DeleteView):
 
             return reverse('Assistance:Requests')
         
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_view', kwargs={'pk': self.object.id})
+
         else:
 
             if self.kwargs['ticket_type'] == 'change':
@@ -149,6 +157,7 @@ class Delete(DeleteView):
 
             elif self.kwargs['ticket_type'] == 'problem':
                 path = 'Problems'
+
 
             return reverse('ITIM:' + path)
 

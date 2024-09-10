@@ -75,7 +75,12 @@ class Add(AddView):
     def get_success_url(self, **kwargs):
 
         if self.kwargs['ticket_type'] == 'request':
+
             return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.kwargs['ticket_id']))
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_task_view', args=(self.object.ticket.project.id, self.kwargs['ticket_type'],self.kwargs['ticket_id'],))
 
         return f"/ticket/"
 

@@ -29,11 +29,18 @@ class TicketMarkdown:
 
             ticket = self.__class__.objects.get(pk=ticket_id)
 
+        project_id = str('0')
+
+        if ticket.project:
+
+            project_id = str(ticket.project.id).lower()
+
         context: dict = {
             'id': ticket.id,
             'name': ticket,
             'ticket_type': str(ticket.get_ticket_type_display()).lower(),
             'ticket_status': str(ticket.get_status_display()).lower(),
+            'project_id': project_id,
         }
 
         html_link = render_to_string('core/ticket/renderers/ticket_link.html.j2', context)

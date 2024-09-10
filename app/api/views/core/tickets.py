@@ -1,3 +1,4 @@
+from django.db.models import Q
 
 from rest_framework import generics, viewsets
 
@@ -7,6 +8,7 @@ from api.serializers.assistance.request import RequestTicketSerializer
 from api.serializers.itim.change import ChangeTicketSerializer
 from api.serializers.itim.incident import IncidentTicketSerializer
 from api.serializers.itim.problem import ProblemTicketSerializer
+from api.serializers.project_management.project_task import ProjectTaskSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 from core.models.ticket.ticket import Ticket
@@ -86,6 +88,11 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
             self.serializer_class = RequestTicketSerializer
             self._ticket_type_value = Ticket.TicketType.REQUEST.value
 
+        elif self._ticket_type == 'project_task':
+            
+            self.serializer_class = ProjectTaskSerializer
+            self._ticket_type_value = Ticket.TicketType.PROJECT_TASK.value
+
         else:
 
             raise ValueError('unable to determin the serializer_class')
@@ -110,6 +117,14 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         elif self._ticket_type == 'request':
 
             ticket_type = self.queryset.model.TicketType.REQUEST.value
+
+        elif self._ticket_type == 'project_task':
+
+            ticket_type = self.queryset.model.TicketType.REQUEST.value
+
+            return self.queryset.filter(
+                project = self.kwargs['project_id']
+            )
 
         else:
 

@@ -444,3 +444,12 @@ class TicketValidation(
 
         # raise ValidationError('Test to see what it looks like')
         pass
+
+    def validate_project_task_ticket(self):
+
+        # check status
+
+        # check type
+
+        # raise ValidationError('Test to see what it looks like')
+        pass

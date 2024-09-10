@@ -38,7 +38,7 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
     )
     def create(self, request, *args, **kwargs):
 
-        super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
 
     @extend_schema(
@@ -79,14 +79,14 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
     )
     def update(self, request, *args, **kwargs):
 
-        super().update(request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
 
     def get_queryset(self):
 
         if 'ticket_id' in self.kwargs:
 
-            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
+            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id']).order_by('created')
 
         if 'pk' in self.kwargs:
 

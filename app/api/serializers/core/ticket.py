@@ -22,6 +22,10 @@ class TicketSerializer(
 
         request = self.context.get('request')
 
+        kwargs: dict = {
+            'pk': item.id
+        }
+
         if item.ticket_type == self.Meta.model.TicketType.CHANGE.value:
 
             view_name = '_api_itim_change'
@@ -38,6 +42,11 @@ class TicketSerializer(
 
             view_name = '_api_assistance_request'
 
+        elif item.ticket_type == self.Meta.model.TicketType.PROJECT_TASK.value:
+
+            view_name = '_api_project_tasks'
+
+            kwargs.update({'project_id': item.project.id})
         else:
 
             raise ValueError('Serializer unable to obtain ticket type')
@@ -46,9 +55,7 @@ class TicketSerializer(
         return request.build_absolute_uri(
             reverse(
                 'API:' + view_name + '-detail',
-                kwargs={
-                    'pk': item.id
-                }
+                kwargs = kwargs
             )
         )
 
@@ -59,6 +66,10 @@ class TicketSerializer(
     def get_url_ticket_comments(self, item):
 
         request = self.context.get('request')
+
+        kwargs: dict = {
+            'ticket_id': item.id
+        }
 
         if item.ticket_type == self.Meta.model.TicketType.CHANGE.value:
 
@@ -76,6 +87,12 @@ class TicketSerializer(
 
             view_name = '_api_assistance_request_ticket_comments'
 
+        elif item.ticket_type == self.Meta.model.TicketType.PROJECT_TASK.value:
+
+            view_name = '_api_project_tasks_comments'
+
+            kwargs.update({'project_id': item.project.id})
+
         else:
 
             raise ValueError('Serializer unable to obtain ticket type')
@@ -84,9 +101,7 @@ class TicketSerializer(
         return request.build_absolute_uri(
             reverse(
                 'API:' + view_name + '-list',
-                kwargs={
-                    'ticket_id': item.id
-                }
+                kwargs = kwargs
             )
         )
 
