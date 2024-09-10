@@ -10,6 +10,8 @@
             {% url 'ITIM:_ticket_problem_view' ticket_type='problem' pk=id %}
             {% elif ticket_type == 'request' %}
             {% url 'Assistance:_ticket_request_view' ticket_type='request' pk=id %}
-            {% endif %}">{{ ticket_type }} {{ name }}, <span style="color: #777;">#{{ id }}</span></a>
+            {% elif ticket_type == 'project task' %}
+            {% url 'Project Management:_project_task_view' project_id=project_id ticket_type='project_task' pk=id %}
+            {% endif %}"><span style="color: #777;">#{{ id }}</span> {{ name }}, <span style="color: #777;">{{ ticket_type }}</span></a>
     </span>
 </span>

@@ -43,7 +43,11 @@ class Add(AddView):
         if self.kwargs['ticket_type'] == 'request':
 
             return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.kwargs['ticket_id'],))
-        
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_task_view', args=(self.object.from_ticket_id.project.id, self.kwargs['ticket_type'],self.kwargs['ticket_id'],))
+
         else:
 
             return reverse('ITIM:_ticket_' + str(self.kwargs['ticket_type']).lower() + '_view', args=(self.kwargs['ticket_type'],self.kwargs['ticket_id'],))

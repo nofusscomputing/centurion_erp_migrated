@@ -22,6 +22,8 @@
 
     {% include 'content/section.html.j2' with tab=form.tabs.tasks %}
 
+    <input type="button" value="New Task" onclick="window.location='{% url 'Project Management:_project_task_add' ticket_type='project_task' project_id=project.id %}';">
+
     <table>
     <tr>
         <th>id</th>
