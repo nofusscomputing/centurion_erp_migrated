@@ -28,6 +28,7 @@ class Index(views.APIView):
     def get(self, request, *args, **kwargs):
 
         body: dict = {
+            'projects': reverse('API:_api_projects-list', request=request)
         }
 
         return Response(body)
