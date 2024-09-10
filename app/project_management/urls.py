@@ -1,7 +1,6 @@
 from django.urls import path
 
 from .views import project
-from .views.project_task import ProjectTaskAdd, ProjectTaskChange, ProjectTaskDelete, ProjectTaskView
 
 from core.views import ticket, ticket_comment
 
