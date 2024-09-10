@@ -21,6 +21,22 @@ class ProjectSerializer(
         return request.build_absolute_uri(reverse("API:_api_projects-detail", args=[item.pk]))
 
 
+    project_tasks_url = serializers.SerializerMethodField('get_url_project_tasks')
+
+
+    def get_url_project_tasks(self, item):
+
+        request = self.context.get('request')
+
+        return request.build_absolute_uri(
+            reverse(
+                'API:_api_project_tasks-list',
+                kwargs={
+                    'project_id': item.id
+                }
+            )
+        )
+
     class Meta:
 
         model = Project
@@ -37,6 +53,7 @@ class ProjectSerializer(
             'manager_user',
             'manager_team',
             'team_members',
+            'project_tasks_url',
             'created',
             'modified',
             'url',
