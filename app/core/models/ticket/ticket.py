@@ -164,6 +164,14 @@ class Ticket(
             ('purge_ticket_change', 'Can purge a change ticket'),
             ('triage_ticket_change', 'Can triage all change ticket'),
             ('view_ticket_change', 'Can view all change ticket'),
+
+            ('add_ticket_project_task', 'Can add a project task'),
+            ('change_ticket_project_task', 'Can change any project task'),
+            ('delete_ticket_project_task', 'Can delete a project task'),
+            ('import_ticket_project_task', 'Can import a project task'),
+            ('purge_ticket_project_task', 'Can purge a project task'),
+            ('triage_ticket_project_task', 'Can triage all project task'),
+            ('view_ticket_project_task', 'Can view all project task'),
         ]
 
         unique_together = ('external_system', 'external_ref',)
@@ -667,12 +675,7 @@ class Ticket(
 
     ]
 
-    fields_project_task: list(str()) = common_fields + [
-        'category',
-        'urgency',
-        'status',
-        'impact',
-        'priority',
+    fields_project_task: list(str()) = common_itsm_fields + [
         'planned_start_date',
         'planned_finish_date',
         'real_start_date',

@@ -143,6 +143,10 @@ class Delete(DeleteView):
 
             return reverse('Assistance:Requests')
         
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_view', kwargs={'pk': self.object.id})
+
         else:
 
             if self.kwargs['ticket_type'] == 'change':
@@ -153,6 +157,7 @@ class Delete(DeleteView):
 
             elif self.kwargs['ticket_type'] == 'problem':
                 path = 'Problems'
+
 
             return reverse('ITIM:' + path)
 
