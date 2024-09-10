@@ -901,6 +901,50 @@ class ProblemTicketPermissions(TicketPermissions, TestCase):
 
 
 
+class ProjectTaskPermissions(TicketPermissions, TestCase):
+
+    ticket_type = 'project_task'
+
+    ticket_type_enum: int = int(Ticket.TicketType.PROJECT_TASK.value)
+
+    app_namespace = 'Project Management'
+
+    url_name_view = '_project_task_view'
+
+    url_name_add = '_project_task_add'
+
+    url_name_change = '_project_task_change'
+
+    url_name_delete = '_project_task_delete'
+
+
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a manufacturer
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        super().setUpTestData()
+
+        self.url_add_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type}
+
+        self.url_change_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.project.id}
+
+        # self.url_delete_kwargs = {'pk': self.project.id}
+
+        self.url_view_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
+
+        self.url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': self.project.id})
+
 class RequestTicketPermissions(TicketPermissions, TestCase):
 
     ticket_type = 'request'
