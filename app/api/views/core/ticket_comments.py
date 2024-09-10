@@ -86,7 +86,7 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
         if 'ticket_id' in self.kwargs:
 
-            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id'])
+            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id']).order_by('created')
 
         if 'pk' in self.kwargs:
 

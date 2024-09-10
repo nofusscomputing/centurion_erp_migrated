@@ -707,7 +707,7 @@ class Ticket(
         self._ticket_comments = TicketComment.objects.filter(
             ticket = self.id,
             parent = None,
-        )
+        ).order_by('created')
 
         return self._ticket_comments
 
