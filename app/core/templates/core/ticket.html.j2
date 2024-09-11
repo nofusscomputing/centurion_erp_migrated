@@ -56,6 +56,8 @@
                             {% url 'ITIM:_ticket_incident_view' ticket_type=related_ticket.type pk=related_ticket.id %}
                         {% elif related_ticket.type == 'problem' %}
                             {% url 'ITIM:_ticket_problem_view' ticket_type=related_ticket.type pk=related_ticket.id %}
+                        {% elif related_ticket.type == 'project_task' %}
+                            {% url 'Project Management:_project_task_view' project_id=related_ticket.project.id ticket_type=related_ticket.type pk=related_ticket.id %}
                         {% endif %}
                         ">{{ related_ticket.title }}</a>
                     </div>

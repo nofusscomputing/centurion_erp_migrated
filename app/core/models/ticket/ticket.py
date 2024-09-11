@@ -750,11 +750,15 @@ class Ticket(
             how_related:str = str(related_ticket.get_how_related_display()).lower()
             ticket_title: str = related_ticket.to_ticket_id.title
 
+            project: int = 0
 
             if related_ticket.to_ticket_id_id == self.id:
 
                 id = related_ticket.from_ticket_id.id
 
+                if related_ticket.from_ticket_id.project:
+
+                    project = related_ticket.from_ticket_id.project
 
                 if str(related_ticket.get_how_related_display()).lower() == 'blocks':
 
@@ -769,13 +773,19 @@ class Ticket(
 
                 id = related_ticket.to_ticket_id.id
 
+                if related_ticket.to_ticket_id.project:
+
+                    project = related_ticket.to_ticket_id.project
+
+
             related_tickets += [
                 {
                     'id': id,
-                    'type': related_ticket.to_ticket_id.get_ticket_type_display().lower(),
+                    'type': related_ticket.to_ticket_id.get_ticket_type_display().lower().replace(' ', '_'),
                     'title': ticket_title,
                     'how_related': how_related.replace(' ', '_'),
-                    'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg')
+                    'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg'),
+                    'project': project,
                 }
             ]
 
