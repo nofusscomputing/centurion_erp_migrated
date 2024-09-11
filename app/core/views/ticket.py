@@ -64,7 +64,7 @@ class Add(AddView):
 
         elif self.kwargs['ticket_type'] == 'project_task':
 
-            return reverse('Project Management:_project_task_view', args=(self.object.project.id, self.kwargs['ticket_type'],self.object.id,))
+            return reverse('Project Management:_project_task_view', args=(self.kwargs['project_id'], self.kwargs['ticket_type'],self.object.id,))
 
         else:
 
@@ -278,7 +278,7 @@ class View(ChangeView):
 
             path = 'Project Management:_project_task_change'
 
-            url_kwargs = { 'project_id': self.object.project.id,'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+            url_kwargs = { 'project_id': self.kwargs['project_id'],'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
 
         else:
 

@@ -447,6 +447,11 @@ class TicketValidation(
 
     def validate_project_task_ticket(self):
 
-        self.cleaned_data.update({
-            'project': self._project
-        })
+        if hasattr(self,'_project'):
+            self.cleaned_data.update({
+                'project': self._project
+            })
+        
+        if self.cleaned_data['project'] is None:
+
+            raise ValidationError('A project task requires a project')

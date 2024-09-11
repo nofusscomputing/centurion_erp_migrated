@@ -950,6 +950,16 @@ class ProjectTaskPermissions(ProjectTicketPermissions, TestCase):
 
         super().setUpTestData()
 
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            title = 'Amended ' + self.ticket_type + ' ticket',
+            description = 'the ticket body',
+            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value),
+            project = self.project
+        )
+
         self.url_add_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type}
 
         self.url_change_kwargs = {'project_id': self.project.id, 'ticket_type': self.ticket_type, 'pk': self.item.id}
