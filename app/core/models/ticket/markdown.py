@@ -63,6 +63,7 @@ class TicketMarkdown:
             ])
 
             .use(admon.admon_plugin)
+            .use(footnote.footnote_plugin)
         )
 
         return md.render(markdown_text)
