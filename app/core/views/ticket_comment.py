@@ -1,5 +1,3 @@
-import markdown
-
 from django.urls import reverse
 from django.views import generic
 

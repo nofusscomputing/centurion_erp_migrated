@@ -1,5 +1,3 @@
-import markdown
-
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render

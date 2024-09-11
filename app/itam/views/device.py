@@ -1,5 +1,4 @@
 import json
-import markdown
 
 from django.contrib.auth import decorators as auth_decorator
 from django.core.paginator import Paginator
