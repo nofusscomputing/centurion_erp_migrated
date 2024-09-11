@@ -253,7 +253,39 @@ class View(ChangeView):
 
         # context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
 
-        context['edit_url'] = reverse('Assistance:_ticket_request_change', args=(self.kwargs['ticket_type'], self.kwargs['pk'])) #/assistance/ticket/{{ ticket_type }}/{{ ticket.id }}
+        url_kwargs = { 'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+
+        if self.kwargs['ticket_type'] == 'request':
+
+            path = 'Assistance:_ticket_request_change'
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            path = 'Project Management:_project_task_view'
+
+            url_kwargs = { 'project_id': self.object.project.id,'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+
+        else:
+
+            comment_path = 'ITIM:_ticket_comment_' + self.kwargs['ticket_type']
+
+            if self.kwargs['ticket_type'] == 'change':
+
+                path = 'ITIM:_ticket_change_change'
+
+            elif self.kwargs['ticket_type'] == 'incident':
+
+                path = 'ITIM:_ticket_incident_change'
+
+            elif self.kwargs['ticket_type'] == 'problem':
+
+                path = 'ITIM:_ticket_problem_change'
+
+        context['edit_url'] = reverse(
+            path,
+            kwargs = url_kwargs,
+        ) # /assistance/ticket/{{ ticket_type }}/{{ ticket.id }}
+
 
         context['content_title'] = self.object.title
 
