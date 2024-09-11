@@ -850,6 +850,10 @@ class Ticket(
 
                 comment_field_value = f"changed {field} to {self.get_status_display()}"
 
+            if field == 'title':
+
+                comment_field_value = f"Title changed ~~{before[field]}~~ to **{after[field]}**"
+
             if field == 'project_id':
 
                 comment_field_value = f"changed {field.replace('_id','')} to {self.project}"
