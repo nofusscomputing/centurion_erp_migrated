@@ -59,6 +59,7 @@ class TicketMarkdown:
             .enable([
                 'linkify',
                 'strikethrough',
+                'table',
             ])
         )
 
