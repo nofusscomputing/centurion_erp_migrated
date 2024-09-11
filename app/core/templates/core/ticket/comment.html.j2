@@ -41,8 +41,14 @@
                 {% endif %}
                 <div >
                     <div style="padding: 10px; padding-top: 10px">
+
+                        {% if ticket_type == 'project_task'%}
+                        <input type="button" value="Comment" onclick="window.location='{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=comment';">
+                        <input type="button" value="Task" onclick="window.location='{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=task';">
+                        {% else %}
                         <input type="button" value="Comment" onclick="window.location='{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=comment';">
                         <input type="button" value="Task" onclick="window.location='{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=task';">
+                        {% endif %}
                     </div>
                 </div>
 
@@ -60,19 +66,24 @@
         {% elif ticket_type == 'incident'%}
             {% translate 'ITIM:_ticket_comment_incident_add' as comment_url %}
         {% elif ticket_type == 'project_task'%}
-            {% translate 'Project Management:_ticket_comment_request_add' as comment_url %}
+            {% translate 'Project Management:_project_task_comment_add' as comment_url %}
         {% elif ticket_type == 'problem'%}
             {% translate 'ITIM:_ticket_comment_problem_add' as comment_url %}
         {% elif ticket_type == 'request'%}
             {% translate 'Assistance:_ticket_comment_request_add' as comment_url %}
         {% endif %}
 
+        {% if ticket_type == 'project_task'%}
+        <input type="button" value="Comment" onclick="window.location='{% url comment_url ticket.project.id ticket_type ticket.id%}?comment_type=comment';">
+        <input type="button" value="Task" onclick="window.location='{% url comment_url ticket.project.id ticket_type ticket.id %}?comment_type=task';">
+        <input type="button" value="Notification" onclick="window.location='{% url comment_url ticket.project.id ticket_type ticket.id %}?comment_type=notification';">
+        <input type="button" value="Resolve" onclick="window.location='{% url comment_url ticket.project.id ticket_type ticket.id %}?comment_type=solution';">
+        {% else %}
         <input type="button" value="Comment" onclick="window.location='{% url comment_url ticket_type ticket.id%}?comment_type=comment';">
-        
         <input type="button" value="Task" onclick="window.location='{% url comment_url ticket_type ticket.id %}?comment_type=task';">
         <input type="button" value="Notification" onclick="window.location='{% url comment_url ticket_type ticket.id %}?comment_type=notification';">
         <input type="button" value="Resolve" onclick="window.location='{% url comment_url ticket_type ticket.id %}?comment_type=solution';">
-
+        {% endif %}
     </div>
 
 </div>
