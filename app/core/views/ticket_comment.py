@@ -82,7 +82,10 @@ class Add(AddView):
 
             return reverse('Project Management:_project_task_view', args=(self.object.ticket.project.id, self.kwargs['ticket_type'],self.kwargs['ticket_id'],))
 
-        return f"/ticket/"
+        return reverse(
+            'ITIM:_ticket_' + self.kwargs['ticket_type'] + '_view', 
+            kwargs={'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['ticket_id']},
+        )
 
 
     def get_context_data(self, **kwargs):
