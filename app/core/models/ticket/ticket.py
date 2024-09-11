@@ -630,7 +630,6 @@ class Ticket(
         'title',
         'description',
         'opened_by',
-        'project',
         'ticket_type',
         'assigned_users',
         'assigned_teams',
@@ -639,6 +638,7 @@ class Ticket(
     common_itsm_fields: list(str()) = common_fields + [
         'status',
         'urgency',
+        'project',
         'priority',
         'impact',
         'subscribed_teams',
@@ -675,7 +675,13 @@ class Ticket(
 
     ]
 
-    fields_project_task: list(str()) = common_itsm_fields + [
+    fields_project_task: list(str()) = common_fields + [
+        'status',
+        'urgency',
+        'priority',
+        'impact',
+        'subscribed_teams',
+        'subscribed_users',
         'planned_start_date',
         'planned_finish_date',
         'real_start_date',
