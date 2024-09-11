@@ -101,7 +101,12 @@
 
 
     <div id="ticket-meta">
-    <h3 class="{{ ticket_type }}-ticket">{{ ticket_type }}</h3>
+    <h3 class="{{ ticket_type }}-ticket">
+        {{ ticket_type }} <span style="font-size: smaller;">#{{ ticket.id }} 
+        {% if ticket.external_ref %}
+        <span style="display: inline-block;" title="External system {{ ticket.get_external_system_display }}">(#{{ ticket.external_ref }})</span>
+        {% endif %}</span>
+    </h3>
 
         <fieldset>
             <label>Assigned</label>
