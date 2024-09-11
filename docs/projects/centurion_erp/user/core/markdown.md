@@ -25,6 +25,8 @@ All Text fields, that is those that are multi-lined support markdown text.
 
 - Task Lists
 
+- Heading Anchors
+
 
 ## Admonitions
 

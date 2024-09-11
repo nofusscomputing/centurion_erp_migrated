@@ -2,7 +2,7 @@ import re
 
 from markdown_it import MarkdownIt
 
-from mdit_py_plugins import admon, footnote, tasklists
+from mdit_py_plugins import admon, anchors, footnote, tasklists
 
 from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
@@ -52,7 +52,7 @@ class TicketMarkdown:
                 config = "commonmark",
                 options_update={
                     'linkify': True,
-                    'highlight': self.highlight_func
+                    'highlight': self.highlight_func,
                 }
             )
 
@@ -63,6 +63,7 @@ class TicketMarkdown:
             ])
 
             .use(admon.admon_plugin)
+            .use(anchors.anchors_plugin, permalink=True)
             .use(footnote.footnote_plugin)
             .use(tasklists.tasklists_plugin)
         )
