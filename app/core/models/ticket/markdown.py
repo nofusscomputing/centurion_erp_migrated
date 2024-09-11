@@ -51,9 +51,15 @@ class TicketMarkdown:
             MarkdownIt(
                 config = "commonmark",
                 options_update={
+                    'linkify': True,
                     'highlight': self.highlight_func
                 }
             )
+
+            .enable([
+                'linkify',
+            ])
+        )
 
         return md.render(markdown_text)
 
