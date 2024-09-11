@@ -61,6 +61,8 @@ class TicketMarkdown:
                 'strikethrough',
                 'table',
             ])
+
+            .use(admon.admon_plugin)
         )
 
         return md.render(markdown_text)
