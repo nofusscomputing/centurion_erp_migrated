@@ -756,9 +756,15 @@ class Ticket(
 
                 id = related_ticket.from_ticket_id.id
 
+
                 if related_ticket.from_ticket_id.project:
 
                     project = related_ticket.from_ticket_id.project
+
+
+                if related_ticket.from_ticket_id.status:
+
+                    status:str = related_ticket.from_ticket_id.get_status_display()
 
                 if str(related_ticket.get_how_related_display()).lower() == 'blocks':
 
@@ -769,6 +775,7 @@ class Ticket(
 
                     how_related = 'blocks'
 
+
             elif related_ticket.from_ticket_id_id == self.id:
 
                 id = related_ticket.to_ticket_id.id
@@ -776,6 +783,10 @@ class Ticket(
                 if related_ticket.to_ticket_id.project:
 
                     project = related_ticket.to_ticket_id.project
+
+                if related_ticket.to_ticket_id.status:
+
+                    status:str = related_ticket.to_ticket_id.get_status_display()
 
 
             related_tickets += [
@@ -786,6 +797,7 @@ class Ticket(
                     'how_related': how_related.replace(' ', '_'),
                     'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg'),
                     'project': project,
+                    'status': str(status).lower(),
                 }
             ]
 

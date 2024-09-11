@@ -48,18 +48,7 @@
                         {% elif related_ticket.how_related == 'related' %}
                         Related to
                         {% endif %}
-                        <a href="{% if related_ticket.type == 'request' %}
-                            {% url 'Assistance:_ticket_request_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'change' %}
-                            {% url 'ITIM:_ticket_change_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'incident' %}
-                            {% url 'ITIM:_ticket_incident_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'problem' %}
-                            {% url 'ITIM:_ticket_problem_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'project_task' %}
-                            {% url 'Project Management:_project_task_view' project_id=related_ticket.project.id ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% endif %}
-                        ">{{ related_ticket.title }}</a>
+                        {% include 'core/ticket/renderers/ticket_link.html.j2' with id=related_ticket.id name=related_ticket.title ticket_type=related_ticket.type ticket_status=related_ticket.status project_id=related_ticket.project %}
                     </div>
                 </div>
                 {% endfor %}
