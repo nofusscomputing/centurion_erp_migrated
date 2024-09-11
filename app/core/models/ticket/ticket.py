@@ -753,6 +753,9 @@ class Ticket(
 
             if related_ticket.to_ticket_id_id == self.id:
 
+                id = related_ticket.from_ticket_id.id
+
+
                 if str(related_ticket.get_how_related_display()).lower() == 'blocks':
 
                     how_related = 'blocked by'
@@ -762,10 +765,13 @@ class Ticket(
 
                     how_related = 'blocks'
 
+            elif related_ticket.from_ticket_id_id == self.id:
+
+                id = related_ticket.to_ticket_id.id
 
             related_tickets += [
                 {
-                    'id': related_ticket.id,
+                    'id': id,
                     'type': related_ticket.to_ticket_id.get_ticket_type_display().lower(),
                     'title': ticket_title,
                     'how_related': how_related.replace(' ', '_'),
