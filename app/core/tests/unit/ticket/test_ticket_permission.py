@@ -19,14 +19,13 @@ from project_management.models.projects import Project
 from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
 
-from core.tests.unit.ticket.ticket_permission.field_based_permissions import TicketFieldBasedPermissions
+from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
 
 
 
 
 class TicketPermissions(
     ModelPermissions,
-    TicketFieldBasedPermissions
 ):
 
     ticket_type:str = None
@@ -841,7 +840,25 @@ class TicketPermissions(
 
 
 
-class ChangeTicketPermissions(TicketPermissions, TestCase):
+class ITSMTicketPermissions(
+    TicketPermissions,
+    ITSMTicketFieldBasedPermissions,
+):
+
+    pass
+
+
+
+class ProjectTicketPermissions(
+    TicketPermissions,
+    ProjectTicketFieldBasedPermissions,
+):
+
+    pass
+
+
+
+class ChangeTicketPermissions(ITSMTicketPermissions, TestCase):
 
     ticket_type = 'change'
 
@@ -861,7 +878,7 @@ class ChangeTicketPermissions(TicketPermissions, TestCase):
 
 
 
-class IncidentTicketPermissions(TicketPermissions, TestCase):
+class IncidentTicketPermissions(ITSMTicketPermissions, TestCase):
 
     ticket_type = 'incident'
 
@@ -881,7 +898,7 @@ class IncidentTicketPermissions(TicketPermissions, TestCase):
 
 
 
-class ProblemTicketPermissions(TicketPermissions, TestCase):
+class ProblemTicketPermissions(ITSMTicketPermissions, TestCase):
 
     ticket_type = 'problem'
 
@@ -901,7 +918,7 @@ class ProblemTicketPermissions(TicketPermissions, TestCase):
 
 
 
-class ProjectTaskPermissions(TicketPermissions, TestCase):
+class ProjectTaskPermissions(ProjectTicketPermissions, TestCase):
 
     ticket_type = 'project_task'
 
@@ -945,7 +962,9 @@ class ProjectTaskPermissions(TicketPermissions, TestCase):
 
         self.url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': self.project.id})
 
-class RequestTicketPermissions(TicketPermissions, TestCase):
+
+
+class RequestTicketPermissions(ITSMTicketPermissions, TestCase):
 
     ticket_type = 'request'
 

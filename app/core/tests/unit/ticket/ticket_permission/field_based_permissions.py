@@ -2114,81 +2114,6 @@ class TicketFieldPermissionsTriageUser:
         assert response.status_code == 200
 
 
-    def test_field_permission_planned_start_date_triage_user_denied(self):
-        """ Check correct permission for add 
-
-        A standard user should not be able to edit field planned_start_date.
-        """
-
-        field_name: str = 'planned_start_date'
-        field_value = '2024-09-08T13:19:00'
-
-
-        client = Client(raise_request_exception=True)
-        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
-
-        client.force_login(self.triage_user)
-
-        data = self.change_data.copy()
-        
-        data[field_name] = field_value
-
-        try:
-
-            response = client.post(
-                url,
-                data=data
-            )
-
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
-
-
-    def test_field_permission_planned_finish_date_triage_user_denied(self):
-        """ Check correct permission for add 
-
-        A standard user should not be able to edit field planned_finish_date.
-        """
-
-        field_name: str = 'planned_finish_date'
-        field_value = '2024-09-08T13:19:00'
-
-
-        client = Client(raise_request_exception=True)
-        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
-
-        client.force_login(self.triage_user)
-
-        data = self.change_data.copy()
-        
-        data[field_name] = field_value
-
-        try:
-
-            response = client.post(
-                url,
-                data=data
-            )
-
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
-
-
-
     def test_field_permission_project_triage_user_allowed(self):
         """ Check correct permission for add 
 
@@ -2214,80 +2139,6 @@ class TicketFieldPermissionsTriageUser:
         )
 
         assert response.status_code == 200
-
-
-    def test_field_permission_real_start_date_triage_user_denied(self):
-        """ Check correct permission for add 
-
-        A standard user should not be able to edit field real_start_date.
-        """
-
-        field_name: str = 'real_start_date'
-        field_value = '2024-09-08T13:19:00'
-
-
-        client = Client(raise_request_exception=True)
-        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
-
-        client.force_login(self.triage_user)
-
-        data = self.change_data.copy()
-        
-        data[field_name] = field_value
-
-        try:
-
-            response = client.post(
-                url,
-                data=data
-            )
-
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
-
-
-    def test_field_permission_real_finish_date_triage_user_denied(self):
-        """ Check correct permission for add 
-
-        A standard user should not be able to edit field real_finish_date.
-        """
-
-        field_name: str = 'real_finish_date'
-        field_value = '2024-09-08T13:19:00'
-
-
-        client = Client(raise_request_exception=True)
-        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
-
-        client.force_login(self.triage_user)
-
-        data = self.change_data.copy()
-        
-        data[field_name] = field_value
-
-        try:
-
-            response = client.post(
-                url,
-                data=data
-            )
-
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
 
 
     def test_field_permission_subscribed_users_triage_user_allowed(self):
@@ -2385,15 +2236,298 @@ class TicketFieldPermissionsTriageUser:
 
 
 
-class TicketFieldBasedPermissions(
+class ITSMTicketFieldPermissionsTriageUser(
+    TicketFieldPermissionsTriageUser
+):
+
+
+    def test_field_permission_planned_start_date_triage_user_denied(self):
+        """ Check correct permission for add 
+
+        A standard user should not be able to edit field planned_start_date.
+        """
+
+        field_name: str = 'planned_start_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        try:
+
+            response = client.post(
+                url,
+                data=data
+            )
+
+            assert False, 'a ValidationError exception should have been thrown'
+
+        except ValidationError as exception:
+
+            assert exception.code == 'cant_edit_field_' + field_name
+
+        except Exception as exception:
+
+            assert False, f"reason: {exception}"
+
+
+    def test_field_permission_planned_finish_date_triage_user_denied(self):
+        """ Check correct permission for add 
+
+        A standard user should not be able to edit field planned_finish_date.
+        """
+
+        field_name: str = 'planned_finish_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        try:
+
+            response = client.post(
+                url,
+                data=data
+            )
+
+            assert False, 'a ValidationError exception should have been thrown'
+
+        except ValidationError as exception:
+
+            assert exception.code == 'cant_edit_field_' + field_name
+
+        except Exception as exception:
+
+            assert False, f"reason: {exception}"
+
+
+    def test_field_permission_real_start_date_triage_user_denied(self):
+        """ Check correct permission for add 
+
+        A standard user should not be able to edit field real_start_date.
+        """
+
+        field_name: str = 'real_start_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        try:
+
+            response = client.post(
+                url,
+                data=data
+            )
+
+            assert False, 'a ValidationError exception should have been thrown'
+
+        except ValidationError as exception:
+
+            assert exception.code == 'cant_edit_field_' + field_name
+
+        except Exception as exception:
+
+            assert False, f"reason: {exception}"
+
+
+    def test_field_permission_real_finish_date_triage_user_denied(self):
+        """ Check correct permission for add 
+
+        A standard user should not be able to edit field real_finish_date.
+        """
+
+        field_name: str = 'real_finish_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        try:
+
+            response = client.post(
+                url,
+                data=data
+            )
+
+            assert False, 'a ValidationError exception should have been thrown'
+
+        except ValidationError as exception:
+
+            assert exception.code == 'cant_edit_field_' + field_name
+
+        except Exception as exception:
+
+            assert False, f"reason: {exception}"
+
+
+
+class ProjectTicketFieldPermissionsTriageUser(
+    TicketFieldPermissionsTriageUser
+):
+
+
+    def test_field_permission_planned_start_date_triage_user_allowed(self):
+        """ Check correct permission for add 
+
+        A standard user should be able to edit field planned_start_date.
+        """
+
+        field_name: str = 'planned_start_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        
+        response = client.post(
+            url,
+            data=data
+        )
+
+        assert response.status_code == 200
+
+
+    def test_field_permission_planned_finish_date_triage_user_allowed(self):
+        """ Check correct permission for add 
+
+        A standard user should be able to edit field planned_finish_date.
+        """
+
+        field_name: str = 'planned_finish_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        
+        response = client.post(
+            url,
+            data=data
+        )
+
+        assert response.status_code == 200
+
+
+    def test_field_permission_real_start_date_triage_user_allowed(self):
+        """ Check correct permission for add 
+
+        A standard user should be able to edit field real_start_date.
+        """
+
+        field_name: str = 'real_start_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        
+        response = client.post(
+            url,
+            data=data
+        )
+
+        assert response.status_code == 200
+
+
+    def test_field_permission_real_finish_date_triage_user_allowed(self):
+        """ Check correct permission for add 
+
+        A standard user should be able to edit field real_finish_date.
+        """
+
+        field_name: str = 'real_finish_date'
+        field_value = '2024-09-08T13:19:00'
+
+
+        client = Client(raise_request_exception=True)
+        url = reverse(self.app_namespace + ':' + self.url_name_change, kwargs=self.url_change_kwargs)
+
+        client.force_login(self.triage_user)
+
+        data = self.change_data.copy()
+        
+        data[field_name] = field_value
+
+        
+        response = client.post(
+            url,
+            data=data
+        )
+
+        assert response.status_code == 200
+
+
+
+
+class ITSMTicketFieldBasedPermissions(
     TicketFieldPermissionsAddUser,
     TicketFieldPermissionsChangeUser,
     TicketFieldPermissionsImportUser,
-    TicketFieldPermissionsTriageUser,
+    ITSMTicketFieldPermissionsTriageUser,
 ):
 
     pass
 
+
+
+class ProjectTicketFieldBasedPermissions(
+    TicketFieldPermissionsAddUser,
+    TicketFieldPermissionsChangeUser,
+    TicketFieldPermissionsImportUser,
+    ProjectTicketFieldPermissionsTriageUser,
+):
+
+    pass
 
 
 # @pytest.mark.django_db
