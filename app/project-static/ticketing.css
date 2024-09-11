@@ -581,8 +581,20 @@
     margin: 0px 5px 0px 5px;
 }
 
+div#markdown {
+    justify-content: center;
+    display: block;
+    text-align: left;
+    padding: 10px;
+}
+#markdown .codehilite {
+    display: block;
+    width: 100%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
 
-#ticket-content #markdown h1 {
+#markdown h1 {
     background-color: inherit;
     color: inherit;
     font-size: 24px;
@@ -594,7 +606,7 @@
 }
 
 
-#ticket-content #markdown h2 {
+#markdown h2 {
     background-color: inherit;
     color: inherit;
     font-size: 20px;
@@ -606,7 +618,7 @@
 }
 
 
-#ticket-content #markdown h3 {
+#markdown h3 {
     background-color: inherit;
     color: inherit;
     font-size: 18px;
@@ -618,7 +630,7 @@
 }
 
 
-#ticket-content #markdown h4 {
+#markdown h4 {
     background-color: inherit;
     color: #000;
     font-size: 16px;
@@ -630,7 +642,7 @@
 }
 
 
-#ticket-content #markdown h5 {
+#markdown h5 {
     background-color: inherit;
     color: #000;
     font-size: 14px;
@@ -642,7 +654,7 @@
 }
 
 
-#ticket-content #markdown li {
+#markdown li {
     background-color: inherit;
     font-size: 14px;
     line-height: 25px;
@@ -654,7 +666,7 @@
 
 
 
-#ticket-content #markdown p:not(div.admonition p){
+#markdown p:not(div.admonition p){
     background-color: inherit;
     font-size: inherit;
     line-height: 25px;
@@ -689,6 +701,15 @@
     padding: 10px;
     margin: 0px;
     width: 100%;
+}
+
+#markdown div.admonition.info {
+    background-color: #b6f5dd;
+    border-color:#27ffbe;
+}
+
+#markdown div.admonition.info p.admonition-title {
+    background-color: #1ef59170;
 }
 
 #markdown div.admonition.note {

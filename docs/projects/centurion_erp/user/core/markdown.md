@@ -44,6 +44,8 @@ Available admonition types are:
 
 - note
 
+- info
+
 - tip
 
 - warning
