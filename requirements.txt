@@ -18,8 +18,11 @@ drf-spectacular[sidecar]==0.27.2
 
 django_split_settings==1.3.1
 
-markdown==3.6
-Pygments
+markdown-it-py[plugins]==3.0.0
+markdown-it-py[linkify]==3.0.0
+Pygments==2.18.0
+
+
 
 celery==5.4.0
 django-celery-results==2.5.1

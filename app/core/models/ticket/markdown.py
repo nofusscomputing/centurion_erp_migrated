@@ -1,7 +1,16 @@
-import markdown as md
 import re
 
+from markdown_it import MarkdownIt
+
+from mdit_py_plugins import admon, footnote, tasklists
+
+from pygments import highlight
+from pygments.formatters.html import HtmlFormatter
+from pygments.lexers import get_lexer_by_name
+
 from django.template.loader import render_to_string
+
+
 
 class TicketMarkdown:
     """Ticket and Comment markdown functions
@@ -10,11 +19,43 @@ class TicketMarkdown:
     """
 
 
+    def highlight_func(self, code: str, lang: str, _) -> str | None:
+        """Use pygments for code high lighting"""
+
+        if not lang:
+
+            return None
+
+        lexer = get_lexer_by_name(lang)
+
+        formatter = HtmlFormatter(style='vs', cssclass='codehilite')
+
+        return highlight(code, lexer, formatter)
+
+
     def render_markdown(self, markdown_text):
+        """Render Markdown
+
+        implemented using https://markdown-it-py.readthedocs.io/en/latest/index.html
+
+        Args:
+            markdown_text (str): Markdown text
+
+        Returns:
+            str: HTML text
+        """
 
         markdown_text = self.ticket_reference(markdown_text)
 
-        return md.markdown(markdown_text, extensions=['markdown.extensions.fenced_code', 'codehilite'])
+        md = (
+            MarkdownIt(
+                config = "commonmark",
+                options_update={
+                    'highlight': self.highlight_func
+                }
+            )
+
+        return md.render(markdown_text)
 
 
     def build_ticket_html(self, match):

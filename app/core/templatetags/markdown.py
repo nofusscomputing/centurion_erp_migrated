@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
-import markdown as md
+from core.models.ticket.markdown import TicketMarkdown
 
 register = template.Library()
 
@@ -9,7 +9,13 @@ register = template.Library()
 @register.filter()
 @stringfilter
 def markdown(value):
-    return md.markdown(value, extensions=['markdown.extensions.fenced_code', 'codehilite'])
+
+    if not value:
+        value = None
+
+    markdown = TicketMarkdown()
+
+    return markdown.render_markdown(value)
 
 @register.filter()
 @stringfilter
