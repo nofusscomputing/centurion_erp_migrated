@@ -251,9 +251,6 @@ class View(ChangeView):
 
         context['ticket_type'] = self.kwargs['ticket_type']
 
-        context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
-
         # context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
 
         context['edit_url'] = reverse('Assistance:_ticket_request_change', args=(self.kwargs['ticket_type'], self.kwargs['pk'])) #/assistance/ticket/{{ ticket_type }}/{{ ticket.id }}
