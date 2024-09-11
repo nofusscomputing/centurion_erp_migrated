@@ -447,9 +447,6 @@ class TicketValidation(
 
     def validate_project_task_ticket(self):
 
-        # check status
-
-        # check type
-
-        # raise ValidationError('Test to see what it looks like')
-        pass
+        self.cleaned_data.update({
+            'project': self._project
+        })

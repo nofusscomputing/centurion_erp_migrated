@@ -38,6 +38,12 @@ class Add(AddView):
             'type_ticket': self.kwargs['ticket_type'],
         })
 
+        if self.kwargs['ticket_type'] == 'project_task':
+
+            initial.update({
+                'project': int(self.kwargs['project_id'])
+            })
+
         return initial
 
 
@@ -106,9 +112,20 @@ class Change(ChangeView):
 
 
     def get_initial(self):
-        return {
+
+        initial = super().get_initial()
+
+        initial.update({
             'type_ticket': self.kwargs['ticket_type'],
-        }
+        })
+
+        if self.kwargs['ticket_type'] == 'project_task':
+
+            initial.update({
+                'project': int(self.kwargs['project_id'])
+            })
+
+        return initial
 
 
     def get_success_url(self, **kwargs):
@@ -261,7 +278,7 @@ class View(ChangeView):
 
         elif self.kwargs['ticket_type'] == 'project_task':
 
-            path = 'Project Management:_project_task_view'
+            path = 'Project Management:_project_task_change'
 
             url_kwargs = { 'project_id': self.object.project.id,'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
 

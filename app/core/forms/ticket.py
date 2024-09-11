@@ -110,6 +110,8 @@ class TicketForm(
 
             self.fields['status'].choices = self.Meta.model.TicketStatus.ProjectTask
 
+            self._project: int = kwargs['initial']['project']
+
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROJECT_TASK.value
 
         # self.fields['status'].widget = self.fields['status'].hidden_widget()
