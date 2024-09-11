@@ -24,3 +24,30 @@ All Text fields, that is those that are multi-lined support markdown text.
 - Linkify
 
 - Task Lists
+
+
+## Admonitions
+
+
+![admonition example](../images/admonition-example.png)
+
+declare with:
+
+``` md
+
+!!! <type> "<optional heading in double quotes>"
+    text goes here
+
+```
+
+Available admonition types are:
+
+- note
+
+- tip
+
+- warning
+
+- danger
+
+- quote
