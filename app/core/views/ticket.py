@@ -46,8 +46,21 @@ class Add(AddView):
 
 
     def form_valid(self, form):
-        form.instance.is_global = False
-        return super().form_valid(form)
+
+        created: bool = False
+
+        if form.instance.id is None:
+
+            created = True
+
+        val = super().form_valid(form)
+
+        if created:
+
+            form.instance.subscribed_users.add(form.instance.opened_by)
+
+        return val
+
 
 
     def get_form_kwargs(self):
@@ -128,7 +141,17 @@ class Change(ChangeView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'], self.kwargs['pk'],))
+        if self.kwargs['ticket_type'] == 'request':
+
+            return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.object.id,))
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_task_view', args=(self.kwargs['project_id'], self.kwargs['ticket_type'],self.object.id,))
+
+        else:
+
+            return reverse('ITIM:_ticket_' + str(self.kwargs['ticket_type']).lower() + '_view', args=(self.kwargs['ticket_type'],self.object.id,))
 
 
 class Delete(DeleteView):
