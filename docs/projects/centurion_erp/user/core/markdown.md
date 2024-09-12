@@ -27,6 +27,8 @@ All Text fields, that is those that are multi-lined support markdown text.
 
 - Heading Anchors
 
+- Ticket References
+
 
 ## Admonitions
 
@@ -55,3 +57,8 @@ Available admonition types are:
 - danger
 
 - quote
+
+
+## Ticket References
+
+Declare a ticket reference in format `#<ticket number>`, and it will be rendered as a link to the ticket. i.e. `#2`

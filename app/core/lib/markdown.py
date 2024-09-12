@@ -10,6 +10,8 @@ from pygments.lexers import get_lexer_by_name
 
 from django.template.loader import render_to_string
 
+from .markdown_plugins import ticket_number
+
 
 
 class Markdown:
@@ -45,8 +47,6 @@ class Markdown:
             str: HTML text
         """
 
-        markdown_text = self.ticket_reference(markdown_text)
-
         md = (
             MarkdownIt(
                 config = "commonmark",
@@ -66,6 +66,7 @@ class Markdown:
             .use(anchors.anchors_plugin, permalink=True)
             .use(footnote.footnote_plugin)
             .use(tasklists.tasklists_plugin)
+            .use(ticket_number.plugin, enabled=True)
         )
 
         return md.render(markdown_text)
