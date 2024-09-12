@@ -74,3 +74,8 @@ urlpatterns = [
 ## Tenancy Setup
 
 All items within Centurion ERP are considered tenancy objects. Pay particular attention to any requirement that specifies that a class is to be included. Some of these classes add the required logic for Tenancy object CRUD operations as well as permission checking.
+
+
+## Markdown
+
+To extend the markdown add a plugin to path `app/core/lib/markdown_plugins/` ensuring you enable it within `app/core/lib/markdown.py` with `.use(<plugin name>)`
