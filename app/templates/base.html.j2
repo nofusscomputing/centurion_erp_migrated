@@ -24,7 +24,7 @@
   {% block body %}
   <header>
 
-    <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
+    <h1 id="site-title"><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
     {%if user.is_authenticated %}
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
@@ -91,7 +91,7 @@ section h2 span svg {
 </style>
 
     <section>
-      <h2>{% block title %}{{ content_title }}{% endblock %}
+      <h2 id="content_title">{% block title %}{{ content_title }}{% endblock %}
         {% if model_delete_url %}
         <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
           {% include 'icons/delete.svg' %}

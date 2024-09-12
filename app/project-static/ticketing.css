@@ -390,7 +390,7 @@
     border: none;
     color: #fff;
     display: flex;
-    font-size: 14px;
+    font-size: inherit;
     height: 30px;
     line-height: 30px;
     margin: 0px;
@@ -581,6 +581,14 @@
     margin: 0px 5px 0px 5px;
 }
 
+#markdown {
+    font-size: 12pt;
+}
+
+#markdown p {
+    font-size: inherit;
+}
+
 div#markdown {
     justify-content: center;
     display: block;
@@ -599,7 +607,7 @@ div#markdown {
     color: inherit;
     font-size: 24px;
     line-height: 24px;
-    padding: 0px;
+    padding: 24px 0px 48px 0px;
     margin: 0px;
     text-align: left;
 
@@ -611,7 +619,7 @@ div#markdown {
     color: inherit;
     font-size: 20px;
     line-height: 20px;
-    padding: 0px;
+    padding: 20px 0px 40px 0px;
     margin: 0px;
     text-align: left;
 
@@ -623,7 +631,7 @@ div#markdown {
     color: inherit;
     font-size: 18px;
     line-height: 18px;
-    padding: 0px;
+    padding: 18px 0px 36px 0px;
     margin: 0px;
     text-align: left;
 
@@ -635,7 +643,7 @@ div#markdown {
     color: #000;
     font-size: 16px;
     line-height: 16px;
-    padding: 0px;
+    padding: 16px 0px 32px 0px;
     margin: 0px;
     text-align: left;
 
@@ -647,7 +655,7 @@ div#markdown {
     color: #000;
     font-size: 14px;
     line-height: 14px;
-    padding: 0px;
+    padding: 14px 0px 28px 0px;;
     margin: 0px;
     text-align: left;
 
@@ -656,9 +664,9 @@ div#markdown {
 
 #markdown li {
     background-color: inherit;
-    font-size: 14px;
+    font-size: inherit;
     line-height: 25px;
-    padding: 0px;
+    padding: 5px;
     margin: 0px;
     text-align: left;
 
