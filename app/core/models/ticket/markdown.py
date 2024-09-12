@@ -75,31 +75,35 @@ class TicketMarkdown:
 
         ticket_id = match.group(1)
 
-        if hasattr(self, 'ticket'):
+        try:
+            if hasattr(self, 'ticket'):
 
-            ticket = self.ticket.__class__.objects.get(pk=ticket_id)
+                ticket = self.ticket.__class__.objects.get(pk=ticket_id)
 
-        else:
+            else:
 
-            ticket = self.__class__.objects.get(pk=ticket_id)
+                ticket = self.__class__.objects.get(pk=ticket_id)
 
-        project_id = str('0')
+            project_id = str('0')
 
-        if ticket.project:
+            if ticket.project:
 
-            project_id = str(ticket.project.id).lower()
+                project_id = str(ticket.project.id).lower()
 
-        context: dict = {
-            'id': ticket.id,
-            'name': ticket,
-            'ticket_type': str(ticket.get_ticket_type_display()).lower(),
-            'ticket_status': str(ticket.get_status_display()).lower(),
-            'project_id': project_id,
-        }
+            context: dict = {
+                'id': ticket.id,
+                'name': ticket,
+                'ticket_type': str(ticket.get_ticket_type_display()).lower(),
+                'ticket_status': str(ticket.get_status_display()).lower(),
+                'project_id': project_id,
+            }
 
-        html_link = render_to_string('core/ticket/renderers/ticket_link.html.j2', context)
+            html_link = render_to_string('core/ticket/renderers/ticket_link.html.j2', context)
 
-        return str(html_link)
+            return str(html_link)
+        except:
+
+            return str('#' + ticket_id)
 
 
 
