@@ -190,6 +190,8 @@ nav:
 
         - projects/centurion_erp/user/core/index.md
 
+        - projects/centurion_erp/user/core/markdown.md
+
         - projects/centurion_erp/user/core/tickets.md
 
       - ITAM:

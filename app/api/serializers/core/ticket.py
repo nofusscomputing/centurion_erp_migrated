@@ -176,4 +176,8 @@ class TicketSerializer(
 
         self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
 
+        if self.instance is None:
+
+            self.validated_data['subscribed_users'] = self.validated_data['subscribed_users'] + [ self.validated_data['opened_by'] ]
+
         return is_valid

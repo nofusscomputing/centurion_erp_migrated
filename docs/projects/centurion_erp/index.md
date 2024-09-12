@@ -45,6 +45,8 @@ Centurion ERP contains the following modules:
 
     - History
 
+    - [Markdown](./user/core/markdown.md)
+
     - [Multi-Tenant](./development/api/models/access_organization_permission_checking.md#permission-checking)
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)

@@ -23,7 +23,7 @@
             <div>
                 <input style="float: right; position: relative; margin: 0px;" type="button" value="Edit" onclick="window.location='{{ edit_url }}';">
             </div>
-            <div id="markdown">{{ ticket.markdown_description | safe }}</div>
+            <div id="markdown">{{ ticket.description | markdown | safe }}</div>
         </div>
 
         <div id="ticket-additional-data">
@@ -40,7 +40,7 @@
                 {% for related_ticket in ticket.related_tickets %}
                 <div id="linked-tickets" class="{{ related_ticket.type }}-ticket">
                     <div class="icon icon-{{ related_ticket.how_related }}">{% include related_ticket.icon_filename %}</div>
-                    <div class="ticket">
+                    <div id="markdown" class="ticket">
                         {% if related_ticket.how_related == 'blocked_by' %}
                         Blocked by
                         {% elif related_ticket.how_related == 'blocks' %}
@@ -48,16 +48,7 @@
                         {% elif related_ticket.how_related == 'related' %}
                         Related to
                         {% endif %}
-                        <a href="{% if related_ticket.type == 'request' %}
-                            {% url 'Assistance:_ticket_request_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'change' %}
-                            {% url 'ITIM:_ticket_change_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'incident' %}
-                            {% url 'ITIM:_ticket_incident_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% elif related_ticket.type == 'problem' %}
-                            {% url 'ITIM:_ticket_problem_view' ticket_type=related_ticket.type pk=related_ticket.id %}
-                        {% endif %}
-                        ">{{ related_ticket.title }}</a>
+                        <span style="display: inline-block;">{{ related_ticket.markdown | markdown | safe }}</span>
                     </div>
                 </div>
                 {% endfor %}
@@ -101,7 +92,12 @@
 
 
     <div id="ticket-meta">
-    <h3 class="{{ ticket_type }}-ticket">{{ ticket_type }}</h3>
+    <h3 class="{{ ticket_type }}-ticket">
+        {{ ticket_type }} <span style="font-size: smaller;">#{{ ticket.id }} 
+        {% if ticket.external_ref %}
+        <span style="display: inline-block;" title="External system {{ ticket.get_external_system_display }}">(#{{ ticket.external_ref }})</span>
+        {% endif %}</span>
+    </h3>
 
         <fieldset>
             <label>Assigned</label>

@@ -390,7 +390,7 @@
     border: none;
     color: #fff;
     display: flex;
-    font-size: 14px;
+    font-size: inherit;
     height: 30px;
     line-height: 30px;
     margin: 0px;
@@ -581,70 +581,102 @@
     margin: 0px 5px 0px 5px;
 }
 
+#markdown {
+    font-size: 12pt;
+}
 
-#ticket-content #markdown h1 {
+#markdown p {
+    font-size: inherit;
+}
+
+div#markdown {
+    justify-content: center;
+    display: block;
+    text-align: left;
+    padding: 10px;
+}
+#markdown .codehilite {
+    display: block;
+    width: 100%;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+#markdown h1 {
     background-color: inherit;
     color: inherit;
     font-size: 24px;
     line-height: 24px;
-    padding: 0px;
+    padding: 24px 0px 48px 0px;
     margin: 0px;
     text-align: left;
 
 }
 
 
-#ticket-content #markdown h2 {
+#markdown h2 {
     background-color: inherit;
     color: inherit;
     font-size: 20px;
     line-height: 20px;
-    padding: 0px;
+    padding: 20px 0px 40px 0px;
     margin: 0px;
     text-align: left;
 
 }
 
 
-#ticket-content #markdown h3 {
+#markdown h3 {
     background-color: inherit;
     color: inherit;
     font-size: 18px;
     line-height: 18px;
-    padding: 0px;
+    padding: 18px 0px 36px 0px;
     margin: 0px;
     text-align: left;
 
 }
 
 
-#ticket-content #markdown h4 {
+#markdown h4 {
     background-color: inherit;
     color: #000;
     font-size: 16px;
     line-height: 16px;
-    padding: 0px;
+    padding: 16px 0px 32px 0px;
     margin: 0px;
     text-align: left;
 
 }
 
 
-#ticket-content #markdown h5 {
+#markdown h5 {
     background-color: inherit;
     color: #000;
     font-size: 14px;
     line-height: 14px;
-    padding: 0px;
+    padding: 14px 0px 28px 0px;;
     margin: 0px;
     text-align: left;
 
 }
 
 
-#ticket-content #markdown li {
+#markdown li {
     background-color: inherit;
-    font-size: 14px;
+    font-size: inherit;
+    line-height: 25px;
+    padding: 5px;
+    margin: 0px;
+    text-align: left;
+
+}
+
+
+
+#markdown p:not(div.admonition p){
+    background-color: inherit;
+    font-size: inherit;
     line-height: 25px;
     padding: 0px;
     margin: 0px;
@@ -652,13 +684,91 @@
 
 }
 
-
-#ticket-content #markdown p {
-    background-color: inherit;
-    font-size: 14px;
-    line-height: 25px;
+#markdown div.admonition {
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 10px;
+    font-size: inherit;
+    margin: 10px;
     padding: 0px;
-    margin: 0px;
-    text-align: left;
+}
 
+#markdown div.admonition p.admonition-title {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    font-size: inherit;
+    margin: 0px;
+    padding: 2px 10px 2px 10px;
+    width: 100%;
+}
+
+#markdown div.admonition p:not(p.admonition-title) {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: inherit;
+    padding: 10px;
+    margin: 0px;
+    width: 100%;
+}
+
+#markdown div.admonition.info {
+    background-color: #b6f5dd;
+    border-color:#27ffbe;
+}
+
+#markdown div.admonition.info p.admonition-title {
+    background-color: #1ef59170;
+}
+
+#markdown div.admonition.note {
+    background-color: #b6d3f5;
+    border-color:#278cff;
+}
+
+#markdown div.admonition.note p.admonition-title {
+    background-color: #1e82f570;
+    color: #fff;
+}
+
+#markdown div.admonition.tip {
+    background-color: #bbf5b6;
+    border-color:#39ff27;
+}
+
+#markdown div.admonition.tip p.admonition-title {
+    background-color: #37f51e70;
+    color: #fff;
+}
+
+#markdown div.admonition.warning {
+    background-color: #f5d8b6;
+    border-color:#ffa127;
+}
+
+#markdown div.admonition.warning p.admonition-title {
+    background-color: #f5911e70;
+    color: #fff;
+}
+
+#markdown div.admonition.danger {
+    background-color: #f5b6b6;
+    border-color:#ff2727;
+}
+
+#markdown div.admonition.danger p.admonition-title {
+    background-color: #f51e1e70;
+    color: #fff;
+}
+
+#markdown div.admonition.quote {
+    background-color: #d3d3d3;
+    border-color:#868686;
+}
+
+#markdown div.admonition.quote p.admonition-title {
+    background-color: #81818170;
+    color: #fff;
+}
+#markdown div.admonition.quote p:not(p.admonition-title) {
+    font-style: italic;
 }

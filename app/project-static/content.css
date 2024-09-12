@@ -43,7 +43,7 @@ refactored
 }
 
 
-#content-body form#dynamic-form div {
+#content-body form#dynamic-form div:not(#markdown) {
   align-items: center;
   display: block;
   line-height: inherit;
@@ -199,7 +199,7 @@ main section a:visited {
 
 }
 
-article div {
+article div:not(.codehilite) {
   /* background-color: #ff0000; */
   justify-content: center;
   width: 100%;

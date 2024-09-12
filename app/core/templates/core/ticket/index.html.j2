@@ -32,6 +32,7 @@
         <th>Title</th>
         <th>Status</th>
         <th>Opened By</th>
+        <th>organization</th>
         <th>Created</th>
     </thead>
     {% for ticket in tickets %}
@@ -57,6 +58,7 @@
         </td>
         <td>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|ticket_status %}</td>
         <td>{{ ticket.opened_by }}</td>
+        <td>{{ ticket.organization.name }}</td>
         <td>{{ ticket.created }}</td>
     </tr>
     {% endfor %}

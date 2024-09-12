@@ -106,6 +106,25 @@ class Project(ProjectCommonFieldsName):
 
 
     @property
+    def duration_project(self) -> int:
+
+        duration_project: int = 0
+
+        from core.models.ticket.ticket import Ticket
+
+        tickets = Ticket.objects.filter(
+            project = self.id
+        )
+
+        for ticket in tickets:
+
+            duration_project = duration_project + int(ticket.duration_ticket)
+
+
+        return int(duration_project)
+
+
+    @property
     def percent_completed(self) -> str: # Auto-Calculate
         """ How much of the project is completed.
 

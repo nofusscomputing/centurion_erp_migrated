@@ -5,6 +5,7 @@ from django.db.models import Q
 from app import settings
 
 from core.forms.common import CommonModelForm
+from core.templatetags.markdown import to_duration
 
 from project_management.models.projects import Project
 
@@ -64,7 +65,9 @@ class DetailForm(ProjectForm):
                     "right": [
                         'planned_start_date',
                         'planned_finish_date',
+                        'real_start_date',
                         'real_finish_date',
+                        'duration'
                     ]
                 },
                 {
@@ -118,6 +121,12 @@ class DetailForm(ProjectForm):
             input_formats=settings.DATETIME_FORMAT,
             disabled = True,
             initial = self.instance.modified,
+        )
+
+        self.fields['duration'] = forms.IntegerField(
+            label = 'Duration',
+            disabled = True,
+            initial = to_duration(self.instance.duration_project),
         )
 
         self.fields['resources'] = forms.CharField(

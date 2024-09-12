@@ -4,7 +4,7 @@
 
 {% if comment.get_comment_type_display == 'Action' %}
 
-    <span>{{ comment.markdown_body | safe }}</span>
+    <span>{{ comment.body | markdown | safe }}</span>
 
 {% elif comment.get_comment_type_display == 'Comment' or comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' or comment.get_comment_type_display == 'Solution' %}
 <div id="comment" class="comment-type-default comment-type-{{ comment.get_comment_type_display }}">
@@ -26,15 +26,27 @@
         </div>
         <div id="icons">
             {%if not comment.parent_id %}
-                <a title="Reply with Comment" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=comment">
+                {% if ticket_type == 'project_task'%}
+                <a title="Reply with Comment" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=comment">
                     {% include 'icons/ticket/reply.svg' %}
                 </a>
-                <a title="Reply with Task" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=task">
+                <a title="Reply with Task" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=task">
                     {% include 'icons/ticket/task.svg' %}
                 </a>
-                <a title="Reply with Notification" href="{% url 'Assistance:_ticket_comment_request_reply_add' ticket_type ticket.id comment.id %}?comment_type=notification">
+                <a title="Reply with Notification" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=notification">
                     {% include 'icons/ticket/notification.svg' %}
                 </a>
+                {% else %}
+                <a title="Reply with Comment" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=comment">
+                    {% include 'icons/ticket/reply.svg' %}
+                </a>
+                <a title="Reply with Task" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=task">
+                    {% include 'icons/ticket/task.svg' %}
+                </a>
+                <a title="Reply with Notification" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=notification">
+                    {% include 'icons/ticket/notification.svg' %}
+                </a>
+                {% endif %}
             {% endif %}
             <a title="Edit Comment" href="{% url 'Assistance:_ticket_comment_request_change' ticket_type ticket.id comment.id %}">
             {% include 'icons/ticket/edit.svg' %}
@@ -81,7 +93,7 @@
     <hr />
 
     <div id="markdown" style="margin: 15px; padding: 10px; background-color: #fff;">
-        {{ comment.markdown_body | safe }}
+        {{ comment.body | markdown | safe }}
     </div>
 
     <hr />

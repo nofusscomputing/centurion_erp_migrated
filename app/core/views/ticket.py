@@ -1,5 +1,3 @@
-import markdown
-
 from django.http import Http404
 from django.urls import reverse
 from django.views import generic
@@ -38,12 +36,31 @@ class Add(AddView):
             'type_ticket': self.kwargs['ticket_type'],
         })
 
+        if self.kwargs['ticket_type'] == 'project_task':
+
+            initial.update({
+                'project': int(self.kwargs['project_id'])
+            })
+
         return initial
 
 
     def form_valid(self, form):
-        form.instance.is_global = False
-        return super().form_valid(form)
+
+        created: bool = False
+
+        if form.instance.id is None:
+
+            created = True
+
+        val = super().form_valid(form)
+
+        if created:
+
+            form.instance.subscribed_users.add(form.instance.opened_by)
+
+        return val
+
 
 
     def get_form_kwargs(self):
@@ -60,7 +77,7 @@ class Add(AddView):
 
         elif self.kwargs['ticket_type'] == 'project_task':
 
-            return reverse('Project Management:_project_task_view', args=(self.object.project.id, self.kwargs['ticket_type'],self.object.id,))
+            return reverse('Project Management:_project_task_view', args=(self.kwargs['project_id'], self.kwargs['ticket_type'],self.object.id,))
 
         else:
 
@@ -106,14 +123,35 @@ class Change(ChangeView):
 
 
     def get_initial(self):
-        return {
+
+        initial = super().get_initial()
+
+        initial.update({
             'type_ticket': self.kwargs['ticket_type'],
-        }
+        })
+
+        if self.kwargs['ticket_type'] == 'project_task':
+
+            initial.update({
+                'project': int(self.kwargs['project_id'])
+            })
+
+        return initial
 
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'], self.kwargs['pk'],))
+        if self.kwargs['ticket_type'] == 'request':
+
+            return reverse('Assistance:_ticket_request_view', args=(self.kwargs['ticket_type'],self.object.id,))
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            return reverse('Project Management:_project_task_view', args=(self.kwargs['project_id'], self.kwargs['ticket_type'],self.object.id,))
+
+        else:
+
+            return reverse('ITIM:_ticket_' + str(self.kwargs['ticket_type']).lower() + '_view', args=(self.kwargs['ticket_type'],self.object.id,))
 
 
 class Delete(DeleteView):
@@ -251,12 +289,41 @@ class View(ChangeView):
 
         context['ticket_type'] = self.kwargs['ticket_type']
 
-        context['model_pk'] = self.kwargs['pk']
-        context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
-
         # context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
 
-        context['edit_url'] = reverse('Assistance:_ticket_request_change', args=(self.kwargs['ticket_type'], self.kwargs['pk'])) #/assistance/ticket/{{ ticket_type }}/{{ ticket.id }}
+        url_kwargs = { 'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+
+        if self.kwargs['ticket_type'] == 'request':
+
+            path = 'Assistance:_ticket_request_change'
+
+        elif self.kwargs['ticket_type'] == 'project_task':
+
+            path = 'Project Management:_project_task_change'
+
+            url_kwargs = { 'project_id': self.kwargs['project_id'],'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+
+        else:
+
+            comment_path = 'ITIM:_ticket_comment_' + self.kwargs['ticket_type']
+
+            if self.kwargs['ticket_type'] == 'change':
+
+                path = 'ITIM:_ticket_change_change'
+
+            elif self.kwargs['ticket_type'] == 'incident':
+
+                path = 'ITIM:_ticket_incident_change'
+
+            elif self.kwargs['ticket_type'] == 'problem':
+
+                path = 'ITIM:_ticket_problem_change'
+
+        context['edit_url'] = reverse(
+            path,
+            kwargs = url_kwargs,
+        ) # /assistance/ticket/{{ ticket_type }}/{{ ticket.id }}
+
 
         context['content_title'] = self.object.title
 

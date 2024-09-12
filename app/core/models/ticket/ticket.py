@@ -8,8 +8,6 @@ from access.models import TenancyObject, Team
 
 from core.middleware.get_request import get_request
 
-from .markdown import TicketMarkdown
-
 from project_management.models.projects import Project
 
 
@@ -120,7 +118,6 @@ class TicketCommonFields(models.Model):
 class Ticket(
     TenancyObject,
     TicketCommonFields,
-    TicketMarkdown,
 ):
 
     save_model_history: bool = False
@@ -630,7 +627,6 @@ class Ticket(
         'title',
         'description',
         'opened_by',
-        'project',
         'ticket_type',
         'assigned_users',
         'assigned_teams',
@@ -639,6 +635,7 @@ class Ticket(
     common_itsm_fields: list(str()) = common_fields + [
         'status',
         'urgency',
+        'project',
         'priority',
         'impact',
         'subscribed_teams',
@@ -675,7 +672,13 @@ class Ticket(
 
     ]
 
-    fields_project_task: list(str()) = common_itsm_fields + [
+    fields_project_task: list(str()) = common_fields + [
+        'status',
+        'urgency',
+        'priority',
+        'impact',
+        'subscribed_teams',
+        'subscribed_users',
         'planned_start_date',
         'planned_finish_date',
         'real_start_date',
@@ -728,10 +731,6 @@ class Ticket(
 
         return str(duration)
 
-    @property
-    def markdown_description(self) -> str:
-
-        return self.render_markdown(self.description)
 
     @property
     def related_tickets(self) -> list(dict()):
@@ -750,8 +749,21 @@ class Ticket(
             how_related:str = str(related_ticket.get_how_related_display()).lower()
             ticket_title: str = related_ticket.to_ticket_id.title
 
+            project: int = 0
 
             if related_ticket.to_ticket_id_id == self.id:
+
+                id = related_ticket.from_ticket_id.id
+
+
+                if related_ticket.from_ticket_id.project:
+
+                    project = related_ticket.from_ticket_id.project
+
+
+                if related_ticket.from_ticket_id.status:
+
+                    status:str = related_ticket.from_ticket_id.get_status_display()
 
                 if str(related_ticket.get_how_related_display()).lower() == 'blocks':
 
@@ -763,13 +775,29 @@ class Ticket(
                     how_related = 'blocks'
 
 
+            elif related_ticket.from_ticket_id_id == self.id:
+
+                id = related_ticket.to_ticket_id.id
+
+                if related_ticket.to_ticket_id.project:
+
+                    project = related_ticket.to_ticket_id.project
+
+                if related_ticket.to_ticket_id.status:
+
+                    status:str = related_ticket.to_ticket_id.get_status_display()
+
+
             related_tickets += [
                 {
-                    'id': related_ticket.id,
-                    'type': related_ticket.to_ticket_id.get_ticket_type_display().lower(),
+                    'id': id,
+                    'type': related_ticket.to_ticket_id.get_ticket_type_display().lower().replace(' ', '_'),
                     'title': ticket_title,
                     'how_related': how_related.replace(' ', '_'),
-                    'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg')
+                    'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg'),
+                    'project': project,
+                    'status': str(status).lower(),
+                    'markdown': str('#' + str(id))
                 }
             ]
 
@@ -821,6 +849,10 @@ class Ticket(
             if field == 'status':
 
                 comment_field_value = f"changed {field} to {self.get_status_display()}"
+
+            if field == 'title':
+
+                comment_field_value = f"Title changed ~~{before[field]}~~ to **{after[field]}**"
 
             if field == 'project_id':
 

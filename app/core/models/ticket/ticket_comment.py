@@ -5,14 +5,12 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
-from .markdown import TicketMarkdown
 from .ticket import Ticket
 
 
 
 class TicketComment(
     TenancyObject,
-    TicketMarkdown,
 ):
 
 
@@ -391,11 +389,6 @@ class TicketComment(
 
         return self.user.username + ' ' + self.body + ' on ' +  str(self.created)
 
-
-    @property
-    def markdown_body(self) -> str:
-
-        return self.render_markdown(self.body)
 
     @property
     def comment_template_queryset(self):

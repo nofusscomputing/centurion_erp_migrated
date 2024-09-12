@@ -21,7 +21,7 @@ urlpatterns = [
 
     path('project/<int:project_id>/<str:ticket_type>/<int:ticket_id>/comment/add', ticket_comment.Add.as_view(), name="_project_task_comment_add"),
     path('project/<int:project_id>/<str:ticket_type>/<int:ticket_id>/comment/<int:pk>/edit', ticket_comment.Change.as_view(), name="_project_task_comment_change"),
-    path('project/<int:project_id>/<str:ticket_type>/<int:ticket_id>/comment/<int:parent_id>/add', ticket_comment.Add.as_view(), name="_project_task_comment_add"),
+    path('project/<int:project_id>/<str:ticket_type>/<int:ticket_id>/comment/<int:parent_id>/add', ticket_comment.Add.as_view(), name="_project_task_comment_reply_add"),
 
 
 ]
