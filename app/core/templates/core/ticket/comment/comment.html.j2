@@ -26,6 +26,17 @@
         </div>
         <div id="icons">
             {%if not comment.parent_id %}
+                {% if ticket_type == 'project_task'%}
+                <a title="Reply with Comment" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=comment">
+                    {% include 'icons/ticket/reply.svg' %}
+                </a>
+                <a title="Reply with Task" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=task">
+                    {% include 'icons/ticket/task.svg' %}
+                </a>
+                <a title="Reply with Notification" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=notification">
+                    {% include 'icons/ticket/notification.svg' %}
+                </a>
+                {% else %}
                 <a title="Reply with Comment" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=comment">
                     {% include 'icons/ticket/reply.svg' %}
                 </a>
@@ -35,6 +46,7 @@
                 <a title="Reply with Notification" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=notification">
                     {% include 'icons/ticket/notification.svg' %}
                 </a>
+                {% endif %}
             {% endif %}
             <a title="Edit Comment" href="{% url 'Assistance:_ticket_comment_request_change' ticket_type ticket.id comment.id %}">
             {% include 'icons/ticket/edit.svg' %}
