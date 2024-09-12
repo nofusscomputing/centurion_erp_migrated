@@ -8,8 +8,6 @@ from access.models import TenancyObject, Team
 
 from core.middleware.get_request import get_request
 
-from .markdown import TicketMarkdown
-
 from project_management.models.projects import Project
 
 
@@ -120,7 +118,6 @@ class TicketCommonFields(models.Model):
 class Ticket(
     TenancyObject,
     TicketCommonFields,
-    TicketMarkdown,
 ):
 
     save_model_history: bool = False
@@ -734,10 +731,6 @@ class Ticket(
 
         return str(duration)
 
-    @property
-    def markdown_description(self) -> str:
-
-        return self.render_markdown(self.description)
 
     @property
     def related_tickets(self) -> list(dict()):
@@ -804,6 +797,7 @@ class Ticket(
                     'icon_filename': str('icons/ticket/ticket_' + how_related.replace(' ', '_') + '.svg'),
                     'project': project,
                     'status': str(status).lower(),
+                    'markdown': str('#' + str(id))
                 }
             ]
 

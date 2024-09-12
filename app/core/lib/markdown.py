@@ -12,7 +12,7 @@ from django.template.loader import render_to_string
 
 
 
-class TicketMarkdown:
+class Markdown:
     """Ticket and Comment markdown functions
     
     Intended to be used for all areas of a tickets, projects and comments.

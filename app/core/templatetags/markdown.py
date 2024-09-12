@@ -1,7 +1,7 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
-from core.models.ticket.markdown import TicketMarkdown
+from core.lib.markdown import Markdown
 
 register = template.Library()
 
@@ -13,9 +13,10 @@ def markdown(value):
     if not value:
         value = None
 
-    markdown = TicketMarkdown()
+    markdown = Markdown()
 
     return markdown.render_markdown(value)
+
 
 @register.filter()
 @stringfilter
