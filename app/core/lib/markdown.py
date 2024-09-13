@@ -49,7 +49,7 @@ class Markdown:
 
         md = (
             MarkdownIt(
-                config = "commonmark",
+                config = "js-default",
                 options_update={
                     'linkify': True,
                     'highlight': self.highlight_func,
