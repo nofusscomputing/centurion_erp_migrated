@@ -37,6 +37,7 @@ class TicketValidation(
     import_fields: list = [
         'assigned_users',
         'assigned_teams',
+        'category',
         'created',
         'date_closed',
         'external_ref',
