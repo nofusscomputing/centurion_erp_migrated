@@ -5,6 +5,9 @@ docs_dir: 'docs'
 repo_name: Centurion ERP
 repo_url: https://github.com/nofusscomputing/centurion_erp
 edit_uri: '/edit/development/docs/'
+theme: 
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   mkdocstrings:
