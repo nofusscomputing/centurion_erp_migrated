@@ -1,0 +1,29 @@
+{% extends 'base.html.j2' %}
+
+{% block content %}
+<input type="button" value="New Category" onclick="window.location='{% url 'Settings:_ticket_category_add' %}';">
+
+<table style="max-width: 100%;">
+    <thead>
+        <th>Name</th>
+        <th>Organization</th>
+        <th>created</th>
+        <th>modified</th>
+        <th>&nbsp;</th>
+    </thead>
+    {% if items %}
+    {% for category in items %}
+    <tr>
+        <td><a href="{% url 'Settings:_ticket_category_view' pk=category.id %}">{{ category.name }}</a></td>
+        <td>{{ category.organization }}</td>
+        <td>{{ category.created }}</td>
+        <td>{{ category.modified }}</td>
+        <td>&nbsp;</td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr><td colspan="5">Nothing Found</td></tr>
+    {% endif%}
+</table>
+
+{% endblock %}

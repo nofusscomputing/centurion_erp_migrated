@@ -2,7 +2,7 @@ from django.urls import path
 
 from assistance.views import knowledge_base_category
 
-from core.views import celery_log
+from core.views import celery_log, ticket_categories
 
 from settings.views import app_settings, home, device_models, device_types, external_link, manufacturer, software_categories
 
@@ -64,6 +64,12 @@ urlpatterns = [
     path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),
     path("software_category/<int:pk>/edit", software_category.Change.as_view(), name="_software_category_change"),
     path("software_category/<int:pk>/delete", software_category.Delete.as_view(), name="_software_category_delete"),
+
+    path("ticket_categories", ticket_categories.Index.as_view(), name="_ticket_categories"),
+    path("ticket_categories/<int:pk>", ticket_categories.View.as_view(), name="_ticket_category_view"),
+    path("ticket_categories/add", ticket_categories.Add.as_view(), name="_ticket_category_add"),
+    path("ticket_categories/<int:pk>/edit", ticket_categories.Change.as_view(), name="_ticket_category_change"),
+    path("ticket_categories/<int:pk>/delete", ticket_categories.Delete.as_view(), name="_ticket_category_delete"),
 
     path("task_results", celery_log.Index.as_view(), name="_task_results"),
     path("task_result/<int:pk>", celery_log.View.as_view(), name="_task_result_view"),
