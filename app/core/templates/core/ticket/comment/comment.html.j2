@@ -4,7 +4,7 @@
 
 {% if comment.get_comment_type_display == 'Action' %}
 
-    <span>{{ comment.body | markdown | safe }}</span>
+    <div style="padding: 0px; margin: 0px;"><span style="display: inline-block;">{{ comment.user.username }}&nbsp;</span><span style="display: inline-block;">{{ comment.body | markdown | safe }}</span></div>
 
 {% elif comment.get_comment_type_display == 'Comment' or comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' or comment.get_comment_type_display == 'Solution' %}
 <div id="comment" class="comment-type-default comment-type-{{ comment.get_comment_type_display }}">
