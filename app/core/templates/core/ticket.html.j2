@@ -122,6 +122,7 @@
             <label>Labels</label>
             <span class="text">val</span>
         </fieldset>
+        {% if ticket.category %}
         <fieldset>
             <label>Category</label>
             <span class="text">
@@ -130,6 +131,7 @@
                 </a>
             </span>
         </fieldset>
+        {% endif %}
         <fieldset>
             <label>Project</label>
             <span class="text">
