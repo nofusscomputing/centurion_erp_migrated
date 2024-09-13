@@ -117,7 +117,9 @@ class Index(IndexView):
 
     model = Project
 
-    permission_required = 'project_management.view_project'
+    permission_required = [
+        'project_management.view_project',
+    ]
 
     template_name = 'project_management/project_index.html.j2'
 
@@ -151,8 +153,7 @@ class View(ChangeView):
     model = Project
 
     permission_required = [
-        'itam.view_device',
-        'itam.change_device'
+        'project_management.view_project'
     ]
 
     template_name = 'project_management/project.html.j2'
