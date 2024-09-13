@@ -14,8 +14,7 @@ from app.tests.abstract.models import PrimaryModel, ModelAdd, ModelChange, Model
 # ):
 class TicketCategoryViews(
     TestCase,
-    ModelAdd,
-    ModelChange,
+    PrimaryModel
 ):
 
     add_module = 'core.views.ticket_categories'
