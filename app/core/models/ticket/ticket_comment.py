@@ -5,12 +5,15 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core.lib.slash_commands import SlashCommands
+
 from .ticket import Ticket
 from .ticket_comment_category import TicketCommentCategory
 
 
 
 class TicketComment(
+    SlashCommands,
     TenancyObject,
 ):
 
@@ -412,6 +415,8 @@ class TicketComment(
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         self.organization = self.ticket.organization
+
+        self.body = self.slash_command(self.body)
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 

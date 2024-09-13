@@ -6,6 +6,8 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core.lib.slash_commands import SlashCommands
+
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory
 
@@ -117,6 +119,7 @@ class TicketCommonFields(models.Model):
 
 
 class Ticket(
+    SlashCommands,
     TenancyObject,
     TicketCommonFields,
 ):
@@ -818,6 +821,14 @@ class Ticket(
             pass
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        description = self.slash_command(self.description)
+
+        if description != self.description:
+
+            self.description = description
+
+            self.save()
 
         after = self.__dict__.copy()
 
