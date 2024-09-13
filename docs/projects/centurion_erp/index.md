@@ -66,6 +66,7 @@ Centurion ERP contains the following modules:
 
 - [Service Management](./user/itim/service.md)
 
+
 ## Documentation
 
 Documentation is broken down into three areas, they are:
@@ -81,7 +82,7 @@ Specific features for a module can be found on the module's documentation un the
 
 ## Development
 
-It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Github](https://github.com/nofusscomputing/centurion_erp/actions/workflows/ci.yaml). 
+It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Github](https://github.com/nofusscomputing/centurion_erp/actions/workflows/ci.yaml).
 
 !!! info
     If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
