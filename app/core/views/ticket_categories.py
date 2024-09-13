@@ -71,7 +71,7 @@ class Delete(DeleteView):
     model = TicketCategory
 
     permission_required = [
-        'itim.delete_ticketcategory',
+        'core.delete_ticketcategory',
     ]
 
 
