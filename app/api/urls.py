@@ -47,7 +47,7 @@ router.register('project_management/projects', projects.View, basename='_api_pro
 router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks', project_task.View, basename='_api_project_tasks')
 router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_project_tasks_comments')
 
-router.register('settings/ticket_caategories', ticket_categories.View, basename='_api_ticket_category')
+router.register('settings/ticket_categories', ticket_categories.View, basename='_api_ticket_category')
 
 router.register('software', software.SoftwareViewSet, basename='software')
 
