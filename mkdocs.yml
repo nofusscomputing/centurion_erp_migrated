@@ -196,6 +196,8 @@ nav:
 
         - projects/centurion_erp/user/core/ticketcategory.md
 
+        - projects/centurion_erp/user/core/ticket_comment_category.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md

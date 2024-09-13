@@ -5,20 +5,20 @@ from django.urls import reverse
 from app import settings
 
 from core.forms.common import CommonModelForm
-from core.models.ticket.ticket_category import TicketCategory
+from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 
 
-class TicketCategoryForm(CommonModelForm):
+class TicketCommentCategoryForm(CommonModelForm):
 
 
     class Meta:
 
         fields = '__all__'
 
-        model = TicketCategory
+        model = TicketCommentCategory
 
-    prefix = 'ticket_category'
+    prefix = 'ticket_comment_category'
 
     def __init__(self, *args, **kwargs):
 
@@ -47,7 +47,7 @@ class TicketCategoryForm(CommonModelForm):
 
 
 
-class DetailForm(TicketCategoryForm):
+class DetailForm(TicketCommentCategoryForm):
 
 
     tabs: dict = {
@@ -71,15 +71,14 @@ class DetailForm(TicketCategoryForm):
                 },
                 {
                     "layout": "double",
-                    "name": "Ticket Types",
+                    "name": "Comment Types",
                     "left": [
-                        'change',
-                        'problem',
-                        'request'
+                        'comment',
+                        'solution'
                     ],
                     "right": [
-                        'incident',
-                        'project_task'
+                        'notification',
+                        'task'
                     ]
                 },
             ]
@@ -113,8 +112,8 @@ class DetailForm(TicketCategoryForm):
 
 
         self.tabs['details'].update({
-            "edit_url": reverse('Settings:_ticket_category_change', kwargs={'pk': self.instance.pk})
+            "edit_url": reverse('Settings:_ticket_comment_category_change', kwargs={'pk': self.instance.pk})
         })
 
-        self.url_index_view = reverse('Settings:_ticket_categories')
+        self.url_index_view = reverse('Settings:_ticket_comment_categories')
 
