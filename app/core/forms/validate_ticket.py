@@ -56,6 +56,7 @@ class TicketValidation(
     ]
 
     triage_fields: list = [
+        'category',
         'assigned_users',
         'assigned_teams',
         'status',

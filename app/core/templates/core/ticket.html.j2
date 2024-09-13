@@ -123,6 +123,14 @@
             <span class="text">val</span>
         </fieldset>
         <fieldset>
+            <label>Category</label>
+            <span class="text">
+                <a href="{% url 'Settings:_ticket_category_view' pk=ticket.category.id %}">
+                {{ ticket.category }}
+                </a>
+            </span>
+        </fieldset>
+        <fieldset>
             <label>Project</label>
             <span class="text">
                 {% if ticket.project %}

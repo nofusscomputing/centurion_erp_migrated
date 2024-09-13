@@ -64,6 +64,10 @@ class TicketForm(
 
             self.fields['ticket_type'].initial = '1'
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                request=True
+            )
+
         elif kwargs['initial']['type_ticket'] == 'incident':
 
             ticket_type = self.Meta.model.fields_itsm_incident
@@ -71,6 +75,10 @@ class TicketForm(
             self.fields['status'].choices = self.Meta.model.TicketStatus.Incident
 
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.INCIDENT.value
+
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                incident=True
+            )
 
         elif kwargs['initial']['type_ticket'] == 'problem':
 
@@ -80,6 +88,9 @@ class TicketForm(
 
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROBLEM.value
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                problem=True
+            )
         elif kwargs['initial']['type_ticket'] == 'change':
 
             ticket_type = self.Meta.model.fields_itsm_change
@@ -88,6 +99,9 @@ class TicketForm(
 
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.CHANGE.value
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                change=True
+            )
         elif kwargs['initial']['type_ticket'] == 'issue':
 
             ticket_type = self.Meta.model.fields_git_issue
@@ -117,7 +131,9 @@ class TicketForm(
 
             self.fields['ticket_type'].initial = self.Meta.model.TicketType.PROJECT_TASK.value
 
-        # self.fields['status'].widget = self.fields['status'].hidden_widget()
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                project_task=True
+            )
 
         if kwargs['user'].is_superuser:
 
