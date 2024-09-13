@@ -35,8 +35,10 @@ class TicketCategorySerializer(
 
         if instance is not None:
 
-            self.fields.fields['parent'].queryset = self.fields.fields['parent'].queryset.exclude(
-                id=instance.id
-            )
+            if hasattr(instance, 'id'):
+
+                self.fields.fields['parent'].queryset = self.fields.fields['parent'].queryset.exclude(
+                    id=instance.id
+                )
 
         super().__init__(instance=instance, data=data, **kwargs)
