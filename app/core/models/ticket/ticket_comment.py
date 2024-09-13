@@ -6,6 +6,7 @@ from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
 from .ticket import Ticket
+from .ticket_comment_category import TicketCommentCategory
 
 
 
@@ -186,14 +187,15 @@ class TicketComment(
         verbose_name = 'Duration',
     )
 
-
-    # category = models.CharField(
-    #     blank = False,
-    #     help_text = "Category of the Ticket",
-    #     max_length = 50,
-    #     unique = True,
-    #     verbose_name = 'Category',
-    # )
+    category = models.ForeignKey(
+        TicketCommentCategory,
+        blank= True,
+        default = None,
+        help_text = 'Category of the comment',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Category',
+    )
 
     template = models.ForeignKey(
         'self',
@@ -201,7 +203,7 @@ class TicketComment(
         default = None,
         help_text = 'Comment Template to use',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.SET_NULL,
         related_name = 'comment_template',
         verbose_name = 'Template',
     )

@@ -80,17 +80,33 @@ class CommentForm(
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                task = True
+            )
+
         elif self._comment_type == 'comment':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
+
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                comment = True
+            )
 
         elif self._comment_type == 'solution':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                solution = True
+            )
+
         elif self._comment_type == 'notification':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
+
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                notification = True
+            )
 
 
         allowed_fields = self.fields_allowed

@@ -55,6 +55,7 @@ class TicketCommentValidation(
         'external_system',
         'comment_type',
         'body',
+        'category',
         'created',
         'modified',
         'private',
@@ -74,6 +75,7 @@ class TicketCommentValidation(
     ]
 
     triage_fields: list = [
+        'category',
         'body',
         'private',
         'duration',

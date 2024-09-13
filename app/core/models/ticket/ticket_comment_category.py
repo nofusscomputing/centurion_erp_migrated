@@ -70,7 +70,7 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
         default = True,
         help_text = 'Use category for standard comment',
         null = False,
-        verbose_name = 'Change Comment',
+        verbose_name = 'Comment',
     )
 
     notification = models.BooleanField(
@@ -78,7 +78,7 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
         default = True,
         help_text = 'Use category for notification comment',
         null = False,
-        verbose_name = 'Incident Comment',
+        verbose_name = 'Notification Comment',
     )
 
     solution = models.BooleanField(
@@ -86,7 +86,7 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
         default = True,
         help_text = 'Use category for solution comment',
         null = False,
-        verbose_name = 'Problem Comment',
+        verbose_name = 'Solution Comment',
     )
 
     task = models.BooleanField(
@@ -94,7 +94,7 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
         default = True,
         help_text = 'Use category for task comment',
         null = False,
-        verbose_name = 'Project Comment',
+        verbose_name = 'Task Comment',
     )
 
 
