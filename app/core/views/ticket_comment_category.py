@@ -15,7 +15,7 @@ class Add(AddView):
     model = TicketCommentCategory
 
     permission_required = [
-        'core.add_ticketcategory',
+        'core.add_ticketcommentcategory',
     ]
 
 
@@ -47,7 +47,7 @@ class Change(ChangeView):
     model = TicketCommentCategory
 
     permission_required = [
-        'core.change_ticketcategory',
+        'core.change_ticketcommentcategory',
     ]
 
 
@@ -71,7 +71,7 @@ class Delete(DeleteView):
     model = TicketCommentCategory
 
     permission_required = [
-        'core.delete_ticketcategory',
+        'core.delete_ticketcommentcategory',
     ]
 
 
@@ -99,7 +99,7 @@ class Index(IndexView):
     paginate_by = 10
 
     permission_required = [
-        'core.view_ticketcategory'
+        'core.view_ticketcommentcategory'
     ]
 
     template_name = 'core/index_ticket_comment_categories.html.j2'
@@ -124,7 +124,7 @@ class View(ChangeView):
     model = TicketCommentCategory
 
     permission_required = [
-        'core.view_ticketcategory',
+        'core.view_ticketcommentcategory',
     ]
 
     template_name = 'core/ticket_comment_category.html.j2'
