@@ -115,6 +115,7 @@ class TicketSerializer(
             'id',
             'assigned_teams',
             'assigned_users',
+            'category',
             'created',
             'modified',
             'status',

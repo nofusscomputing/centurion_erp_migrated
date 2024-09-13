@@ -676,6 +676,7 @@ class Ticket(
     ]
 
     fields_project_task: list(str()) = common_fields + [
+        'category',
         'status',
         'urgency',
         'priority',
