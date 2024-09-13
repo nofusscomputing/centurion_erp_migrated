@@ -1,6 +1,6 @@
 import re
 
-from core.lib.slash_commands.duration import Duration
+from .duration import Duration
 
 
 class SlashCommands(

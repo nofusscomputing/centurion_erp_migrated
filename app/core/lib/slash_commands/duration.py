@@ -2,25 +2,24 @@ import re
 
 
 class Duration:
-    """Duration Slash Command
+    # This summary is used for the user documentation
+    """The command keyword is `spend` and you can also use `spent`. The formatting for the time
+after the command, is `<digit>` then either `h`, `m`, `s` for hours, minutes and seconds respectively.
 
-    The command keyword is `spend` and you can also use `spent`. The formatting for the time
-    after the command, is <digit> then either `h`, `m`, `s` for hours, minutes and seconds respectively.
-    
-    Valid commands are as follows:
+Valid commands are as follows:
 
-    - /spend 1h1ms
+- /spend 1h1ms
 
-    - /spend 1h 1m 1s
+- /spend 1h 1m 1s
 
-    For this command to process the following conditions must be met:
+For this command to process the following conditions must be met:
 
-    - There is either a `<new line>` (`\n`) or a `<space>` char immediatly before the slash `/`
+- There is either a `<new line>` (`\\n`) or a `<space>` char immediatly before the slash `/`
 
-    - There is a `<space>` char after the command keyword, i.e. `/spend<space>1h`
+- There is a `<space>` char after the command keyword, i.e. `/spend<space>1h`
 
-    - _Optional_ `<space>` char between the time blocks.
-    """
+- _Optional_ `<space>` char between the time blocks.
+"""
 
 
     time_spent: str = r'[\s|\n]\/(?P<command>[spend|spent]+)\s(?P<time>(?P<hours>\d+h)?\s?(?P<minutes>[\d]{1,2}m)?\s?(?P<seconds>\d+[s])?)[\s|\n]?'
