@@ -1,10 +1,12 @@
 import re
 
 from .duration import Duration
+from .related_ticket import CommandRelatedTicket
 
 
 class SlashCommands(
-    Duration
+    Duration,
+    CommandRelatedTicket
 ):
     """Slash Commands Base Class
     
@@ -13,6 +15,8 @@ class SlashCommands(
     - Ticket
     
     - TicketComment
+
+    Testing of regex can be done at https://pythex.org/
     """
 
 
@@ -33,5 +37,7 @@ class SlashCommands(
         """
 
         markdown = re.sub(self.time_spent, self.command_duration, markdown)
+
+        markdown = re.sub(self.related_ticket, self.command_related_ticket, markdown)
 
         return markdown

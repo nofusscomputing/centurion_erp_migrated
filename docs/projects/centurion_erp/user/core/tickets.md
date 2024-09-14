@@ -47,13 +47,25 @@ Comment types are:
 
 Slash commands are a quick action that is specified after a slash command. As the name implies, the command starts with a slash `/`. The following slash commands are available:
 
+- Related `/blocked_by`, `/blocks` and `/relate`
+
 - Time Spent `/spend`, `/spent`
 
 
 ### Time Spent
 
-
 ::: app.core.lib.slash_commands.Duration
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true
+
+
+### Related Tickets
+
+::: app.core.lib.slash_commands.CommandRelatedTicket
     options:
         inherited_members: false
         members: []
