@@ -61,30 +61,36 @@ For this command to process the following conditions must be met:
 
             duration += int(seconds[:-1])
 
-        if duration > 0:
+        if duration == 0:
 
-            if str(self._meta.verbose_name).lower() == 'ticket':
+            #ToDo: Add logging that the slash command could not be processed.
 
-                from core.models.ticket.ticket_comment import TicketComment
+            return str(match.string[match.start():match.end()])
 
-                comment_text = f'added {time} of time spent'
 
-                TicketComment.objects.create(
-                    ticket = self,
-                    comment_type = TicketComment.CommentType.ACTION,
-                    body = comment_text,
-                    duration = duration,
-                    user = self.opened_by,
-                )
+        if str(self._meta.verbose_name).lower() == 'ticket':
 
-            if str(self._meta.verbose_name).lower() == 'comment':
+            from core.models.ticket.ticket_comment import TicketComment
 
-                self.duration = duration
+            comment_text = f'added {time} of time spent'
+
+            TicketComment.objects.create(
+                ticket = self,
+                comment_type = TicketComment.CommentType.ACTION,
+                body = comment_text,
+                duration = duration,
+                user = self.opened_by,
+            )
+
+        elif str(self._meta.verbose_name).lower() == 'comment':
+
+            self.duration = duration
 
         else:
 
             #ToDo: Add logging that the slash command could not be processed.
 
             return str(match.string[match.start():match.end()])
+
 
         return None
