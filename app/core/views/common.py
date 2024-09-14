@@ -52,6 +52,15 @@ class AddView(View, generic.CreateView):
             'organization': UserSettings.objects.get(user = self.request.user).default_organization
         }
 
+    
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'New ' + self.model._meta.verbose_name
+
+        return context
+
 
 class ChangeView(View, generic.UpdateView):
 
@@ -209,3 +218,12 @@ class IndexView(View, generic.ListView):
             raise MissingAttribute('Model is required for view')
 
         super().__init__(**kwargs)
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = self.model._meta.verbose_name_plural
+
+        return context

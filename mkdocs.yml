@@ -5,6 +5,9 @@ docs_dir: 'docs'
 repo_name: Centurion ERP
 repo_url: https://github.com/nofusscomputing/centurion_erp
 edit_uri: '/edit/development/docs/'
+theme: 
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   mkdocstrings:
@@ -193,6 +196,10 @@ nav:
         - projects/centurion_erp/user/core/markdown.md
 
         - projects/centurion_erp/user/core/tickets.md
+
+        - projects/centurion_erp/user/core/ticketcategory.md
+
+        - projects/centurion_erp/user/core/ticket_comment_category.md
 
       - ITAM:
 

@@ -28,14 +28,13 @@ Whilst there are many Enterprise Rescource Planning (ERP) applications, Centurio
 
 Centurion ERP contains the following modules:
 
+- Change Management
+
+- [Cluster Management](./user/itim/cluster.md)
+
 - [Companion Ansible Collection](../ansible/collections/centurion/index.md)
 
 - [Configuration Management](./user/config_management/index.md)
-
-- [IT Asset Management (ITAM)](./user/itam/index.md)
-
-- [Knowledge Base](./user/assistance/knowledge_base.md)
-
 
 - **Core Features:**
 
@@ -50,6 +49,22 @@ Centurion ERP contains the following modules:
     - [Multi-Tenant](./development/api/models/access_organization_permission_checking.md#permission-checking)
 
     - [Single Sign-On {SSO}](./user/configuration.md#single-sign-on)
+
+- Incident Management
+
+- [IT Asset Management (ITAM)](./user/itam/index.md)
+
+- **Knowledge Management:**
+
+    - [Knowledge Base](./user/assistance/knowledge_base.md)
+
+- Problem Management
+
+- [Project Management](./user/project_management/index.md)
+
+- Request Management
+
+- [Service Management](./user/itim/service.md)
 
 
 ## Documentation
@@ -67,7 +82,7 @@ Specific features for a module can be found on the module's documentation un the
 
 ## Development
 
-It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Gitlab](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/merge_requests) on each Merge Request. You will find a link to the last report conducted as part of that merge request just below the Merge Request's description.
+It's important to us that Centurion ERP remaining stable. To assist with this we do test Centurion during it's development cycle. Testing reports are available and can be viewed from [Github](https://github.com/nofusscomputing/centurion_erp/actions/workflows/ci.yaml).
 
 !!! info
     If you find any test that is less than sufficient, or does not exist; please let us know. If you know a better way of doing the test, even better. We welcome your contribution/feedback.
@@ -75,7 +90,7 @@ It's important to us that Centurion ERP remaining stable. To assist with this we
 
 ## Roadmap / Planned Features
 
-Below is a list of modules/features we intend to add to Centurion. To find out what we are working on now please view the [Milestones](https://gitlab.com/nofusscomputing/projects/centurion_erp/-/milestones) on Gitlab.
+Below is a list of modules/features we intend to add to Centurion. To find out what we are working on now please view the [Milestones](https://github.com/nofusscomputing/centurion_erp/milestones) on Github.
 
 - **Planned Modules:**
 
@@ -84,10 +99,6 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
         General Ledger - _[see #116](https://github.com/nofusscomputing/centurion_erp/issues/116)_
 
     - Asset Management _[see #89](https://github.com/nofusscomputing/centurion_erp/issues/88)_
-
-    - Change Management _[see #90](https://github.com/nofusscomputing/centurion_erp/issues/90)_
-
-    - Config Management
 
     - Core
 
@@ -103,19 +114,13 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
     - Human Resource Management _[see #92](https://github.com/nofusscomputing/centurion_erp/issues/92)_
 
-    - Incident Management _[see #93](https://github.com/nofusscomputing/centurion_erp/issues/93)_
-
     - IT Asset Management (ITAM)
 
         - Licence Management _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_
 
     - IT Infrastructure Management (ITIM) _[see #61](https://github.com/nofusscomputing/centurion_erp/issues/61)_
 
-        - Cluster Management _[see #71](https://github.com/nofusscomputing/centurion_erp/issues/71)_
-
         - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
-
-        - Service Management _[see #19](https://github.com/nofusscomputing/centurion_erp/issues/19)_
 
         - Software Package Management _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_
 
@@ -130,12 +135,6 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
     - Order Management _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_
 
         - Supplier Management _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_
-
-    - Project Management _[see #14](https://github.com/nofusscomputing/centurion_erp/issues/14)_
-
-    - Problem Management  _[see #95](https://github.com/nofusscomputing/centurion_erp/issues/95)_
-
-    - Request Management _[see #96](https://github.com/nofusscomputing/centurion_erp/issues/96)_
 
 
 - **Planned Integrations:**

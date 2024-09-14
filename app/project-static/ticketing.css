@@ -221,10 +221,18 @@
 }
 
 
-#ticket-comments li  {
+#ticket-comments li:not(#Action)  {
     line-height: 30px;
     margin: 0px;
     margin-bottom: 30px;
+    padding-left: 10px;
+}
+
+#ticket-comments li#Action  {
+    line-height: 30px;
+    margin: 0px;
+    margin-bottom: -10px;
+    margin-top: -20px;
     padding-left: 10px;
 }
 

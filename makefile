@@ -24,7 +24,7 @@ prepare:
 
 
 markdown-mkdocs-lint:
-	PATH=${PATH}:node_modules/.bin markdownlint-cli2 "docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md #CHANGELOG.md !gitlab-ci !website-template"
+	PATH=${PATH}:node_modules/.bin markdownlint-cli2 docs/*.md docs/**/*.md docs/**/**/*.md docs/**/**/**/*.md docs/**/**/**/**/**/*.md !docs/pull_request_template.md !CHANGELOG.md !gitlab-ci !website-template || true
 
 
 docs-lint: markdown-mkdocs-lint

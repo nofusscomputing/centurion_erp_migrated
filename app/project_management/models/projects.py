@@ -41,10 +41,12 @@ class Project(ProjectCommonFieldsName):
     # project_type
 
     code = models.CharField(
-        blank = False,
+        blank = True,
         help_text = 'Project Code',
         max_length = 25,
+        null = True,
         unique = True,
+        verbose_name = 'Project Code',
     )
 
     planned_start_date = models.DateTimeField(

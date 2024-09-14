@@ -9,6 +9,71 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 The ticketing system within Centurion ERP is common to all ticket types. The differences are primarily fields and the value of fields.
 
 
+## Features
+
+- Commenting
+
+- Related Tickets
+
+- Slash commands
+
+- Ticket Types:
+
+    - Changes
+
+    - Incidents
+
+    - Problems
+
+    - Request
+
+    - Project Task
+
+
+## Commenting
+
+Comment types are:
+
+- Standard _All Ticket types_
+
+- Notification _Change, Incident, Problem, Project Tasks and Request tickets._
+
+- Solution _Change, Incident, Problem, Project Tasks and Request tickets._
+
+- Task _Change, Incident, Problem, Project Tasks and Request tickets._
+
+
+## Slash Commands
+
+Slash commands are a quick action that is specified after a slash command. As the name implies, the command starts with a slash `/`. The following slash commands are available:
+
+- Related `/blocked_by`, `/blocks` and `/relate`
+
+- Time Spent `/spend`, `/spent`
+
+
+### Time Spent
+
+::: app.core.lib.slash_commands.Duration
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true
+
+
+### Related Tickets
+
+::: app.core.lib.slash_commands.CommandRelatedTicket
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true
+
+
 ## Ticket Types
 
 ::: app.core.models.ticket.ticket.Ticket.TicketType

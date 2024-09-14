@@ -18,7 +18,7 @@
 
         {% for comment in ticket.comments %}
 
-            <li>
+            <li {% if comment.get_comment_type_display == 'Action' %}id="{{ comment.get_comment_type_display }}"{% endif %}>
                 {% include 'core/ticket/comment/comment.html.j2' %}
 
                 {% if comment.threads %}

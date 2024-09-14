@@ -5,11 +5,15 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core.lib.slash_commands import SlashCommands
+
 from .ticket import Ticket
+from .ticket_comment_category import TicketCommentCategory
 
 
 
 class TicketComment(
+    SlashCommands,
     TenancyObject,
 ):
 
@@ -186,14 +190,15 @@ class TicketComment(
         verbose_name = 'Duration',
     )
 
-
-    # category = models.CharField(
-    #     blank = False,
-    #     help_text = "Category of the Ticket",
-    #     max_length = 50,
-    #     unique = True,
-    #     verbose_name = 'Category',
-    # )
+    category = models.ForeignKey(
+        TicketCommentCategory,
+        blank= True,
+        default = None,
+        help_text = 'Category of the comment',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Category',
+    )
 
     template = models.ForeignKey(
         'self',
@@ -201,7 +206,7 @@ class TicketComment(
         default = None,
         help_text = 'Comment Template to use',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.SET_NULL,
         related_name = 'comment_template',
         verbose_name = 'Template',
     )
@@ -410,6 +415,8 @@ class TicketComment(
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         self.organization = self.ticket.organization
+
+        self.body = self.slash_command(self.body)
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 

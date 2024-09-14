@@ -6,7 +6,10 @@ from django.forms import ValidationError
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
+from core.lib.slash_commands import SlashCommands
+
 from core.middleware.get_request import get_request
+from core.models.ticket.ticket_category import TicketCategory
 
 from project_management.models.projects import Project
 
@@ -116,6 +119,7 @@ class TicketCommonFields(models.Model):
 
 
 class Ticket(
+    SlashCommands,
     TenancyObject,
     TicketCommonFields,
 ):
@@ -433,13 +437,14 @@ class Ticket(
         verbose_name = 'Status',
     ) 
 
-    # category = models.CharField(
-    #     blank = False,
-    #     help_text = "Category of the Ticket",
-    #     max_length = 50,
-    #     unique = True,
-    #     verbose_name = 'Category',
-    # )
+    category = models.ForeignKey(
+        TicketCategory,
+        blank= True,
+        help_text = 'Category for this ticket',
+        null = True,
+        on_delete = models.SET_NULL,
+        verbose_name = 'Category',
+    )
 
     title = models.CharField(
         blank = False,
@@ -634,6 +639,7 @@ class Ticket(
 
     common_itsm_fields: list(str()) = common_fields + [
         'status',
+        'category'
         'urgency',
         'project',
         'priority',
@@ -673,6 +679,7 @@ class Ticket(
     ]
 
     fields_project_task: list(str()) = common_fields + [
+        'category',
         'status',
         'urgency',
         'priority',
@@ -814,6 +821,14 @@ class Ticket(
             pass
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
+
+        description = self.slash_command(self.description)
+
+        if description != self.description:
+
+            self.description = description
+
+            self.save()
 
         after = self.__dict__.copy()
 

@@ -61,6 +61,8 @@ class CommentForm(
 
         self.fields['body'].widget.attrs = {'style': "height: 800px; width: 900px"}
 
+        self.fields['duration'].widget = self.fields['duration'].hidden_widget()
+
         self.fields['user'].initial = kwargs['user'].pk
         self.fields['user'].widget = self.fields['user'].hidden_widget()
 
@@ -69,9 +71,15 @@ class CommentForm(
         self.fields['parent'].widget = self.fields['parent'].hidden_widget()
         self.fields['comment_type'].widget = self.fields['comment_type'].hidden_widget()
 
-        if not self._has_import_permission or not self._has_triage_permission:
+        if not( self._has_import_permission or self._has_triage_permission or request.user.is_superuser ):
+
             self.fields['source'].initial = TicketComment.CommentSource.HELPDESK
+
             self.fields['source'].widget = self.fields['source'].hidden_widget()
+
+        else:
+
+            self.fields['source'].initial = TicketComment.CommentSource.DIRECT
 
 
 
@@ -80,17 +88,33 @@ class CommentForm(
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.TASK
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                task = True
+            )
+
         elif self._comment_type == 'comment':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.COMMENT
+
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                comment = True
+            )
 
         elif self._comment_type == 'solution':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.SOLUTION
 
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                solution = True
+            )
+
         elif self._comment_type == 'notification':
 
             self.fields['comment_type'].initial = self.Meta.model.CommentType.NOTIFICATION
+
+            self.fields['category'].queryset = self.fields['category'].queryset.filter(
+                notification = True
+            )
 
 
         allowed_fields = self.fields_allowed

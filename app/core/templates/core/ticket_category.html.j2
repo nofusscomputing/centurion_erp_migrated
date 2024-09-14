@@ -1,0 +1,12 @@
+{% extends 'detail.html.j2' %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+{% endblock %}

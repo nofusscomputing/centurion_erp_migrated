@@ -1,3 +1,5 @@
+from rest_framework.fields import empty
+
 from api.serializers.core.ticket import TicketSerializer
 
 from core.models.ticket.ticket import Ticket
@@ -16,6 +18,7 @@ class ChangeTicketSerializer(
             'id',
             'assigned_teams',
             'assigned_users',
+            'category',
             'created',
             'modified',
             'status',
@@ -47,3 +50,12 @@ class ChangeTicketSerializer(
             'ticket_type',
             'url',
         ]
+
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+
+        super().__init__(instance=instance, data=data, **kwargs)
+
+        self.fields.fields['category'].queryset = self.fields.fields['category'].queryset.filter(
+            project_task = True
+        )

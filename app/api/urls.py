@@ -10,7 +10,11 @@ from api.views.settings import index as settings
 
 from api.views import assistance, itim, project_management
 from api.views.assistance import request_ticket
-from api.views.core import ticket_comments as core_ticket_comments
+from api.views.core import (
+    ticket_categories, 
+    ticket_comment_categories,
+    ticket_comments as core_ticket_comments
+)
 from api.views.itim import change_ticket, incident_ticket, problem_ticket
 from api.views.project_management import projects, project_task
 
@@ -43,6 +47,10 @@ router.register('itim/problem/(?P<ticket_id>[0-9]+)/comments', core_ticket_comme
 router.register('project_management/projects', projects.View, basename='_api_projects')
 router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks', project_task.View, basename='_api_project_tasks')
 router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_project_tasks_comments')
+
+router.register('settings/ticket_categories', ticket_categories.View, basename='_api_ticket_category')
+
+router.register('settings/ticket_comment_categories', ticket_comment_categories.View, basename='_api_ticket_comment_category')
 
 router.register('software', software.SoftwareViewSet, basename='software')
 
