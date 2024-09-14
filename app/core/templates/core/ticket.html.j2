@@ -132,16 +132,22 @@
             </span>
         </fieldset>
         {% endif %}
+        {% if ticket.project %}
         <fieldset>
             <label>Project</label>
             <span class="text">
-                {% if ticket.project %}
                 <a href="{% url 'Project Management:_project_view' pk=ticket.project_id %}">{{ ticket.project }}</a>
-                {% else %}
-                -
-                {% endif %}
             </span>
         </fieldset>
+        {% endif %}
+        {% if ticket.milestone %}
+        <fieldset>
+            <label>Milestone</label>
+            <span class="text">
+                <a href="{% url 'Project Management:_project_milestone_view' project_id=ticket.project_id pk=ticket.milestone.id %}">{{ ticket.milestone }}</a>
+            </span>
+        </fieldset>
+        {% endif %}
         <fieldset>
             <label>Priority</label>
             <span class="text">U{{ ticket.get_urgency_display }} / I{{ ticket.get_impact_display }} / P{{ ticket.get_priority_display }}</span>

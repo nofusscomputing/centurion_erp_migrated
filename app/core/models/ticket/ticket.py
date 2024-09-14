@@ -11,7 +11,7 @@ from core.lib.slash_commands import SlashCommands
 from core.middleware.get_request import get_request
 from core.models.ticket.ticket_category import TicketCategory
 
-from project_management.models.projects import Project
+from project_management.models.project_milestone import Project, ProjectMilestone
 
 
 
@@ -528,6 +528,15 @@ class Ticket(
         verbose_name = 'Project',
     )
 
+    milestone = models.ForeignKey(
+        ProjectMilestone,
+        blank= True,
+        help_text = 'Assign to a milestone',
+        null = True,
+        on_delete = models.DO_NOTHING,
+        verbose_name = 'Project Milestone',
+    )
+
 
     opened_by = models.ForeignKey(
         User,
@@ -642,6 +651,7 @@ class Ticket(
         'category'
         'urgency',
         'project',
+        'milestone',
         'priority',
         'impact',
         'subscribed_teams',
@@ -680,6 +690,7 @@ class Ticket(
 
     fields_project_task: list(str()) = common_fields + [
         'category',
+        'milestone',
         'status',
         'urgency',
         'priority',
@@ -695,6 +706,7 @@ class Ticket(
     tech_fields = [
         'category',
         'project',
+        'milestone',
         'assigned_users',
         'assigned_teams',
         'subscribed_teams',

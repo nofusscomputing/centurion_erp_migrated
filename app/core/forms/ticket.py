@@ -52,6 +52,18 @@ class TicketForm(
         self.fields['ticket_type'].widget = self.fields['ticket_type'].hidden_widget()
         self.fields['organization'].widget = self.fields['organization'].hidden_widget()
 
+        if self.instance.project is not None:
+
+            self.fields['milestone'].queryset = self.fields['milestone'].queryset.filter(
+                    project=self.instance.project
+                )
+
+        else:
+
+            self.fields['milestone'].queryset = self.fields['milestone'].queryset.filter(
+                    id=0
+                )
+
 
         original_fields = self.fields.copy()
         ticket_type = []

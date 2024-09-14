@@ -97,6 +97,11 @@ class DetailForm(ProjectForm):
             "slug": "tasks",
             "sections": []
         },
+        "milestones": {
+            "name": "Milestones",
+            "slug": "milestones",
+            "sections": []
+        },
         "notes": {
             "name": "Notes",
             "slug": "notes",

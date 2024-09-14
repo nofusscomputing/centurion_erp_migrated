@@ -17,6 +17,39 @@
 
 </div>
 
+<div id="milestones" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.milestones %}
+
+    <input type="button" value="New Milestone" onclick="window.location='{% url 'Project Management:_project_milestone_add' project_id=project.id %}';">
+
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Completed</th>
+            <th>Started</th>
+            <th>Finished</th>
+        </thead>
+        {% if milestones %}
+        {% for milestone in milestones %}
+        <tr>
+            <td>
+                <a href="{% url 'Project Management:_project_milestone_view' project_id=project.id pk=milestone.id %}">
+                {{ milestone.name }}
+                </a>
+            </td>
+            <td>{{ milestone.percent_completed }}</td>
+            <td>{{ milestone.start_date }}</td>
+            <td>{{ milestone.finish_date }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr><td colspan="4">Nothing Found</td></tr>
+        {% endif %}
+    </table>
+
+</div>
+
 
 <div id="tasks" class="content-tab">
 
