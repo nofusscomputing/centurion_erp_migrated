@@ -153,7 +153,11 @@ class TicketSerializer(
         self.fields.fields['status'].initial = Ticket.TicketStatus.All.NEW
         self.fields.fields['status'].default = Ticket.TicketStatus.All.NEW
 
+        self.ticket_type_fields = self.Meta.fields
+
         super().__init__(instance=instance, data=data, **kwargs)
+
+        self.fields['organization'].required = True
 
 
     def is_valid(self, *, raise_exception=True) -> bool:
@@ -161,14 +165,6 @@ class TicketSerializer(
         self.request = self._context['request']
 
         is_valid = super().is_valid(raise_exception=raise_exception)
-
-        if self.instance:
-
-            self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
-
-        else:
-
-            self.original_object = None
 
         self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
 

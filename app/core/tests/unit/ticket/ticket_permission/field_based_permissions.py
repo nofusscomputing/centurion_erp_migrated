@@ -855,7 +855,7 @@ class TicketFieldPermissionsChangeUser:
         """
 
         field_name: str = 'opened_by'
-        field_value = 1
+        field_value = 2
 
 
         client = Client(raise_request_exception=True)
@@ -966,7 +966,7 @@ class TicketFieldPermissionsChangeUser:
         """
 
         field_name: str = 'project'
-        field_value = self.project.id
+        field_value = self.project_two.id
 
 
         client = Client(raise_request_exception=True)
@@ -1497,7 +1497,7 @@ class TicketFieldPermissionsImportUser:
         """
 
         field_name: str = 'opened_by'
-        field_value = 1
+        field_value = 2
 
 
         client = Client(raise_request_exception=True)
@@ -2387,22 +2387,13 @@ class ProjectTicketFieldPermissionsTriageUser(
         
         data[field_name] = field_value
 
-        try:
 
-            response = client.post(
-                url,
-                data=data
-            )
+        response = client.post(
+            url,
+            data=data
+        )
 
-            assert False, 'a ValidationError exception should have been thrown'
-
-        except ValidationError as exception:
-
-            assert exception.code == 'cant_edit_field_' + field_name
-
-        except Exception as exception:
-
-            assert False, f"reason: {exception}"
+        assert response.status_code == 200
 
 
     def test_field_permission_planned_start_date_triage_user_allowed(self):
@@ -2424,7 +2415,7 @@ class ProjectTicketFieldPermissionsTriageUser(
         
         data[field_name] = field_value
 
-        
+
         response = client.post(
             url,
             data=data

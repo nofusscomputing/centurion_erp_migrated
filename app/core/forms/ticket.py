@@ -151,27 +151,31 @@ class TicketForm(
 
             ticket_type += self.Meta.model.tech_fields
 
-        fields_allowed = self.fields_allowed
+        self.ticket_type_fields = ticket_type
+
+        fields_allowed_by_permission = self.get_fields_allowed_by_permission
+
+        allowed_ticket_fields: list = []
+
+        for field in fields_allowed_by_permission:    # Remove fields not intended for the ticket type
 
 
-        for field in fields_allowed:    # Remove fields not intended for the ticket type
-
-            if field not in ticket_type:
-
-                self._fields_allowed.remove(field)
+            if field in ticket_type:
+                
+                allowed_ticket_fields = allowed_ticket_fields + [ field ]
 
 
         for field in original_fields:    # Remove fields user cant edit unless field is hidden
 
             if (
                 (
-                    field not in self._fields_allowed and not self.fields[field].widget.is_hidden
+                    field not in allowed_ticket_fields and not self.fields[field].widget.is_hidden
                 )
                     or
                 field not in ticket_type
             ):
 
-                del self.fields[field]
+                self.fields[field].widget = self.fields[field].hidden_widget()
 
 
     def clean(self):
@@ -184,10 +188,6 @@ class TicketForm(
     def is_valid(self) -> bool:
 
         is_valid = super().is_valid()
-
-        if self.instance.pk:
-        
-            self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
 
         self.validate_ticket()
 

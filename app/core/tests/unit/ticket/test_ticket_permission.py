@@ -21,7 +21,7 @@ from core.models.ticket.ticket_comment import TicketComment
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions
 
-
+from settings.models.user_settings import UserSettings
 
 
 class TicketPermissions(
@@ -86,12 +86,16 @@ class TicketPermissions(
             user = self.add_user
         )
 
+        user_settings = UserSettings.objects.get(user = self.add_user)
+        user_settings.default_organization = self.organization
+        user_settings.save()
+
 
         self.item = self.model.objects.create(
             organization=organization,
             title = 'A ' + self.ticket_type + ' ticket',
             description = 'the ticket body',
-            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            ticket_type = self.ticket_type_enum,
             opened_by = self.add_user,
             status = int(Ticket.TicketStatus.All.NEW.value)
         )
@@ -100,13 +104,18 @@ class TicketPermissions(
             organization=organization,
             title = 'A second ' + self.ticket_type + ' ticket',
             description = 'the ticket body of item two',
-            ticket_type = int(Ticket.TicketType.REQUEST.value),
+            ticket_type = self.ticket_type_enum,
             opened_by = self.add_user,
             status = int(Ticket.TicketStatus.All.NEW.value)
         )
 
         self.project = Project.objects.create(
             name = 'ticket permissions project name',
+            organization = organization
+        )
+
+        self.project_two = Project.objects.create(
+            name = 'ticket permissions project name two',
             organization = organization
         )
 
@@ -118,7 +127,6 @@ class TicketPermissions(
         self.add_data = {
             'title': 'an add ticket',
             'organization': self.organization.id,
-            'opened_by': self.add_user.id,
         }
 
         self.url_change_kwargs = {'ticket_type': self.ticket_type, 'pk': self.item.id}
