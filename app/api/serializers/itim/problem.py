@@ -39,6 +39,7 @@ class ProblemTicketSerializer(
             'opened_by',
             'organization',
             'project',
+            'milestone',
             'subscribed_teams',
             'subscribed_users',
             'ticket_comments',
