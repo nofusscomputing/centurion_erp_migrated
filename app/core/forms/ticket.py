@@ -50,7 +50,12 @@ class TicketForm(
         self.fields['opened_by'].widget = self.fields['opened_by'].hidden_widget()
 
         self.fields['ticket_type'].widget = self.fields['ticket_type'].hidden_widget()
-        self.fields['organization'].widget = self.fields['organization'].hidden_widget()
+
+        self.fields['organization'].initial = self.initial['organization']
+
+        if self.instance.pk is not None:
+            
+            self.fields['organization'].widget = self.fields['organization'].hidden_widget()
 
         if self.instance.project is not None:
 

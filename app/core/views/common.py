@@ -134,6 +134,13 @@ class ChangeView(View, generic.UpdateView):
         return context
 
 
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
+
+
 class DeleteView(OrganizationPermission, generic.DeleteView):
 
     template_name:str  = 'form.html.j2'

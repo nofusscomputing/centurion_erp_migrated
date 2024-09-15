@@ -32,6 +32,7 @@ class TicketValidation(
         'title',
         'description',
         'urgency',
+        'organization'
     ]
 
     change_fields: list = []
@@ -369,6 +370,38 @@ class TicketValidation(
         return is_valid
 
 
+    def validate_field_organization(self) -> bool:
+        """Check `organization field`
+
+        Raises:
+            ValidationError: user tried to change the organization
+
+        Returns:
+            True (bool): OK
+            False (bool): User tried to edit the organization
+        """
+
+        is_valid: bool = True
+
+        if self.instance is not None:
+
+            if self.instance.pk is not None:
+
+                if 'organization' in self.get_user_changed_fields:
+
+                    if self.field_edited('organization'):
+
+                        is_valid = False
+
+                        raise ValidationError(
+                            f'cant edit field: organization',
+                            code=f'cant_edit_field_organization',
+                        )
+
+
+        return is_valid
+
+
     def validate_field_status(self):
         """Validate status field
 
@@ -475,13 +508,18 @@ class TicketValidation(
 
             validate_field_permission = True
 
+        validate_field_organization: bool = False
+        if self.validate_field_organization():
+
+            validate_field_organization = True
+
 
         validate_field_status = False
         if self.validate_field_status():
 
             validate_field_status = True
 
-        if validate_field_permission and validate_field_status:
+        if validate_field_permission and validate_field_status and validate_field_organization:
             is_valid = True
 
         return is_valid
