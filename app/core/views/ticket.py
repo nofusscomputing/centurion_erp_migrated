@@ -7,7 +7,7 @@ from django_celery_results.models import TaskResult
 from access.mixin import OrganizationPermission
 
 from core.forms.ticket import DetailForm, TicketForm
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from settings.models.user_settings import UserSettings

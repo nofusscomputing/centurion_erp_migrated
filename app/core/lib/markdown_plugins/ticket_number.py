@@ -54,7 +54,7 @@ def plugin(
         ticket_id = match.group(1)
 
         try:
-            from core.models.ticket.ticket import Ticket
+            from core.models.ticket import Ticket
 
             ticket = Ticket.objects.get(pk=ticket_id)
 

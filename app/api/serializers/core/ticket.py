@@ -6,7 +6,7 @@ from rest_framework.fields import empty
 from api.serializers.core.ticket_comment import TicketCommentSerializer
 
 from core.forms.validate_ticket import TicketValidation
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 
 
 

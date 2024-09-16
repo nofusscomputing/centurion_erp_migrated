@@ -7,7 +7,7 @@ from access.models import TenancyObject, Team
 
 from core.lib.slash_commands import SlashCommands
 
-from .ticket import Ticket
+from . import Ticket
 from .ticket_comment_category import TicketCommentCategory
 
 

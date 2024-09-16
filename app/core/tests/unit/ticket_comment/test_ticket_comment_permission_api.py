@@ -11,7 +11,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions import APIPermissions, APIPermissionAdd, APIPermissionChange
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 from core.models.ticket.ticket_comment import TicketComment
 
 

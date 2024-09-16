@@ -10,7 +10,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions import APIPermissions
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 
 
 class TicketPermissionsAPI(APIPermissions):

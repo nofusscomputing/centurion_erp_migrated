@@ -11,7 +11,7 @@ from api.serializers.itim.problem import ProblemTicketSerializer
 from api.serializers.project_management.project_task import ProjectTaskSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 
 
 

@@ -7,7 +7,7 @@ from app import settings
 from core.forms.common import CommonModelForm
 from core.forms.validate_ticket import TicketValidation
 
-from core.models.ticket.ticket import Ticket, RelatedTickets
+from core.models.ticket import Ticket, RelatedTickets
 
 
 

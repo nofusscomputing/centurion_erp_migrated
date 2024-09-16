@@ -3,7 +3,7 @@
 import access.fields
 import access.models
 import core.lib.slash_commands
-import core.models.ticket.ticket
+import core.models.ticket
 import core.models.ticket.ticket_comment
 import django.db.models.deletion
 import django.utils.timezone
@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
                 ('priority', models.IntegerField(blank=True, choices=[(1, 'Very Low'), (2, 'Low'), (3, 'Medium'), (4, 'High'), (5, 'Very High'), (6, 'Major')], default=1, help_text='What priority should this ticket for its completion', null=True, verbose_name='Priority')),
                 ('external_ref', models.IntegerField(blank=True, default=None, help_text='External System reference', null=True, verbose_name='Reference Number')),
                 ('external_system', models.IntegerField(blank=True, choices=[(1, 'Github'), (2, 'Gitlab'), (9999, 'Custom #1 (Imported)'), (9998, 'Custom #2 (Imported)'), (9997, 'Custom #3 (Imported)'), (9996, 'Custom #4 (Imported)'), (9995, 'Custom #5 (Imported)'), (9994, 'Custom #6 (Imported)'), (9993, 'Custom #7 (Imported)'), (9992, 'Custom #8 (Imported)'), (9991, 'Custom #9 (Imported)')], default=None, help_text='External system this item derives', null=True, verbose_name='External System')),
-                ('ticket_type', models.IntegerField(choices=[(1, 'Request'), (2, 'Incident'), (3, 'Change'), (4, 'Problem'), (5, 'Issue'), (6, 'Merge Request'), (7, 'Project Task')], help_text='The type of ticket this is', validators=[core.models.ticket.ticket.Ticket.validation_ticket_type], verbose_name='Type')),
+                ('ticket_type', models.IntegerField(choices=[(1, 'Request'), (2, 'Incident'), (3, 'Change'), (4, 'Problem'), (5, 'Issue'), (6, 'Merge Request'), (7, 'Project Task')], help_text='The type of ticket this is', validators=[core.models.ticket.Ticket.validation_ticket_type], verbose_name='Type')),
                 ('is_deleted', models.BooleanField(default=False, help_text='Is the ticket deleted? And ready to be purged', verbose_name='Deleted')),
                 ('date_closed', models.DateTimeField(blank=True, help_text='Date ticket closed', null=True, verbose_name='Closed Date')),
                 ('planned_start_date', models.DateTimeField(blank=True, help_text='Planned start date.', null=True, verbose_name='Planned Start Date')),
