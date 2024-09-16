@@ -94,8 +94,8 @@ class TicketValidation(
 
         else:
 
-            self.ValidationError(
-                detail = message,
+            raise ValidationError(
+                message = message,
                 code = code
             )
 
@@ -194,6 +194,39 @@ class TicketValidation(
 
 
     @property
+    def get_user_changed_data(self) -> dict:
+        """Create an object with the user 'changed' data.
+
+        Due to forms having fields deleted, this function is required
+        as attribute `cleaned_data` no longer functions per normal.
+
+        Returns:
+            _user_changed_data (dict): Changed data.
+        """
+
+        if hasattr(self, '_user_changed_data'):
+
+            return self._user_changed_data
+
+        changed_data: dict = {}
+
+        for field in self.get_user_changed_fields:
+
+            if hasattr(self.Meta.model, field):
+
+                changed_data.update({
+                    field: self.request.POST.dict()[field]
+                })
+
+
+        if len(changed_data) > 0:
+
+            self._user_changed_data = changed_data
+
+        return changed_data
+
+
+    @property
     def get_user_changed_fields(self) -> list(str()):
         """List of fields the user changed.
 
@@ -220,7 +253,7 @@ class TicketValidation(
 
         for field in post_data:
 
-            if field in self.fields:
+            if hasattr(self.Meta.model, field):
 
                 changed_data = changed_data + [ field ]
 
@@ -296,8 +329,7 @@ class TicketValidation(
                     self.field_edited(field)
                     or (
                         field not in fields_allowed
-                        and field in self.fields
-                        and self.field_edited(field)
+                        and hasattr(self.Meta.model, field)
                     )
                 ):
 
@@ -317,7 +349,7 @@ class TicketValidation(
         if hasattr(self, 'cleaned_data'):    # initial avail in ui
 
             initial_data: dict = self.initial
-            changed_data: dict = self.cleaned_data
+            changed_data: dict = self.get_user_changed_data
 
         elif hasattr(self, 'validated_data'):    # API
 
