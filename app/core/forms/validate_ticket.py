@@ -82,6 +82,24 @@ class TicketValidation(
         'subscribed_teams',
     ]
 
+
+    def combined_validation_error(self, message:str, code:str = None) -> None:
+
+        if 'serializers' in self.Meta.__module__:
+
+            raise serializers.ValidationError(
+                detail = message,
+                code = code
+            )
+
+        else:
+
+            self.ValidationError(
+                detail = message,
+                code = code
+            )
+
+
     @property
     def get_fields_allowed_by_permission(self):
 
@@ -236,7 +254,7 @@ class TicketValidation(
 
         if len(fields_allowed) == 0:
 
-            raise ValidationError('Access Denied to all fields', code='access_denied_all_fields')
+            self.combined_validation_error('Access Denied to all fields', code='access_denied_all_fields')
 
 
         for field in self.get_user_changed_fields:
@@ -279,10 +297,11 @@ class TicketValidation(
                     or (
                         field not in fields_allowed
                         and field in self.fields
+                        and self.field_edited(field)
                     )
                 ):
 
-                    raise ValidationError(
+                    self.combined_validation_error(
                         f'cant edit field: {field}',
                         code=f'cant_edit_field_{field}',
                     )
@@ -359,6 +378,10 @@ class TicketValidation(
 
                     return False
 
+        else:
+
+            return False
+
         return True
 
 
@@ -420,7 +443,7 @@ class TicketValidation(
 
                         is_valid = False
 
-                        raise ValidationError(
+                        self.combined_validation_error(
                             f'cant edit field: organization',
                             code=f'cant_edit_field_organization',
                         )
@@ -509,7 +532,7 @@ class TicketValidation(
 
             else:
 
-                raise ValidationError('Incorrect Status set')
+                self.combined_validation_error('Incorrect Status set')
 
         
         return is_valid
@@ -596,7 +619,7 @@ class TicketValidation(
 
         # check type
 
-        # raise ValidationError('Test to see what it looks like')
+        # self.combined_validation_error('Test to see what it looks like')
         pass
 
     def validate_project_task_ticket(self):
@@ -608,4 +631,4 @@ class TicketValidation(
         
         if self.cleaned_data['project'] is None:
 
-            raise ValidationError('A project task requires a project')
+            self.combined_validation_error('A project task requires a project')
