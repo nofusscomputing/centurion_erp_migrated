@@ -524,7 +524,7 @@ class Ticket(
         blank= True,
         help_text = 'Assign to a project',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.SET_NULL,
         verbose_name = 'Project',
     )
 
@@ -533,7 +533,7 @@ class Ticket(
         blank= True,
         help_text = 'Assign to a milestone',
         null = True,
-        on_delete = models.DO_NOTHING,
+        on_delete = models.SET_NULL,
         verbose_name = 'Project Milestone',
     )
 
