@@ -15,7 +15,9 @@ class ProjectCommonFields(TenancyObject):
         blank=False
     )
 
-    created = AutoCreatedField()
+    created = AutoCreatedField(
+        editable = True,
+    )
 
     modified = AutoLastModifiedField()
 

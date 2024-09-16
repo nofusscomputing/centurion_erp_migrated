@@ -4,6 +4,7 @@ from django.db import models
 from access.models import Team
 
 from core.mixin.history_save import SaveHistory
+from core.models.ticket.ticket_enum_values import TicketValues
 
 from .project_common import ProjectCommonFieldsName
 
@@ -23,9 +24,42 @@ class Project(ProjectCommonFieldsName):
         verbose_name_plural = 'Projects'
 
 
+    class Ticket_ExternalSystem(models.IntegerChoices): # <null|github|gitlab>
+        GITHUB   = TicketValues.ExternalSystem._GITHUB_INT, TicketValues.ExternalSystem._GITHUB_VALUE
+        GITLAB   = TicketValues.ExternalSystem._GITLAB_INT, TicketValues.ExternalSystem._GITLAB_VALUE
+
+        CUSTOM_1 = TicketValues.ExternalSystem._CUSTOM_1_INT, TicketValues.ExternalSystem._CUSTOM_1_VALUE
+        CUSTOM_2 = TicketValues.ExternalSystem._CUSTOM_2_INT, TicketValues.ExternalSystem._CUSTOM_2_VALUE
+        CUSTOM_3 = TicketValues.ExternalSystem._CUSTOM_3_INT, TicketValues.ExternalSystem._CUSTOM_3_VALUE
+        CUSTOM_4 = TicketValues.ExternalSystem._CUSTOM_4_INT, TicketValues.ExternalSystem._CUSTOM_4_VALUE
+        CUSTOM_5 = TicketValues.ExternalSystem._CUSTOM_5_INT, TicketValues.ExternalSystem._CUSTOM_5_VALUE
+        CUSTOM_6 = TicketValues.ExternalSystem._CUSTOM_6_INT, TicketValues.ExternalSystem._CUSTOM_6_VALUE
+        CUSTOM_7 = TicketValues.ExternalSystem._CUSTOM_7_INT, TicketValues.ExternalSystem._CUSTOM_7_VALUE
+        CUSTOM_8 = TicketValues.ExternalSystem._CUSTOM_8_INT, TicketValues.ExternalSystem._CUSTOM_8_VALUE
+        CUSTOM_9 = TicketValues.ExternalSystem._CUSTOM_9_INT, TicketValues.ExternalSystem._CUSTOM_9_VALUE
+
+
     # class ProjectStates(enum):
     #     OPEN = 1
     #     CLOSED = 1
+
+    external_ref = models.IntegerField(
+        blank = True,
+        default=None,
+        help_text = 'External System reference',
+        null=True,
+        verbose_name = 'Reference Number',
+    ) # external reference or null. i.e. github issue number
+
+
+    external_system = models.IntegerField(
+        blank = True,
+        choices=Ticket_ExternalSystem,
+        default=None,
+        help_text = 'External system this item derives',
+        null=True,
+        verbose_name = 'External System',
+    ) 
 
 
     description = models.TextField(
