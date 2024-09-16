@@ -364,8 +364,35 @@ class TicketValidation(
 
     def validate_field_milestone(self):
 
-        is_valid: bool = True
+        is_valid: bool = False
 
+        if self.instance is not None:
+
+            if self.instance.milestone is None:
+
+                return True
+
+            else:
+
+                if self.instance.project is None:
+
+                    self.combined_validation_error(
+                        f'Milestones require a project',
+                        code=f'milestone_requires_project',
+                    )
+
+                    return False
+
+                if self.instance.project.id == self.instance.milestone.project.id:
+
+                    return True
+
+                else:
+
+                    self.combined_validation_error(
+                        f'Milestone must be from the same project',
+                        code=f'milestone_same_project',
+                    )
 
         return is_valid
 
@@ -513,13 +540,23 @@ class TicketValidation(
 
             validate_field_organization = True
 
+        validate_field_milestone: bool = False
+        if self.validate_field_milestone():
+
+            validate_field_milestone: bool = True
+
 
         validate_field_status = False
         if self.validate_field_status():
 
             validate_field_status = True
 
-        if validate_field_permission and validate_field_status and validate_field_organization:
+        if (
+            validate_field_permission
+            and validate_field_status
+            and validate_field_milestone
+            and validate_field_organization
+        ):
             is_valid = True
 
         return is_valid
