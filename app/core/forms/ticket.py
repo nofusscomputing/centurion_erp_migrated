@@ -180,7 +180,8 @@ class TicketForm(
                 field not in ticket_type
             ):
 
-                self.fields[field].widget = self.fields[field].hidden_widget()
+                # self.fields[field].widget = self.fields[field].hidden_widget()
+                del self.fields[field]
 
 
     def clean(self):
