@@ -7,7 +7,7 @@ from app import settings
 from core.forms.common import CommonModelForm
 from core.forms.validate_ticket import TicketValidation
 
-from core.models.ticket.ticket import Ticket, RelatedTickets
+from core.models.ticket import Ticket, RelatedTickets
 
 
 
@@ -50,7 +50,24 @@ class TicketForm(
         self.fields['opened_by'].widget = self.fields['opened_by'].hidden_widget()
 
         self.fields['ticket_type'].widget = self.fields['ticket_type'].hidden_widget()
-        self.fields['organization'].widget = self.fields['organization'].hidden_widget()
+
+        self.fields['organization'].initial = self.initial['organization']
+
+        if self.instance.pk is not None:
+            
+            self.fields['organization'].widget = self.fields['organization'].hidden_widget()
+
+        if self.instance.project is not None:
+
+            self.fields['milestone'].queryset = self.fields['milestone'].queryset.filter(
+                    project=self.instance.project
+                )
+
+        else:
+
+            self.fields['milestone'].queryset = self.fields['milestone'].queryset.filter(
+                    id=0
+                )
 
 
         original_fields = self.fields.copy()
@@ -139,26 +156,31 @@ class TicketForm(
 
             ticket_type += self.Meta.model.tech_fields
 
-        fields_allowed = self.fields_allowed
+        self.ticket_type_fields = ticket_type
+
+        fields_allowed_by_permission = self.get_fields_allowed_by_permission
+
+        allowed_ticket_fields: list = []
+
+        for field in fields_allowed_by_permission:    # Remove fields not intended for the ticket type
 
 
-        for field in fields_allowed:    # Remove fields not intended for the ticket type
-
-            if field not in ticket_type:
-
-                self._fields_allowed.remove(field)
+            if field in ticket_type:
+                
+                allowed_ticket_fields = allowed_ticket_fields + [ field ]
 
 
         for field in original_fields:    # Remove fields user cant edit unless field is hidden
 
             if (
                 (
-                    field not in self._fields_allowed and not self.fields[field].widget.is_hidden
+                    field not in allowed_ticket_fields and not self.fields[field].widget.is_hidden
                 )
                     or
                 field not in ticket_type
             ):
 
+                # self.fields[field].widget = self.fields[field].hidden_widget()
                 del self.fields[field]
 
 
@@ -172,10 +194,6 @@ class TicketForm(
     def is_valid(self) -> bool:
 
         is_valid = super().is_valid()
-
-        if self.instance.pk:
-        
-            self.original_object = self.Meta.model.objects.get(pk=self.instance.pk)
 
         self.validate_ticket()
 

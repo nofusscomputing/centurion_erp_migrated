@@ -13,8 +13,7 @@ from core.models.notes import Notes
 from core.models.ticket import Ticket
 from core.views.common import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
-from project_management.forms.project import Project, ProjectForm, DetailForm
-from project_management.models.project_milestone import ProjectMilestone
+from project_management.forms.project_milestone import DetailForm, ProjectMilestone, ProjectMilestoneForm
 
 from settings.models.user_settings import UserSettings
 
@@ -22,21 +21,25 @@ from settings.models.user_settings import UserSettings
 
 class Add(AddView):
 
-    form_class = ProjectForm
+    form_class = ProjectMilestoneForm
 
-    model = Project
+    model = ProjectMilestone
 
     permission_required = [
-        'project_management.add_project',
+        'project_management.add_projectmilestone',
     ]
 
     template_name = 'form.html.j2'
     
 
     def get_initial(self):
-        return {
-            'organization': UserSettings.objects.get(user = self.request.user).default_organization
-        }
+        initial = super().get_initial()
+
+        initial.update({
+            'project': self.kwargs['project_id']
+        })
+
+        return initial
 
     def form_valid(self, form):
         form.instance.is_global = False
@@ -45,13 +48,13 @@ class Add(AddView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Project Management:Projects')
+        return reverse('Project Management:_project_view', kwargs={'pk': self.kwargs['project_id']}) + '?tab=milestones'
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['content_title'] = 'Create a Project'
+        context['content_title'] = 'Create a Project Milestone'
 
         return context
 
@@ -59,12 +62,12 @@ class Add(AddView):
 
 class Change(ChangeView):
 
-    form_class = ProjectForm
+    form_class = ProjectMilestoneForm
 
-    model = Project
+    model = ProjectMilestone
 
     permission_required = [
-        'project_management.change_project',
+        'project_management.change_projectmilestone',
     ]
 
     template_name = 'form.html.j2'
@@ -90,10 +93,11 @@ class Change(ChangeView):
 
 
 class Delete(DeleteView):
-    model = Project
+
+    model = ProjectMilestone
     
     permission_required = [
-        'project_management.delete_project',
+        'project_management.delete_projectmilestone',
     ]
     
     template_name = 'form.html.j2'
@@ -101,7 +105,7 @@ class Delete(DeleteView):
 
     def get_success_url(self, **kwargs):
 
-        return reverse('Project Management:Projects')
+        return reverse('Project Management:_project_view', kwargs={'pk': self.kwargs['project_id']}) + '?tab=milestones'
 
 
     def get_context_data(self, **kwargs):
@@ -113,76 +117,46 @@ class Delete(DeleteView):
 
 
 
-class Index(IndexView):
-
-    model = Project
-
-    permission_required = [
-        'project_management.view_project',
-    ]
-
-    template_name = 'project_management/project_index.html.j2'
-
-    context_object_name = "projects"
-
-    paginate_by = 10
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['content_title'] = 'Projects'
-
-        return context
-
-
-    def get_queryset(self):
-
-        if self.request.user.is_superuser:
-
-            return self.model.objects.filter().order_by('name')
-
-        else:
-
-            return self.model.objects.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
-
-
-
 class View(ChangeView):
 
-    model = Project
+    model = ProjectMilestone
 
     permission_required = [
-        'project_management.view_project'
+        'project_management.view_projectmilestone'
     ]
 
-    template_name = 'project_management/project.html.j2'
+    template_name = 'project_management/project_milestone.html.j2'
 
     form_class = DetailForm
 
     context_object_name = "project"
 
 
+    def get_initial(self):
+        initial = super().get_initial()
+
+        initial.update({
+            'project': self.kwargs['project_id']
+        })
+
+        return initial
+
+
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
 
-        # context['notes_form'] = AddNoteForm(prefix='note')
-        # context['notes'] = Notes.objects.filter(service=self.kwargs['pk'])
-
-        context['milestones'] = ProjectMilestone.objects.filter(project__id=self.kwargs['pk'])
-
-        context['project_tasks'] = Ticket.objects.filter(
-            project = self.object,
+        context['tasks'] = Ticket.objects.filter(
+            project = self.object.project,
+            milestone = self.kwargs['pk'],
         )
-
 
         context['model_docs_path'] = self.model._meta.app_label + '/' + self.model._meta.model_name + '/'
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
 
-        context['model_delete_url'] = reverse('Project Management:_project_delete', args=(self.kwargs['pk'],))
+        context['model_delete_url'] = reverse('Project Management:_project_milestone_delete', kwargs={'project_id': self.kwargs['project_id'], 'pk': self.kwargs['pk']})
 
         context['content_title'] = context['project'].name
 
@@ -206,4 +180,3 @@ class View(ChangeView):
     #             notes.save()
 
     #     return super().post(request, *args, **kwargs)
-

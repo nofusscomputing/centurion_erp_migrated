@@ -12,6 +12,12 @@ class TicketValidation(
 
     Validate a ticket form or api viewset
 
+    ## Class requirements
+
+    - attribute `ticket_type_fields` is set to a list of fields for the ticket type
+
+    - attribute `ticket_type` is set to a string value (lowercase) of the ticket type
+
     Raises:
         PermissionDenied: User has no allowable fields to edit
         PermissionDenied: User is lacking permission to edit a field
@@ -26,6 +32,7 @@ class TicketValidation(
         'title',
         'description',
         'urgency',
+        'organization'
     ]
 
     change_fields: list = []
@@ -49,6 +56,7 @@ class TicketValidation(
         'planned_finish_date',
         'priority',
         'project',
+        'milestone',
         'real_start_date',
         'real_finish_date',
         'subscribed_users',
@@ -67,18 +75,37 @@ class TicketValidation(
         'planned_finish_date',
         'priority',
         'project',
+        'milestone',
         'real_start_date',
         'real_finish_date',
         'subscribed_users',
         'subscribed_teams',
     ]
 
+
+    def combined_validation_error(self, message:str, code:str = None) -> None:
+
+        if 'serializers' in self.Meta.__module__:
+
+            raise serializers.ValidationError(
+                detail = message,
+                code = code
+            )
+
+        else:
+
+            raise ValidationError(
+                message = message,
+                code = code
+            )
+
+
     @property
-    def fields_allowed(self):
+    def get_fields_allowed_by_permission(self):
 
-        if hasattr(self, '_fields_allowed'):
+        if hasattr(self, '_fields_allowed_by_permission'):
 
-            return self._fields_allowed
+            return self._fields_allowed_by_permission
 
         if not hasattr(self, '_ticket_type'):
             
@@ -161,78 +188,300 @@ class TicketValidation(
 
             fields_allowed = fields_allowed + all_fields
 
-        self._fields_allowed = fields_allowed
+        self._fields_allowed_by_permission = fields_allowed
 
         return fields_allowed
 
 
+    @property
+    def get_user_changed_data(self) -> dict:
+        """Create an object with the user 'changed' data.
+
+        Due to forms having fields deleted, this function is required
+        as attribute `cleaned_data` no longer functions per normal.
+
+        Returns:
+            _user_changed_data (dict): Changed data.
+        """
+
+        if hasattr(self, '_user_changed_data'):
+
+            return self._user_changed_data
+
+        changed_data: dict = {}
+
+        for field in self.get_user_changed_fields:
+
+            if hasattr(self.Meta.model, field):
+
+                changed_data.update({
+                    field: self.request.POST.dict()[field]
+                })
+
+
+        if len(changed_data) > 0:
+
+            self._user_changed_data = changed_data
+
+        return changed_data
+
+
+    @property
+    def get_user_changed_fields(self) -> list(str()):
+        """List of fields the user changed.
+
+        This data is sourced from the HTTP/POST data.
+
+        Returns:
+            list: All of the fields that have changed.
+        """
+
+        if hasattr(self, '_user_changed_fields'):
+
+            return self._user_changed_fields
+
+        changed_data: list = []
+
+        changed_data_exempt = [
+            '_state',
+            'csrfmiddlewaretoken',
+            'ticket_comments',
+            'url',
+        ]
+
+        post_data: dict = self.request.POST.dict().copy()
+
+        for field in post_data:
+
+            if hasattr(self.Meta.model, field):
+
+                changed_data = changed_data + [ field ]
+
+
+        if len(changed_data) > 0:
+
+            self._user_changed_fields = changed_data
+
+        return changed_data
+
+
+    @property
     def validate_field_permission(self):
         """ Check field permissions
 
         Users can't edit all fields. They can only adjust fields that they
         have the permissions to adjust.
 
+        ## Required fields
+
+        A field marked as required when the instance has no pk, the field will have
+        it's permission marked as allowed. This is not the case for items thaat are being
+        edited, i.e. have a pk.
+
         Raises:
-            PermissionDenied: Access Denied when user has no ticket permissions assigned
-            PermissionDenied: User tried to edit a field they dont have permission to edit.
+            ValidationError: Access Denied when user has no ticket permissions assigned
+            ValidationError: User tried to edit a field they dont have permission to edit.
         """
 
-        fields_allowed = self.fields_allowed
+        fields_allowed = self.get_fields_allowed_by_permission
 
         if len(fields_allowed) == 0:
 
-            raise ValidationError('Access Denied to all fields', code='access_denied_all_fields')
+            self.combined_validation_error('Access Denied to all fields', code='access_denied_all_fields')
 
-        for field in self.changed_data:
+
+        for field in self.get_user_changed_fields:
 
             allowed: bool = False
 
-            if field in self.fields:
+            if (
+                field in self.fields
+                and field in self.ticket_type_fields
+                and (
+                    field in fields_allowed
+                )
+            ):
 
-                if hasattr(self.fields[field], 'widget'):
+                allowed = True
 
-                    if self.fields[field].widget.is_hidden:
+            if hasattr(self.instance, 'pk'):
 
-                        changed_value = None
+                if (
+                    field in self.fields
+                    and field in self.ticket_type_fields
+                    and self.instance.pk is None
+                ):
 
-                        if type(self.fields[field].initial) is bool:
-
-                            changed_value: bool = bool(self.data[field])
-
-                        elif type(self.fields[field].initial) is int:
-
-                            changed_value: int = int(self.data[field])
-
-                        elif type(self.fields[field].initial) is str:
-
-                            changed_value: str = str(self.data[field])
-
-                        if changed_value == self.fields[field].initial or field in fields_allowed:
-
-                            allowed = True
-
-                    if field in fields_allowed:
+                    if self.fields[field].required:
 
                         allowed = True
 
-                else:
+            elif self.instance is None:
 
-                    if field in fields_allowed or self.fields[field].required:
+                    if self.fields[field].required:
 
                         allowed = True
+
 
             if not allowed:
 
-                raise ValidationError(
-                    f'cant edit field: {field}',
-                    code=f'cant_edit_field_{field}',
-                )
+                if (
+                    self.field_edited(field)
+                    or (
+                        field not in fields_allowed
+                        and hasattr(self.Meta.model, field)
+                    )
+                ):
 
-                return False
+                    self.combined_validation_error(
+                        f'cant edit field: {field}',
+                        code=f'cant_edit_field_{field}',
+                    )
+
+                    return False
 
 
         return True
 
+
+    def field_edited(self, field:str) -> bool:
+
+        if hasattr(self, 'cleaned_data'):    # initial avail in ui
+
+            initial_data: dict = self.initial
+            changed_data: dict = self.get_user_changed_data
+
+        elif hasattr(self, 'validated_data'):    # API
+
+            initial_data:dict = self.instance.__dict__
+            changed_data: dict = self.validated_data
+
+        if field in initial_data:
+
+            value = initial_data[field]
+
+        elif str(field) + '_id' in initial_data:
+
+            value = initial_data[str(field) + '_id']
+
+        else:
+
+            return True
+
+
+        if field in changed_data:
+
+            if changed_data[field] == value:
+
+                return False
+
+            if hasattr(changed_data[field], 'id'):
+
+                if value is None:
+
+                    return True
+
+                if int(value) == changed_data[field].id:
+
+                    return False
+
+            else:
+
+                val = value
+
+                if value is None:
+
+                    return True
+
+                if type(changed_data[field]) is int:
+
+                    val = int(value)
+
+                elif type(changed_data[field]) is bool:
+
+                    val = bool(value)
+
+                elif type(changed_data[field]) is str:
+
+                    val = str(value)
+
+
+                if val == changed_data[field]:
+
+                    return False
+
+        else:
+
+            return False
+
+        return True
+
+
+    def validate_field_milestone(self):
+
+        is_valid: bool = False
+
+        if self.instance is not None:
+
+            if self.instance.milestone is None:
+
+                return True
+
+            else:
+
+                if self.instance.project is None:
+
+                    self.combined_validation_error(
+                        f'Milestones require a project',
+                        code=f'milestone_requires_project',
+                    )
+
+                    return False
+
+                if self.instance.project.id == self.instance.milestone.project.id:
+
+                    return True
+
+                else:
+
+                    self.combined_validation_error(
+                        f'Milestone must be from the same project',
+                        code=f'milestone_same_project',
+                    )
+
+        return is_valid
+
+
+    def validate_field_organization(self) -> bool:
+        """Check `organization field`
+
+        Raises:
+            ValidationError: user tried to change the organization
+
+        Returns:
+            True (bool): OK
+            False (bool): User tried to edit the organization
+        """
+
+        is_valid: bool = True
+
+        if self.instance is not None:
+
+            if self.instance.pk is not None:
+
+                if 'organization' in self.get_user_changed_fields:
+
+                    if self.field_edited('organization'):
+
+                        is_valid = False
+
+                        self.combined_validation_error(
+                            f'cant edit field: organization',
+                            code=f'cant_edit_field_organization',
+                        )
+
+
+        return is_valid
 
 
     def validate_field_status(self):
@@ -315,7 +564,7 @@ class TicketValidation(
 
             else:
 
-                raise ValidationError('Incorrect Status set')
+                self.combined_validation_error('Incorrect Status set')
 
         
         return is_valid
@@ -334,69 +583,22 @@ class TicketValidation(
 
         else:
 
-            fields = self.data
-
-        changed_data: list = []
-
-        changed_data_exempt = [
-            'csrfmiddlewaretoken',
-            'ticket_comments',
-            'url',
-        ]
-
-        for field in fields:
-
-            if str(field).startswith('ticket-'):
-
-                field = str(field).replace('ticket-','')
-
-            if field in changed_data_exempt:
-                continue
-
-            if field == 'is_deleted':
-
-                if self.fields['is_deleted']:
-
-                    continue
-
-            if self.original_object is not None:
-
-                field_value: str = str(fields[field])
-
-                if type(getattr(self.original_object, field)) is bool:
-
-                    field_value: bool = bool(fields[field])
-
-                elif type(getattr(self.original_object, field)) is int:
-
-                    field_value: int = int(fields[field])
-
-                if (
-                    (
-                        field_value != getattr(self.original_object, field)
-                        and (
-                            type(field_value) in [str, int, bool]
-                        )
-                    ) or
-                    field in self.data
-                ):
-
-                    changed_data = changed_data + [ field ]
-            else:
-
-
-                if type(fields[field]) in [str, int, bool]:
-
-                    changed_data = changed_data + [ field ]
-
-        if len(changed_data) > 0:
-
-            self.changed_data = changed_data
+            fields = self.cleaned_data
 
         validate_field_permission = False
-        if self.validate_field_permission():
+        if self.validate_field_permission:
 
             validate_field_permission = True
+
+        validate_field_organization: bool = False
+        if self.validate_field_organization():
+
+            validate_field_organization = True
+
+        validate_field_milestone: bool = False
+        if self.validate_field_milestone():
+
+            validate_field_milestone: bool = True
 
 
         validate_field_status = False
@@ -404,7 +606,12 @@ class TicketValidation(
 
             validate_field_status = True
 
-        if validate_field_permission and validate_field_status:
+        if (
+            validate_field_permission
+            and validate_field_status
+            and validate_field_milestone
+            and validate_field_organization
+        ):
             is_valid = True
 
         return is_valid
@@ -444,7 +651,7 @@ class TicketValidation(
 
         # check type
 
-        # raise ValidationError('Test to see what it looks like')
+        # self.combined_validation_error('Test to see what it looks like')
         pass
 
     def validate_project_task_ticket(self):
@@ -456,4 +663,4 @@ class TicketValidation(
         
         if self.cleaned_data['project'] is None:
 
-            raise ValidationError('A project task requires a project')
+            self.combined_validation_error('A project task requires a project')

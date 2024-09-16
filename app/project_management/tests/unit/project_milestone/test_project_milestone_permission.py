@@ -1,25 +1,36 @@
+# from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser, User
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import reverse
+from django.test import TestCase, Client
+
 import pytest
 import unittest
 import requests
 
-from django.contrib.auth.models import AnonymousUser, User
-from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
-
 from access.models import Organization, Team, TeamUsers, Permission
 
-from api.tests.abstract.api_permissions import APIPermissions
+from app.tests.abstract.model_permissions import ModelPermissions
 
-from core.models.ticket import Ticket
-
-
-class TicketPermissionsAPI(APIPermissions):
+from project_management.models.project_milestone import Project, ProjectMilestone
 
 
-    change_data = {'title': 'ticket change'}
+class ProjectMilestonePermissions(TestCase, ModelPermissions):
 
-    delete_data = {'title': 'ticket delete'}
+    model = ProjectMilestone
 
+    app_namespace = 'Project Management'
+
+    url_name_view = '_project_milestone_view'
+
+    url_name_add = '_project_milestone_add'
+
+    url_name_change = '_project_milestone_change'
+
+    url_name_delete = '_project_milestone_delete'
+
+    url_delete_response = reverse('Project Management:_project_view', kwargs={'pk': 1}) + '?tab=milestones'
 
     @classmethod
     def setUpTestData(self):
@@ -27,7 +38,7 @@ class TicketPermissionsAPI(APIPermissions):
 
         1. Create an organization for user and item
         . create an organization that is different to item
-        2. Create a software
+        2. Create a category
         3. create teams with each permission: view, add, change, delete
         4. create a user per team
         """
@@ -38,47 +49,36 @@ class TicketPermissionsAPI(APIPermissions):
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
-        self.add_user = User.objects.create_user(username="test_user_add", password="password")
 
-        add_permissions = Permission.objects.get(
-                codename = 'add_' + self.model._meta.model_name + '_' + self.ticket_type,
-                content_type = ContentType.objects.get(
-                    app_label = self.model._meta.app_label,
-                    model = self.model._meta.model_name,
-                )
-            )
-
-        add_team = Team.objects.create(
-            team_name = 'add_team',
-            organization = organization,
+        self.project = Project.objects.create(
+            name = 'test_item_' + self.model._meta.model_name,
+            organization = self.organization
         )
-
-        add_team.permissions.set([add_permissions])
-
 
         self.item = self.model.objects.create(
-            organization=organization,
-            title = 'A ' + self.ticket_type + ' ticket',
-            description = 'the ticket body',
-            ticket_type = self.ticket_type_enum,
-            opened_by = self.add_user,
-            status = int(Ticket.TicketStatus.All.NEW.value)
+            name = 'test_item_' + self.model._meta.model_name,
+            organization = self.organization,
+            project = self.project,
         )
 
 
-        # self.url_kwargs = {}
+        self.url_view_kwargs = {'project_id': self.project.id, 'pk': self.item.id}
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_add_kwargs = {'project_id': self.project.id }
 
-        self.add_data = {
-            'title': 'an add ticket',
-            'organization': self.organization.id,
-            'opened_by': self.add_user.id,
-            'description': 'the description'
-        }
+        self.add_data = {'name': 'manufacturer', 'organization': self.organization.id}
+
+        self.url_change_kwargs = {'project_id': self.project.id, 'pk': self.item.id}
+
+        self.change_data = {'name': 'manufacturer', 'organization': self.organization.id}
+
+        self.url_delete_kwargs = {'project_id': self.project.id, 'pk': self.item.id}
+
+        self.delete_data = {'name': 'manufacturer'}
+
 
         view_permissions = Permission.objects.get(
-                codename = 'view_' + self.model._meta.model_name + '_' + self.ticket_type,
+                codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
                     app_label = self.model._meta.app_label,
                     model = self.model._meta.model_name,
@@ -94,10 +94,25 @@ class TicketPermissionsAPI(APIPermissions):
 
 
 
+        add_permissions = Permission.objects.get(
+                codename = 'add_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+        add_team = Team.objects.create(
+            team_name = 'add_team',
+            organization = organization,
+        )
+
+        add_team.permissions.set([add_permissions])
+
 
 
         change_permissions = Permission.objects.get(
-                codename = 'change_' + self.model._meta.model_name + '_' + self.ticket_type,
+                codename = 'change_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
                     app_label = self.model._meta.app_label,
                     model = self.model._meta.model_name,
@@ -114,7 +129,7 @@ class TicketPermissionsAPI(APIPermissions):
 
 
         delete_permissions = Permission.objects.get(
-                codename = 'delete_' + self.model._meta.model_name + '_' + self.ticket_type,
+                codename = 'delete_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
                     app_label = self.model._meta.app_label,
                     model = self.model._meta.model_name,
@@ -138,6 +153,7 @@ class TicketPermissionsAPI(APIPermissions):
             user = self.view_user
         )
 
+        self.add_user = User.objects.create_user(username="test_user_add", password="password")
         teamuser = TeamUsers.objects.create(
             team = add_team,
             user = self.add_user
@@ -175,67 +191,3 @@ class TicketPermissionsAPI(APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-
-class ChangeTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
-
-    model = Ticket
-
-    ticket_type: str = 'change'
-
-    ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
-
-    app_namespace = 'API'
-    
-    url_name = '_api_itim_change-detail'
-
-    url_list = '_api_itim_change-list'
-
-
-
-class IncidentTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
-
-    model = Ticket
-
-    ticket_type: str = 'incident'
-
-    ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
-
-    app_namespace = 'API'
-    
-    url_name = '_api_itim_incident-detail'
-
-    url_list = '_api_itim_incident-list'
-
-
-
-class ProblemTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
-
-    model = Ticket
-
-    ticket_type: str = 'problem'
-
-    ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
-
-    app_namespace = 'API'
-    
-    url_name = '_api_itim_problem-detail'
-
-    url_list = '_api_itim_problem-list'
-
-
-
-class RequestTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
-
-    model = Ticket
-
-    ticket_type: str = 'request'
-
-    ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
-
-    app_namespace = 'API'
-    
-    url_name = '_api_assistance_request-detail'
-
-    url_list = '_api_assistance_request-list'

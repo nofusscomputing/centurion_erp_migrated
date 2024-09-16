@@ -2,7 +2,7 @@ from rest_framework.fields import empty
 
 from api.serializers.core.ticket import TicketSerializer
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 
 
 
@@ -39,6 +39,7 @@ class RequestTicketSerializer(
             'opened_by',
             'organization',
             'project',
+            'milestone',
             'subscribed_teams',
             'subscribed_users',
             'ticket_comments',

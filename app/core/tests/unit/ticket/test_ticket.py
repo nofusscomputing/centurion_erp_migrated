@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from app.tests.abstract.models import TenancyModel
 
-from core.models.ticket.ticket import Ticket
+from core.models.ticket import Ticket
 
 
 class TicketModel(
@@ -55,3 +55,37 @@ class TicketModel(
         """
 
         pass
+
+
+    @pytest.mark.skip(reason='test to be written')
+    def test_field_milestone_no_project(self):
+        """Field Value Test
+
+        Ensure that a milestone can't be applied if no project
+        has been selected
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='test to be written')
+    def test_field_milestone_has_project(self):
+        """Field Value Test
+
+        Ensure that a milestone can be applied if a project
+        has been selected
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='test to be written')
+    def test_field_milestone_different_project(self):
+        """Field Value Test
+
+        Ensure that a milestone from a different project
+        can't be applied
+        """
+
+        pass
+
