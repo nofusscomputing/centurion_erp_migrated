@@ -58,6 +58,7 @@ class DetailForm(ProjectForm):
                         'organization',
                         'code',
                         'name',
+                        'priority',
                         'project_type',
                         'state',
                         'completed',

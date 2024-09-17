@@ -323,12 +323,12 @@ class Ticket(
 
 
     class TicketPriority(models.IntegerChoices):
-        VERY_LOW  = '1', 'Very Low'
-        LOW       = '2', 'Low'
-        MEDIUM    = '3', 'Medium'
-        HIGH      = '4', 'High'
-        VERY_HIGH = '5', 'Very High'
-        MAJOR     = '6', 'Major'
+        VERY_LOW  = TicketValues.Priority._VERY_LOW_INT, TicketValues.Priority._VERY_LOW_VALUE
+        LOW       = TicketValues.Priority._LOW_INT, TicketValues.Priority._LOW_VALUE
+        MEDIUM    = TicketValues.Priority._MEDIUM_INT, TicketValues.Priority._MEDIUM_VALUE
+        HIGH      = TicketValues.Priority._HIGH_INT, TicketValues.Priority._HIGH_VALUE
+        VERY_HIGH = TicketValues.Priority._VERY_HIGH_INT, TicketValues.Priority._VERY_HIGH_VALUE
+        MAJOR     = TicketValues.Priority._MAJOR_INT, TicketValues.Priority._MAJOR_VALUE
 
 
 
