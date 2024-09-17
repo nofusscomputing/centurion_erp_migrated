@@ -43,6 +43,7 @@ class ProjectSerializer(
 
         fields =  [
             'id',
+            'state',
             'name',
             'description',
             'code',
