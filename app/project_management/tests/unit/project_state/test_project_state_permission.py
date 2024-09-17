@@ -54,7 +54,7 @@ class ProjectStatePermissions(TestCase, ModelPermissions):
 
         self.item = self.model.objects.create(
             organization=organization,
-            name = 'deviceone'
+            name = 'a project state'
         )
 
 
@@ -62,11 +62,11 @@ class ProjectStatePermissions(TestCase, ModelPermissions):
 
         # self.url_add_kwargs = {'pk': self.item.id}
 
-        self.add_data = {'name': 'device one', 'organization': self.organization.id}
+        self.add_data = {'name': 'a added project state', 'organization': self.organization.id}
 
         self.url_change_kwargs = {'pk': self.item.id}
 
-        self.change_data = {'name': 'device change', 'organization': self.organization.id}
+        self.change_data = {'name': 'a changed project state', 'organization': self.organization.id}
 
         self.url_delete_kwargs = {'pk': self.item.id}
 

@@ -1,39 +1,29 @@
+
 from django import forms
 from django.urls import reverse
-from django.db.models import Q
 
 from app import settings
 
 from core.forms.common import CommonModelForm
-from core.templatetags.markdown import to_duration
 
 from project_management.models.project_states import ProjectState
-
 
 
 class ProjectStateForm(CommonModelForm):
 
     class Meta:
 
-        fields = [
-            'id',
-            'organization',
-            'name',
-            'model_notes',
-            'runbook'
-        ]
+        fields = '__all__'
 
         model = ProjectState
 
+    prefix = 'project_state'
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
 
-    #     # self.fields['description'].widget.attrs = {'style': "height: 800px; width: 1000px"}
+
 
 
 class DetailForm(ProjectStateForm):
-
 
     tabs: dict = {
         "details": {
@@ -43,9 +33,10 @@ class DetailForm(ProjectStateForm):
                 {
                     "layout": "double",
                     "left": [
-                        'name',
-                        'runbook',
                         'organization',
+                        'name',
+                        'is_completed',
+                        'runbook',
                         'c_created',
                         'c_modified',
                     ],
@@ -82,6 +73,7 @@ class DetailForm(ProjectStateForm):
         )
 
         self.tabs['details'].update({
-            "edit_url": reverse('Settings:_project_state_change', args=(self.instance.pk,))
+            "edit_url": reverse('Settings:_project_state_change', kwargs={'pk': self.instance.pk})
         })
+
         self.url_index_view = reverse('Settings:_project_states')
