@@ -48,7 +48,7 @@ For this command to process the following conditions must be met:
 
         if ticket_id is not None:
 
-            from core.models.ticket import RelatedTickets
+            from core.models.ticket.ticket import RelatedTickets
 
             if command == 'relate':
 

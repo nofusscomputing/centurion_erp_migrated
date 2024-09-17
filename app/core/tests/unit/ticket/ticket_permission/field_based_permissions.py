@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import reverse
 from django.test import Client
 
-from core.models.ticket import Ticket
+from core.models.ticket.ticket import Ticket
 
 
 class TicketFieldPermissionsAddUser:

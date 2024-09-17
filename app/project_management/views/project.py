@@ -10,7 +10,7 @@ from access.mixin import OrganizationPermission
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
-from core.models.ticket import Ticket
+from core.models.ticket.ticket import Ticket
 from core.views.common import AddView, ChangeView, DeleteView, DisplayView, IndexView
 
 from project_management.forms.project import Project, ProjectForm, DetailForm

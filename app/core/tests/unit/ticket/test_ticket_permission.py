@@ -16,7 +16,7 @@ from app.tests.abstract.model_permissions import ModelPermissions
 
 from project_management.models.projects import Project
 
-from core.models.ticket import Ticket, RelatedTickets
+from core.models.ticket.ticket import Ticket, RelatedTickets
 from core.models.ticket.ticket_comment import TicketComment
 
 from core.tests.unit.ticket.ticket_permission.field_based_permissions import ITSMTicketFieldBasedPermissions, ProjectTicketFieldBasedPermissions

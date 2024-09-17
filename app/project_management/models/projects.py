@@ -180,7 +180,7 @@ class Project(ProjectCommonFieldsName):
 
         duration_project: int = 0
 
-        from core.models.ticket import Ticket
+        from core.models.ticket.ticket import Ticket
 
         tickets = Ticket.objects.filter(
             project = self.id
