@@ -46,6 +46,7 @@ class ProjectSerializer(
             'organization',
             'state',
             'project_type',
+            'priority',
             'name',
             'description',
             'code',

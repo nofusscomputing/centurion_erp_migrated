@@ -107,3 +107,20 @@ class TicketValues:
         _CUSTOM_8_VALUE = 'Custom #8 (Imported)'
         _CUSTOM_9_INT   = '9991'
         _CUSTOM_9_VALUE = 'Custom #9 (Imported)'
+
+
+
+    class Priority:
+
+        _VERY_LOW_INT    = '1'
+        _VERY_LOW_VALUE  = 'Very Low'
+        _LOW_INT         = '2'
+        _LOW_VALUE       = 'Low'
+        _MEDIUM_INT      = '3'
+        _MEDIUM_VALUE    = 'Medium'
+        _HIGH_INT        = '4'
+        _HIGH_VALUE      = 'High'
+        _VERY_HIGH_INT   = '5'
+        _VERY_HIGH_VALUE = 'Very High'
+        _MAJOR_INT       = '6'
+        _MAJOR_VALUE     = 'Major'

@@ -41,6 +41,16 @@ class Project(ProjectCommonFieldsName):
         CUSTOM_9 = TicketValues.ExternalSystem._CUSTOM_9_INT, TicketValues.ExternalSystem._CUSTOM_9_VALUE
 
 
+
+    class Priority(models.IntegerChoices):
+        VERY_LOW  = TicketValues.Priority._VERY_LOW_INT, TicketValues.Priority._VERY_LOW_VALUE
+        LOW       = TicketValues.Priority._LOW_INT, TicketValues.Priority._LOW_VALUE
+        MEDIUM    = TicketValues.Priority._MEDIUM_INT, TicketValues.Priority._MEDIUM_VALUE
+        HIGH      = TicketValues.Priority._HIGH_INT, TicketValues.Priority._HIGH_VALUE
+        VERY_HIGH = TicketValues.Priority._VERY_HIGH_INT, TicketValues.Priority._VERY_HIGH_VALUE
+        MAJOR     = TicketValues.Priority._MAJOR_INT, TicketValues.Priority._MAJOR_VALUE
+
+
     # class ProjectStates(enum):
     #     OPEN = 1
     #     CLOSED = 1
@@ -70,7 +80,14 @@ class Project(ProjectCommonFieldsName):
         null= True,
     )
 
-    # priority
+    priority = models.IntegerField(
+        blank = False,
+        choices =Priority,
+        default = Priority.LOW,
+        help_text = 'Priority of the project',
+        null = True,
+        verbose_name ='Priority'
+    )
 
     state = models.ForeignKey(
         ProjectState,
