@@ -7,6 +7,8 @@ from core.mixin.history_save import SaveHistory
 from core.models.ticket.ticket_enum_values import TicketValues
 
 from .project_common import ProjectCommonFieldsName
+from .project_states import ProjectState
+from .project_types import ProjectType
 
 
 class Project(ProjectCommonFieldsName):
@@ -70,9 +72,24 @@ class Project(ProjectCommonFieldsName):
 
     # priority
 
-    # state
+    state = models.ForeignKey(
+        ProjectState,
+        blank= False,
+        help_text = 'State of the project',
+        on_delete=models.SET_NULL,
+        null = True,
+        verbose_name ='Project State'
+    )
 
-    # project_type
+
+    project_type = models.ForeignKey(
+        ProjectType,
+        blank= False,
+        help_text = 'Type of project',
+        on_delete=models.SET_NULL,
+        null = True,
+        verbose_name ='Project Type'
+    )
 
     code = models.CharField(
         blank = True,

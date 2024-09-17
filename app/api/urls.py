@@ -16,7 +16,12 @@ from api.views.core import (
     ticket_comments as core_ticket_comments
 )
 from api.views.itim import change_ticket, incident_ticket, problem_ticket
-from api.views.project_management import projects, project_task
+from api.views.project_management import (
+    projects,
+    project_state,
+    project_type,
+    project_task
+)
 
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
@@ -50,6 +55,8 @@ router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks/(?P<ti
 
 router.register('settings/ticket_categories', ticket_categories.View, basename='_api_ticket_category')
 
+router.register('settings/project_state', project_state.View, basename='_api_project_state')
+router.register('settings/project_type', project_type.View, basename='_api_project_type')
 router.register('settings/ticket_comment_categories', ticket_comment_categories.View, basename='_api_ticket_comment_category')
 
 router.register('software', software.SoftwareViewSet, basename='software')

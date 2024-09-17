@@ -43,6 +43,9 @@ class ProjectSerializer(
 
         fields =  [
             'id',
+            'organization',
+            'state',
+            'project_type',
             'name',
             'description',
             'code',
@@ -56,6 +59,8 @@ class ProjectSerializer(
             'project_tasks_url',
             'created',
             'modified',
+            'external_ref',
+            'external_system',
             'url',
         ]
 
