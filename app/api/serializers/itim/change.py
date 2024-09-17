@@ -2,7 +2,7 @@ from rest_framework.fields import empty
 
 from api.serializers.core.ticket import TicketSerializer
 
-from core.models.ticket import Ticket
+from core.models.ticket.ticket import Ticket
 
 
 

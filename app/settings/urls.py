@@ -10,6 +10,8 @@ from itam.views import device_type, device_model, software_category
 
 from itim.views import cluster_types, ports
 
+from project_management.views import project_states, project_types
+
 app_name = "Settings"
 urlpatterns = [
 
@@ -58,6 +60,18 @@ urlpatterns = [
     path("port/<int:pk>/edit", ports.Change.as_view(), name="_port_change"),
     path("port/<int:pk>/delete", ports.Delete.as_view(), name="_port_delete"),
     path("port/<int:pk>", ports.View.as_view(), name="_port_view"),
+
+    path("project_states", project_states.Index.as_view(), name="_project_states"),
+    path("project_state/<int:pk>", project_states.View.as_view(), name="_project_state_view"),
+    path("project_state/add", project_states.Add.as_view(), name="_project_state_add"),
+    path("project_state/<int:pk>/edit", project_states.Change.as_view(), name="_project_state_change"),
+    path("project_state/<int:pk>/delete", project_states.Delete.as_view(), name="_project_state_delete"),
+
+    path("project_types", project_types.Index.as_view(), name="_project_types"),
+    path("project_type/<int:pk>", project_types.View.as_view(), name="_project_type_view"),
+    path("project_type/add", project_types.Add.as_view(), name="_project_type_add"),
+    path("project_type/<int:pk>/edit", project_types.Change.as_view(), name="_project_type_change"),
+    path("project_type/<int:pk>/delete", project_types.Delete.as_view(), name="_project_type_delete"),
 
     path("software_category", software_categories.Index.as_view(), name="_software_categories"),
     path("software_category/<int:pk>", software_category.View.as_view(), name="_software_category_view"),

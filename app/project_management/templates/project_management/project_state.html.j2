@@ -1,0 +1,42 @@
+{% extends 'detail.html.j2' %}
+
+{% block additional-stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ticketing.css' %}">
+{% endblock additional-stylesheet %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+<div id="tasks" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.tasks %}
+
+</div>
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
+        {{ notes_form }}
+        <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+        <div class="comments">
+            {% if notes %}
+            {% for note in notes %}
+            {% include 'note.html.j2' %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
+</div>
+
+{% endblock %}

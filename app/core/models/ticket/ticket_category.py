@@ -32,7 +32,8 @@ class TicketCategory(TicketCategoryCommonFields):
     class Meta:
 
         ordering = [
-            'name'
+            'parent__name',
+            'name',
         ]
 
         verbose_name = "Ticket Category"
@@ -106,6 +107,15 @@ class TicketCategory(TicketCategoryCommonFields):
     )
 
 
-    def __str__(self):
+    @property
+    def recusive_name(self):
+
+        if self.parent:
+
+            return str(self.parent.recusive_name + ' > ' + self.name )
 
         return self.name
+
+    def __str__(self):
+
+        return self.recusive_name

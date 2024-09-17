@@ -24,10 +24,18 @@
             <a href="{% url 'Project Management:_project_view' pk=project.id %}">{{ project.name }}</a>
         </td>
         <td>
-        &nbsp;
+        {% if project.project_type %}
+            {{ project.project_type }}
+        {% else%}
+            -
+        {% endif %}
         </td>
         <td>
-        &nbsp;
+        {% if project.state %}
+            {{ project.state }}
+        {% else%}
+            -
+        {% endif %}
         </td>
         <td>{% if project.is_global %}Global{% else %}{{ project.organization }}{% endif %}</td>
         <td>&nbsp;</td>

@@ -6,7 +6,7 @@ from app import settings
 
 from core.forms.common import CommonModelForm
 
-from core.models.ticket import RelatedTickets
+from core.models.ticket.ticket import RelatedTickets
 
 
 class RelatedTicketForm(CommonModelForm):

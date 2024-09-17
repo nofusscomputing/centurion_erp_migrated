@@ -1,30 +1,31 @@
 {% extends 'base.html.j2' %}
 
-{% block content %}
-<input type="button" value="<< Back to settings" onclick="window.location='{% url 'Settings:Settings' %}';">
-<input type="button" value="New Category" onclick="window.location='{% url 'Settings:_ticket_category_add' %}';">
+{% block content_header_icon %}{% endblock %}
 
-<table style="max-width: 100%;">
-    <thead>
+{% block content %}
+
+<input type="button" value="New Project Type" onclick="window.location='{% url 'Settings:_project_type_add' %}';">
+
+<table class="data">
+    <tr>
         <th>Name</th>
         <th>Organization</th>
-        <th>created</th>
-        <th>modified</th>
+        <th>Created</th>
+        <th>Modified</th>
         <th>&nbsp;</th>
-    </thead>
-    {% if items %}
-    {% for category in items %}
+    </tr>
+    {% for project_type in project_types %}
     <tr>
-        <td><a href="{% url 'Settings:_ticket_category_view' pk=category.id %}">{{ category.name }}</a></td>
-        <td>{{ category.organization }}</td>
-        <td>{{ category.created }}</td>
-        <td>{{ category.modified }}</td>
+        <td>
+            <a href="{% url 'Settings:_project_type_view' pk=project_type.id %}">{{ project_type.name }}</a>
+        </td>
+        <td>{% if project_type.is_global %}Global{% else %}{{ project_type.organization }}{% endif %}</td>
+        <td>{{ project_type.created }}</td>
+        <td>{{ project_type.modified }}</td>
         <td>&nbsp;</td>
     </tr>
     {% endfor %}
-    {% else %}
-    <tr><td colspan="5">Nothing Found</td></tr>
-    {% endif%}
+
 </table>
 
 <div class="pagination">

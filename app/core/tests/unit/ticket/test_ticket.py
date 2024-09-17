@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from app.tests.abstract.models import TenancyModel
 
-from core.models.ticket import Ticket
+from core.models.ticket.ticket import Ticket
 
 
 class TicketModel(

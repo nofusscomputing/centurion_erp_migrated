@@ -91,7 +91,7 @@ class Project(ProjectCommonFieldsName):
 
     state = models.ForeignKey(
         ProjectState,
-        blank= False,
+        blank= True,
         help_text = 'State of the project',
         on_delete=models.SET_NULL,
         null = True,
@@ -101,7 +101,7 @@ class Project(ProjectCommonFieldsName):
 
     project_type = models.ForeignKey(
         ProjectType,
-        blank= False,
+        blank= True,
         help_text = 'Type of project',
         on_delete=models.SET_NULL,
         null = True,
@@ -180,7 +180,7 @@ class Project(ProjectCommonFieldsName):
 
         duration_project: int = 0
 
-        from core.models.ticket import Ticket
+        from core.models.ticket.ticket import Ticket
 
         tickets = Ticket.objects.filter(
             project = self.id
