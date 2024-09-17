@@ -58,6 +58,8 @@ class ProjectSerializer(
             'project_tasks_url',
             'created',
             'modified',
+            'external_ref',
+            'external_system',
             'url',
         ]
 
