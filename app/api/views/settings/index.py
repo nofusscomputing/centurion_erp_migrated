@@ -39,6 +39,7 @@ class View(views.APIView):
         response_data: dict = {
             "permissions": reverse('API:_settings_permissions', request=request),
             "project_state": reverse('API:_api_project_state-list', request=request),
+            "project_type": reverse('API:_api_project_type-list', request=request),
             "ticket_categories": reverse('API:_api_ticket_category-list', request=request),
             "ticket_comment_categories": reverse('API:_api_ticket_comment_category-list', request=request)
         }
