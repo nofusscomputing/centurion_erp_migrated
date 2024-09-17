@@ -55,6 +55,7 @@ class DetailForm(ProjectForm):
                 {
                     "layout": "double",
                     "left": [
+                        'organization',
                         'code',
                         'name',
                         'project_type',
