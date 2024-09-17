@@ -96,6 +96,12 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = Manufacturer
 
+                case 'projectstate':
+
+                    from project_management.models.project_states import ProjectState
+
+                    self.model = ProjectState
+
                 case 'software':
 
                     self.model = Software
