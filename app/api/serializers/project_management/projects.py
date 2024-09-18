@@ -41,6 +41,23 @@ class ProjectSerializer(
             )
         )
 
+
+    project_milestone_url = serializers.SerializerMethodField('get_url_project_milestone')
+
+    def get_url_project_milestone(self, item):
+
+        request = self.context.get('request')
+
+        return request.build_absolute_uri(
+            reverse(
+                'API:_api_project_milestone-list',
+                kwargs={
+                    'project_id': item.id
+                }
+            )
+        )
+
+
     class Meta:
 
         model = Project
@@ -62,6 +79,7 @@ class ProjectSerializer(
             'manager_team',
             'team_members',
             'project_tasks_url',
+            'project_milestone_url',
             'percent_completed',
             'created',
             'modified',
@@ -100,6 +118,7 @@ class ProjectImportSerializer(ProjectSerializer):
             'manager_team',
             'team_members',
             'project_tasks_url',
+            'project_milestone_url',
             'percent_completed',
             'created',
             'modified',
