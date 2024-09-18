@@ -21,6 +21,10 @@ class Project(ProjectCommonFieldsName):
             'name',
         ]
 
+        permissions = [
+            ('import_project', 'Can import a project'),
+        ]
+
         verbose_name = 'Project'
 
         verbose_name_plural = 'Projects'
@@ -176,6 +180,13 @@ class Project(ProjectCommonFieldsName):
         null = False,
         verbose_name = 'Deleted',
     )
+
+
+
+    fields_all: list = []
+
+    fields_import: list = []
+
 
 
     def __str__(self):

@@ -65,6 +65,44 @@ class ProjectSerializer(
             'percent_completed',
             'created',
             'modified',
+            'url',
+        ]
+
+        read_only_fields = [
+            'id',
+            'url',
+            'created',
+            'modified',
+        ]
+
+
+
+class ProjectImportSerializer(ProjectSerializer):
+
+    class Meta:
+
+        model = Project
+
+        fields =  [
+            'id',
+            'organization',
+            'state',
+            'project_type',
+            'priority',
+            'name',
+            'description',
+            'code',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
+            'manager_user',
+            'manager_team',
+            'team_members',
+            'project_tasks_url',
+            'percent_completed',
+            'created',
+            'modified',
             'external_ref',
             'external_system',
             'is_deleted',
