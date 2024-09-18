@@ -136,10 +136,11 @@ class DetailForm(ProjectForm):
             initial = to_duration(self.instance.duration_project),
         )
 
-        self.fields['resources'] = forms.CharField(
-            label = 'Available Resources',
+        self.fields['completed'] = forms.CharField(
             disabled = True,
-            initial = 'xx/yy CPU, xx/yy RAM, xx/yy Storage',
+            help_text = 'Project completion percentage.',
+            initial = self.instance.percent_completed,
+            label = 'Completed',
         )
 
         self.tabs['details'].update({

@@ -11,6 +11,10 @@ class ProjectSerializer(
     serializers.ModelSerializer,
 ):
 
+    percent_completed = serializers.CharField(
+        read_only = True,        
+    )
+
     url = serializers.SerializerMethodField('get_url')
 
 
@@ -58,6 +62,7 @@ class ProjectSerializer(
             'manager_team',
             'team_members',
             'project_tasks_url',
+            'percent_completed',
             'created',
             'modified',
             'external_ref',

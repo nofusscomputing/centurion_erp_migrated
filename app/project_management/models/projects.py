@@ -202,5 +202,36 @@ class Project(ProjectCommonFieldsName):
             str: Calculated percentage of project completion.
         """
 
-        return 'xx %'
+        from core.models.ticket.ticket import Ticket
+
+        ticket_status_closed = [
+            TicketValues._CANCELLED_INT,
+            TicketValues._CLOSED_INT,
+            TicketValues._SOLVED_INT,
+        ]
+
+        all_tickets = Ticket.objects.filter(
+            project = self.id,
+        ).exclude(
+            status__in = ticket_status_closed
+        )
+
+        closed_tickets = Ticket.objects.filter(
+            project = self.id,
+            status__in = ticket_status_closed
+        )
+
+        calculation: int = 0
+
+        if len(all_tickets) > 0:
+
+            if len(closed_tickets) > 0:
+
+                calculation: int = int(
+                    (
+                        len(closed_tickets) / len(all_tickets)
+                    ) * 100
+                )
+
+        return str(calculation) + '%'
 
