@@ -175,6 +175,12 @@ class TicketSerializer(
 
         if self.instance is None:
 
-            self.validated_data['subscribed_users'] = self.validated_data['subscribed_users'] + [ self.validated_data['opened_by'] ]
+            subscribed_users: list = []
+
+            if 'subscribed_users' in self.validated_data:
+
+                subscribed_users = self.validated_data['subscribed_users']
+
+            self.validated_data['subscribed_users'] = subscribed_users + [ self.validated_data['opened_by'] ]
 
         return is_valid
