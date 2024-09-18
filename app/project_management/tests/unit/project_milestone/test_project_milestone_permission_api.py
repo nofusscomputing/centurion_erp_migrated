@@ -4,16 +4,17 @@ import requests
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.shortcuts import reverse
+from django.test import Client, TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions import APIPermissions
 
+from project_management.models.projects import Project
 from project_management.models.project_milestone import Project, ProjectMilestone
 
 
-@pytest.mark.skip(reason='to be developed')
 class ProjectMilestonePermissionsAPI(TestCase, APIPermissions):
 
 
@@ -21,9 +22,9 @@ class ProjectMilestonePermissionsAPI(TestCase, APIPermissions):
 
     app_namespace = 'API'
     
-    url_name = '_api_ticket_comment_category-detail'
+    url_name = '_api_project_milestone-detail'
 
-    url_list = '_api_ticket_comment_category-list'
+    url_list = '_api_project_milestone-list'
 
     change_data = {'name': 'category'}
 
@@ -47,18 +48,23 @@ class ProjectMilestonePermissionsAPI(TestCase, APIPermissions):
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.project = Project.objects.create(
+            name='a proj',
+            organization=self.organization,
+        )
 
         self.item = self.model.objects.create(
             organization=organization,
-            name = 'softwareone'
+            name = 'softwareone',
+            project = self.project,
         )
 
 
-        # self.url_kwargs = {'pk': self.item.id}
+        self.url_kwargs = {'project_id': self.project.id,}
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'project_id': self.project.id, 'pk': self.item.id}
 
-        self.add_data = {'name': 'software', 'organization': self.organization.id}
+        self.add_data = {'name': 'software', 'organization': self.organization.id, 'project': self.project.id}
 
 
         view_permissions = Permission.objects.get(
@@ -175,3 +181,11 @@ class ProjectMilestonePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+        # fetch fields to confirm availability.
+        # client = Client()
+        # url = reverse(self.app_namespace + ':' + self.url_name, kwargs=self.url_view_kwargs)
+
+        # client.force_login(self.view_user)
+        # self.view_response = client.get(url)

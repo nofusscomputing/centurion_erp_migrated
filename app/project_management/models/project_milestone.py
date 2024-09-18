@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from access.fields import AutoCreatedField
+
 from .projects import Project, ProjectCommonFieldsName, SaveHistory
 
 
@@ -22,7 +24,9 @@ class ProjectMilestone(ProjectCommonFieldsName):
     description = models.TextField(
         blank = True,
         default = None,
+        help_text = 'Description of milestone. Markdown supported',
         null= True,
+        verbose_name = 'Description',
     )
 
     start_date = models.DateTimeField(
@@ -42,13 +46,17 @@ class ProjectMilestone(ProjectCommonFieldsName):
     project = models.ForeignKey(
         Project,
         blank= False,
-        help_text = '',
+        help_text = 'Project this milestone belongs.',
         on_delete=models.CASCADE,
         null = False,
     )
 
     model_notes = None
 
+
+    created = AutoCreatedField(
+        editable = False,
+    )
 
 
     def __str__(self):

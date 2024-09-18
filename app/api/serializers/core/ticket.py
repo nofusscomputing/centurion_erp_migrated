@@ -162,19 +162,34 @@ class TicketSerializer(
 
     def is_valid(self, *, raise_exception=True) -> bool:
 
-        self.request = self._context['request']
+        is_valid = False
 
-        is_valid = super().is_valid(raise_exception=raise_exception)
+        try:
 
-        self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
+            self.request = self._context['request']
 
+            is_valid = super().is_valid(raise_exception=raise_exception)
 
-        is_valid = self.validate_ticket()
+            self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
 
-        self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
+            is_valid = self.validate_ticket()
 
-        if self.instance is None:
+            self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
 
-            self.validated_data['subscribed_users'] = self.validated_data['subscribed_users'] + [ self.validated_data['opened_by'] ]
+            if self.instance is None:
+
+                subscribed_users: list = []
+
+                if 'subscribed_users' in self.validated_data:
+
+                    subscribed_users = self.validated_data['subscribed_users']
+
+                self.validated_data['subscribed_users'] = subscribed_users + [ self.validated_data['opened_by'] ]
+        
+        except Exception as unhandled_exception:
+
+            serializers.ParseError( 
+                detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
+            )
 
         return is_valid
