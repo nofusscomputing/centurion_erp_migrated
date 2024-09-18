@@ -169,6 +169,14 @@ class Project(ProjectCommonFieldsName):
         blank = True,
     )
 
+    is_deleted = models.BooleanField(
+        blank = False,
+        default = False,
+        help_text = 'Is this project considered deleted',
+        null = False,
+        verbose_name = 'Deleted',
+    )
+
 
     def __str__(self):
 

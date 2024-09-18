@@ -67,6 +67,7 @@ class ProjectSerializer(
             'modified',
             'external_ref',
             'external_system',
+            'is_deleted',
             'url',
         ]
 
