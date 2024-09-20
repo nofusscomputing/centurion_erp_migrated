@@ -55,7 +55,7 @@ class TicketForm(
 
         if self.instance.pk is not None:
             
-            self.fields['organization'].widget = self.fields['organization'].hidden_widget()
+            del self.fields['organization']
 
         if self.instance.project is not None:
 

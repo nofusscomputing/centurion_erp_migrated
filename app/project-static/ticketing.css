@@ -208,6 +208,11 @@
     width: 33%;
 }
 
+#data-block.linked-item div#item p{
+    margin: 0px;
+    padding: 0px;
+}
+
 
 #ticket-comments {
     padding: 10px;

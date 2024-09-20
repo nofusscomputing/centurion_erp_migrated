@@ -13,6 +13,12 @@ The ticketing system within Centurion ERP is common to all ticket types. The dif
 
 - Commenting
 
+- Linked Items to ticket
+
+- Milestone
+
+- Project
+
 - Related Tickets
 
 - Slash commands
@@ -47,6 +53,8 @@ Comment types are:
 
 Slash commands are a quick action that is specified after a slash command. As the name implies, the command starts with a slash `/`. The following slash commands are available:
 
+- Linked Item `link`
+
 - Related `/blocked_by`, `/blocks` and `/relate`
 
 - Time Spent `/spend`, `/spent`
@@ -55,6 +63,17 @@ Slash commands are a quick action that is specified after a slash command. As th
 ### Time Spent
 
 ::: app.core.lib.slash_commands.Duration
+    options:
+        inherited_members: false
+        members: []
+        show_bases: false
+        show_submodules: false
+        summary: true
+
+
+### Linked Items
+
+::: app.core.lib.slash_commands.CommandLinkedModel
     options:
         inherited_members: false
         members: []

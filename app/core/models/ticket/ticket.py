@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
 
-# from .ticket_enum import TicketEnum
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -670,6 +669,30 @@ class Ticket(
             duration = 0
 
         return str(duration)
+
+
+    @property
+    def linked_items(self) -> list(dict()):
+        """Fetch items linked to ticket
+
+        Returns:
+            List of dict (list): List of dictionary with fields: id, name, type and url.
+            Empty List (list): No items were found
+        """
+
+        linked_items: list = []
+
+        from core.models.ticket.ticket_linked_items import TicketLinkedItem
+
+        items = TicketLinkedItem.objects.filter(
+            ticket = self
+        )
+
+        if len(items) > 0:
+
+            linked_items = items
+
+        return linked_items
 
 
     @property

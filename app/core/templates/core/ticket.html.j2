@@ -62,26 +62,17 @@
             <div id="data-block" class="linked-item">
                 <h3>
                     <div id="text">Linked Items</div>
-                    <div id="icons">{% include 'icons/place-holder.svg' %}{% include 'icons/place-holder.svg' %}</div>
+                    <div id="icons">
+                        <a href="{% url '_ticket_linked_item_add' ticket_type=ticket_type ticket_id=ticket.id %}">{% include 'icons/ticket/add.svg' %}</a>
+                    </div>
                 </h3>
-                <div id="item">
-                    An item
-                </div>
-                <div id="item">
-                    another item
-                </div>
-                <div id="item">
-                    another item
-                </div>
-                <div id="item">
-                    another item
-                </div>
-                <div id="item">
-                    another item
-                </div>
-                <div id="item">
-                    another item
-                </div>
+                {% if ticket.linked_items %}
+                {% for linked_item in ticket.linked_items %}
+                <div id="item">{{ linked_item | markdown | safe }}</div>
+                {% endfor %}
+                {% else %}
+                <div style="text-align:center;%">Nothing found</div>
+                {% endif%}
             </div>
 
         </div>
