@@ -2,11 +2,13 @@ import re
 
 from .duration import Duration
 from .related_ticket import CommandRelatedTicket
+from .linked_model import CommandLinkedModel
 
 
 class SlashCommands(
     Duration,
-    CommandRelatedTicket
+    CommandRelatedTicket,
+    CommandLinkedModel,
 ):
     """Slash Commands Base Class
     
@@ -37,6 +39,8 @@ class SlashCommands(
         """
 
         markdown = re.sub(self.time_spent, self.command_duration, markdown)
+
+        markdown = re.sub(self.linked_item, self.command_linked_model, markdown)
 
         markdown = re.sub(self.related_ticket, self.command_related_ticket, markdown)
 

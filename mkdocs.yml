@@ -93,6 +93,8 @@ nav:
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
 
+          - projects/centurion_erp/development/api/models/ticket.md
+
           - projects/centurion_erp/development/api/models/tenancy_object.md
 
         - projects/centurion_erp/development/api/common_views.md
@@ -228,6 +230,12 @@ nav:
         - projects/centurion_erp/user/project_management/index.md
 
         - projects/centurion_erp/user/project_management/project.md
+
+        - projects/centurion_erp/user/project_management/project_state.md
+
+        - projects/centurion_erp/user/project_management/project_task.md
+
+        - projects/centurion_erp/user/project_management/project_type.md
 
       - Settings:
 
