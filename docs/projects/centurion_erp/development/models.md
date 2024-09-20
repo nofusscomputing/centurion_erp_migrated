@@ -51,6 +51,7 @@ This section details the additional items that may need to be done when adding a
 
 - If the model is a primary model, add to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
 
+
 ## History
 
 Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.

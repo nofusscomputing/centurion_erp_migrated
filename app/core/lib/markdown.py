@@ -10,7 +10,7 @@ from pygments.lexers import get_lexer_by_name
 
 from django.template.loader import render_to_string
 
-from .markdown_plugins import ticket_number
+from .markdown_plugins import ticket_number, model_reference
 
 
 
@@ -67,6 +67,7 @@ class Markdown:
             .use(footnote.footnote_plugin)
             .use(tasklists.tasklists_plugin)
             .use(ticket_number.plugin, enabled=True)
+            .use(model_reference.plugin, enabled=True)
         )
 
         return md.render(markdown_text)
