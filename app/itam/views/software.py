@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceSoftware
@@ -108,6 +109,11 @@ class View(ChangeView):
         )
 
         context['software_versions'] = software_versions
+
+        context['tickets'] = TicketLinkedItem.objects.filter(
+            item = int(self.kwargs['pk']),
+            item_type = TicketLinkedItem.Modules.SOFTWARE
+        )
 
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(software=self.kwargs['pk'])
