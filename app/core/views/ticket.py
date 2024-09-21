@@ -289,19 +289,21 @@ class View(ChangeView):
 
         context['ticket_type'] = self.kwargs['ticket_type']
 
-        # context['model_delete_url'] = reverse('ITAM:_device_delete', args=(self.kwargs['pk'],))
-
         url_kwargs = { 'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
 
         if self.kwargs['ticket_type'] == 'request':
 
             path = 'Assistance:_ticket_request_change'
 
+            context['model_delete_url'] = reverse('Assistance:_ticket_' + self.kwargs['ticket_type'] + '_delete', kwargs=url_kwargs)
+
         elif self.kwargs['ticket_type'] == 'project_task':
 
             path = 'Project Management:_project_task_change'
 
             url_kwargs = { 'project_id': self.kwargs['project_id'],'ticket_type': self.kwargs['ticket_type'], 'pk': self.kwargs['pk']}
+
+            context['model_delete_url'] = reverse('Project Management:_project_task_delete', kwargs=url_kwargs)
 
         else:
 
@@ -318,6 +320,9 @@ class View(ChangeView):
             elif self.kwargs['ticket_type'] == 'problem':
 
                 path = 'ITIM:_ticket_problem_change'
+
+
+            context['model_delete_url'] = reverse('ITIM:_ticket_' + self.kwargs['ticket_type'] + '_delete', kwargs=url_kwargs)
 
         context['edit_url'] = reverse(
             path,
