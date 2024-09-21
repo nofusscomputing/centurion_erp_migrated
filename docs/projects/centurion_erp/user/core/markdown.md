@@ -64,7 +64,7 @@ Available admonition types are:
 Declare a ticket reference in format `#<ticket number>`, and it will be rendered as a link to the ticket. i.e. `#2`
 
 
-## Model
+## Model Reference
 
 A Model link is a reference to an item within the database. Supported model link items are:
 
