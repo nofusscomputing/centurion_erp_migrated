@@ -1,6 +1,7 @@
 
 import re
 
+from django.template import Context, Template
 from django.template.loader import render_to_string
 from django.urls import reverse
 
@@ -112,7 +113,19 @@ def plugin(
                     pk = int(id)
                 )
 
-                return f'<a href="{ url }">{ item.name }, <span style="color: #777; font-size: smaller;">{ item_type }</span></a>'
+                html_template = Template('''
+                <a href="{{ url }}">
+                    {{ name }}, <span style="color: #777; font-size: smaller;">{{ item_type }}</span>
+                </a>
+                ''')
+                context = Context({
+                    'url': url,
+                    'item_type': item_type,
+                    'name': item.name
+                })
+                html = html_template.render(context)
+
+                return html
 
         except Exception as e:
 
