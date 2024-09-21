@@ -24,6 +24,7 @@ class ProjectTaskSerializer(
             'status',
             'title',
             'description',
+            'estimate',
             'urgency',
             'impact',
             'priority',

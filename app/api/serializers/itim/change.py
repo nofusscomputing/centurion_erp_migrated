@@ -24,6 +24,7 @@ class ChangeTicketSerializer(
             'status',
             'title',
             'description',
+            'estimate',
             'urgency',
             'impact',
             'priority',

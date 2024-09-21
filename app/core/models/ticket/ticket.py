@@ -534,6 +534,14 @@ class Ticket(
         verbose_name = 'Planned Finish Date',
     )
 
+    estimate = models.IntegerField(
+        blank = False,
+        default = 0,
+        help_text = 'Time Eastimated to complete this ticket in seconds',
+        null = False,
+        verbose_name = 'Estimation',
+    )
+
     real_start_date = models.DateTimeField(
         blank = True,
         help_text = 'Real start date',
@@ -563,6 +571,7 @@ class Ticket(
         'ticket_type',
         'assigned_users',
         'assigned_teams',
+        'estimate',
     ]
 
     common_itsm_fields: list(str()) = common_fields + [

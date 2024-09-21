@@ -24,6 +24,7 @@ class RequestTicketSerializer(
             'status',
             'title',
             'description',
+            'estimate',
             'urgency',
             'impact',
             'priority',

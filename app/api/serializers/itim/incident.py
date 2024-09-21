@@ -24,6 +24,7 @@ class IncidentTicketSerializer(
             'status',
             'title',
             'description',
+            'estimate',
             'urgency',
             'impact',
             'priority',
