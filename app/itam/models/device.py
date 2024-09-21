@@ -344,7 +344,6 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     device = models.ForeignKey(
         Device,
         on_delete=models.CASCADE,
-        default = None,
         null = False,
         blank= False
     )
@@ -352,7 +351,6 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     software = models.ForeignKey(
         Software,
         on_delete=models.CASCADE,
-        default = None,
         null = False,
         blank= False
     )
@@ -419,7 +417,6 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
     device = models.ForeignKey(
         Device,
         on_delete = models.CASCADE,
-        default = None,
         null = False,
         blank = False,
         
@@ -429,7 +426,6 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         OperatingSystemVersion,
         verbose_name = 'Operating System/Version',
         on_delete = models.CASCADE,
-        default = None,
         null = False,
         blank = False
         

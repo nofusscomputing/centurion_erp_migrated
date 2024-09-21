@@ -376,7 +376,6 @@ class Ticket(
 
     description = models.TextField(
         blank = False,
-        default = None,
         help_text = 'Ticket Description',
         null = False,
         verbose_name = 'Description',
