@@ -91,6 +91,11 @@ class DetailForm(OperatingSystemForm):
             "slug": "installations",
             "sections": []
         },
+        "tickets": {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
         "notes": {
             "name": "Notes",
             "slug": "notes",
