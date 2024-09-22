@@ -68,5 +68,7 @@ class TicketCommentSerializer(serializers.ModelSerializer):
                     self.fields.fields['ticket'].initial = int(self._kwargs['context']['view'].kwargs['ticket_id'])
 
                     self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
-        
+
+                    self.fields.fields['user'].initial = kwargs['context']['request']._user.id
+
         super().__init__(instance=instance, data=data, **kwargs)

@@ -61,6 +61,11 @@ class DetailForm(DeviceForm):
             "slug": "software",
             "sections": []
         },
+        "tickets": {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
         "notes": {
             "name": "Notes",
             "slug": "notes",

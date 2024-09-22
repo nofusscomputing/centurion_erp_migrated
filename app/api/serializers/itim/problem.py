@@ -24,6 +24,7 @@ class ProblemTicketSerializer(
             'status',
             'title',
             'description',
+            'estimate',
             'urgency',
             'impact',
             'priority',

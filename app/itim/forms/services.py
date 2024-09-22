@@ -128,7 +128,12 @@ class DetailForm(ServiceForm):
                     ]
                 }
             ]
-        }
+        },
+        "tickets": {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
     }
 
 

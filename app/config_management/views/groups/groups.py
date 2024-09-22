@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import Device
@@ -158,6 +159,11 @@ class View(ChangeView):
         context['config'] = json.dumps(json.loads(self.object.render_config()), indent=4, sort_keys=True)
 
         context['config_group_hosts'] = ConfigGroupHosts.objects.filter(group_id = self.kwargs['pk']).order_by('-host')
+
+        context['tickets'] = TicketLinkedItem.objects.filter(
+            item = int(self.kwargs['pk']),
+            item_type = TicketLinkedItem.Modules.CONFIG_GROUP
+        )
 
         context['notes_form'] = AddNoteForm(prefix='note')
         context['notes'] = Notes.objects.filter(config_group=self.kwargs['pk'])

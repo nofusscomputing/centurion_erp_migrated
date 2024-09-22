@@ -63,3 +63,8 @@ def to_duration(value):
     seconds = int((int(value)%hour)%minute)
 
     return str("{:02d}h {:02d}m {:02d}s".format(hours, minutes, seconds))
+
+@register.simple_tag
+def concat_strings(*args):
+    """concatenate all args"""
+    return ''.join(map(str, args))

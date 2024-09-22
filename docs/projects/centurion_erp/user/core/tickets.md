@@ -53,7 +53,7 @@ Comment types are:
 
 Slash commands are a quick action that is specified after a slash command. As the name implies, the command starts with a slash `/`. The following slash commands are available:
 
-- Linked Item `link`
+- Linked Item `/link`
 
 - Related `/blocked_by`, `/blocks` and `/relate`
 

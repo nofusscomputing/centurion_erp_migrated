@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.models.device import DeviceOperatingSystem
@@ -186,6 +187,11 @@ class View(ChangeView):
         )
         
         context['operating_system_versions'] = operating_system_versions
+
+        context['tickets'] = TicketLinkedItem.objects.filter(
+            item = int(self.kwargs['pk']),
+            item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
+        )
 
         installs = DeviceOperatingSystem.objects.filter(operating_system_version__operating_system_id=self.kwargs['pk'])
         context['installs'] = installs

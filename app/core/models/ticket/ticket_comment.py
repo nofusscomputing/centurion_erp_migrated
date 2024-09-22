@@ -162,7 +162,6 @@ class TicketComment(
 
     body = models.TextField(
         blank = False,
-        default = None,
         help_text = 'Comment contents',
         null = False,
         verbose_name = 'Comment',

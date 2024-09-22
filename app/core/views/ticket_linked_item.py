@@ -19,7 +19,7 @@ class Add(AddView):
     model = TicketLinkedItem
 
     permission_required = [
-        'itam.add_device',
+        'core.add_ticketlinkeditem',
     ]
 
     template_name = 'form.html.j2'
