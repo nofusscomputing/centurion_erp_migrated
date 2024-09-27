@@ -10,6 +10,16 @@ class NavigationMetadata(JSONAPIMetadata):
         metadata = super().determine_metadata(request, view)
 
         metadata['navigation'] = [
+            {
+                "name": "ITAM",
+                "pages": [
+                    {
+                        "name": "Devices",
+                        "icon": "device",
+                        "link": "/itam/device"
+                    }
+                ]
+            }
         ]
 
         return metadata

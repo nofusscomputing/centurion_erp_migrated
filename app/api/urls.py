@@ -30,7 +30,7 @@ from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
-from .views.v2 import index as v2
+from .views.v2.views import index as v2
 
 
 app_name = "API"
