@@ -1,3 +1,5 @@
+from django.conf import settings as django_settings
+
 from django.urls import path
 
 from rest_framework.routers import DefaultRouter
@@ -27,6 +29,8 @@ from api.views.project_management import (
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
+
+from .views.v2 import index as v2
 
 
 app_name = "API"
@@ -63,6 +67,11 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 
 router.register('software', software.SoftwareViewSet, basename='software')
 
+
+# API V2
+if django_settings.API_TEST:
+
+    router.register('v2', v2.Index, basename='_api_v2_home')
 
 
 urlpatterns = [

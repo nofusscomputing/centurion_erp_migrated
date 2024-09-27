@@ -1,3 +1,5 @@
+from django.conf import settings as django_settings
+
 from django.utils.safestring import mark_safe
 
 from rest_framework import generics, permissions, routers, viewsets
@@ -27,8 +29,8 @@ class Index(viewsets.ViewSet):
 
 
     def list(self, request, pk=None):
-        return Response(
-        {
+
+        API: dict = {
             # "teams": reverse("_api_teams", request=request),
             'assistance': reverse("API:_api_assistance", request=request),
             "devices": reverse("API:device-list", request=request),
@@ -38,5 +40,13 @@ class Index(viewsets.ViewSet):
             'project_management': reverse("API:_api_project_management", request=request),
             "settings": reverse('API:_settings', request=request),
             "software": reverse("API:software-list", request=request),
+
         }
-    )
+
+        if django_settings.API_TEST:
+
+            API.update({
+                'v2': reverse("API:_api_v2_home-list", request=request),
+            })
+
+        return Response( API )

@@ -80,6 +80,7 @@ CACHES = {
 #
 
 ALLOWED_HOSTS = [ '*' ]          # Site host to serve
+API_TEST = False                   # API Version 2. currently testing
 DEBUG = False                    # SECURITY WARNING: don't run with debug turned on in production!
 SITE_URL = 'http://127.0.0.1'    # domain with HTTP method for the sites URL
 SECRET_KEY = None                # You need to generate this
@@ -102,6 +103,7 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'corsheaders',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -126,6 +128,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
