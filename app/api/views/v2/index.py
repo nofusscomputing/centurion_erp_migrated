@@ -6,10 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .metadata import UIMetadata
+from .metadata import NavigationMetadata
 
 
 class Index(viewsets.ViewSet):
+
+    metadata_class = NavigationMetadata
 
     permission_classes = []
 
