@@ -160,6 +160,92 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name = 'Is Virtual',
     )
 
+    table_fields: list = [
+        "nbsp",
+        "name",
+        "device_model",
+        "device_type",
+        "organization",
+        "created",
+        "modified",
+        "model",
+        "nbsp"
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'device_type',
+                        'device_model',
+                        'name',
+                        'serial_number',
+                        'uuid',
+                        'inventorydate',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Dependent Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    # "name": "Device Config",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    # "name": "Device Config",
+                    "field": "software",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+        {
+            "name": "Config Management",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    # "name": "Rendered Config",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        }
+    ]
+
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
@@ -242,10 +328,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
             return 'UNK'
 
+    @property
+    def get_configuration(self):
 
-    def get_configuration(self, id):
-
-        softwares = DeviceSoftware.objects.filter(device=id)
+        softwares = DeviceSoftware.objects.filter(device=self.id)
 
         config = {
             "software": []
@@ -386,6 +472,17 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         null = True,
         blank = True
     )
+
+
+    table_fields: list = [
+        "nbsp",
+        "software",
+        "action",
+        "version",
+        "installedversion",
+        "installed",
+        "nbsp"
+    ]
 
 
     @property

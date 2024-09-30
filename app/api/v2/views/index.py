@@ -29,5 +29,6 @@ class Index(viewsets.ViewSet):
     def list(self, request, pk=None):
         return Response(
             {
+                "itam": reverse('API:_api_v2_itam_home-list', request=request)
             }
         )

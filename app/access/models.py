@@ -62,6 +62,52 @@ class Organization(SaveHistory):
     def __str__(self):
         return self.name
 
+    table_fields: list = [
+        'nbsp',
+        'name',
+        'created',
+        'modified',
+        'nbsp'
+    ]
+
+
+    
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'name',
+                        'manager',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Teams",
+            "slug": "teams",
+            "sections": [
+                # {
+                #     "layout": "table",
+                #     # "name": "Device Config",
+                #     "field": "teams",
+                # }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    ]
 
 
 class TenancyManager(models.Manager):

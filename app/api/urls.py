@@ -30,7 +30,23 @@ from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
-from .views.v2.views import index as v2
+
+from api.v2.views import index as v2
+
+from api.v2.views.itam import (
+    index as itam_index_v2,
+    device as device_v2,
+    device_software as device_software_v2
+)
+from api.v2.views.settings import device_model as device_model_v2
+
+from api.v2.views.itim import (
+    service_device as service_device_v2
+)
+
+from api.v2.views.access import (
+    organization as organization_v2
+)
 
 
 app_name = "API"
@@ -72,6 +88,16 @@ router.register('software', software.SoftwareViewSet, basename='software')
 if django_settings.API_TEST:
 
     router.register('v2', v2.Index, basename='_api_v2_home')
+
+    router.register('v2/access', itam_index_v2.Index, basename='_api_v2_access_home')
+    router.register('v2/access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
+
+    router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
+    router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/device_software', device_software_v2.ViewSet, basename='_api_v2_device_software')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
+
+    router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 
 
 urlpatterns = [
