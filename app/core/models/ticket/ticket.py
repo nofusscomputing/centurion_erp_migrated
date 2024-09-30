@@ -369,7 +369,7 @@ class Ticket(
     title = models.CharField(
         blank = False,
         help_text = "Title of the Ticket",
-        max_length = 50,
+        max_length = 100,
         unique = True,
         verbose_name = 'Title',
     )
