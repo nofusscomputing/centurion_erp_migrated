@@ -429,48 +429,54 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
+        blank= False,
         on_delete=models.CASCADE,
         null = False,
-        blank= False
     )
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
     )
 
     action = models.CharField(
-        max_length=1,
+        blank = True,
         choices=Actions,
         default=None,
+        help_text = 'Action to perform',
+        max_length=1,
         null=True,
-        blank = True,
+        verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Version to install',
+        on_delete=models.CASCADE,
         null = True,
-        blank= True
+        verbose_name = 'Desired Version'
     )
 
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        related_name = 'installedversion',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        related_name = 'installedversion',
+        verbose_name = 'Installed Version'
     )
 
     installed = models.DateTimeField(
-        verbose_name = 'Install Date',
+        blank = True,
+        help_text = 'Date detected as installed',
         null = True,
-        blank = True
+        verbose_name = 'Date Installed'
     )
 
 

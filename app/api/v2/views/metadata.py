@@ -140,8 +140,14 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
                 choices = []
 
+                model = None
 
-                if fields[field_name]['relationship_resource'] == 'DeviceModel':
+
+                if fields[field_name]['relationship_resource'] == 'Device':
+
+                    from itam.models.device import Device as model
+
+                elif fields[field_name]['relationship_resource'] == 'DeviceModel':
 
                     from itam.models.device import DeviceModel as model
 
@@ -153,21 +159,30 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
                     from access.models import Organization as model
 
+                elif fields[field_name]['relationship_resource'] == 'Software':
+
+                    from itam.models.software import Software as model
+
+                elif fields[field_name]['relationship_resource'] == 'SoftwareVersion':
+
+                    from itam.models.software import SoftwareVersion as model
+
                 elif fields[field_name]['relationship_resource'] == 'User':
 
                     from django.contrib.auth.models import User as model
 
+                if model:
 
-                queryset = model.objects.filter()
+                    queryset = model.objects.filter()
 
-                for item in queryset:
+                    for item in queryset:
 
-                    choices += [{
-                        'value': item.id,
-                        'display_name': str(item)
-                    }]
+                        choices += [{
+                            'value': item.id,
+                            'display_name': str(item)
+                        }]
 
-                field_choices[field_name].update({'choices': choices})
+                    field_choices[field_name].update({'choices': choices})
 
 
         return field_choices

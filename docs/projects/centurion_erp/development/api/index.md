@@ -15,3 +15,5 @@ This section contains the application API documentation to assist in application
 - [Serializers](./serializer/index.md)
 
 - [Unit Testing](./tests/index.md)
+
+- [Views](./views.md)
