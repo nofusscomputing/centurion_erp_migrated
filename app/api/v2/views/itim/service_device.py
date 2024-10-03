@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
@@ -17,7 +17,14 @@ from api.v2.serializers.itim.service import Service, ModelSerializer, ViewSerial
 from api.v2.views.metadata import NavigationMetadata
 
 
-
+@extend_schema_view(
+        list=extend_schema(exclude=True),
+        retrieve=extend_schema(exclude=True),
+        create=extend_schema(exclude=True),
+        update=extend_schema(exclude=True),
+        partial_update=extend_schema(exclude=True),
+        destroy=extend_schema(exclude=True)
+    )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     model = Service

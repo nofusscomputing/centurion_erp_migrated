@@ -483,12 +483,24 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     table_fields: list = [
         "nbsp",
         "software",
+        "category",
         "action",
         "version",
         "installedversion",
         "installed",
         "nbsp"
     ]
+
+    @property
+    def category(self):
+
+        category = None
+
+        if self.software:
+
+            category = self.software.category.id
+
+        return category
 
 
     @property

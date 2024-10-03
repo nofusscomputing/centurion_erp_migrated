@@ -1,8 +1,9 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
+from rest_framework.fields import empty
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 
@@ -17,7 +18,14 @@ from itam.models.device import DeviceSoftware
 from api.v2.views.metadata import NavigationMetadata
 
 
-
+@extend_schema_view(
+        list=extend_schema(exclude=True),
+        retrieve=extend_schema(exclude=True),
+        create=extend_schema(exclude=True),
+        update=extend_schema(exclude=True),
+        partial_update=extend_schema(exclude=True),
+        destroy=extend_schema(exclude=True)
+    )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     model = DeviceSoftware
@@ -32,41 +40,32 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_serializer_class(self):
 
+        kwargs=self.kwargs
+
         if (
             self.action == 'list'
             or self.action == 'retrieve'
         ):
 
-            return ViewSerializer
+            self.serializer_class = ViewSerializer
+
+        else:
+
+            self.serializer_class = ModelSerializer
+
+        return self.serializer_class
 
 
-        return ModelSerializer
+    def get_serializer_context(self):
 
+        context = super().get_serializer_context()
+
+        context['device_id'] = int(self.kwargs['device_id'])
+
+        return context
 
 
     def create(self, request, *args, **kwargs):
-
-        # current_device = []
-
-        # if 'uuid' in self.request.POST:
-
-        #     current_device = self.serializer_class.Meta.model.objects.filter(
-        #         organization = int(self.request.POST['organization']),
-        #         uuid = str(self.request.POST['uuid'])
-        #     )
-
-        # if 'serial_number' in self.request.POST and len(current_device) == 0:
-
-        #         current_device = self.serializer_class.Meta.model.objects.filter(
-        #             organization = int(self.request.POST['organization']),
-        #             serial_number = str(self.request.POST['serial_number'])
-        #         )
-
-        # if len(current_device) == 1:
-
-        #     instance = current_device.get()
-        #     serializer = self.get_serializer(instance)
-        #     return Response(serializer.data)
 
         return super().create(request, *args, **kwargs)
 
@@ -88,7 +87,5 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         return self.queryset
 
     def get_view_name(self):
-        if self.detail:
-            return "Device Software"
         
-        return 'Device Softwares'
+        return 'Device Software'

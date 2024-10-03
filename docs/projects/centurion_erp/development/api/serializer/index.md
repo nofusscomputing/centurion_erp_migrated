@@ -29,6 +29,8 @@ This section contains the application API documentation for Serializers to assis
 
 - Serializer file names are lower case and named the same as the model / related field.
 
+- fields that are required to have an initial value have it specified `self.fields.fields[<field name>].initial`
+
 
 ## Base Serializer
 
