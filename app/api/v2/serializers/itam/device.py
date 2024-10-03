@@ -54,6 +54,7 @@ class ModelSerializer(BaseSerializer):
 
         return {
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request),
             'history': 'ToDo',
             'notes': 'ToDo',
             'service': reverse("API:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
@@ -62,7 +63,7 @@ class ModelSerializer(BaseSerializer):
         }
 
     # rendered_config = serializers.SerializerMethodField('get_rendered_config')
-    rendered_config = serializers.JSONField(source='get_configuration')
+    rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
     
 
     def get_rendered_config(self, item):
@@ -99,6 +100,7 @@ class ModelSerializer(BaseSerializer):
             'id',
             'display_name',
             'inventorydate',
+            'rendered_config',
             'created',
             'modified',
             '_urls',

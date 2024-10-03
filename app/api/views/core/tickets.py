@@ -61,9 +61,9 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
             action_keyword = 'view'
 
-        else:
+        # else:
 
-            raise ValueError('unable to determin the action_keyword')
+        #     raise ValueError('unable to determin the action_keyword')
 
         self.permission_required = [
             'core.' + action_keyword + '_ticket_' + self._ticket_type,

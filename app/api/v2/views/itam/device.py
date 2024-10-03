@@ -88,6 +88,19 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
         return super().list(request)
 
+    def update(self, request, *args, **kwargs):
+
+        a = 'a'
+
+        return super().update(request, *args, **kwargs)
+
+
+    def partial_update(self, request, *args, **kwargs):
+
+        a = 'a'
+
+        return super().partial_update(request, *args, **kwargs)
+
 
     @extend_schema( description='Fetch the selected device', tags=['device'], methods=["GET"])
     def retrieve(self, request, *args, **kwargs):

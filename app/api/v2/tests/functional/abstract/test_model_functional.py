@@ -309,3 +309,15 @@ class ModelAttributesFunctional:
 
 
         assert all_are_str
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_method_options_no_field_is_generic(self):
+        """Test HTTP/Options Method
+
+        Fields are used for the UI to setup inputs correctly.
+
+        Ensure all fields at path `.actions.<METHOD>.<name>.type` do not have `GenericField` as the value.
+        """
+
+        pass

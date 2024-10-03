@@ -49,9 +49,40 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
                 metadata['layout'] = view.queryset.model.page_layout
 
+                metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
+
+                # for field_name, value in metadata['actions']['PUT'].items():
+
+                #     if metadata['actions']['PUT'][field_name]['type'] == 'Relationship':
+
+                #         choices = []
+
+                #         if metadata['actions']['PUT'][field_name]['relationship_resource'] == 'DeviceType':
+
+                #             from itam.models.device import DeviceType
+
+                #             queryset = DeviceType.objects.filter()
+
+                #             for item in queryset:
+
+                #                 choices += [{
+                #                     'value': item.id,
+                #                     'display_name': item.name
+                #                 }]
+
+                #         metadata['actions']['PUT'][field_name].update({'choices': choices})
+
+
             elif view.suffix == 'List':
 
                 metadata['table_fields'] = view.queryset.model.table_fields
+
+
+                metadata['actions']['POST'] = self.field_choices(metadata['actions']['POST'])
+
+
+
+            
 
         else:
 
@@ -96,3 +127,47 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
 
         return metadata
+
+
+    def field_choices(self, fields) -> dict:
+
+        field_choices = fields
+
+
+        for field_name, value in fields.items():
+
+            if fields[field_name]['type'] == 'Relationship':
+
+                choices = []
+
+
+                if fields[field_name]['relationship_resource'] == 'DeviceModel':
+
+                    from itam.models.device import DeviceModel as model
+
+                elif fields[field_name]['relationship_resource'] == 'DeviceType':
+
+                    from itam.models.device import DeviceType as model
+
+                elif fields[field_name]['relationship_resource'] == 'Organization':
+
+                    from access.models import Organization as model
+
+                elif fields[field_name]['relationship_resource'] == 'User':
+
+                    from django.contrib.auth.models import User as model
+
+
+                queryset = model.objects.filter()
+
+                for item in queryset:
+
+                    choices += [{
+                        'value': item.id,
+                        'display_name': str(item)
+                    }]
+
+                field_choices[field_name].update({'choices': choices})
+
+
+        return field_choices

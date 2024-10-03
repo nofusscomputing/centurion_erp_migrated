@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .metadata import NavigationMetadata
+from api.v2.views.metadata import NavigationMetadata
 
 
 class Index(viewsets.ViewSet):
@@ -29,7 +29,7 @@ class Index(viewsets.ViewSet):
     def list(self, request, pk=None):
         return Response(
             {
-                "itam": reverse('API:_api_v2_itam_home-list', request=request),
-                "settings": reverse('API:_api_v2_settings_home-list', request=request)
+                "device_model": reverse('API:_api_v2_device_model-list', request=request),
+                "external_link": reverse('API:_api_v2_external_link-list', request=request)
             }
         )

@@ -100,6 +100,7 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 # SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

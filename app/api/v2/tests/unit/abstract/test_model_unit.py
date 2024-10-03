@@ -71,4 +71,3 @@ class ModelAttributesUnit:
         """
 
         assert not callable(self.model.page_layout)
-
