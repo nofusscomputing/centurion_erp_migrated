@@ -17,6 +17,11 @@ from api.views.mixin import OrganizationPermissionAPI
 
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
+    filterset_fields = [
+        'devices',
+        'software',
+    ]
+
     permission_classes = [
         OrganizationPermissionAPI
     ]
@@ -68,6 +73,6 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_view_name(self):
         if self.detail:
-            return "DeviceModel"
+            return "External Link"
         
-        return 'DeviceModel'
+        return 'External Links'

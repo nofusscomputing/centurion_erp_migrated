@@ -10,6 +10,8 @@ from api.v2.serializers.itam.software_version import BaseSerializer as SoftwareV
 
 from itam.models.device import Device, DeviceSoftware
 
+from api.v2.serializers.itam.device import Badge, BadgeField
+
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -57,6 +59,14 @@ class ModelSerializer(BaseSerializer):
         }
 
 
+    def tester(self):
+
+        return {
+            'a': 'a',
+            'b':'b'
+        }
+    action = BadgeField(default=Badge('a','b','_self'), label='Action', source='self')
+
     class Meta:
 
         model = DeviceSoftware
@@ -80,6 +90,8 @@ class ModelSerializer(BaseSerializer):
             'id',
             'category',
             'device',
+            'installed',
+            'installedversion',
             'organization',
             'created',
             'modified',
@@ -100,6 +112,20 @@ class ModelSerializer(BaseSerializer):
             self.fields.fields['organization'].default = Device.objects.get(id=self._context['device_id']).organization.id
 
             self.fields.fields['organization'].initial = Device.objects.get(id=self._context['device_id']).organization.id
+
+
+    def is_valid(self, *, raise_exception=False):
+
+        is_valid = super().is_valid(raise_exception=raise_exception)
+    
+        if 'device_id' in self._context:
+
+            device = Device.objects.get(id=self._context['device_id'])
+
+            self.validated_data['device'] = device
+            self.validated_data['organization'] = device.organization
+
+        return is_valid
 
 
 

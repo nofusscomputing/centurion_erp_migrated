@@ -1,3 +1,6 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
@@ -27,6 +30,13 @@ from api.v2.views.metadata import NavigationMetadata
         destroy=extend_schema(exclude=True)
     )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
+
+    # filter_backends = [DjangoFilterBackend]
+    # filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['category',]
+    # search_fields = '__all__'
+    
+    filterset_fields = ['action']
 
     model = DeviceSoftware
 

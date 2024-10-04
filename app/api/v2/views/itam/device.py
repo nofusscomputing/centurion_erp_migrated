@@ -19,6 +19,19 @@ from api.v2.views.metadata import NavigationMetadata
 @extend_schema(tags=['device'])
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
+    filterset_fields = [
+        'name',
+        'serial_number',
+        'organization',
+        'uuid',
+    ]
+
+    search_fields = [
+        'name',
+        'serial_number',
+        'uuid',
+    ]
+
     metadata_class = NavigationMetadata
 
     permission_classes = [

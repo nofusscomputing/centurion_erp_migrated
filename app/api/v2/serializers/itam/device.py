@@ -1,3 +1,5 @@
+import json
+
 from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 from rest_framework import serializers
@@ -9,6 +11,55 @@ from api.v2.serializers.itam.operating_system import BaseSerializer as Operating
 # from api.v2.serializers.itim.service import BaseSerializer as ServiceBaseSerializer
 
 from itam.models.device import Device
+
+
+class Badge:
+
+    icon = 'x'
+
+    colour = 'x'
+
+    url = 'y'
+
+    def __init__(self, icon = 'x', colour = 'y', url = 'z'):
+
+        self.icon = icon
+
+        self.colour = colour
+
+        self.url = url
+
+
+class BadgeField(serializers.Field):
+
+    source = ''
+    label = ''
+    fred = 'dsfdsfds'
+    # read_only = True
+
+    def __init__(self, *, read_only=True, write_only=False,
+                 required=None, default=empty, initial=empty, source=None,
+                 label=None, help_text=None, style=None,
+                 error_messages=None, validators=None, allow_null=False):
+
+        super().__init__(read_only=read_only, write_only=write_only,
+                 required=required, default=default, initial=initial, source=source,
+                 label=label, help_text=help_text, style=style,
+                 error_messages=error_messages, validators=validators, allow_null=allow_null)
+
+        a = 'a'
+
+    def to_representation(self, value):
+        return {
+            'icon': value.icon,
+            'colour': value.colour,
+            'action_id': self.root.instance.action,
+            'text': self.root.instance.get_action_display(),
+            'url': value.url,
+        }
+
+    def to_internal_value(self, data):
+        return Badge(data.icon,data.colour, data.url)
 
 
 
@@ -54,7 +105,7 @@ class ModelSerializer(BaseSerializer):
 
         return {
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request),
+            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
             'history': 'ToDo',
             'notes': 'ToDo',
             'service': reverse("API:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
@@ -64,11 +115,50 @@ class ModelSerializer(BaseSerializer):
 
     # rendered_config = serializers.SerializerMethodField('get_rendered_config')
     rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
+
+
+    context = serializers.SerializerMethodField('get_cont')
+
+    def get_cont(self, item) -> dict:
+
+        # for self use the api returned json to render
+        from django.core.serializers import serialize
+
+        device = json.loads(serialize('json', [item]))
+
+        fields = device[0]['fields']
+
+        fields.update({'id': device[0]['pk']})
+
+
+
+        # serializers.seria
+        # a = ModelSerializer(item).get_value()
+
+        context: dict = {}
+
+        # context['device'] = json.loads(serialize('json', [item]))
+
+        # if self._context['view'].detail:
+
+        #     context['device'] = fields
+
+        return context
     
 
     def get_rendered_config(self, item):
 
         return item.get_configuration(0)
+
+    # badge = BadgeField(default=Badge('a','b','_self'), label='Action')
+    # def get_badge(self, item) -> dict:
+
+    #     return {
+    #         'icon': 'x',
+    #         'colour': 'x',
+    #         'url': 'x',
+    #     }
+
 
 
     class Meta:
@@ -77,6 +167,7 @@ class ModelSerializer(BaseSerializer):
 
         fields =  [
              'id',
+            #  'badge',
             'display_name',
             'name',
             'device_type',
@@ -90,6 +181,7 @@ class ModelSerializer(BaseSerializer):
             'config',
             'rendered_config',
             'inventorydate',
+            'context',
             'created',
             'modified',
             'organization',
@@ -98,6 +190,7 @@ class ModelSerializer(BaseSerializer):
 
         read_only_fields = [
             'id',
+            'context',
             'display_name',
             'inventorydate',
             'rendered_config',

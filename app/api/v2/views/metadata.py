@@ -3,6 +3,8 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.utils.field_mapping import ClassLookupDict
 
+from api.v2.serializers.itam.device import BadgeField
+
 
 
 class OverRidesJSONAPIMetadata(JSONAPIMetadata):
@@ -30,7 +32,8 @@ class OverRidesJSONAPIMetadata(JSONAPIMetadata):
             serializers.ListField: "List",
             serializers.DictField: "Dict",
             serializers.Serializer: "Serializer",
-            serializers.JSONField: "JSON"    # New. Does not exist in base class
+            serializers.JSONField: "JSON",    # New. Does not exist in base class
+            BadgeField: 'Badge'
         }
     )
 

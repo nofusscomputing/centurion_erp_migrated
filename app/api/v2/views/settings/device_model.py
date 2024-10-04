@@ -8,7 +8,7 @@ from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
 
-from api.v2.serializers.itam.device import ModelSerializer, ViewSerializer
+from api.v2.serializers.itam.device_model import ModelSerializer, ViewSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
 from itam.models.device_models import DeviceModel

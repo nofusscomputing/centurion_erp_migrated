@@ -1,3 +1,4 @@
+import pytest
 from django.test import Client
 
 from rest_framework.reverse import reverse

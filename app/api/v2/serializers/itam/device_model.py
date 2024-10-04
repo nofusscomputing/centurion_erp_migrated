@@ -51,9 +51,11 @@ class ModelSerializer(BaseSerializer):
 
     pass
 
-    # class Meta:
+    class Meta:
 
-    #     model = DeviceModel
+        model = DeviceModel
+
+        fields = '__all__'
 
     #     fields =  [
     #          'id',
