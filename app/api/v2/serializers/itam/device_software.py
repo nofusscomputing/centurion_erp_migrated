@@ -59,13 +59,14 @@ class ModelSerializer(BaseSerializer):
         }
 
 
-    def tester(self):
+    action_badge = BadgeField(default=Badge('a','b','_self'), label='Action')
 
-        return {
-            'a': 'a',
-            'b':'b'
-        }
-    action = BadgeField(default=Badge('a','b','_self'), label='Action', source='self')
+    # def tester(self):
+
+    #     return {
+    #         'a': 'a',
+    #         'b':'b'
+    #     }
 
     class Meta:
 
@@ -77,6 +78,7 @@ class ModelSerializer(BaseSerializer):
             'software',
             'category',
             'action',
+            'action_badge',
             'version',
             'installedversion',
             'installed',

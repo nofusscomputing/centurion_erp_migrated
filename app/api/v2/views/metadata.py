@@ -50,7 +50,8 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
             if view.suffix == 'Instance':
 
-                metadata['layout'] = view.queryset.model.page_layout
+                if hasattr(view.queryset.model, 'page_layout'):
+                    metadata['layout'] = view.queryset.model.page_layout
 
                 metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
 

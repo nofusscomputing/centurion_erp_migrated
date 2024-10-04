@@ -11,23 +11,7 @@ from api.v2.serializers.itam.operating_system import BaseSerializer as Operating
 # from api.v2.serializers.itim.service import BaseSerializer as ServiceBaseSerializer
 
 from itam.models.device import Device
-
-
-class Badge:
-
-    icon = 'x'
-
-    colour = 'x'
-
-    url = 'y'
-
-    def __init__(self, icon = 'x', colour = 'y', url = 'z'):
-
-        self.icon = icon
-
-        self.colour = colour
-
-        self.url = url
+from core.classes.badge import Badge
 
 
 class BadgeField(serializers.Field):
@@ -52,9 +36,9 @@ class BadgeField(serializers.Field):
     def to_representation(self, value):
         return {
             'icon': value.icon,
-            'colour': value.colour,
-            'action_id': self.root.instance.action,
-            'text': self.root.instance.get_action_display(),
+            'icon_style': value.icon_style,
+            'text': value.text,
+            'text_style': value.text_style,
             'url': value.url,
         }
 

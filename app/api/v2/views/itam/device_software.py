@@ -54,16 +54,14 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
         if (
             self.action == 'list'
-            or self.action == 'retrieve'
+            # or self.action == 'retrieve'
         ):
 
-            self.serializer_class = ViewSerializer
+            return ViewSerializer
 
-        else:
+        return ModelSerializer
 
-            self.serializer_class = ModelSerializer
-
-        return self.serializer_class
+        # return self.serializer_class
 
 
     def get_serializer_context(self):

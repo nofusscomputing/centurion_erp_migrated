@@ -484,12 +484,33 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         "nbsp",
         "software",
         "category",
-        "action",
+        "action_badge",
         "version",
         "installedversion",
         "installed",
         "nbsp"
     ]
+
+
+    @property
+    def action_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.action:
+
+            text = self.get_action_display()
+
+        return Badge(
+            icon= f'action_{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-action-{text.lower()}',
+            url = '_self',
+        )
+
 
     @property
     def category(self):
