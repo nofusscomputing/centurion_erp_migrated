@@ -11,6 +11,7 @@ from access.models import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
+from core.classes.icon import Icon
 from core.mixin.history_save import SaveHistory
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
@@ -161,7 +162,8 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     )
 
     table_fields: list = [
-        "nbsp",
+        # "nbsp",
+        'status_icon',
         "name",
         "device_model",
         "device_type",
@@ -294,6 +296,32 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+
+
+    @property
+    def status_icon(self) -> list([Icon]):
+
+        
+
+        icons: list(Icon) = []
+
+        icons += [
+            Icon(
+                name = f'device_status_{self.status.lower()}',
+                style = f'icon-device-status-{self.status.lower()}'
+            )
+        ]
+        # return Badge(
+        #     icon= f'action_{text.lower()}',
+        #     icon_style = f'badge-icon-action-{text.lower()}',
+        #     text = text,
+        #     text_style = f'badge-text-action-{text.lower()}',
+        #     url = '_self',
+        # )
+
+        return icons
+
+
     @property
     def status(self) -> str:
         """ Fetch Device status
@@ -312,21 +340,22 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         one = (now() - check_date).days
 
+        status: str = 'UNK'
+
         if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
 
-            return 'OK'
+            status = 'OK'
 
         elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
 
-            return 'WARN'
+            status = 'WARN'
 
         elif (now() - check_date).days >= 3:
 
-            return 'BAD'
+            status = 'BAD'
 
-        else:
+        return status
 
-            return 'UNK'
 
     @property
     def get_configuration(self):
@@ -504,7 +533,7 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             text = self.get_action_display()
 
         return Badge(
-            icon= f'action_{text.lower()}',
+            icon_name = f'action_{text.lower()}',
             icon_style = f'badge-icon-action-{text.lower()}',
             text = text,
             text_style = f'badge-text-action-{text.lower()}',

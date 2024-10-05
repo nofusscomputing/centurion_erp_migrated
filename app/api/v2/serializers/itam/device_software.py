@@ -10,7 +10,7 @@ from api.v2.serializers.itam.software_version import BaseSerializer as SoftwareV
 
 from itam.models.device import Device, DeviceSoftware
 
-from api.v2.serializers.itam.device import Badge, BadgeField
+from core.fields.badge import Badge, BadgeField
 
 
 
@@ -59,7 +59,9 @@ class ModelSerializer(BaseSerializer):
         }
 
 
-    action_badge = BadgeField(default=Badge('a','b','_self'), label='Action')
+    # action_badge = BadgeField(default=Badge('a','b','_self'), label='Action')
+
+    action_badge = BadgeField(label='Action')
 
     # def tester(self):
 
