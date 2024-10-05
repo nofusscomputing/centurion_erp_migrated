@@ -19,6 +19,16 @@ from settings.models.user_settings import UserSettings
 
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
+    filterset_fields = [
+        'external_system',
+        'external_ref',
+    ]
+
+    search_fields = [
+        'name',
+        'description',
+    ]
+
     permission_classes = [
         OrganizationPermissionAPI
     ]
