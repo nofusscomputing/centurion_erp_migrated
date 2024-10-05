@@ -17,6 +17,16 @@ from core.models.ticket.ticket import Ticket
 
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
+    filterset_fields = [
+        'external_system',
+        'external_ref',
+    ]
+
+    search_fields = [
+        'title',
+        'description',
+    ]
+
     permission_classes = [
         OrganizationPermissionAPI
     ]
