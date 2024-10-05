@@ -30,7 +30,7 @@ class ProjectCommonFieldsName(ProjectCommonFields):
 
     name = models.CharField(
         blank = False,
-        max_length = 50,
+        max_length = 100,
         unique = True,
     )
 
