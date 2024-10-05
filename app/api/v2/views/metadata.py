@@ -6,6 +6,8 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 from core.fields.badge import BadgeField
 from core.fields.icon import IconField
 
+from api.v2.serializers.base.user import User, UserBaseSerializer
+
 
 
 class OverRidesJSONAPIMetadata(JSONAPIMetadata):
@@ -35,7 +37,9 @@ class OverRidesJSONAPIMetadata(JSONAPIMetadata):
             serializers.Serializer: "Serializer",
             serializers.JSONField: "JSON",    # New. Does not exist in base class
             BadgeField: 'Badge',
-            IconField: 'Icon'
+            IconField: 'Icon',
+            User: 'Relationship--',
+            UserBaseSerializer: 'Relationship'
         }
     )
 
@@ -102,6 +106,18 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
                             "name": "organization",
                             "icon": "device",
                             "link": "/access/organization"
+                        }
+                    ]
+                },
+                {
+                    "display_name": "Assistance",
+                    "name": "assistance",
+                    "pages": [
+                        {
+                            "display_name": "Requests",
+                            "name": "request",
+                            "icon": "ticket",
+                            "link": "/assistance/ticket/request"
                         }
                     ]
                 },

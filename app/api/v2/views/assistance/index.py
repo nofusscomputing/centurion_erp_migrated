@@ -6,20 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .metadata import NavigationMetadata
+# from .metadata import NavigationMetadata
 
 
 class Index(viewsets.ViewSet):
 
-    metadata_class = NavigationMetadata
+    # metadata_class = NavigationMetadata
 
     permission_classes = []
 
     def get_view_name(self):
-        return "V2"
+        return "Assistance"
 
     def get_view_description(self, html=False) -> str:
-        text = "Centurion ERP UI Testing"
+        text = "Assistance Module"
         if html:
             return mark_safe(f"<p>{text}</p>")
         else:
@@ -29,9 +29,6 @@ class Index(viewsets.ViewSet):
     def list(self, request, pk=None):
         return Response(
             {
-                "access": "to do",
-                "assistance": reverse('API:_api_v2_assistance_home-list', request=request),
-                "itam": reverse('API:_api_v2_itam_home-list', request=request),
-                "settings": reverse('API:_api_v2_settings_home-list', request=request)
+                "requets": reverse('API:_api_v2_ticket_request-list', request=request)
             }
         )

@@ -563,6 +563,15 @@ class Ticket(
 
         return self.title
 
+    table_fields: list = [
+        'id',
+        'title',
+        'status',
+        'opened_by',
+        'organization',
+        'created'
+    ]
+
     common_fields: list(str()) = [
         'organization',
         'title',
