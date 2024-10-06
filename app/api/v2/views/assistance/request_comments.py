@@ -31,6 +31,11 @@ from api.v2.views.metadata import NavigationMetadata
 # )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
+    
+    filterset_fields = [
+        'parent',
+    ]
+
 
     metadata_class = NavigationMetadata
 
@@ -38,7 +43,7 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
-    queryset = TicketComment.objects.all()
+    # queryset = TicketComment.objects.all()
 
     # serializer_class = TicketSerializer
     def get_serializer_class(self):
@@ -114,18 +119,40 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-    # def get_queryset(self):
+    
+    def get_queryset(self):
 
-    #     if self.request.user.is_superuser:
+        if 'parent_id' in self.kwargs:
 
-    #         return self.queryset.filter().order_by('name')
+            self.queryset = TicketComment.objects.filter(parent=self.kwargs['parent_id'])
 
-    #     else:
+        else:
 
-    #         return self.queryset.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+            self.queryset = TicketComment.objects.filter(parent=None)
+
+
+        if 'ticket_id' in self.kwargs:
+
+            self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id']).order_by('created')
+
+        if 'pk' in self.kwargs:
+
+            self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
+
+        return self.queryset
 
 
     def get_view_name(self):
+
+        if hasattr(self, 'kwargs'):
+
+            if 'parent_id' in self.kwargs:
+
+                if self.detail:
+                    return "Ticket Comment Thread"
+                
+                return 'Ticket Comment Threads'
+
         if self.detail:
             return "Ticket Comment"
         

@@ -71,6 +71,10 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
             # view_name = '_api_assistance_request_ticket_comments'
             view_name = '_api_v2_assistance_request_ticket_comments'
 
+            # if 'parent_id' in self._kwargs['context']['view'].kwargs:
+
+            #     view_name = '_api_v2_assistance_request_ticket_comment_threads'
+
         else:
 
             raise ValueError('Serializer unable to obtain ticket type')
@@ -85,22 +89,37 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
         #     )
         # )
 
-        return {
+        urls: dict = {
             '_self': request.build_absolute_uri(
-            reverse('API:' + view_name + '-detail',
-            # reverse('API_api_v2_device-detail',
-                kwargs={
-                    'ticket_id': item.ticket.id,
-                    'pk': item.id
-                }
-            )
-        ),
-            # 'history': 'ToDo',
-            # 'notes': 'ToDo',
-            # 'services': 'ToDo',
-            # 'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            # 'tickets': 'ToDo'
+                reverse('API:' + str(view_name) + '-detail',
+                # reverse('API_api_v2_device-detail',
+                    kwargs={
+                        'ticket_id': item.ticket.id,
+                        'pk': item.id
+                    }
+                )
+            ),
         }
+
+        threads = TicketComment.objects.filter(parent = item.id, ticket = item.ticket.id)
+
+        if len(threads) > 0:
+
+            view_name = '_api_v2_assistance_request_ticket_comment_threads'
+
+            urls.update({
+                'threads': request.build_absolute_uri(
+                    reverse('API:' + view_name + '-list',
+                    # reverse('API_api_v2_device-detail',
+                        kwargs={
+                            'ticket_id': item.ticket.id,
+                            'parent_id': item.id
+                        }
+                    )
+                ),
+            })
+
+        return urls
 
     # rendered_config = serializers.SerializerMethodField('get_rendered_config')
     # rendered_config = serializers.JSONField(source='get_configuration')

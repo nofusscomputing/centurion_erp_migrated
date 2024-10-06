@@ -890,14 +890,17 @@ class Ticket(
 
         if self.status:
 
-            text = self.get_status_display()
+            text:str = str(self.get_status_display())
+            style:str = text.replace('(', '')
+            style = style.replace(')', '')
+            style = style.replace(' ', '_')
 
         return Badge(
-            icon_name = f'ticket_status_{text.lower()}',
-            icon_style = f'ticket_status-{text.lower()}',
+            icon_name = f'ticket_status_{style.lower()}',
+            icon_style = f'ticket-status-icon ticket-status-icon-{style.lower()}',
             text = text,
-            text_style = f'badge-text-ticket_status-{text.lower()}',
-            url = '_self',
+            text_style = f'ticket-status-text badge-text-ticket_status-{style.lower()}',
+            # url = '_self',
         )
 
 
