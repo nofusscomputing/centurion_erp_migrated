@@ -8,19 +8,17 @@ from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
 
-# from access.serializers.organization import (
-#     Organization,
-#     OrganizationModelSerializer as ModelSerializer,
-#     OrganizationViewSerializer as ViewSerializer
-# )
-
-from api.v2.serializers.assistance.request import (
-    Ticket,
-    TicketModelSerializer as ModelSerializer,
-    TicketViewSerializer as ViewSerializer
+from access.serializers.organization import (
+    Organization,
+    OrganizationModelSerializer as ModelSerializer,
+    OrganizationViewSerializer as ViewSerializer
 )
 
-# from api.v2.serializers.assistance.request import Ticket, ModelSerializer, ViewSerializer
+from api.v2.serializers.core.ticket_comment import (
+    TicketComment,
+    TicketCommentModelSerializer as ModelSerializer,
+    TicketCommentViewSerializer as ViewSerializer
+)
 
 
 from api.views.mixin import OrganizationPermissionAPI
@@ -40,7 +38,7 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
-    queryset = Ticket.objects.all()
+    queryset = TicketComment.objects.all()
 
     # serializer_class = TicketSerializer
     def get_serializer_class(self):
@@ -102,9 +100,9 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
     #     description='Fetch items that are from the users assigned organization(s)',
     #     # methods=["GET"]
     # )
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
 
-        return super().list(request)
+        return super().list(request=request, *args, **kwargs)
 
 
     # @extend_schema(
@@ -129,6 +127,6 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_view_name(self):
         if self.detail:
-            return "Request Ticket"
+            return "Ticket Comment"
         
-        return 'Request Tickets'
+        return 'Ticket Comments'

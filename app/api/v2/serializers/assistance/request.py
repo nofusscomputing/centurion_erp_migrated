@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
-
+from access.serializers.teams import TeamBaseSerializer
 # from api.serializers.core.ticket import TicketSerializer
 
 from api.v2.serializers.core.ticket_category import TicketCategoryBaseSerializer
@@ -11,11 +11,12 @@ from api.v2.serializers.base.user import UserBaseSerializer
 
 from core.models.ticket.ticket import Ticket
 
+from core.fields.badge import Badge, BadgeField
 
 
 
 
-class BaseSerializer(serializers.ModelSerializer):
+class TicketBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -46,7 +47,7 @@ class BaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class ModelSerializer(BaseSerializer):
+class TicketModelSerializer(TicketBaseSerializer):
 
 
     # operating_system = OperatingSystemModelSerializer(source='id', many=False, read_only=False)
@@ -57,6 +58,7 @@ class ModelSerializer(BaseSerializer):
 
         return {
             '_self': reverse("API:_api_v2_ticket_request-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'comments': reverse("API:_api_v2_assistance_request_ticket_comments-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             # 'history': 'ToDo',
             # 'notes': 'ToDo',
             # 'services': 'ToDo',
@@ -72,9 +74,10 @@ class ModelSerializer(BaseSerializer):
 
     #     return item.get_configuration(0)
 
-    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
-    category = TicketCategoryBaseSerializer()
+    status_badge = BadgeField(label='Status')
+
+
 
     class Meta:
 
@@ -88,6 +91,7 @@ class ModelSerializer(BaseSerializer):
             'created',
             'modified',
             'status',
+            'status_badge',
             'title',
             'description',
             'estimate',
@@ -116,6 +120,7 @@ class ModelSerializer(BaseSerializer):
         read_only_fields = [
             'id',
             'display_name',
+            'status_badge',
             'ticket_type',
             '_urls',
         ]
@@ -133,11 +138,23 @@ class ModelSerializer(BaseSerializer):
 
 
 
-class ViewSerializer(ModelSerializer):
+class TicketViewSerializer(TicketModelSerializer):
 
     # device_model = DeviceModelBaseSerializer(many=False, read_only=True)
 
     # device_type = DeviceTypeBaseSerializer(many=False, read_only=True)
+
+    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
+
+    assigned_teams = TeamBaseSerializer(many=True)
+
+    category = TicketCategoryBaseSerializer()
+
+    opened_by = UserBaseSerializer()
+
+    subscribed_users = UserBaseSerializer(many=True)
+
+    subscribed_teams = TeamBaseSerializer(many=True)
 
     organization = OrganizationBaseSerializer(many=False, read_only=True)
 

@@ -6,7 +6,7 @@ from access.models import Team
 
 
 
-class BaseSerializer(serializers.ModelSerializer):
+class TeamBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -20,7 +20,7 @@ class BaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Organization
+        model = Team
 
         fields = [
             'id',
@@ -38,11 +38,11 @@ class BaseSerializer(serializers.ModelSerializer):
 
 
 
-class ModelSerializer(BaseSerializer):
+class TeamModelSerializer(TeamBaseSerializer):
 
     class Meta:
 
-        model = Organization
+        model = Team
 
         fields = '__all__'
 
@@ -72,7 +72,7 @@ class ModelSerializer(BaseSerializer):
         # ]
 
 
-class ViewSerializer(ModelSerializer):
+class TeamViewSerializer(TeamModelSerializer):
 
     pass
 

@@ -566,7 +566,7 @@ class Ticket(
     table_fields: list = [
         'id',
         'title',
-        'status',
+        'status_badge',
         'opened_by',
         'organization',
         'created'
@@ -878,6 +878,27 @@ class Ticket(
 
         signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.subscribed_users.through)
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
+
+
+
+    @property
+    def status_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.status:
+
+            text = self.get_status_display()
+
+        return Badge(
+            icon_name = f'ticket_status_{text.lower()}',
+            icon_style = f'ticket_status-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-ticket_status-{text.lower()}',
+            url = '_self',
+        )
 
 
     def ticketassigned(self, instance) -> bool:

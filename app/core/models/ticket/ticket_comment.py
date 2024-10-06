@@ -17,6 +17,7 @@ class TicketComment(
     TenancyObject,
 ):
 
+    table_fields: list = []
 
     save_model_history: bool = False
 

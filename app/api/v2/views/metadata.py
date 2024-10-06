@@ -156,55 +156,55 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
         field_choices = fields
 
 
-        for field_name, value in fields.items():
+        # for field_name, value in fields.items():
 
-            if fields[field_name]['type'] == 'Relationship':
+        #     if fields[field_name]['type'] == 'Relationship':
 
-                choices = []
+        #         choices = []
 
-                model = None
+        #         model = None
 
 
-                if fields[field_name]['relationship_resource'] == 'Device':
+        #         if fields[field_name]['relationship_resource'] == 'Device':
 
-                    from itam.models.device import Device as model
+        #             from itam.models.device import Device as model
 
-                elif fields[field_name]['relationship_resource'] == 'DeviceModel':
+        #         elif fields[field_name]['relationship_resource'] == 'DeviceModel':
 
-                    from itam.models.device import DeviceModel as model
+        #             from itam.models.device import DeviceModel as model
 
-                elif fields[field_name]['relationship_resource'] == 'DeviceType':
+        #         elif fields[field_name]['relationship_resource'] == 'DeviceType':
 
-                    from itam.models.device import DeviceType as model
+        #             from itam.models.device import DeviceType as model
 
-                elif fields[field_name]['relationship_resource'] == 'Organization':
+        #         elif fields[field_name]['relationship_resource'] == 'Organization':
 
-                    from access.models import Organization as model
+        #             from access.models import Organization as model
 
-                elif fields[field_name]['relationship_resource'] == 'Software':
+        #         elif fields[field_name]['relationship_resource'] == 'Software':
 
-                    from itam.models.software import Software as model
+        #             from itam.models.software import Software as model
 
-                elif fields[field_name]['relationship_resource'] == 'SoftwareVersion':
+        #         elif fields[field_name]['relationship_resource'] == 'SoftwareVersion':
 
-                    from itam.models.software import SoftwareVersion as model
+        #             from itam.models.software import SoftwareVersion as model
 
-                elif fields[field_name]['relationship_resource'] == 'User':
+        #         elif fields[field_name]['relationship_resource'] == 'User':
 
-                    from django.contrib.auth.models import User as model
+        #             from django.contrib.auth.models import User as model
 
-                if model:
+        #         if model:
 
-                    queryset = model.objects.filter()
+        #             queryset = model.objects.filter()
 
-                    for item in queryset:
+        #             for item in queryset:
 
-                        choices += [{
-                            'value': item.id,
-                            'display_name': str(item)
-                        }]
+        #                 choices += [{
+        #                     'value': item.id,
+        #                     'display_name': str(item)
+        #                 }]
 
-                    field_choices[field_name].update({'choices': choices})
+        #             field_choices[field_name].update({'choices': choices})
 
 
         return field_choices
