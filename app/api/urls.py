@@ -61,6 +61,10 @@ from api.v2.views.access import (
     organization as organization_v2
 )
 
+from core.viewsets import (
+    notes as notes_v2
+)
+
 
 app_name = "API"
 
@@ -117,6 +121,7 @@ if django_settings.API_TEST:
     router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
     router.register('v2/itam/device/(?P<device_id>[0-9]+)/device_software', device_software_v2.ViewSet, basename='_api_v2_device_software')
     router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
+    router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
 
     router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
     router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
