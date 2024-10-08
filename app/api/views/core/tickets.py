@@ -33,6 +33,8 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_dynamic_permissions(self):
 
+        action_keyword = 'view'
+
         if self.action == 'create':
 
             action_keyword = 'add'

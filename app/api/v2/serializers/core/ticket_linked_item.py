@@ -7,11 +7,11 @@ from access.serializers.organization import OrganizationBaseSerializer
 # from api.v2.serializers.itam.device_type import BaseSerializer as DeviceTypeBaseSerializer
 # from api.v2.serializers.itam.operating_system import BaseSerializer as OperatingSystemModelSerializer
 
-from core.models.ticket.ticket_category import TicketCategory
+from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
 
 
-class TicketCategoryBaseSerializer(serializers.ModelSerializer):
+class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -19,30 +19,30 @@ class TicketCategoryBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
-    url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
-    )
+    # url = serializers.HyperlinkedIdentityField(
+    #     view_name="API:_api_v2_device-detail", format="html"
+    # )
 
     class Meta:
 
-        model = TicketCategory
+        model = TicketLinkedItem
 
         fields = [
             'id',
             'display_name',
-            'name',
-            'url',
+            # 'name',
+            # 'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'name',
-            'url',
+            # 'name',
+            # 'url',
         ]
 
 
-class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
+class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
 
     # operating_system = OperatingSystemModelSerializer(source='id', many=False, read_only=False)
@@ -52,7 +52,7 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
     # def get_url(self, item):
 
     #     return {
-    #         '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+    #         '_self': '',
     #         # 'history': 'ToDo',
     #         # 'notes': 'ToDo',
     #         # 'services': 'ToDo',
@@ -71,7 +71,7 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
 
     class Meta:
 
-        model = TicketCategory
+        model = TicketLinkedItem
 
         fields = '__all__'
 
@@ -96,14 +96,14 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
         #     '_urls',
         # ]
 
-        read_only_fields = [
-            'id',
-            'display_name',
-            'inventorydate',
-            'created',
-            'modified',
-            '_urls',
-        ]
+        # read_only_fields = [
+        #     'id',
+        #     'display_name',
+        #     # 'inventorydate',
+        #     # 'created',
+        #     # 'modified',
+        #     # '_urls',
+        # ]
 
 
     def __init__(self, instance=None, data=empty, **kwargs):
@@ -114,7 +114,7 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
 
 
 
-class TicketCategoryViewSerializer(TicketCategoryModelSerializer):
+class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
     # device_model = DeviceModelBaseSerializer(many=False, read_only=True)
 

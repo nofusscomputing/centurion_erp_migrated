@@ -699,15 +699,17 @@ class Ticket(
 
         linked_items: list = []
 
-        from core.models.ticket.ticket_linked_items import TicketLinkedItem
+        if self.pk:
 
-        items = TicketLinkedItem.objects.filter(
-            ticket = self
-        )
+            from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
-        if len(items) > 0:
+            items = TicketLinkedItem.objects.filter(
+                ticket = self
+            )
 
-            linked_items = items
+            if len(items) > 0:
+
+                linked_items = items
 
         return linked_items
 

@@ -7,6 +7,7 @@ from access.serializers.teams import TeamBaseSerializer
 # from api.serializers.core.ticket import TicketSerializer
 
 from api.v2.serializers.core.ticket_category import TicketCategoryBaseSerializer
+from api.v2.serializers.core.ticket_linked_item import TicketLinkedItemBaseSerializer
 from api.v2.serializers.base.user import UserBaseSerializer
 
 from core.models.ticket.ticket import Ticket
@@ -59,6 +60,7 @@ class TicketModelSerializer(TicketBaseSerializer):
         return {
             '_self': reverse("API:_api_v2_ticket_request-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'comments': reverse("API:_api_v2_assistance_request_ticket_comments-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'linked_items': reverse("API:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             # 'history': 'ToDo',
             # 'notes': 'ToDo',
             # 'services': 'ToDo',
@@ -76,7 +78,9 @@ class TicketModelSerializer(TicketBaseSerializer):
 
 
     status_badge = BadgeField(label='Status')
+    duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
+    linked_items = TicketLinkedItemBaseSerializer()
 
 
     class Meta:
@@ -95,6 +99,7 @@ class TicketModelSerializer(TicketBaseSerializer):
             'title',
             'description',
             'estimate',
+            'duration',
             'urgency',
             'impact',
             'priority',
@@ -114,6 +119,7 @@ class TicketModelSerializer(TicketBaseSerializer):
             'subscribed_teams',
             'subscribed_users',
             # 'ticket_comments',
+            'linked_items',
             '_urls',
         ]
 
@@ -121,7 +127,7 @@ class TicketModelSerializer(TicketBaseSerializer):
             'id',
             'display_name',
             'status_badge',
-            'ticket_type',
+            # 'ticket_type',
             '_urls',
         ]
 

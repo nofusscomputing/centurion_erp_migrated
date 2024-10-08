@@ -36,7 +36,8 @@ from api.v2.views import index as v2
 from api.v2.views.assistance import (
     index as assistance_index_v2,
     request as request_ticket_v2,
-    request_comments as request_comments_v2
+    request_comments as request_comments_v2,
+    ticket_linked_item as ticket_linked_item_v2
 )
 
 
@@ -107,6 +108,8 @@ if django_settings.API_TEST:
     router.register('v2/assistance/ticket/request', request_ticket_v2.ViewSet, basename='_api_v2_ticket_request')
     router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments', request_comments_v2.ViewSet, basename='_api_v2_assistance_request_ticket_comments')
     router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', request_comments_v2.ViewSet, basename='_api_v2_assistance_request_ticket_comment_threads')
+    router.register('v2/assistance/ticket/request/(?P<ticket_id>[0-9]+)/linked_items', ticket_linked_item_v2.ViewSet, basename='_api_v2_ticket_linked_item')
+    
 
     router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
     router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')

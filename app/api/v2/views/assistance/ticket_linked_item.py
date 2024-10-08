@@ -14,13 +14,11 @@ from access.mixin import OrganizationMixin
 #     OrganizationViewSerializer as ViewSerializer
 # )
 
-from api.v2.serializers.assistance.request import (
-    Ticket,
-    TicketModelSerializer as ModelSerializer,
-    TicketViewSerializer as ViewSerializer
+from api.v2.serializers.core.ticket_linked_item import (
+    TicketLinkedItem,
+    TicketLinkedItemModelSerializer as ModelSerializer,
+    TicketLinkedItemViewSerializer as ViewSerializer
 )
-
-# from api.v2.serializers.assistance.request import Ticket, ModelSerializer, ViewSerializer
 
 
 from api.views.mixin import OrganizationPermissionAPI
@@ -33,9 +31,11 @@ from api.v2.views.metadata import NavigationMetadata
 # )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
-    filterset_fields = [
-        'external_ref'
-    ]
+    
+    # filterset_fields = [
+    #     'parent',
+    # ]
+
 
     metadata_class = NavigationMetadata
 
@@ -43,7 +43,7 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
-    queryset = Ticket.objects.all()
+    # queryset = TicketComment.objects.all()
 
     # serializer_class = TicketSerializer
     def get_serializer_class(self):
@@ -105,9 +105,9 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
     #     description='Fetch items that are from the users assigned organization(s)',
     #     # methods=["GET"]
     # )
-    def list(self, request):
+    def list(self, request, *args, **kwargs):
 
-        return super().list(request)
+        return super().list(request=request, *args, **kwargs)
 
 
     # @extend_schema(
@@ -119,19 +119,33 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-    # def get_queryset(self):
+    def get_queryset(self):
 
-    #     if self.request.user.is_superuser:
+        self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
-    #         return self.queryset.filter().order_by('name')
+        # if 'ticket_id' in self.kwargs:
 
-    #     else:
+        #     self.queryset = self.queryset.filter(ticket=self.kwargs['ticket_id']).order_by('created')
 
-    #         return self.queryset.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+        if 'pk' in self.kwargs:
+
+            self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
+
+        return self.queryset
 
 
     def get_view_name(self):
+
+        if hasattr(self, 'kwargs'):
+
+            if 'parent_id' in self.kwargs:
+
+                if self.detail:
+                    return "Ticket Comment Thread"
+                
+                return 'Ticket Comment Threads'
+
         if self.detail:
-            return "Request Ticket"
+            return "Ticket Comment"
         
-        return 'Request Tickets'
+        return 'Ticket Comments'
