@@ -66,6 +66,8 @@ class TicketLinkedItem(TenancyObject):
         verbose_name = 'Item ID',
     )
 
+    table_fields: list = []
+
     def __str__(self) -> str:
 
         item_type: str = None

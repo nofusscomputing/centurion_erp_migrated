@@ -7,11 +7,13 @@ from access.serializers.organization import OrganizationBaseSerializer
 # from api.v2.serializers.itam.device_type import BaseSerializer as DeviceTypeBaseSerializer
 # from api.v2.serializers.itam.operating_system import BaseSerializer as OperatingSystemModelSerializer
 
-from core.models.ticket.ticket_linked_items import TicketLinkedItem
+from api.v2.serializers.assistance.request import TicketBaseSerializer
+
+from core.models.ticket.ticket import RelatedTickets
 
 
 
-class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
+class RelatedTicketsBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -23,26 +25,36 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
         view_name="API:_api_v2_device-detail", format="html"
     )
 
+    # ticket_id = serializers.SerializerMethodField('get_ticket_id')
+
+    # def get_ticket_id(self, item):
+
+    #     related_ticket = RelatedTickets.object.get(id=int(item))
+
+    #     if int(self._context['view'].kwargs['ticket_id']) == item.from_ticket_id_id:
+
+    #         return 
+
     class Meta:
 
-        model = TicketLinkedItem
+        model = RelatedTickets
 
         fields = [
             'id',
             'display_name',
-            # 'name',
+            'title',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            # 'name',
+            'title',
             'url',
         ]
 
 
-class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
+class RelatedTicketsModelSerializer(RelatedTicketsBaseSerializer):
 
 
     # operating_system = OperatingSystemModelSerializer(source='id', many=False, read_only=False)
@@ -68,10 +80,15 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
     #     return item.get_configuration(0)
 
+    to_ticket_id = TicketBaseSerializer(label='To Ticket')
+
+
+    from_ticket_id = TicketBaseSerializer(label='To Ticket')
+
 
     class Meta:
 
-        model = TicketLinkedItem
+        model = RelatedTickets
 
         fields = '__all__'
 
@@ -114,7 +131,7 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
 
 
-class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
+class RelatedTicketsViewSerializer(RelatedTicketsModelSerializer):
 
     # device_model = DeviceModelBaseSerializer(many=False, read_only=True)
 

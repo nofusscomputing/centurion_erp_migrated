@@ -19,11 +19,11 @@ from core.fields.badge import Badge, BadgeField
 
 class TicketBaseSerializer(serializers.ModelSerializer):
 
-    display_name = serializers.SerializerMethodField('get_display_name')
+    # display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    # def get_display_name(self, item):
 
-        return str( item )
+    #     return str( item )
 
     url = serializers.HyperlinkedIdentityField(
         view_name="API:_api_v2_ticket_request-detail", format="html"
@@ -33,19 +33,20 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
         model = Ticket
 
+        # fields = '__all__'
         fields = [
             'id',
-            'display_name',
-            'name',
+            # 'display_name',
+            'title',
             'url',
         ]
 
-        read_only_fields = [
-            'id',
-            'display_name',
-            'name',
-            'url',
-        ]
+        # read_only_fields = [
+        #     'id',
+        #     # 'display_name',
+        #     'title',
+        #     # 'url',
+        # ]
 
 
 class TicketModelSerializer(TicketBaseSerializer):
@@ -61,6 +62,7 @@ class TicketModelSerializer(TicketBaseSerializer):
             '_self': reverse("API:_api_v2_ticket_request-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'comments': reverse("API:_api_v2_assistance_request_ticket_comments-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("API:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'related_tickets': reverse("API:_api_v2_related_ticket-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
             # 'history': 'ToDo',
             # 'notes': 'ToDo',
             # 'services': 'ToDo',
@@ -80,7 +82,6 @@ class TicketModelSerializer(TicketBaseSerializer):
     status_badge = BadgeField(label='Status')
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
-    linked_items = TicketLinkedItemBaseSerializer()
 
 
     class Meta:
@@ -119,7 +120,6 @@ class TicketModelSerializer(TicketBaseSerializer):
             'subscribed_teams',
             'subscribed_users',
             # 'ticket_comments',
-            'linked_items',
             '_urls',
         ]
 

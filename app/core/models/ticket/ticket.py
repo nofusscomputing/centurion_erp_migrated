@@ -1147,6 +1147,11 @@ class RelatedTickets(TenancyObject):
         verbose_name = 'Related Ticket',
     )
 
+    table_fields: list = []
+
+    # def __str__(self):
+
+    #     return ''
 
     @property
     def parent_object(self):

@@ -14,10 +14,10 @@ from access.mixin import OrganizationMixin
 #     OrganizationViewSerializer as ViewSerializer
 # )
 
-from api.v2.serializers.assistance.request import (
-    Ticket,
-    TicketModelSerializer as ModelSerializer,
-    TicketViewSerializer as ViewSerializer
+from api.v2.serializers.core.ticket_related import (
+    RelatedTickets,
+    RelatedTicketsModelSerializer as ModelSerializer,
+    RelatedTicketsViewSerializer as ViewSerializer
 )
 
 # from api.v2.serializers.assistance.request import Ticket, ModelSerializer, ViewSerializer
@@ -33,9 +33,9 @@ from api.v2.views.metadata import NavigationMetadata
 # )
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
-    filterset_fields = [
-        'external_ref'
-    ]
+    # filterset_fields = [
+    #     'external_ref'
+    # ]
 
     metadata_class = NavigationMetadata
 
@@ -43,7 +43,7 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         OrganizationPermissionAPI
     ]
 
-    queryset = Ticket.objects.all()
+    # queryset = Ticket.objects.all()
 
     # serializer_class = TicketSerializer
     def get_serializer_class(self):
@@ -119,19 +119,19 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
-    # def get_queryset(self):
+    def get_queryset(self):
 
-    #     if self.request.user.is_superuser:
+        self.queryset = RelatedTickets.objects.filter(
+            Q(from_ticket_id_id=self.kwargs['ticket_id'])
+                |
+            Q(to_ticket_id_id=self.kwargs['ticket_id'])
+        )
 
-    #         return self.queryset.filter().order_by('name')
-
-    #     else:
-
-    #         return self.queryset.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True)).order_by('name')
+        return self.queryset.filter().order_by('id')
 
 
     def get_view_name(self):
         if self.detail:
-            return "Request Ticket"
+            return "Related Ticket"
         
-        return 'Request Tickets'
+        return 'Related Tickets'
