@@ -62,7 +62,8 @@ from api.v2.views.access import (
 )
 
 from core.viewsets import (
-    notes as notes_v2
+    notes as notes_v2,
+    history as history_v2
 )
 
 
@@ -122,6 +123,11 @@ if django_settings.API_TEST:
     router.register('v2/itam/device/(?P<device_id>[0-9]+)/device_software', device_software_v2.ViewSet, basename='_api_v2_device_software')
     router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
     router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
+    router.register('v2/itam/(?P<item_class>[a-z]+)/(?P<item_id>[0-9]+)/tickets', ticket_linked_item_v2.ViewSet, basename='_api_v2_device_tickets')
+    # router.register('v2/itam/device/(?P<item_id>[0-9]+)/tickets', ticket_linked_item_v2.ViewSet, basename='_api_v2_device_tickets')
+
+    # router.register('v2/itam/(?P<model_class>)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
+    router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 
     router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
     router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')

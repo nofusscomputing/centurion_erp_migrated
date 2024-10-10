@@ -2,6 +2,8 @@ from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.utils.field_mapping import ClassLookupDict
+from rest_framework.request import clone_request
+
 
 from core.fields.badge import BadgeField
 from core.fields.icon import IconField
@@ -52,6 +54,8 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
         metadata = super().determine_metadata(request, view)
 
+        metadata['actions'] = self.determine_actions(request, view)
+
         if hasattr(view, 'queryset'):
 
             if view.suffix == 'Instance':
@@ -60,6 +64,8 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
                     metadata['layout'] = view.queryset.model.page_layout
 
                 metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
+
+                metadata['documentation'] = 'https://nofusscomputing.com/docs'
 
                 # for field_name, value in metadata['actions']['PUT'].items():
 
@@ -87,12 +93,12 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
                 metadata['table_fields'] = view.queryset.model.table_fields
 
+                if 'actions' in metadata:
 
-                metadata['actions']['POST'] = self.field_choices(metadata['actions']['POST'])
+                    if request.method in metadata['actions']:
 
+                        metadata['actions'][request.method] = self.field_choices(metadata['actions']['POST'])
 
-
-            
 
         else:
 
@@ -208,3 +214,40 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
 
         return field_choices
+
+
+
+    def determine_actions(self, request, view):
+        """
+        Custom...
+            Added GET to the allowed actions
+
+        ToDo: update so that if method=GET that it only
+        contains the fields required. i.e. field type, lable, values and choices.
+
+
+        For generic class based views we return information about
+        the fields that are accepted for 'PUT' and 'POST' methods.
+        """
+        actions = {}
+        for method in {'PUT', 'POST', 'GET'} & set(view.allowed_methods):
+            view.request = clone_request(request, method)
+            try:
+                # Test global permissions
+                if hasattr(view, 'check_permissions'):
+                    view.check_permissions(view.request)
+                # Test object permissions
+                if method == 'PUT' and hasattr(view, 'get_object'):
+                    view.get_object()
+            except (exceptions.APIException, PermissionDenied, Http404):
+                pass
+            else:
+                # If user has appropriate permissions for the view, include
+                # appropriate metadata about the fields that should be supplied.
+                if hasattr(view, 'get_serializer'):
+                    serializer = view.get_serializer()
+                    actions[method] = self.get_serializer_info(serializer)
+            finally:
+                view.request = request
+
+        return actions

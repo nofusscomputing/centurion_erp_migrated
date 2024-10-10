@@ -121,7 +121,24 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_queryset(self):
 
-        self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
+        if 'ticket_id' in self.kwargs:
+
+            self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
+
+        elif 'item_id' in self.kwargs:
+
+            item_type: int = None
+
+            for choice in list(map(lambda c: c.name, TicketLinkedItem.Modules)):
+
+                if str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
+
+            self.queryset = TicketLinkedItem.objects.filter(
+                item=int(self.kwargs['item_id']),
+                item_type = item_type
+            )
 
         # if 'ticket_id' in self.kwargs:
 
@@ -146,6 +163,6 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
                 return 'Ticket Comment Threads'
 
         if self.detail:
-            return "Ticket Comment"
+            return "Ticket Linked Item"
         
-        return 'Ticket Comments'
+        return 'Ticket Linked Items'

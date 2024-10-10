@@ -225,8 +225,9 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         },
         {
             "name": "Tickets",
+            "layout": "table",
             "slug": "tickets",
-            "sections": []
+            "field": "tickets",
         },
         {
             "name": "Notes",

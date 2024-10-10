@@ -7,7 +7,7 @@ from access.serializers.teams import TeamBaseSerializer
 # from api.serializers.core.ticket import TicketSerializer
 
 from api.v2.serializers.core.ticket_category import TicketCategoryBaseSerializer
-from api.v2.serializers.core.ticket_linked_item import TicketLinkedItemBaseSerializer
+# from api.v2.serializers.core.ticket_linked_item import TicketLinkedItemBaseSerializer
 from api.v2.serializers.base.user import UserBaseSerializer
 
 from core.models.ticket.ticket import Ticket
@@ -58,11 +58,13 @@ class TicketModelSerializer(TicketBaseSerializer):
 
     def get_url(self, item):
 
+        context = self.context.copy()
+
         return {
-            '_self': reverse("API:_api_v2_ticket_request-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'comments': reverse("API:_api_v2_assistance_request_ticket_comments-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
-            'linked_items': reverse("API:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
-            'related_tickets': reverse("API:_api_v2_related_ticket-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            '_self': reverse("API:_api_v2_ticket_request-detail", request=context['view'].request, kwargs={'pk': item.pk}),
+            'comments': reverse("API:_api_v2_assistance_request_ticket_comments-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            'linked_items': reverse("API:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            'related_tickets': reverse("API:_api_v2_related_ticket-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
             # 'history': 'ToDo',
             # 'notes': 'ToDo',
             # 'services': 'ToDo',

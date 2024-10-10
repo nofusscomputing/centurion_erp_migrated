@@ -3,13 +3,13 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
-from api.v2.serializers.assistance.request import TicketBaseSerializer
-
-from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
 
+from core.models.history import History
 
-class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
+
+
+class HistoryBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -23,40 +23,50 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = TicketLinkedItem
+        model = History
 
         fields = [
             'id',
             'display_name',
-            # 'name',
+            'name',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            # 'name',
+            'name',
             'url',
         ]
 
 
-class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
+class HistoryModelSerializer(HistoryBaseSerializer):
 
 
+    after = serializers.JSONField(read_only=True)
+
+    before = serializers.JSONField(read_only=True)
     # operating_system = OperatingSystemModelSerializer(source='id', many=False, read_only=False)
 
-    # _urls = serializers.SerializerMethodField('get_url')
+    _urls = serializers.SerializerMethodField('get_url')
 
-    # def get_url(self, item):
+    def get_url(self, item):
 
-    #     return {
-    #         '_self': '',
-    #         # 'history': 'ToDo',
-    #         # 'notes': 'ToDo',
-    #         # 'services': 'ToDo',
-    #         # 'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-    #         # 'tickets': 'ToDo'
-    #     }
+        return {
+            '_self': reverse("API:_api_v2_model_history-detail", 
+                request=self._context['view'].request,
+                kwargs={
+                    'model_class': 'device',
+                    'model_id': self._kwargs['context']['view'].kwargs['model_id'],
+                    'pk': item.pk
+                }
+            ),
+            # 'history': 'ToDo',
+            # 'notes': 'ToDo',
+            # 'services': 'ToDo',
+            # 'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            # 'tickets': 'ToDo'
+        }
 
     # rendered_config = serializers.SerializerMethodField('get_rendered_config')
     # rendered_config = serializers.JSONField(source='get_configuration')
@@ -69,7 +79,7 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
     class Meta:
 
-        model = TicketLinkedItem
+        model = History
 
         fields = '__all__'
 
@@ -94,30 +104,28 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
         #     '_urls',
         # ]
 
-        # read_only_fields = [
-        #     'id',
-        #     'display_name',
-        #     # 'inventorydate',
-        #     # 'created',
-        #     # 'modified',
-        #     # '_urls',
-        # ]
+        read_only_fields = [
+            'id',
+            'display_name',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
 
     def __init__(self, instance=None, data=empty, **kwargs):
 
         super().__init__(instance=instance, data=data, **kwargs)
 
+
         # self.rendered_config = serializers.JSONField(initial=self.Meta.model.get_configuration(0))
 
 
 
-class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
+class HistoryViewSerializer(HistoryModelSerializer):
 
     # device_model = DeviceModelBaseSerializer(many=False, read_only=True)
 
     # device_type = DeviceTypeBaseSerializer(many=False, read_only=True)
 
     organization = OrganizationBaseSerializer(many=False, read_only=True)
-
-    ticket = TicketBaseSerializer(read_only = True)

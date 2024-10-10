@@ -35,7 +35,7 @@ class History(HistoryCommonFields):
         DELETE = '3', 'Delete'
 
 
-    before = models.TextField(
+    before = models.JSONField(
         help_text = 'JSON Object before Change',
         blank = True,
         default = None,
@@ -43,7 +43,7 @@ class History(HistoryCommonFields):
     )
 
 
-    after = models.TextField(
+    after = models.JSONField(
         help_text = 'JSON Object After Change',
         blank = True,
         default = None,
@@ -93,3 +93,17 @@ class History(HistoryCommonFields):
         max_length = 50,
         unique = False,
     )
+
+
+    table_fields: list  = [
+        'created',
+        'action',
+        'item_class',
+        'user',
+        'nbsp',
+        [
+            'before',
+            'after'
+        ]
+
+    ]

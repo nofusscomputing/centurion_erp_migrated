@@ -59,11 +59,25 @@ class ModelSerializer(BaseSerializer):
         return {
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
-            'history': 'ToDo',
+            'history': reverse(
+                "API:_api_v2_model_history-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model_class': self.Meta.model._meta.model_name,
+                    'model_id': item.pk
+                }
+            ),
             'notes': reverse("API:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("API:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            'tickets': 'ToDo'
+            'tickets': reverse(
+                "API:_api_v2_device_tickets-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'item_class': 'device',
+                    'item_id': item.pk
+                    }
+            )
         }
 
     # rendered_config = serializers.SerializerMethodField('get_rendered_config')
