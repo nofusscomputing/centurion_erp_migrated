@@ -5,6 +5,7 @@ from rest_framework import serializers
 from access.serializers.organization import OrganizationBaseSerializer
 from api.v2.serializers.assistance.request import TicketBaseSerializer
 
+from core.fields.badge import BadgeField
 from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
 
@@ -15,11 +16,15 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     def get_display_name(self, item):
 
-        return str( item )
+        return '#' + str( item.ticket.id )
 
     url = serializers.HyperlinkedIdentityField(
         view_name="API:_api_v2_device-detail", format="html"
     )
+
+    created = serializers.DateTimeField(source='ticket.created')
+
+    status_badge = BadgeField(source='ticket.status_badge')
 
     class Meta:
 
@@ -28,7 +33,8 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'display_name',
-            # 'name',
+            'status_badge',
+            'created'
             'url',
         ]
 

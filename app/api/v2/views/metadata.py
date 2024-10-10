@@ -65,7 +65,9 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
                 metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
 
-                metadata['documentation'] = 'https://nofusscomputing.com/docs'
+                if hasattr(view, 'model_documentation'):
+
+                    metadata['documentation'] = getattr(view, 'model_documentation')
 
                 # for field_name, value in metadata['actions']['PUT'].items():
 
@@ -92,6 +94,10 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
             elif view.suffix == 'List':
 
                 metadata['table_fields'] = view.queryset.model.table_fields
+
+                if hasattr(view, 'documentation'):
+
+                    metadata['documentation'] = getattr(view, 'documentation')
 
                 if 'actions' in metadata:
 

@@ -34,6 +34,10 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     metadata_class = NavigationMetadata
 
+    model_documentation: str = 'https://nofusscomputing.com/docs'
+
+    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
+
     permission_classes = [
         OrganizationPermissionAPI
     ]
