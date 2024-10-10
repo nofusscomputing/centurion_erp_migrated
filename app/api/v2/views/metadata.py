@@ -56,12 +56,15 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
 
         metadata['actions'] = self.determine_actions(request, view)
 
+        if hasattr(view, 'page_layout'):
+            metadata['layout'] = view.page_layout
+
         if hasattr(view, 'queryset'):
 
             if view.suffix == 'Instance':
 
-                if hasattr(view.queryset.model, 'page_layout'):
-                    metadata['layout'] = view.queryset.model.page_layout
+                # if hasattr(view, 'page_layout'):
+                #     metadata['layout'] = view.page_layout
 
                 metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
 
@@ -146,16 +149,18 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
                     ]
                 },
 
-                # {
-                #     "name": "Settings",
-                #     "pages": [
-                #         {
-                #             "name": "Device Models",
-                #             "icon": "device",
-                #             "link": "/settings/device_model"
-                #         }
-                #     ]
-                # }
+                {
+                    "display_name": "Settings",
+                    "name": "settings",
+                    "pages": [
+                        {
+                            "display_name": "System",
+                            "name": "system",
+                            "icon": "settings",
+                            "link": "/settings"
+                        }
+                    ]
+                }
             ]
 
 

@@ -15,6 +15,10 @@ class Index(viewsets.ViewSet):
 
     permission_classes = []
 
+    page_layout: list = [
+        "sdas"
+    ]
+
     def get_view_name(self):
         return "V2"
 

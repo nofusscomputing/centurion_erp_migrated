@@ -44,6 +44,8 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     queryset = Device.objects.all()
 
+    page_layout = Device.page_layout
+
     def get_serializer_class(self):
 
         if (
