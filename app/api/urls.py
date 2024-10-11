@@ -1,6 +1,6 @@
 from django.conf import settings as django_settings
 
-from django.urls import path
+from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -133,7 +133,6 @@ if django_settings.API_TEST:
     router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
     router.register('v2/settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
 
-
 urlpatterns = [
 
     path("assistance", assistance.index.Index.as_view(), name="_api_assistance"),
@@ -168,3 +167,4 @@ urlpatterns = [
 urlpatterns = format_suffix_patterns(urlpatterns)
 
 urlpatterns += router.urls
+

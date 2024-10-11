@@ -59,109 +59,111 @@ class NavigationMetadata(OverRidesJSONAPIMetadata):
         if hasattr(view, 'page_layout'):
             metadata['layout'] = view.page_layout
 
-        if hasattr(view, 'queryset'):
+        # if hasattr(view, 'queryset'):
 
-            if view.suffix == 'Instance':
+        if view.suffix == 'Instance':
 
-                # if hasattr(view, 'page_layout'):
-                #     metadata['layout'] = view.page_layout
+            # if hasattr(view, 'page_layout'):
+            #     metadata['layout'] = view.page_layout
 
-                metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
+            metadata['actions']['PUT'] = self.field_choices(metadata['actions']['PUT'])
 
-                if hasattr(view, 'model_documentation'):
+            if hasattr(view, 'model_documentation'):
 
-                    metadata['documentation'] = getattr(view, 'model_documentation')
+                metadata['documentation'] = getattr(view, 'model_documentation')
 
-                # for field_name, value in metadata['actions']['PUT'].items():
+            # for field_name, value in metadata['actions']['PUT'].items():
 
-                #     if metadata['actions']['PUT'][field_name]['type'] == 'Relationship':
+            #     if metadata['actions']['PUT'][field_name]['type'] == 'Relationship':
 
-                #         choices = []
+            #         choices = []
 
-                #         if metadata['actions']['PUT'][field_name]['relationship_resource'] == 'DeviceType':
+            #         if metadata['actions']['PUT'][field_name]['relationship_resource'] == 'DeviceType':
 
-                #             from itam.models.device import DeviceType
+            #             from itam.models.device import DeviceType
 
-                #             queryset = DeviceType.objects.filter()
+            #             queryset = DeviceType.objects.filter()
 
-                #             for item in queryset:
+            #             for item in queryset:
 
-                #                 choices += [{
-                #                     'value': item.id,
-                #                     'display_name': item.name
-                #                 }]
+            #                 choices += [{
+            #                     'value': item.id,
+            #                     'display_name': item.name
+            #                 }]
 
-                #         metadata['actions']['PUT'][field_name].update({'choices': choices})
-
-
-            elif view.suffix == 'List':
-
-                metadata['table_fields'] = view.queryset.model.table_fields
-
-                if hasattr(view, 'documentation'):
-
-                    metadata['documentation'] = getattr(view, 'documentation')
-
-                if 'actions' in metadata:
-
-                    if request.method in metadata['actions']:
-
-                        metadata['actions'][request.method] = self.field_choices(metadata['actions']['POST'])
+            #         metadata['actions']['PUT'][field_name].update({'choices': choices})
 
 
-        else:
+        elif view.suffix == 'List':
 
-            metadata['navigation'] = [
-                {
-                    "display_name": "Access",
-                    "name": "access",
-                    "pages": [
-                        {
-                            "display_name": "Organization",
-                            "name": "organization",
-                            "icon": "device",
-                            "link": "/access/organization"
-                        }
-                    ]
-                },
-                {
-                    "display_name": "Assistance",
-                    "name": "assistance",
-                    "pages": [
-                        {
-                            "display_name": "Requests",
-                            "name": "request",
-                            "icon": "ticket",
-                            "link": "/assistance/ticket/request"
-                        }
-                    ]
-                },
-                {
-                    "display_name": "ITAM",
-                    "name": "itam",
-                    "pages": [
-                        {
-                            "display_name": "Devices",
-                            "name": "device",
-                            "icon": "device",
-                            "link": "/itam/device"
-                        }
-                    ]
-                },
+            if hasattr(view, 'get_queryset'):
 
-                {
-                    "display_name": "Settings",
-                    "name": "settings",
-                    "pages": [
-                        {
-                            "display_name": "System",
-                            "name": "system",
-                            "icon": "settings",
-                            "link": "/settings"
-                        }
-                    ]
-                }
-            ]
+                metadata['table_fields'] = view.get_queryset().model.table_fields
+
+            if hasattr(view, 'documentation'):
+
+                metadata['documentation'] = getattr(view, 'documentation')
+
+            if 'actions' in metadata:
+
+                if request.method in metadata['actions']:
+
+                    metadata['actions'][request.method] = self.field_choices(metadata['actions']['POST'])
+
+
+        # else:
+
+        metadata['navigation'] = [
+            {
+                "display_name": "Access",
+                "name": "access",
+                "pages": [
+                    {
+                        "display_name": "Organization",
+                        "name": "organization",
+                        "icon": "device",
+                        "link": "/access/organization"
+                    }
+                ]
+            },
+            {
+                "display_name": "Assistance",
+                "name": "assistance",
+                "pages": [
+                    {
+                        "display_name": "Requests",
+                        "name": "request",
+                        "icon": "ticket",
+                        "link": "/assistance/ticket/request"
+                    }
+                ]
+            },
+            {
+                "display_name": "ITAM",
+                "name": "itam",
+                "pages": [
+                    {
+                        "display_name": "Devices",
+                        "name": "device",
+                        "icon": "device",
+                        "link": "/itam/device"
+                    }
+                ]
+            },
+
+            {
+                "display_name": "Settings",
+                "name": "settings",
+                "pages": [
+                    {
+                        "display_name": "System",
+                        "name": "system",
+                        "icon": "settings",
+                        "link": "/settings"
+                    }
+                ]
+            }
+        ]
 
 
 

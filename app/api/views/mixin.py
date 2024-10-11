@@ -35,6 +35,10 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             view.http_method_not_allowed(request._request)
 
+        if request.user.is_authenticated and method == 'options':
+
+            return True
+
         if hasattr(view, 'queryset'):
             if view.queryset:
                 if view.queryset.model._meta:
@@ -78,9 +82,11 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             action = 'view'
 
-        permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
+        if hasattr(self, 'obj'):
 
-        self.permission_required = [ permission ]
+            permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
+
+            self.permission_required = [ permission ]
 
         if hasattr(view, 'get_dynamic_permissions'):
 

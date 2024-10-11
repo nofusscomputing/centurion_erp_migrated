@@ -1,5 +1,7 @@
 import threading
 
+from django.shortcuts import redirect
+
 request_local = threading.local()
 
 def get_request():
@@ -11,7 +13,14 @@ class RequestMiddleware():
 
     def __call__(self, request):
         request_local.request = request
-        return self.get_response(request)
+
+        response = self.get_response(request)
+
+        # if response.status_code == 401:
+
+        #     response = redirect('login')
+
+        return response
 
     def process_exception(self, request, exception):
         request_local.request = None

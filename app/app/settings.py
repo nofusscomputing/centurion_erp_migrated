@@ -192,7 +192,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "http://127.0.0.1:3000"
 LOGOUT_REDIRECT_URL = "login"
 
 LOGIN_URL = '/account/login'
