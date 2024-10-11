@@ -1,3 +1,10 @@
+## Version 1.4.0
+
+- Depreciation of **ALL** API urls. will be [removed in v2.0.0](https://github.com/nofusscomputing/centurion_erp/issues/343) release of Centurion.
+
+- New API will be at path `api/v2` and will remain until v2.0.0 release of Centurion on which the `api/v2` path will be moved to `api`
+
+
 # Version 1.3.0
 
 !!! danger "Security"
@@ -14,10 +21,12 @@ This release updates the docker container to be a production setup for deploymen
 - To setup container as "Worker", set `IS_WORKER='True'` environmental variable within container. _**Note:** You can still use command `celery -A app worker -l INFO`, although **not** recommended as the container health check will not be functioning_
 
 
-# Version 1.0.0
+## Version 1.0.0
+
 
 Initial Release of Centurion ERP.
 
-## Breaking changes
+
+### Breaking changes
 
 - Nil
