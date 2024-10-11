@@ -99,9 +99,11 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 # SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'corsheaders',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -124,10 +126,11 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -263,10 +266,8 @@ if API_ENABLED:
             'rest_framework.filters.SearchFilter',
             'rest_framework_json_api.django_filters.DjangoFilterBackend',
             'rest_framework_json_api.filters.OrderingFilter',
-            'rest_framework_json_api.django_filters.DjangoFilterBackend',
-            'rest_framework.filters.SearchFilter',
         ),
-        'SEARCH_PARAM': 'filter[search]',
+        # 'SEARCH_PARAM': 'filter[search]',
         # 'TEST_REQUEST_RENDERER_CLASSES': (
         #     'rest_framework_json_api.renderers.JSONRenderer',
         # ),
