@@ -15,13 +15,6 @@ class BaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
-    # _urls = serializers.SerializerMethodField('get_url')
-
-    # def get_url(self, obj):
-
-    #     return {
-    #         '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})
-    #     }
 
     url = serializers.HyperlinkedIdentityField(
         view_name="API:_api_v2_device_model-detail", format="html"
@@ -49,7 +42,14 @@ class BaseSerializer(serializers.ModelSerializer):
 
 class ModelSerializer(BaseSerializer):
 
-    pass
+
+    _urls = serializers.SerializerMethodField('get_url')
+
+    def get_url(self, obj):
+
+        return {
+            '_self': reverse("API:_api_v2_device_model-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})
+        }
 
     class Meta:
 
@@ -73,14 +73,14 @@ class ModelSerializer(BaseSerializer):
     #         '_urls',
     #     ]
 
-    #     read_only_fields = [
-    #         'id',
+        read_only_fields = [
+            'id',
     #         'display_name',
     #         'inventorydate',
     #         'created',
     #         'modified',
-    #         '_urls',
-    #     ]
+            '_urls',
+        ]
 
 
 

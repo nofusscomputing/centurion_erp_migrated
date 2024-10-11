@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from access.mixin import OrganizationMixin
 
 from api.v2.serializers.itam.device_model import ModelSerializer, ViewSerializer
+from api.v2.views.metadata import NavigationMetadata
 from api.views.mixin import OrganizationPermissionAPI
 
 from itam.models.device_models import DeviceModel
@@ -17,11 +18,15 @@ from itam.models.device_models import DeviceModel
 
 class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
+    metadata_class = NavigationMetadata
+
     permission_classes = [
         OrganizationPermissionAPI
     ]
 
     queryset = DeviceModel.objects.all()
+
+    page_layout = DeviceModel.page_layout
 
     def get_serializer_class(self):
 

@@ -16,7 +16,8 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     def get_display_name(self, item):
 
-        return '#' + str( item.ticket.id )
+        return str( item )
+
 
     url = serializers.HyperlinkedIdentityField(
         view_name="API:_api_v2_device-detail", format="html"

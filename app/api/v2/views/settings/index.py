@@ -16,7 +16,24 @@ class Index(viewsets.ViewSet):
     permission_classes = []
 
     page_layout: list = [
-        "sdas"
+        {
+            "name": "Core",
+            "links": [
+                {
+                    "name": "External Links",
+                    "model": "external_link"
+                }
+            ]
+        },
+        {
+            "name": "ITAM",
+            "links": [
+                {
+                    "name": "Device Model",
+                    "model": "device_model"
+                }
+            ]
+        }
     ]
 
     def get_view_name(self):

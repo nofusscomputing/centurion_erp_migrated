@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from access.mixin import OrganizationMixin
 
 from settings.serializers.external_links import ExternalLink, ExternalLinkModelSerializer, ExternalLinkViewSerializer
+from api.v2.views.metadata import NavigationMetadata
 from api.views.mixin import OrganizationPermissionAPI
 
 # from settings.models.external_link import ExternalLink
@@ -21,6 +22,8 @@ class ViewSet(OrganizationMixin, viewsets.ModelViewSet):
         'devices',
         'software',
     ]
+
+    metadata_class = NavigationMetadata
 
     permission_classes = [
         OrganizationPermissionAPI
