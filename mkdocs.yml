@@ -5,6 +5,9 @@ docs_dir: 'docs'
 repo_name: Centurion ERP
 repo_url: https://github.com/nofusscomputing/centurion_erp
 edit_uri: '/edit/development/docs/'
+theme: 
+  icon:
+    repo: fontawesome/brands/github
 
 plugins:
   mkdocstrings:
@@ -60,6 +63,8 @@ nav:
 
       - projects/centurion_erp/administration/backup.md
 
+      - projects/centurion_erp/administration/core/ticketing.md
+
       - projects/centurion_erp/administration/installation.md
 
     - Development:
@@ -87,6 +92,8 @@ nav:
           - projects/centurion_erp/development/api/models/itam_device.md
 
           - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
+
+          - projects/centurion_erp/development/api/models/ticket.md
 
           - projects/centurion_erp/development/api/models/tenancy_object.md
 
@@ -188,6 +195,14 @@ nav:
 
         - projects/centurion_erp/user/core/index.md
 
+        - projects/centurion_erp/user/core/markdown.md
+
+        - projects/centurion_erp/user/core/tickets.md
+
+        - projects/centurion_erp/user/core/ticketcategory.md
+
+        - projects/centurion_erp/user/core/ticket_comment_category.md
+
       - ITAM:
 
         - projects/centurion_erp/user/itam/index.md
@@ -209,6 +224,18 @@ nav:
         - projects/centurion_erp/user/itim/port.md
 
         - projects/centurion_erp/user/itim/service.md
+
+      - Project Management:
+
+        - projects/centurion_erp/user/project_management/index.md
+
+        - projects/centurion_erp/user/project_management/project.md
+
+        - projects/centurion_erp/user/project_management/project_state.md
+
+        - projects/centurion_erp/user/project_management/project_task.md
+
+        - projects/centurion_erp/user/project_management/project_type.md
 
       - Settings:
 

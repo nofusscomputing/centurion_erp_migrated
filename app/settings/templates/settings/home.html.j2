@@ -51,6 +51,14 @@ div#content article h3 {
     </article>
 
     <article style="">
+        <h3>Core</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_ticket_categories' %}">Ticket Categories</a></li>
+            <li><a href="{% url 'Settings:_ticket_comment_categories' %}">Ticket Comment Categories</a></li>
+        </ul>
+    </article>
+
+    <article style="">
         <h3>ITAM</h3>
         <ul>
             <li><a href="{% url 'Settings:_device_types' %}">Device Types</a></li>
@@ -64,6 +72,14 @@ div#content article h3 {
         <ul>
             <li><a href="{% url 'Settings:_cluster_types' %}">Cluster Types</a></li>
             <li><a href="{% url 'Settings:_ports' %}">Service Ports</a></li>
+        </ul>
+    </article>
+
+    <article style="">
+        <h3>Project Management</h3>
+        <ul>
+            <li><a href="{% url 'Settings:_project_states' %}">Project States</a></li>
+            <li><a href="{% url 'Settings:_project_types' %}">Project Types</a></li>
         </ul>
     </article>
 

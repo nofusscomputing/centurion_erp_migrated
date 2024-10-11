@@ -1,0 +1,25 @@
+{% if ticket_status == 'new' %}
+    {% include 'icons/ticket/add.svg' %}
+    {% elif ticket_status == 'assigned' %}
+    {% include 'icons/ticket/status_assigned.svg' %}
+    {% elif ticket_status == 'assigned_planning' %}
+    {% include 'icons/ticket/status_assigned_planning.svg' %}
+    {% elif ticket_status == 'closed' %}
+    {% include 'icons/ticket/status_closed.svg' %}
+    {% elif ticket_status == 'draft' %}
+    {% include 'icons/ticket/add.svg' %}
+    {% elif ticket_status == 'pending' %}
+    {% include 'icons/ticket/status_pending.svg' %}
+    {% elif ticket_status == 'solved' %}
+    {% include 'icons/ticket/status_solved.svg' %}
+    {% elif ticket_status == 'invalid' %}
+    {% include 'icons/ticket/status_invalid.svg' %}
+    {% elif ticket_status == 'approvals' %}
+    {% include 'icons/ticket/status_approvals.svg' %}
+    {% elif ticket_status == 'accepted' %}
+    {% include 'icons/ticket/status_accepted.svg' %}
+    {% elif ticket_status == 'evaluation' %}
+    {% include 'icons/ticket/status_evaluation.svg' %}
+    {% elif ticket_status == 'testing' %}
+    {% include 'icons/ticket/status_testing.svg' %}
+{% endif %}

@@ -44,11 +44,13 @@ class SoftwareAPI(TestCase):
         different_organization = Organization.objects.create(name='test_different_organization')
 
         category = SoftwareCategory.objects.create(
-            name='a category'
+            name='a category',
+            organization = organization,
         )
 
         publisher = Manufacturer.objects.create(
-            name='a manufacturer'
+            name='a manufacturer',
+            organization = organization,
         )
 
 

@@ -45,6 +45,15 @@ All models must meet the following requirements:
 - If creating a new model, function `access.functions.permissions.permission_queryset()` has been updated to display the models permission(s)
 
 
+## Checklist
+
+This section details the additional items that may need to be done when adding a new model:
+
+- If the model is a primary model, add it to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
+
+- If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
+
+
 ## History
 
 Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.

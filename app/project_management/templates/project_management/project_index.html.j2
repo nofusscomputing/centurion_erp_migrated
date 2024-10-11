@@ -1,0 +1,64 @@
+{% extends 'base.html.j2' %}
+
+{% block content_header_icon %}{% endblock %}
+
+{% block content %}
+
+<input type="button" value="New Project" onclick="window.location='{% url 'Project Management:_project_add' %}';">
+
+<table class="data">
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Type</th>
+        <th>State</th>
+        <th>Organization</th>
+        <th>&nbsp;</th>
+    </tr>
+    {% for project in projects %}
+    <tr>
+        <td>
+            {{ project.code }}
+        </td>
+        <td>
+            <a href="{% url 'Project Management:_project_view' pk=project.id %}">{{ project.name }}</a>
+        </td>
+        <td>
+        {% if project.project_type %}
+            {{ project.project_type }}
+        {% else%}
+            -
+        {% endif %}
+        </td>
+        <td>
+        {% if project.state %}
+            {{ project.state }}
+        {% else%}
+            -
+        {% endif %}
+        </td>
+        <td>{% if project.is_global %}Global{% else %}{{ project.organization }}{% endif %}</td>
+        <td>&nbsp;</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}

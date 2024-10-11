@@ -2,13 +2,15 @@ from django.urls import path
 
 from assistance.views import knowledge_base_category
 
-from core.views import celery_log
+from core.views import celery_log, ticket_categories, ticket_comment_category
 
 from settings.views import app_settings, home, device_models, device_types, external_link, manufacturer, software_categories
 
 from itam.views import device_type, device_model, software_category
 
 from itim.views import cluster_types, ports
+
+from project_management.views import project_states, project_types
 
 app_name = "Settings"
 urlpatterns = [
@@ -59,11 +61,35 @@ urlpatterns = [
     path("port/<int:pk>/delete", ports.Delete.as_view(), name="_port_delete"),
     path("port/<int:pk>", ports.View.as_view(), name="_port_view"),
 
+    path("project_states", project_states.Index.as_view(), name="_project_states"),
+    path("project_state/<int:pk>", project_states.View.as_view(), name="_project_state_view"),
+    path("project_state/add", project_states.Add.as_view(), name="_project_state_add"),
+    path("project_state/<int:pk>/edit", project_states.Change.as_view(), name="_project_state_change"),
+    path("project_state/<int:pk>/delete", project_states.Delete.as_view(), name="_project_state_delete"),
+
+    path("project_types", project_types.Index.as_view(), name="_project_types"),
+    path("project_type/<int:pk>", project_types.View.as_view(), name="_project_type_view"),
+    path("project_type/add", project_types.Add.as_view(), name="_project_type_add"),
+    path("project_type/<int:pk>/edit", project_types.Change.as_view(), name="_project_type_change"),
+    path("project_type/<int:pk>/delete", project_types.Delete.as_view(), name="_project_type_delete"),
+
     path("software_category", software_categories.Index.as_view(), name="_software_categories"),
     path("software_category/<int:pk>", software_category.View.as_view(), name="_software_category_view"),
     path("software_category/add/", software_category.Add.as_view(), name="_software_category_add"),
     path("software_category/<int:pk>/edit", software_category.Change.as_view(), name="_software_category_change"),
     path("software_category/<int:pk>/delete", software_category.Delete.as_view(), name="_software_category_delete"),
+
+    path("ticket_categories", ticket_categories.Index.as_view(), name="_ticket_categories"),
+    path("ticket_categories/<int:pk>", ticket_categories.View.as_view(), name="_ticket_category_view"),
+    path("ticket_categories/add", ticket_categories.Add.as_view(), name="_ticket_category_add"),
+    path("ticket_categories/<int:pk>/edit", ticket_categories.Change.as_view(), name="_ticket_category_change"),
+    path("ticket_categories/<int:pk>/delete", ticket_categories.Delete.as_view(), name="_ticket_category_delete"),
+
+    path("ticket_comment_categories", ticket_comment_category.Index.as_view(), name="_ticket_comment_categories"),
+    path("ticket_comment_categories/<int:pk>", ticket_comment_category.View.as_view(), name="_ticket_comment_category_view"),
+    path("ticket_comment_categories/add", ticket_comment_category.Add.as_view(), name="_ticket_comment_category_add"),
+    path("ticket_comment_categories/<int:pk>/edit", ticket_comment_category.Change.as_view(), name="_ticket_comment_category_change"),
+    path("ticket_comment_categories/<int:pk>/delete", ticket_comment_category.Delete.as_view(), name="_ticket_comment_category_delete"),
 
     path("task_results", celery_log.Index.as_view(), name="_task_results"),
     path("task_result/<int:pk>", celery_log.View.as_view(), name="_task_result_view"),

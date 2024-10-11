@@ -9,3 +9,9 @@ artifacts/
 volumes/
 build/
 pages/
+node_modules/
+.markdownlint-cli2.jsonc
+.markdownlint.json
+package-lock.json
+package.json
+**.junit.xml

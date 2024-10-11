@@ -1,0 +1,132 @@
+{% if comment %}
+
+{% load markdown %}
+
+{% if comment.get_comment_type_display == 'Action' %}
+
+    <div style="padding: 0px; margin: 0px;"><span style="display: inline-block;">{{ comment.user.username }}&nbsp;</span><span style="display: inline-block;">{{ comment.body | markdown | safe }}</span></div>
+
+{% elif comment.get_comment_type_display == 'Comment' or comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' or comment.get_comment_type_display == 'Solution' %}
+<div id="comment" class="comment-type-default comment-type-{{ comment.get_comment_type_display }}">
+
+    <h4>
+        <div id="text">
+        {{ comment.user }} 
+        <span class="sub-script">{% if comment.get_comment_type_display == 'Task' %}
+        created a task 
+        {% elif comment.get_comment_type_display == 'Solution' %}
+        solved 
+        {% else %}
+        wrote 
+        {% endif %}
+        on</span> {{ comment.created }} 
+        {% if comment.created|date_time_seconds != comment.modified|date_time_seconds %}
+            <span class="sub-script">Updated</span> {{ comment.modified }}
+        {% endif %}
+        </div>
+        <div id="icons">
+            {%if not comment.parent_id %}
+                {% if ticket_type == 'project_task'%}
+                <a title="Reply with Comment" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=comment">
+                    {% include 'icons/ticket/reply.svg' %}
+                </a>
+                <a title="Reply with Task" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=task">
+                    {% include 'icons/ticket/task.svg' %}
+                </a>
+                <a title="Reply with Notification" href="{% url comment_reply_url ticket.project.id ticket_type ticket.id comment.id %}?comment_type=notification">
+                    {% include 'icons/ticket/notification.svg' %}
+                </a>
+                {% else %}
+                <a title="Reply with Comment" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=comment">
+                    {% include 'icons/ticket/reply.svg' %}
+                </a>
+                <a title="Reply with Task" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=task">
+                    {% include 'icons/ticket/task.svg' %}
+                </a>
+                <a title="Reply with Notification" href="{% url comment_reply_url ticket_type ticket.id comment.id %}?comment_type=notification">
+                    {% include 'icons/ticket/notification.svg' %}
+                </a>
+                {% endif %}
+            {% endif %}
+            <a title="Edit Comment" href="{% url 'Assistance:_ticket_comment_request_change' ticket_type ticket.id comment.id %}">
+            {% include 'icons/ticket/edit.svg' %}
+            </a>
+        </div>
+        
+    </h4>
+
+    <div style="line-height:30px;">
+        {% if comment.get_comment_type_display != 'Notification' %}
+        <fieldset>
+            <label>Source</label>
+            <span>{{ comment.get_source_display }}</span>
+        </fieldset>
+        {% endif %}
+        {% if comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' %}
+        <fieldset>
+            <label>Status</label>
+            <span>{{ comment.get_status_display }}</span>
+        </fieldset>
+        {% if comment.get_comment_type_display == 'Task' %}
+        <fieldset>
+            <label>Responsible User</label>
+            <span>{{ comment.responsible_user }}</span>
+        </fieldset>
+         {% endif %}
+        <fieldset>
+            <label>
+            {% if comment.get_comment_type_display == 'Task' %}
+                Responsible Team
+            {% elif comment.get_comment_type_display == 'Notification' %}
+                Notify Team
+            {% endif %}
+            </label>
+            <span>{{ comment.responsible_team }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Category</label>
+            <span>{{ comment.category }}</span>
+        </fieldset>
+    </div>
+
+    <hr />
+
+    <div id="markdown" style="margin: 15px; padding: 10px; background-color: #fff;">
+        {{ comment.body | markdown | safe }}
+    </div>
+
+    <hr />
+
+    <div>
+        {% if comment.get_comment_type_display == 'Task' or comment.get_comment_type_display == 'Notification' %}
+        <fieldset>
+            <label>Planned Start</label>
+            <span>{{ comment.planned_start_date }}</span>
+        </fieldset>
+        {% if comment.get_comment_type_display == 'Task' %}
+        <fieldset>
+            <label>Planned Finish</label>
+            <span>{{ comment.planned_finish_date }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Actual Start</label>
+            <span>{{ comment.real_start_date }}</span>
+        </fieldset>
+        <fieldset>
+            <label>Actual Finish</label>
+            <span>{{ comment.real_finish_date }}</span>
+        </fieldset>
+        {% endif %}
+        <fieldset>
+            <label>Duration</label>
+            <span>{{ comment.duration|to_duration }}</span>
+        </fieldset>
+    </div>
+
+</div>
+
+{% endif %}
+ 
+{% endif %}

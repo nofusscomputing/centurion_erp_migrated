@@ -8,6 +8,11 @@ from core.models.history import History
 
 class SaveHistory(models.Model):
 
+    save_model_history: bool = True
+    """When set, history will be saved.
+    By default, ALL models must save history.
+    """
+
     class Meta:
         abstract = True
 
@@ -25,6 +30,7 @@ class SaveHistory(models.Model):
         """
 
         remove_keys = [
+            '_django_version',
             '_state',
             'created',
             'modified'
@@ -176,9 +182,11 @@ class SaveHistory(models.Model):
         # Process the save
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
-        after = self.__dict__.copy()
+        if self.save_model_history:
 
-        self.save_history(before, after)
+            after = self.__dict__.copy()
+
+            self.save_history(before, after)
 
 
     def delete_history(self, item_pk, item_class):

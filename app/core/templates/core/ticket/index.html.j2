@@ -1,0 +1,67 @@
+{% extends 'base.html.j2' %}
+
+{% block additional-stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ticketing.css' %}">
+{% endblock additional-stylesheet %}
+
+
+{% load markdown %}
+
+{% block content %}
+<input type="button" value="New Ticket" onclick="window.location='{{ new_ticket_url }}';">
+
+<style>
+
+#status-icon {
+    margin: 0px;
+
+}
+
+#status-icon svg{
+    width: 22px;
+
+}
+
+</style>
+
+<table style="max-width: 100%;">
+    <thead>
+        <th>&nbsp;</th>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Opened By</th>
+        <th>organization</th>
+        <th>Created</th>
+    </thead>
+    {% for ticket in tickets %}
+    <tr class="clicker">
+        <td id="status-icon">
+            &nbsp;
+        </td>
+        <td>{{ ticket.id }}</td>
+        <td>
+            {% if ticket_type == 'change' %}
+            <a href="{% url 'ITIM:_ticket_change_view' ticket_type='change' pk=ticket.id %}">
+            {% elif ticket_type == 'incident' %}
+            <a href="{% url 'ITIM:_ticket_incident_view' ticket_type='incident' pk=ticket.id %}">
+            {% elif ticket_type == 'problem' %}
+            <a href="{% url 'ITIM:_ticket_problem_view' ticket_type='problem' pk=ticket.id %}">
+            {% elif ticket_type == 'request' %}
+            <a href="{% url 'Assistance:_ticket_request_view' ticket_type='request' pk=ticket.id %}">
+            {% else %}
+            <a href=""></a>
+            {% endif %}
+                {{ ticket.title }}
+            </a>
+        </td>
+        <td>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.get_status_display ticket_status=ticket.get_status_display|ticket_status %}</td>
+        <td>{{ ticket.opened_by }}</td>
+        <td>{{ ticket.organization.name }}</td>
+        <td>{{ ticket.created }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

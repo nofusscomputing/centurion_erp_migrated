@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="{% static 'base.css' %}">
   <link rel="stylesheet" href="{% static 'code.css' %}">
   <link rel="stylesheet" href="{% static 'content.css' %}">
+  {% block additional-stylesheet %}{% endblock additional-stylesheet %}
   <script src="{% static 'functions.js' %}"></script>
   {% endif %}
 
@@ -23,7 +24,7 @@
   {% block body %}
   <header>
 
-    <h1><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
+    <h1 id="site-title"><a href="/" style="text-decoration: none; color: inherit;">{% settings_value "SITE_TITLE" %}</a></h1>
 
     {%if user.is_authenticated %}
     <div class="dropdown" style="right: 0px; position: fixed; padding-right: 50px;">
@@ -90,7 +91,7 @@ section h2 span svg {
 </style>
 
     <section>
-      <h2>{% block title %}{{ content_title }}{% endblock %}
+      <h2 id="content_title">{% block title %}{{ content_title }}{% endblock %}
         {% if model_delete_url %}
         <span title="Delete Item" id="content_header_icon" class="icon-delete" onclick="window.location='{{ model_delete_url }}';">
           {% include 'icons/delete.svg' %}
@@ -103,7 +104,7 @@ section h2 span svg {
         {% endif %}
         {% if model_name and model_pk %}
         {% block content_header_icon %}
-        <span title="View History" id="content_header_icon" onclick="window.location='{% url '_history' model_name=model_name model_pk=model_pk %}';">
+        <span title="View History" id="content_header_icon" onclick="window.location='{% url '_history' model_name=model_name model_pk=model_pk as history_url %}{{ history_url|lower}}';">
           <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 -960 960 960" width="30px">
             <path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/>
           </svg>

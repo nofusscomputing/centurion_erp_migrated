@@ -24,7 +24,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from .views import home
 
-from core.views import history
+from core.views import history, related_ticket, ticket_linked_item
 
 from settings.views import user_settings
 
@@ -50,6 +50,11 @@ urlpatterns = [
     path("history/<str:model_name>/<int:model_pk>", history.View.as_view(), name='_history'),
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}),
 
+
+    path('ticket/<str:ticket_type>/<int:ticket_id>/relate/add', related_ticket.Add.as_view(), name="_ticket_related_add"),
+
+    path('ticket/<str:ticket_type>/<int:ticket_id>/linked_item/add', ticket_linked_item.Add.as_view(), name="_ticket_linked_item_add"),
+
 ]
 
 
@@ -74,11 +79,12 @@ if settings.DEBUG:
     urlpatterns += [
 
         path("__debug__/", include("debug_toolbar.urls"), name='_debug'),
-        path("project_management/", include("project_management.urls")),
     ]
 
 # must be after above
 urlpatterns += [
+
+    path("project_management/", include("project_management.urls")),
 
     path("settings/", include("settings.urls")),
 

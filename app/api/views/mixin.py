@@ -75,6 +75,12 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
         self.permission_required = [ permission ]
 
+        if hasattr(view, 'get_dynamic_permissions'):
+
+            self.permission_required = view.get_dynamic_permissions()
+
+
+
 
         if view:
             if 'organization_id' in view.kwargs:
