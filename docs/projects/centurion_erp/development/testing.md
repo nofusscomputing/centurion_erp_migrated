@@ -55,7 +55,7 @@ class DeviceHistory(TestCase, HistoryEntry, HistoryEntryParentItem):
 
 Each module is to contain a tests directory of the model being tested with a single file for grouping of what is being tested. for items that depend upon a parent model, the test file is to be within the child-models test directory named with format `test_<model>_<parent app>_<parent model name>`
 
-_example file system structure showing the layout of the tests directory for a module_
+example file system structure showing the layout of the tests directory for a module.
 
 ``` text
 .

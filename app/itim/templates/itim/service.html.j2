@@ -72,4 +72,31 @@
 
 </div>
 
+<div id="tickets" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.tickets %}
+
+    <table>
+        <thead>
+          <th>Name</th>
+          <th>Status</th>
+          <th>&nbsp</th>
+        </thead>
+        {% if tickets %}
+        {% for ticket in tickets %}
+        <tr>
+          <td>{% concat_strings "#" ticket.ticket.id as ticket_ref %}{{ ticket_ref | markdown | safe}}</td>
+          <td>{% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=ticket.ticket.get_status_display ticket_status=ticket.ticket.get_status_display|ticket_status %}</td>
+          <td>&nbsp;</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="3">No related tickets exist</td>
+        </tr>
+        {% endif %}
+    </table>
+
+</div>
+
 {% endblock %}

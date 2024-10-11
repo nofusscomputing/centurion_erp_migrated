@@ -45,6 +45,7 @@ class DeviceOperatingSystemModel(
         os_version = OperatingSystemVersion.objects.create(
             name = "12",
             operating_system = os,
+            organization=organization,
         )
 
 

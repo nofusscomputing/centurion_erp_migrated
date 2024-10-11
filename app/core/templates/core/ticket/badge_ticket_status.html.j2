@@ -1,0 +1,6 @@
+<span id="badge">
+    <span id="icon" class="ticket-status ticket-status-{{ ticket_status }}">
+        {% include 'core/ticket/icon_status.html.j2' %}
+    </span>
+    <span id="text">{{ ticket_status_text }}</span>
+</span>

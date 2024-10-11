@@ -194,7 +194,7 @@ class APIPermissionAdd:
     def test_add_has_permission(self):
         """ Check correct permission for add 
 
-        Attempt to add as user with no permission
+        Attempt to add as user with permission
         """
 
         client = Client()

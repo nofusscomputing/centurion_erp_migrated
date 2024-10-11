@@ -108,6 +108,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_json_api',
+    'django_filters',
     'social_django',
     'django_celery_results',
     'core.apps.CoreConfig',
@@ -119,6 +120,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_spectacular_sidecar',
     'config_management.apps.ConfigManagementConfig',
+    'project_management.apps.ProjectManagementConfig',
 ]
 
 MIDDLEWARE = [
@@ -257,7 +259,9 @@ if API_ENABLED:
         # ),
         'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
         'DEFAULT_FILTER_BACKENDS': (
-            'rest_framework_json_api.filters.QueryParameterValidationFilter',
+            # 'rest_framework_json_api.filters.QueryParameterValidationFilter',
+            'rest_framework.filters.SearchFilter',
+            'rest_framework_json_api.django_filters.DjangoFilterBackend',
             'rest_framework_json_api.filters.OrderingFilter',
             'rest_framework_json_api.django_filters.DjangoFilterBackend',
             'rest_framework.filters.SearchFilter',
@@ -355,11 +359,6 @@ if DEBUG:
 
     INTERNAL_IPS = [
         "127.0.0.1",
-    ]
-
-    # Apps Under Development
-    INSTALLED_APPS += [
-        'project_management.apps.ProjectManagementConfig',
     ]
 
 

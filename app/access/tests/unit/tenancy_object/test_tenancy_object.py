@@ -91,3 +91,13 @@ class TenancyObjectTests(TestCase):
         """
 
         assert self.item.objects is not None
+
+
+    @pytest.mark.skip(reason="write test")
+    def test_field_not_none_organzation(self):
+        """ Ensure field is set
+
+        Field organization must be defined for all tenancy objects
+        """
+
+        assert self.item.objects is not None

@@ -1,5 +1,3 @@
-import markdown
-
 from django.views import generic
 
 from access.mixin import OrganizationPermission

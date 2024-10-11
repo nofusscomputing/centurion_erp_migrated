@@ -43,7 +43,7 @@ refactored
 }
 
 
-#content-body form#dynamic-form div {
+#content-body form#dynamic-form div:not(#markdown) {
   align-items: center;
   display: block;
   line-height: inherit;
@@ -199,7 +199,7 @@ main section a:visited {
 
 }
 
-article div {
+article div:not(.codehilite) {
   /* background-color: #ff0000; */
   justify-content: center;
   width: 100%;
@@ -207,35 +207,6 @@ article div {
   display: flex;
   flex-wrap: wrap;
 }
-
-
-
-input[type=checkbox] {
-  visibility: hidden;
-  font-size: 20px;
-}
-
-input[type=checkbox]:after,
-input[type=checkbox]::after {
-  content: " ";
-  background-color: #177ee6;
-  display: inline-block;
-  text-align: center;
-  color: #fff;
-  height: 20px;
-  line-height: 20px;
-  width: 20px;
-  visibility: visible;
-  border-radius: 15px;
-}
-
-input[type=checkbox]:checked:after,
-input[type=checkbox]:checked::after {
-  content: "\2714";
-}
-
-
-
 
 
 table {

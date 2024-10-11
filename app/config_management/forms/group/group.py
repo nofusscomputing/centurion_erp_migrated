@@ -87,6 +87,11 @@ class DetailForm(ConfigGroupForm):
             "slug": "configuration",
             "sections": []
         },
+        "tickets": {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": []
+        },
         "notes": {
             "name": "Notes",
             "slug": "notes",

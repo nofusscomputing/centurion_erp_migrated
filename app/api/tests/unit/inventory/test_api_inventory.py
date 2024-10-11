@@ -502,7 +502,8 @@ class InventoryAPIDifferentNameSerialNumberMatch(TestCase):
 
         Device.objects.create(
             name='random device name',
-            serial_number='serial_number_123'
+            serial_number='serial_number_123',
+            organization = organization,
         )
 
         add_permissions = Permission.objects.get(
@@ -537,7 +538,7 @@ class InventoryAPIDifferentNameSerialNumberMatch(TestCase):
         process_inventory(json.dumps(self.inventory), organization.id)
 
 
-        self.device = Device.objects.get(name=self.inventory['details']['name'])
+        self.device = Device.objects.get(name=self.inventory['details']['name'], organization = organization)
 
         self.operating_system = OperatingSystem.objects.get(name=self.inventory['os']['name'])
 
@@ -778,7 +779,8 @@ class InventoryAPIDifferentNameUUIDMatch(TestCase):
 
         Device.objects.create(
             name='random device name',
-            uuid='123-456-789'
+            uuid='123-456-789',
+            organization = organization,
         )
 
         add_permissions = Permission.objects.get(

@@ -14,6 +14,10 @@ from settings.models.user_settings import UserSettings
 class View(OrganizationPermission):
     """ Abstract class common to all views
 
+    ## Functions
+
+    - `get_dynamic_permissions()` A function to build and return the permissions for the view
+
     !!! Danger
         Don't directly use this class within your view as it's already assigned to the views that require it.
     """
@@ -47,6 +51,15 @@ class AddView(View, generic.CreateView):
         return {
             'organization': UserSettings.objects.get(user = self.request.user).default_organization
         }
+
+    
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = 'New ' + self.model._meta.verbose_name
+
+        return context
 
 
 class ChangeView(View, generic.UpdateView):
@@ -119,6 +132,13 @@ class ChangeView(View, generic.UpdateView):
 
 
         return context
+
+
+    def get_initial(self):
+
+        return {
+            'organization': UserSettings.objects.get(user = self.request.user).default_organization
+        }
 
 
 class DeleteView(OrganizationPermission, generic.DeleteView):
@@ -205,3 +225,12 @@ class IndexView(View, generic.ListView):
             raise MissingAttribute('Model is required for view')
 
         super().__init__(**kwargs)
+
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        context['content_title'] = self.model._meta.verbose_name_plural
+
+        return context

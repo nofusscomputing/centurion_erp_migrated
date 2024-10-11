@@ -135,7 +135,14 @@ class ModelPermissionsAdd:
         """
 
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        if self.app_namespace:
+
+            url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        else:
+
+            url = reverse(self.url_name_add, kwargs=self.url_add_kwargs)
 
 
         response = client.put(url, data=self.add_data)
@@ -150,7 +157,14 @@ class ModelPermissionsAdd:
         """
 
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        if self.app_namespace:
+
+            url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        else:
+
+            url = reverse(self.url_name_add, kwargs=self.url_add_kwargs)
 
 
         client.force_login(self.no_permissions_user)
@@ -167,7 +181,14 @@ class ModelPermissionsAdd:
         """
 
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        if self.app_namespace:
+
+            url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        else:
+
+            url = reverse(self.url_name_add, kwargs=self.url_add_kwargs)
 
 
         client.force_login(self.different_organization_user)
@@ -183,7 +204,14 @@ class ModelPermissionsAdd:
         """
 
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        if self.app_namespace:
+
+            url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        else:
+
+            url = reverse(self.url_name_add, kwargs=self.url_add_kwargs)
 
 
         client.force_login(self.view_user)
@@ -195,11 +223,18 @@ class ModelPermissionsAdd:
     def test_model_add_has_permission(self):
         """ Check correct permission for add 
 
-        Attempt to add as user with no permission
+        Attempt to add as user with permission
         """
 
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        if self.app_namespace:
+
+            url = reverse(self.app_namespace + ':' + self.url_name_add, kwargs=self.url_add_kwargs)
+
+        else:
+
+            url = reverse(self.url_name_add, kwargs=self.url_add_kwargs)
 
 
         client.force_login(self.add_user)

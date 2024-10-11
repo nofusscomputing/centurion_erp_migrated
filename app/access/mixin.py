@@ -10,6 +10,19 @@ from .models import Organization, Team
 class OrganizationMixin():
     """Base Organization class"""
 
+    parent_model: str = None
+    """ Parent Model
+
+    This attribute defines the parent model for the model in question. The parent model when defined
+    will be used as the object to obtain the permissions from.
+    """
+
+    parent_model_pk_kwarg: str = 'pk'
+    """Parent Model kwarg
+
+    This value is used to define the kwarg that is used as the parent objects primary key (pk).
+    """
+
     request = None
 
     user_groups = []
@@ -26,12 +39,16 @@ class OrganizationMixin():
             parent_model (Model): with PK from kwargs['pk']
         """
 
-        return self.parent_model.objects.get(pk=self.kwargs['pk'])
+        return self.parent_model.objects.get(pk=self.kwargs[self.parent_model_pk_kwarg])
 
 
     def object_organization(self) -> int:
 
         id = None
+
+        if hasattr(self, '_object_organization'):
+
+            return self._object_organization
 
         try:
 
@@ -39,7 +56,7 @@ class OrganizationMixin():
                 self.get_queryset()
 
 
-            if hasattr(self, 'parent_model'):
+            if self.parent_model:
                 obj = self.get_parent_obj()
 
                 id = obj.get_organization().id
@@ -60,6 +77,10 @@ class OrganizationMixin():
                     if obj.is_global:
 
                         id = 0
+
+            if hasattr(self, 'instance') and id is None:    # Form Instance
+
+                id = self.instance.get_organization()
 
 
         except AttributeError:
@@ -83,6 +104,10 @@ class OrganizationMixin():
         except:
 
             pass
+
+        if id is not None:
+
+            self._object_organization = id
 
 
         return id
@@ -147,6 +172,10 @@ class OrganizationMixin():
 
         user_organizations = []
 
+        if hasattr(self, '_user_organizations'):
+
+            return self._user_organizations
+
         teams = Team.objects
 
         for group in self.request.user.groups.all():
@@ -157,13 +186,31 @@ class OrganizationMixin():
 
             user_organizations = user_organizations + [team.organization.id]
 
+        if len(user_organizations) > 0:
+
+            self._user_organizations = user_organizations
+
+
         return user_organizations
 
 
     # ToDo: Ensure that the group has access to item
-    def has_organization_permission(self, organization: int=None) -> bool:
+    def has_organization_permission(self, organization: int = None, permissions_required: list = None) -> bool:
+        """ Check if user has permission within organization.
+
+        Args:
+            organization (int, optional): Organization to check. Defaults to None.
+            permissions_required (list, optional): if doing object level permissions, pass in required permission. Defaults to None.
+
+        Returns:
+            bool: True for yes.
+        """
 
         has_permission = False
+
+        if permissions_required is None:
+
+            permissions_required = self.get_permission_required()
 
         if not organization:
 
@@ -182,7 +229,7 @@ class OrganizationMixin():
 
                     assembled_permission = str(permission["content_type__app_label"]) + '.' + str(permission["codename"])
 
-                    if assembled_permission in self.get_permission_required() and (team['organization_id'] == organization or organization == 0):
+                    if assembled_permission in permissions_required and (team['organization_id'] == organization or organization == 0):
 
                         return True
 
@@ -242,15 +289,23 @@ class OrganizationMixin():
 
             return True
 
-        perms = self.get_permission_required()
+        if permissions_required:
 
-        if self.has_organization_permission():
+            perms = permissions_required
+
+        else:
+
+            perms = self.get_permission_required()
+
+        if self.has_organization_permission(permissions_required = perms):
 
             return True
 
-        if self.request.user.has_perms(perms) and len(self.kwargs) == 0 and str(self.request.method).lower() == 'get':
+        if self.request.user.has_perms(perms) and str(self.request.method).lower() == 'get':
 
-            return True
+            if len(self.kwargs) == 0 or (len(self.kwargs) == 1 and 'ticket_type' in self.kwargs):
+
+                return True
 
         for required_permission in self.permission_required:
 
@@ -327,6 +382,12 @@ class OrganizationPermission(AccessMixin, OrganizationMixin):
 
         if not request.user.is_authenticated:
                 return self.handle_no_permission()
+
+        if len(self.permission_required) == 0:
+
+            if hasattr(self, 'get_dynamic_permissions'):
+
+                self.permission_required = self.get_dynamic_permissions()
         
         if len(self.permission_required) > 0:
 

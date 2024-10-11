@@ -1,0 +1,79 @@
+{% extends 'detail.html.j2' %}
+
+{% block additional-stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ticketing.css' %}">
+{% endblock additional-stylesheet %}
+
+{% load json %}
+{% load markdown %}
+
+
+{% block tabs %}
+
+<div id="details" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.details %}
+
+</div>
+
+<div id="tasks" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.tasks %}
+
+    <table>
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Type</th>
+        <th>Created</th>
+    </tr>
+    {% for task in tasks %}
+    <tr>
+        <td>{{ task.id }}</td>
+        <td>
+            {% if task.get_ticket_type_display|lower == 'change' %}
+            <a href="{% url 'ITIM:_ticket_change_view' ticket_type='change' pk=task.id %}">
+            {% elif task.get_ticket_type_display|lower == 'incident' %}
+            <a href="{% url 'ITIM:_ticket_incident_view' ticket_type='incident' pk=task.id %}">
+            {% elif task.get_ticket_type_display|lower == 'problem' %}
+            <a href="{% url 'ITIM:_ticket_problem_view' ticket_type='problem' pk=task.id %}">
+            {% elif task.get_ticket_type_display|lower == 'request' %}
+            <a href="{% url 'Assistance:_ticket_request_view' ticket_type='request' pk=task.id %}">
+            {% elif task.get_ticket_type_display|lower == 'project task' %}
+            <a href="{% url 'Project Management:_project_task_view' ticket_type='project_task' project_id=project.id pk=task.id %}">
+            {% else %}
+            <a href=""></a>
+            {% endif %}
+                {{ task.title }}
+            </a>
+        </td>
+        <td>
+        {% include 'core/ticket/badge_ticket_status.html.j2' with ticket_status_text=task.get_status_display ticket_status=task.get_status_display|ticket_status %}
+        </td>
+        <td>{{ task.get_ticket_type_display }}</td>
+        <td>{{ task.created }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+
+</div>
+
+<div id="notes" class="content-tab">
+
+    {% include 'content/section.html.j2' with tab=form.tabs.notes %}
+
+        {{ notes_form }}
+        <input type="submit" name="{{notes_form.prefix}}" value="Submit" />
+        <div class="comments">
+            {% if notes %}
+            {% for note in notes%}
+            {% include 'note.html.j2' %}
+            {% endfor %}
+            {% endif %}
+        </div>
+
+</div>
+
+{% endblock %}

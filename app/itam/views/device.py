@@ -1,5 +1,4 @@
 import json
-import markdown
 
 from django.contrib.auth import decorators as auth_decorator
 from django.core.paginator import Paginator
@@ -17,6 +16,7 @@ from ..models.software import Software
 
 from core.forms.comment import AddNoteForm
 from core.models.notes import Notes
+from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 from core.views.common import AddView, ChangeView, DeleteView, IndexView
 
 from itam.forms.device_softwareadd import SoftwareAdd
@@ -107,6 +107,10 @@ class View(ChangeView):
 
         context['services'] = Service.objects.filter(device=self.kwargs['pk'])
 
+        context['tickets'] = TicketLinkedItem.objects.filter(
+            item = int(self.kwargs['pk']),
+            item_type = TicketLinkedItem.Modules.DEVICE
+        )
 
         softwares = DeviceSoftware.objects.filter(device=self.kwargs['pk'])
         softwares = Paginator(softwares, 10)

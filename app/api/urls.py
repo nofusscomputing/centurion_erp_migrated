@@ -8,6 +8,22 @@ from .views import access, config, index
 from api.views.settings import permissions
 from api.views.settings import index as settings
 
+from api.views import assistance, itim, project_management
+from api.views.assistance import request_ticket
+from api.views.core import (
+    ticket_categories, 
+    ticket_comment_categories,
+    ticket_comments as core_ticket_comments
+)
+from api.views.itim import change_ticket, incident_ticket, problem_ticket
+from api.views.project_management import (
+    projects,
+    project_milestone,
+    project_state,
+    project_type,
+    project_task
+)
+
 from .views.itam import software, config as itam_config
 from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
@@ -16,15 +32,47 @@ from .views.itam import inventory
 app_name = "API"
 
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 
 router.register('', index.Index, basename='_api_home')
+
+router.register('assistance/request', request_ticket.View, basename='_api_assistance_request')
+router.register('assistance/request/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_assistance_request_ticket_comments')
+
 router.register('device', DeviceViewSet, basename='device')
+
+router.register('itim/change', change_ticket.View, basename='_api_itim_change')
+router.register('itim/change/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_change_ticket_comments')
+
+router.register('itim/incident', incident_ticket.View, basename='_api_itim_incident')
+router.register('itim/incident/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_incident_ticket_comments')
+
+router.register('itim/problem', problem_ticket.View, basename='_api_itim_problem')
+router.register('itim/problem/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_itim_problem_ticket_comments')
+
+router.register('project_management/projects', projects.View, basename='_api_projects')
+router.register('project_management/projects/(?P<project_id>[0-9]+)/milestones', project_milestone.View, basename='_api_project_milestone')
+router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks', project_task.View, basename='_api_project_tasks')
+router.register('project_management/projects/(?P<project_id>[0-9]+)/tasks/(?P<ticket_id>[0-9]+)/comments', core_ticket_comments.View, basename='_api_project_tasks_comments')
+
+router.register('settings/ticket_categories', ticket_categories.View, basename='_api_ticket_category')
+
+router.register('settings/project_state', project_state.View, basename='_api_project_state')
+router.register('settings/project_type', project_type.View, basename='_api_project_type')
+router.register('settings/ticket_comment_categories', ticket_comment_categories.View, basename='_api_ticket_comment_category')
+
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
 
 urlpatterns = [
+
+    path("assistance", assistance.index.Index.as_view(), name="_api_assistance"),
+
+    #
+    # Sof Old Paths to be refactored
+    #
+
     path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
 
     path("configuration/", config.ConfigGroupsList.as_view(), name='_api_config_groups'),
@@ -32,12 +80,16 @@ urlpatterns = [
 
     path("device/inventory", inventory.Collect.as_view(), name="_api_device_inventory"),
 
+    path("itim", itim.index.Index.as_view(), name="_api_itim"),
+
     path("organization/", access.OrganizationList.as_view(), name='_api_orgs'),
     path("organization/<int:pk>/", access.OrganizationDetail.as_view(), name='_api_organization'),
     path("organization/<int:organization_id>/team", access.TeamList.as_view(), name='_api_organization_teams'),
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/", access.TeamDetail.as_view(), name='_api_team'),
     path("organization/<int:organization_id>/team/<int:group_ptr_id>/permissions", access.TeamPermissionDetail.as_view(), name='_api_team_permission'),
     path("organization/team/", access.TeamList.as_view(), name='_api_teams'),
+
+    path("project_management", project_management.index.Index.as_view(), name="_api_project_management"),
 
     path("settings", settings.View.as_view(), name='_settings'),
     path("settings/permissions", permissions.View.as_view(), name='_settings_permissions'),

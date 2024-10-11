@@ -1,5 +1,3 @@
-import markdown
-
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -43,9 +41,12 @@ class View(OrganizationPermission, generic.View):
 
         from settings.models.external_link import ExternalLink
 
+        from project_management.models.projects import Project
+
+
         if not hasattr(self, 'model'):
 
-            match self.kwargs['model_name']:
+            match str(self.kwargs['model_name']).lower():
 
                 case 'cluster':
 
@@ -95,6 +96,12 @@ class View(OrganizationPermission, generic.View):
 
                     self.model = Manufacturer
 
+                case 'projectstate':
+
+                    from project_management.models.project_states import ProjectState
+
+                    self.model = ProjectState
+
                 case 'software':
 
                     self.model = Software
@@ -126,6 +133,10 @@ class View(OrganizationPermission, generic.View):
                     from itim.models.services import Service
 
                     self.model = Service
+
+                case 'project':
+
+                    self.model = Project
 
                 case _:
                     raise Exception('Unable to determine history items model')

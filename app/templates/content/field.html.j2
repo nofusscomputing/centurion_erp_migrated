@@ -2,6 +2,11 @@
 {% load markdown %}
 {% load choice_ids %}
 
+{% block additional-stylesheet %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ticketing.css' %}">
+{% endblock additional-stylesheet %}
+
 {% if field.widget_type == 'textarea' or field.label == 'Notes' %}
 
     {% if field.name in section.json and field.value %}
@@ -17,7 +22,7 @@
                 {{ field.label }}
                 </label>
 
-                <div style="display: inline-block; text-align: left;">
+                <div id="markdown"  style="display: inline-block; text-align: left;">
                     {% if field.value %}
                     {{ field.value | markdown | safe }}
                     {% else %}
@@ -30,7 +35,7 @@
 
             {% if field.value %}
 
-                <div style="display:block; width: 95%; text-align: left;">{{ field.value | markdown | safe }}</div>
+                <div id="markdown">{{ field.value | markdown | safe }}</div>
 
             {% else %}
 
