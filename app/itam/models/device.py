@@ -243,9 +243,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             return 'UNK'
 
 
-    def get_configuration(self, id):
+    @property
+    def get_configuration(self):
 
-        softwares = DeviceSoftware.objects.filter(device=id)
+        softwares = DeviceSoftware.objects.filter(device=self.id)
 
         config = {
             "software": []
