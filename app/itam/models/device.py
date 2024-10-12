@@ -161,6 +161,94 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         verbose_name = 'Is Virtual',
     )
 
+    table_fields: list = [
+        'status_icon',
+        "name",
+        "device_model",
+        "device_type",
+        "organization",
+        "created",
+        "modified",
+        "model",
+        "nbsp"
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'device_type',
+                        'device_model',
+                        'name',
+                        'serial_number',
+                        'uuid',
+                        'inventorydate',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Dependent Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "software",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ],
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+        {
+            "name": "Config Management",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        }
+    ]
+
 
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
