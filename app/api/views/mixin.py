@@ -35,6 +35,10 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             view.http_method_not_allowed(request._request)
 
+        if request.user.is_authenticated and method == 'options':
+
+            return True
+
         if hasattr(view, 'get_queryset'):
             if view.get_queryset():
                 if view.queryset.model._meta:
