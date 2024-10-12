@@ -406,6 +406,25 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         blank = True
     )
 
+    @property
+    def action_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.action:
+
+            text = self.get_action_display()
+
+        return Badge(
+            icon_name = f'action_{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-action-{text.lower()}',
+            url = '_self',
+        )
+
 
     @property
     def parent_object(self):
