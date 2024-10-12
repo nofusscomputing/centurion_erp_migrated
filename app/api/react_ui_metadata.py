@@ -3,7 +3,7 @@ from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.request import clone_request
 from rest_framework.utils.field_mapping import ClassLookupDict
 
-from api.v2.serializers.base.user import User, UserBaseSerializer
+from app.serializers.user import User, UserBaseSerializer
 
 from core.fields.badge import BadgeField
 from core.fields.icon import IconField
