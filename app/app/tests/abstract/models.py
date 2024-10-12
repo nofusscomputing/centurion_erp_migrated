@@ -109,6 +109,35 @@ class TenancyModel(
 
 
 
+    def test_attribute_exists_table_fields(self):
+        """Attrribute Test, Exists
+
+        Ensure attribute `table_fields` exists
+        """
+
+        assert hasattr(self.model, 'table_fields')
+
+
+    def test_attribute_type_table_fields(self):
+        """Attrribute Test, Type
+
+        Ensure attribute `table_fields` is of type `list`
+        """
+
+        assert type(self.model.table_fields) is list
+
+
+    def test_attribute_not_callable_table_fields(self):
+        """Attrribute Test, Not Callable
+
+        Attribute must be a property
+
+        Ensure attribute `table_fields` is not callable.
+        """
+
+        assert not callable(self.model.table_fields)
+
+
 
 class ModelAdd(
     AddView
