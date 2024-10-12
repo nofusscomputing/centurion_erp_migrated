@@ -31,6 +31,8 @@ from .views.itam import inventory
 
 from api.viewsets import index as v2
 
+from access.viewset import index as access_v2
+
 
 app_name = "API"
 
@@ -69,6 +71,8 @@ router.register('software', software.SoftwareViewSet, basename='software')
 
 # API V2
 router.register('v2', v2.Index, basename='_api_v2_home')
+
+router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
 
 urlpatterns = [
 
