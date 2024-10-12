@@ -9,7 +9,7 @@ from api.tests.abstract.viewsets import ViewSetCommon
 from assistance.viewset.index import Index
 
 
-class AccessViewset(
+class AssistanceViewset(
     TestCase,
     ViewSetCommon
 ):
