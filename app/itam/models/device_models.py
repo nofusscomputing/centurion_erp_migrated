@@ -31,6 +31,37 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
         blank= True
     )
 
+    table_fields: list = [
+        'manufacturer',
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'manufacturer',
+                        'name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_global',
+                    ]
+                }
+            ]
+        }
+    ]
+
 
     def clean(self):
 
