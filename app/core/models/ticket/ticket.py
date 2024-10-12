@@ -559,6 +559,15 @@ class Ticket(
 
     # ?? date_edit date of last edit
 
+    table_fields: list = [
+        'id',
+        'title',
+        'status_badge',
+        'opened_by',
+        'organization',
+        'created'
+    ]
+
     def __str__(self):
 
         return self.title
