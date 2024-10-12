@@ -74,6 +74,12 @@ if settings.API_ENABLED:
     ]
 
 
+    urlpatterns += [
+        path('api/v2/auth/', include('rest_framework.urls')),
+    ]
+
+
+
 if settings.DEBUG:
 
     urlpatterns += [
