@@ -11,6 +11,7 @@ from access.models import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
+from core.classes.icon import Icon
 from core.mixin.history_save import SaveHistory
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
@@ -208,6 +209,23 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+
+
+    @property
+    def status_icon(self) -> list([Icon]):
+
+        icons: list(Icon) = []
+
+        icons += [
+            Icon(
+                name = f'device_status_{self.status.lower()}',
+                style = f'icon-device-status-{self.status.lower()}'
+            )
+        ]
+
+        return icons
+
+
     @property
     def status(self) -> str:
         """ Fetch Device status
@@ -226,21 +244,21 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         one = (now() - check_date).days
 
+        status: str = 'UNK'
+
         if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
 
-            return 'OK'
+            status = 'OK'
 
         elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
 
-            return 'WARN'
+            status = 'WARN'
 
         elif (now() - check_date).days >= 3:
 
-            return 'BAD'
+            status = 'BAD'
 
-        else:
-
-            return 'UNK'
+        return status
 
 
     @property
