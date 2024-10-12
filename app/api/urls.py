@@ -29,13 +29,25 @@ from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
 
-from api.viewsets import index as v2
+from api.viewsets import (
+    index as v2
+)
 
-from access.viewset import index as access_v2
+from access.viewset import (
+    index as access_v2
+)
 
-from assistance.viewset import index as assistance_index_v2
+from assistance.viewset import (
+    index as assistance_index_v2
+)
 
-from config_management.viewset import index as config_management_v2
+from config_management.viewset import (
+    index as config_management_v2
+)
+
+from itim.viewsets import (
+    index as itim_v2
+)
 
 
 app_name = "API"
@@ -79,6 +91,8 @@ router.register('v2', v2.Index, basename='_api_v2_home')
 router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+
+router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
 
 router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 
