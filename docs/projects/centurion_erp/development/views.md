@@ -61,7 +61,7 @@ The views that we use are:
 Common test cases are available for views. These test cases can be found within the API docs under [model view test cases](./api/tests/model_views.md).
 
 
-### Requirements.
+### Requirements - Depreciated
 
 All views are to meet the following requirements:
 
