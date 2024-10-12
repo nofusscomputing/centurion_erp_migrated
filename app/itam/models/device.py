@@ -52,6 +52,13 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name',
+            'organization'
+        ]
+
+        verbose_name = 'Device'
+
         verbose_name_plural = 'Devices'
 
 
