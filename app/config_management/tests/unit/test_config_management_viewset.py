@@ -6,17 +6,17 @@ from access.models import Organization
 
 from api.tests.abstract.viewsets import ViewSetCommon
 
-from assistance.viewset.index import Index
+from config_management.viewset.index import Index
 
 
-class AssistanceViewset(
+class ConfigManagementViewset(
     TestCase,
     ViewSetCommon
 ):
 
     viewset = Index
 
-    route_name = 'API:_api_v2_assistance_home'
+    route_name = 'API:_api_v2_config_management_home'
 
 
     @classmethod
