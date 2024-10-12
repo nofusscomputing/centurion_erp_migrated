@@ -21,7 +21,7 @@ class Index(CommonViewSet):
     This endpoint will move to path `/api/` on release of 
     v2.0.0 of Centurion ERP.
     """
-    
+
     view_name = "API v2"
 
 
@@ -29,7 +29,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "access": "to do",
+                "access": reverse('API:_api_v2_access_home-list', request=request),
                 "assistance": reverse('API:_api_v2_assistance_home-list', request=request),
                 "itam": reverse('API:_api_v2_itam_home-list', request=request),
                 "settings": reverse('API:_api_v2_settings_home-list', request=request)
