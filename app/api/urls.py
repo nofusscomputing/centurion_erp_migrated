@@ -33,6 +33,8 @@ from api.viewsets import index as v2
 
 from access.viewset import index as access_v2
 
+from assistance.viewset import index as assistance_index_v2
+
 
 app_name = "API"
 
@@ -73,6 +75,8 @@ router.register('software', software.SoftwareViewSet, basename='software')
 router.register('v2', v2.Index, basename='_api_v2_home')
 
 router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+
+router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 
 urlpatterns = [
 
