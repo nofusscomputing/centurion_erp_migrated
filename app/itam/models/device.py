@@ -500,6 +500,19 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         verbose_name = 'Date Installed'
     )
 
+
+    table_fields: list = [
+        "nbsp",
+        "software",
+        "category",
+        "action_badge",
+        "version",
+        "installedversion",
+        "installed",
+        "nbsp"
+    ]
+
+
     @property
     def action_badge(self):
 
