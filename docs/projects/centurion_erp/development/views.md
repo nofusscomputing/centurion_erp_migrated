@@ -24,6 +24,10 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 - views are documented at the class level for the swagger UI.
 
+- Index Viewsets must be tested against tests `from api.tests.abstract.viewsets import ViewSetCommon`
+
+- Model VieSets must be tested against tests `from api.tests.abstract.viewsets import ViewSetModel`
+
 
 ## Pre v1.3 Docs
 
@@ -57,7 +61,7 @@ The views that we use are:
 Common test cases are available for views. These test cases can be found within the API docs under [model view test cases](./api/tests/model_views.md).
 
 
-### Requirements
+### Requirements.
 
 All views are to meet the following requirements:
 
