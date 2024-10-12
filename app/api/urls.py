@@ -53,6 +53,10 @@ from project_management.viewsets import (
     index as project_management_v2
 )
 
+from settings.viewsets import (
+    index as settings_index_v2,
+)
+
 
 app_name = "API"
 
@@ -101,6 +105,8 @@ router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
 router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
+
+router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 
 urlpatterns = [
 
