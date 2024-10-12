@@ -75,6 +75,39 @@ class TenancyModel(
         assert type(self.model._meta.original_attrs['verbose_name_plural']) is str
 
 
+    def test_field_exists_verbose_name(self):
+        """Test for existance of field in `<model>.Meta`
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name` must be defined in `Meta` class.
+        """
+
+        assert 'verbose_name' in self.model._meta.original_attrs
+
+
+    def test_field_not_empty_verbose_name(self):
+        """Test field `<model>.Meta` is not empty
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name` must be defined in `Meta` class.
+        """
+
+        assert self.model._meta.original_attrs['verbose_name'] is not None
+
+
+    def test_field_type_verbose_name(self):
+        """Test field `<model>.Meta` is not empty
+
+        Field is required for `templates/detail.html.js`
+
+        Attribute `verbose_name` must be of type str.
+        """
+
+        assert type(self.model._meta.original_attrs['verbose_name']) is str
+
+
 
 
 class ModelAdd(
