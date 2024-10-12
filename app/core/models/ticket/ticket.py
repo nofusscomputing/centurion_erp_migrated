@@ -690,15 +690,17 @@ class Ticket(
 
         linked_items: list = []
 
-        from core.models.ticket.ticket_linked_items import TicketLinkedItem
+        if self.pk:
 
-        items = TicketLinkedItem.objects.filter(
-            ticket = self
-        )
+            from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
-        if len(items) > 0:
+            items = TicketLinkedItem.objects.filter(
+                ticket = self
+            )
 
-            linked_items = items
+            if len(items) > 0:
+
+                linked_items = items
 
         return linked_items
 
@@ -869,6 +871,29 @@ class Ticket(
 
         signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.subscribed_users.through)
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
+
+
+
+    @property
+    def status_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.status:
+
+            text:str = str(self.get_status_display())
+            style:str = text.replace('(', '')
+            style = style.replace(')', '')
+            style = style.replace(' ', '_')
+
+        return Badge(
+            icon_name = f'ticket_status_{style.lower()}',
+            icon_style = f'ticket-status-icon ticket-status-icon-{style.lower()}',
+            text = text,
+            text_style = f'ticket-status-text badge-text-ticket_status-{style.lower()}',
+        )
 
 
     def ticketassigned(self, instance) -> bool:
