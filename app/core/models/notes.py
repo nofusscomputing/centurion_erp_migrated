@@ -118,6 +118,7 @@ class Notes(NotesCommonFields):
         blank= True
     )
 
+    table_fields: list = []
 
     def __str__(self):
 
