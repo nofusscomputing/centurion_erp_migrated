@@ -140,7 +140,7 @@ class View(ChangeView):
 
         context['notes'] = Notes.objects.filter(device=self.kwargs['pk'])
 
-        config = self.object.get_configuration(self.kwargs['pk'])
+        config = self.object.get_configuration
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
 
         context['config_groups'] = ConfigGroupHosts.objects.filter(host = self.object.id)
