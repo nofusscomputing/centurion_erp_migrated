@@ -34,6 +34,7 @@ class Index(CommonViewSet):
                 "itam": reverse('API:_api_v2_itam_home-list', request=request),
                 "itim": reverse('API:_api_v2_itim_home-list', request=request),
                 "config_management": reverse('API:_api_v2_config_management_home-list', request=request),
+                "project_management": reverse('API:_api_v2_project_management_home-list', request=request),
                 "settings": reverse('API:_api_v2_settings_home-list', request=request)
             }
         )
