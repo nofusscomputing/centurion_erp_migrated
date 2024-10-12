@@ -93,3 +93,16 @@ class History(HistoryCommonFields):
         max_length = 50,
         unique = False,
     )
+
+
+    table_fields: list  = [
+        'created',
+        'action',
+        'item_class',
+        'user',
+        'nbsp',
+        [
+            'before',
+            'after'
+        ]
+    ]
