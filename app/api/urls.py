@@ -29,6 +29,9 @@ from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
 
+from api.viewsets import index as v2
+
+
 app_name = "API"
 
 
@@ -64,6 +67,8 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
+# API V2
+router.register('v2', v2.Index, basename='_api_v2_home')
 
 urlpatterns = [
 
