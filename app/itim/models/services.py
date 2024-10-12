@@ -199,6 +199,15 @@ class Service(TenancyObject):
 
     modified = AutoLastModifiedField()
 
+
+    table_fields: list = [
+        "nbsp",
+        "name",
+        "port",
+        "nbsp"
+    ]
+
+
     @property
     def config_variables(self):
 
