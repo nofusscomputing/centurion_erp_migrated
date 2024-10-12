@@ -139,6 +139,36 @@ class TenancyModel(
 
 
 
+    def test_attribute_exists_page_layout(self):
+        """Attrribute Test, Exists
+
+        Ensure attribute `page_layout` exists
+        """
+
+        assert hasattr(self.model, 'page_layout')
+
+
+    def test_attribute_type_page_layout(self):
+        """Attrribute Test, Type
+
+        Ensure attribute `page_layout` is of type `list`
+        """
+
+        assert type(self.model.page_layout) is list
+
+
+    def test_attribute_not_callable_page_layout(self):
+        """Attrribute Test, Not Callable
+
+        Attribute must be a property
+
+        Ensure attribute `page_layout` is not callable.
+        """
+
+        assert not callable(self.model.page_layout)
+
+
+
 class ModelAdd(
     AddView
 ):
