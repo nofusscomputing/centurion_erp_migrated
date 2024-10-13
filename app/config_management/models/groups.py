@@ -170,6 +170,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'count_children',
+        'organization'
+    ]
+
+
     def config_keys_ansible_variable(self, value: dict):
 
         clean_value = {}
