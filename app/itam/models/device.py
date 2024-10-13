@@ -37,6 +37,33 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         verbose_name_plural = 'Device Types'
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
