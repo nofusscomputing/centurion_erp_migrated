@@ -32,6 +32,7 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
             'name'
         ]
 
+        verbose_name = 'Device Type'
 
         verbose_name_plural = 'Device Types'
 
