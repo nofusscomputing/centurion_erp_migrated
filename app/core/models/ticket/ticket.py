@@ -559,6 +559,9 @@ class Ticket(
 
     # ?? date_edit date of last edit
 
+    # this model uses a custom page layout
+    page_layout: list = []
+
     table_fields: list = [
         'id',
         'title',
