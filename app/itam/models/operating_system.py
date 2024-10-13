@@ -176,6 +176,12 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
     # as it's a sub model
     page_layout: list = []
 
+    table_fields: list = [
+        'name',
+        'installations'
+    ]
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
