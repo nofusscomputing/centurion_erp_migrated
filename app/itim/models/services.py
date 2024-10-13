@@ -114,6 +114,15 @@ class Port(TenancyObject):
         },
     ]
 
+
+    table_fields: list = [
+        'display_name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return str(self.protocol) + '/' + str(self.number)
