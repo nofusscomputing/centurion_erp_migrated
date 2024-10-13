@@ -130,6 +130,77 @@ class BaseModel:
         assert fields_have_test_value
 
 
+
+    def test_model_fields_parameter_has_verbose_name(self):
+        """Test Field called with Parameter
+
+        During field creation, it should have been called with paramater `verbose_name`
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} has attribute "verbose_name"')
+
+            if not hasattr(field, 'verbose_name'):
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+    def test_model_fields_parameter_type_verbose_name(self):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must be of type str
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} is of type str')
+
+            if not type(field.verbose_name) is str:
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+    def test_model_fields_parameter_not_empty_verbose_name(self):
+        """Test Field called with Parameter
+
+        During field creation, paramater `verbose_name` must not be `None` or empty ('')
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} is not empty')
+
+            if (
+                field.verbose_name is not None
+                or field.verbose_name != ''
+            ):
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+
 class TenancyModel(
     BaseModel,
     TenancyObjectTestCases,
