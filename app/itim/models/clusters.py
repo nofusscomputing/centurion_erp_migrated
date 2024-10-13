@@ -24,9 +24,11 @@ class ClusterType(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster type',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
@@ -139,9 +141,11 @@ class Cluster(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     parent_cluster = models.ForeignKey(
@@ -150,7 +154,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Parent Cluster for this cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Parent Cluster',
     )
 
@@ -160,7 +164,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Type of Cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Cluster Type',
     )
 

@@ -13,9 +13,11 @@ class UserSettingsCommonFields(models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this user Setting',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     slug = None
@@ -30,17 +32,21 @@ class UserSettings(UserSettingsCommonFields):
 
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
         blank= False,
+        help_text = 'User this Setting belongs to',
+        on_delete=models.CASCADE,
+        verbose_name = 'User'
     )
 
 
     default_organization = models.ForeignKey(
         Organization,
-        on_delete=models.DO_NOTHING,
         blank= True,
         default = None,
+        help_text = 'Users default Organization',
         null = True,
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Default Organization'
     )
 
 
