@@ -278,6 +278,36 @@ class Team(Group, TenancyObject):
 
     modified = AutoLastModifiedField()
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'team_name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Users",
+                    "field": "user",
+                },
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
 
     @property
     def parent_object(self):
