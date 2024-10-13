@@ -64,6 +64,11 @@ class Software(SoftwareCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name',
+            'publisher__name'
+        ]
+
         verbose_name_plural = 'Softwares'
 
 
