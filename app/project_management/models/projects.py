@@ -253,6 +253,16 @@ class Project(ProjectCommonFieldsName):
     ]
 
 
+    table_fields: list = [
+        'code',
+        'name',
+        'project_type'
+        'state',
+        'organization',
+        'modified'
+    ]
+
+
     fields_all: list = []
 
     fields_import: list = []
