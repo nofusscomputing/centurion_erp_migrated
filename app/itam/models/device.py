@@ -575,6 +575,10 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'device',
+        ]
+
         verbose_name_plural = 'Device Operating Systems'
 
 
