@@ -317,11 +317,13 @@ class Service(TenancyObject):
         },
     ]
 
+
     table_fields: list = [
-        "nbsp",
-        "name",
-        "port",
-        "nbsp"
+        'name',
+        'deployed_to'
+        'organization',
+        'created',
+        'modified'
     ]
 
 
