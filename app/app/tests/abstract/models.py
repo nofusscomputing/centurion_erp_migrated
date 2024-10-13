@@ -118,8 +118,8 @@ class BaseModel:
             print(f'Checking field {field.attname} is not empty')
 
             if (
-                field.help_text is not None
-                or field.help_text != ''
+                field.help_text is None
+                or field.help_text == ''
             ):
 
                 print(f'    Failure on field {field.attname}')
@@ -188,8 +188,8 @@ class BaseModel:
             print(f'Checking field {field.attname} is not empty')
 
             if (
-                field.verbose_name is not None
-                or field.verbose_name != ''
+                field.verbose_name is None
+                or field.verbose_name == ''
             ):
 
                 print(f'    Failure on field {field.attname}')
