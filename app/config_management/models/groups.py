@@ -38,6 +38,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
         verbose_name_plural = 'Config Groups'
 
 
