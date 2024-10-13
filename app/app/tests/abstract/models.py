@@ -30,6 +30,36 @@ class BaseModel:
         assert issubclass(self.model, TenancyObject)
 
 
+    def test_attribute_exists_ordering(self):
+        """Test for existance of field in `<model>.Meta`
+
+        Attribute `ordering` must be defined in `Meta` class.
+        """
+
+        assert 'ordering' in self.model._meta.original_attrs
+
+
+    def test_attribute_not_empty_ordering(self):
+        """Test field `<model>.Meta` is not empty
+
+        Attribute `ordering` must contain values
+        """
+
+        assert (
+            self.model._meta.original_attrs['ordering'] is not None
+            and len(list(self.model._meta.original_attrs['ordering'])) > 0
+        )
+
+
+    def test_attribute_type_ordering(self):
+        """Test field `<model>.Meta` is not empty
+
+        Attribute `ordering` must be of type list.
+        """
+
+        assert type(self.model._meta.original_attrs['ordering']) is list
+
+
 
 class TenancyModel(
     BaseModel,
