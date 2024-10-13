@@ -15,6 +15,8 @@ class ExternalLink(TenancyObject):
             'organization',
         ]
 
+        verbose_name = 'External Link'
+
         verbose_name_plural = 'External Links'
 
 
