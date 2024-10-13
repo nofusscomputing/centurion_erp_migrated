@@ -86,6 +86,15 @@ class ProjectType(ProjectTypeCommonFields):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return self.name
