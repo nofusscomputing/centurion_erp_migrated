@@ -74,34 +74,6 @@ class AllViewSet:
 
 
 
-    def test_view_attr_view_description_exists(self):
-        """Attribute Test
-
-        Attribute `view_description` must exist
-        """
-
-        assert hasattr(self.viewset, 'view_description')
-
-
-    def test_view_attr_view_description_not_empty(self):
-        """Attribute Test
-
-        Attribute `view_description` must return a value
-        """
-
-        assert self.viewset.view_description is not None
-
-
-    def test_view_attr_view_description_type(self):
-        """Attribute Test
-
-        Attribute `view_description` must be of type str
-        """
-
-        assert type(self.viewset.view_description) is str
-
-
-
     def test_view_attr_metadata_class_exists(self):
         """Attribute Test
 
@@ -176,6 +148,34 @@ class AllViewSet:
         assert view_set.permission_classes[0] is OrganizationPermissionAPI
 
         assert len(view_set.permission_classes) == 1
+
+
+
+    def test_view_attr_view_description_exists(self):
+        """Attribute Test
+
+        Attribute `view_description` must exist
+        """
+
+        assert hasattr(self.viewset, 'view_description')
+
+
+    def test_view_attr_view_description_not_empty(self):
+        """Attribute Test
+
+        Attribute `view_description` must return a value
+        """
+
+        assert self.viewset.view_description is not None
+
+
+    def test_view_attr_view_description_type(self):
+        """Attribute Test
+
+        Attribute `view_description` must be of type str
+        """
+
+        assert type(self.viewset.view_description) is str
 
 
 
@@ -342,6 +342,32 @@ class ModelViewSet(AllViewSet):
 
     viewset = None
     """ViewSet to Test"""
+
+
+
+    def test_view_attr_documentation_exists(self):
+        """Attribute Test
+
+        Attribute `documentation` must exist
+        """
+
+        assert hasattr(self.viewset, 'documentation')
+
+
+    def test_view_attr_documentation_type(self):
+        """Attribute Test
+
+        Attribute `documentation` must be of type str or None.
+
+        this attribute is optional.
+        """
+
+        view_set = self.viewset()
+
+        assert (
+            type(view_set.documentation) is str
+            or type(view_set.documentation) is None
+        )
 
 
 
