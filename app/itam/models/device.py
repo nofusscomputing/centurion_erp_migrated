@@ -510,6 +510,9 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     )
 
 
+    page_layout: list = []
+
+
     table_fields: list = [
         "nbsp",
         "software",
