@@ -109,6 +109,13 @@ class KnowledgeBaseCategory(TenancyObject):
         },
     ]
 
+    table_fields: list = [
+        'title',
+        'parent',
+        'organization',
+    ]
+
+
     def __str__(self):
 
         return self.name
