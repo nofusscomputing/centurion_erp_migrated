@@ -61,6 +61,75 @@ class BaseModel:
 
 
 
+    def test_model_fields_parameter_has_help_text(self):
+        """Test Field called with Parameter
+
+        During field creation, it should have been called with paramater `help_text`
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} has attribute "help_text"')
+
+            if not hasattr(field, 'help_text'):
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+    def test_model_fields_parameter_type_help_text(self):
+        """Test Field called with Parameter
+
+        During field creation, paramater `help_text` must be of type str
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} is of type str')
+
+            if not type(field.help_text) is str:
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
+    def test_model_fields_parameter_not_empty_help_text(self):
+        """Test Field called with Parameter
+
+        During field creation, paramater `help_text` must not be `None` or empty ('')
+        """
+
+        fields_have_test_value: bool = True
+
+        for field in self.model._meta.fields:
+
+            print(f'Checking field {field.attname} is not empty')
+
+            if (
+                field.help_text is not None
+                or field.help_text != ''
+            ):
+
+                print(f'    Failure on field {field.attname}')
+
+                fields_have_test_value = False
+
+
+        assert fields_have_test_value
+
+
 class TenancyModel(
     BaseModel,
     TenancyObjectTestCases,
