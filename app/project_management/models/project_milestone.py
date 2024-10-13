@@ -63,6 +63,15 @@ class ProjectMilestone(ProjectCommonFieldsName):
     # as this model is a sub-model.
     page_layout: dict = []
 
+
+    table_fields: list = [
+        'name',
+        'percent_completed'
+        'start_date',
+        'finish_date',
+    ]
+
+
     def __str__(self):
 
         return self.name
