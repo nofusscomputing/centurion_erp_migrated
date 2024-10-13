@@ -246,10 +246,14 @@ class TenancyObject(SaveHistory):
 
 
 class Team(Group, TenancyObject):
+
     class Meta:
-        # proxy = True
+
+        ordering = [ 'team_name' ]
+
+        verbose_name = 'Team'
+
         verbose_name_plural = "Teams"
-        ordering = ['team_name']
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
