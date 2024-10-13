@@ -43,6 +43,8 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
             'name',
         ]
 
+        verbose_name = 'Software Category'
+
         verbose_name_plural = 'Software Categories'
 
 
