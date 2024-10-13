@@ -107,6 +107,47 @@ class TicketCategory(TicketCategoryCommonFields):
     )
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'parent'
+                        'name'
+                        'runbook',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "left": [
+                        'change',
+                        'problem'
+                        'request'
+                    ],
+                    "right": [
+                        'incident',
+                        'project_task',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     @property
     def recusive_name(self):
 
