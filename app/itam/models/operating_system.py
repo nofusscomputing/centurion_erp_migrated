@@ -49,6 +49,8 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
             'name'
         ]
 
+        verbose_name = 'Operating System'
+
         verbose_name_plural = 'Operating Systems'
 
 
