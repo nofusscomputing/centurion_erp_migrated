@@ -363,10 +363,13 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     """ A way to configure software to install/remove per config group """
 
     class Meta:
+
         ordering = [
             '-action',
             'software'
         ]
+
+        verbose_name = 'Config Group Software'
 
         verbose_name_plural = 'Config Group Softwares'
 
