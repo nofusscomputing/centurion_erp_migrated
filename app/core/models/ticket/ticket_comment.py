@@ -17,8 +17,6 @@ class TicketComment(
     TenancyObject,
 ):
 
-    table_fields: list = []
-
     save_model_history: bool = False
 
     class Meta:
@@ -303,6 +301,15 @@ class TicketComment(
         null = True,
         verbose_name = 'Real Finish Date',
     )
+
+    # this model is not intended to be viewable on its
+    # own page due to being a sub model
+    page_layout: list = []
+
+
+    # this model is not intended to be viewable via
+    # a table as it's a sub-model
+    table_fields: list = []
 
 
     common_fields: list(str()) = [
