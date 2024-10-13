@@ -62,6 +62,75 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
         blank= True
     )
 
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'publisher',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Versions",
+            "slug": "version",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "software_version",
+                }
+            ]
+        },
+        # {
+        #     "name": "Licences",
+        #     "slug": "licence",
+        #     "sections": [
+        #         {
+        #             "layout": "table",
+        #             "field": "licence",
+        #         }
+        #     ]
+        # },
+        {
+            "name": "Installations",
+            "slug": "installs",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "installations",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.name
