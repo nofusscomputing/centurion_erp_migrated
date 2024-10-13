@@ -69,6 +69,8 @@ class Software(SoftwareCommonFields, SaveHistory):
             'publisher__name'
         ]
 
+        verbose_name = 'Software'
+
         verbose_name_plural = 'Softwares'
 
 
