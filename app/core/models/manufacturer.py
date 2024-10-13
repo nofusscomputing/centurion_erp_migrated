@@ -14,9 +14,11 @@ class ManufacturerCommonFields(models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of manufacturer',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -41,8 +43,10 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this manufacturer',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
 

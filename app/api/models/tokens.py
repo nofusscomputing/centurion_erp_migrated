@@ -48,37 +48,45 @@ class AuthToken(models.Model):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this token',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     note = models.CharField(
         blank = True,
-        max_length = 50,
         default = None,
+        help_text = 'A note about this token',
+        max_length = 50,
         null= True,
+        verbose_name = 'Note'
     )
 
     token = models.CharField(
-        verbose_name = 'Auth Token',
+        blank = False,
         db_index=True,
+        help_text = 'The authorization token',
         max_length = 64,
         null = False,
-        blank = False,
         unique = True,
+        verbose_name = 'Auth Token',
     )
 
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        help_text = 'User this token belongs to',
+        on_delete=models.CASCADE,
+        verbose_name = 'Owner'
     )
 
     expires = models.DateTimeField(
-        verbose_name = 'Expiry Date',
+        blank = False,
+        help_text = 'When this token expires',
         null = False,
-        blank = False
+        verbose_name = 'Expiry Date',
     )
 
 
