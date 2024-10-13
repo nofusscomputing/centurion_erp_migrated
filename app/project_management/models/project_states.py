@@ -76,7 +76,7 @@ class ProjectState(ProjectStateCommonFields):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'runbook',
                         'is_global',
                         'is_completed',

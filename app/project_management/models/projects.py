@@ -192,7 +192,7 @@ class Project(ProjectCommonFieldsName):
                     "left": [
                         'organization',
                         'code',
-                        'name'
+                        'name',
                         'priority',
                         'project_type',
                         'state',
