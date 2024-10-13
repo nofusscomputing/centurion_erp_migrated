@@ -579,6 +579,8 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
             'device',
         ]
 
+        verbose_name = 'Device Operating System'
+
         verbose_name_plural = 'Device Operating Systems'
 
 
