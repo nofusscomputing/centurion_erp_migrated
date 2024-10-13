@@ -411,6 +411,15 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     # as it's a sub model for config groups
     page_layout: dict = []
 
+
+    table_fields: list = [
+        'software',
+        'category',
+        'action',
+        'version'
+    ]
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
