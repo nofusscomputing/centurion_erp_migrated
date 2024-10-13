@@ -122,6 +122,15 @@ class ExternalLink(TenancyObject):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
         """ Return the Template to render """
 
