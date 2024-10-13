@@ -66,6 +66,36 @@ class ProjectState(ProjectStateCommonFields):
         verbose_name = 'State Completed',
     )
 
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'runbook',
+                        'is_global',
+                        'is_completed',
+                    ],
+                    "right": [
+                        'model_notes'
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.name
