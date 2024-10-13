@@ -59,6 +59,10 @@ class ProjectMilestone(ProjectCommonFieldsName):
     )
 
 
+    # model not intended to be vieable on its own page
+    # as this model is a sub-model.
+    page_layout: dict = []
+
     def __str__(self):
 
         return self.name
