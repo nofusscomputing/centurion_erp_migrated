@@ -172,6 +172,9 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         unique = False,
     )
 
+    # model not intended to be viewable on its own
+    # as it's a sub model
+    page_layout: list = []
 
     @property
     def parent_object(self):
