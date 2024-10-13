@@ -256,7 +256,7 @@ class Service(TenancyObject):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'config_key_variable',
                         'template',
                         'is_template',
