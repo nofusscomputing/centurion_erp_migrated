@@ -141,6 +141,78 @@ class Cluster(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'parent_cluster',
+                        'cluster_type',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Nodes",
+                    "field": "nodes",
+                },
+                {
+                    "layout": "table",
+                    "name": "Devices",
+                    "field": "devices",
+                },
+                {
+                    "layout": "table",
+                    "name": "Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     @property
     def rendered_config(self):
 
