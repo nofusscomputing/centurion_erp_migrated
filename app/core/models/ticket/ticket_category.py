@@ -148,6 +148,15 @@ class TicketCategory(TicketCategoryCommonFields):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     @property
     def recusive_name(self):
 
