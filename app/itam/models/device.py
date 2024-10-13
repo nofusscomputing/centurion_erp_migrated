@@ -446,6 +446,8 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             'software'
         ]
 
+        verbose_name = 'Device Software'
+
         verbose_name_plural = 'Device Softwares'
 
 
