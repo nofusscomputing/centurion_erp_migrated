@@ -64,6 +64,15 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
