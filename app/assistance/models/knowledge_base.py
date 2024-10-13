@@ -260,6 +260,62 @@ class KnowledgeBase(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'title',
+                        'category',
+                        'responsible_user',
+                        'responsible_teams',
+                        'is_global',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'release_date',
+                        'expiry_date',
+                        'target_user',
+                        'target_team',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'summary',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'content',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "slug": "article",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "articles",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.title
