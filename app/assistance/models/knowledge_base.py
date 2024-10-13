@@ -70,6 +70,45 @@ class KnowledgeBaseCategory(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'title',
+                        'parent_category',
+                        'target_user',
+                        'target_team',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'organization',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "slug": "article",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "articles",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.name
