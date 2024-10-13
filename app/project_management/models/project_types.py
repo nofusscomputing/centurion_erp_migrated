@@ -58,6 +58,34 @@ class ProjectType(ProjectTypeCommonFields):
     )
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'runbook',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes'
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.name
