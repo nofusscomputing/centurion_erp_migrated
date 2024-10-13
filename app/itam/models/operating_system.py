@@ -14,9 +14,11 @@ class OperatingSystemCommonFields(TenancyObject, models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -32,8 +34,10 @@ class OperatingSystemFieldsName(OperatingSystemCommonFields):
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this item',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
     slug = AutoSlugField()
@@ -56,10 +60,12 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
 
     publisher = models.ForeignKey(
         Manufacturer,
-        on_delete=models.CASCADE,
+        blank = True,
         default = None,
+        help_text = 'Who publishes this Operating System',
         null = True,
-        blank= True
+        on_delete = models.SET_DEFAULT,
+        verbose_name = 'Publisher'
     )
 
 
@@ -162,14 +168,17 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
 
     operating_system = models.ForeignKey(
         OperatingSystem,
-        on_delete=models.CASCADE,
+        help_text = 'Operating system this version applies to',
+        on_delete = models.CASCADE,
+        verbose_name = 'Operaating System'
     )
 
     name = models.CharField(
-        verbose_name = 'Major Version',
         blank = False,
+        help_text = 'Major version number for the Operating System',
         max_length = 50,
         unique = False,
+        verbose_name = 'Major Version',
     )
 
     # model not intended to be viewable on its own

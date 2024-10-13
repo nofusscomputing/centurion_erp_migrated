@@ -40,9 +40,11 @@ class Port(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this port',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     number = models.IntegerField(
@@ -156,9 +158,11 @@ class Service(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'Id for this Service',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     is_template = models.BooleanField(

@@ -10,9 +10,11 @@ class ProjectCommonFields(TenancyObject):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField(
@@ -30,8 +32,10 @@ class ProjectCommonFieldsName(ProjectCommonFields):
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of the item',
         max_length = 100,
         unique = True,
+        verbose_name = 'Name'
     )
 
     slug = AutoSlugField()

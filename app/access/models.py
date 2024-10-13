@@ -23,28 +23,34 @@ class Organization(SaveHistory):
         super().save(*args, **kwargs)
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this Organization',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
     manager = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,
         blank = False,
+        help_text = 'Manager for this organization',
         null = True,
-        help_text = 'Organization Manager'
+        on_delete=models.SET_NULL,
+        verbose_name = 'Manager'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
+        help_text = 'Tid bits of information',
         null= True,
         verbose_name = 'Notes',
     )
@@ -144,7 +150,9 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+
+            user = request.user
 
 
             if user.is_authenticated:
@@ -211,23 +219,36 @@ class TenancyObject(SaveHistory):
             raise ValidationError('You must provide an organization')
 
 
+    id = models.AutoField(
+        blank=False,
+        help_text = 'ID of the item',
+        primary_key=True,
+        unique=True,
+        verbose_name = 'ID'
+    )
+
     organization = models.ForeignKey(
         Organization,
-        on_delete=models.CASCADE,
         blank = False,
+        help_text = 'Organization this belongs to',
         null = True,
+        on_delete = models.CASCADE,
         validators = [validatate_organization_exists],
+        verbose_name = 'Organization'
     )
 
     is_global = models.BooleanField(
+        blank = False,
         default = False,
-        blank = False
+        help_text = 'Is this a global object?',
+        verbose_name = 'Global Object'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
-        null= True,
+        help_text = 'Tid bits of information',
+        null = True,
         verbose_name = 'Notes',
     )
 
@@ -264,11 +285,12 @@ class Team(Group, TenancyObject):
 
 
     team_name = models.CharField(
-        verbose_name = 'Name',
         blank = False,
+        default = '',
+        help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
-        default = ''
+        verbose_name = 'Name',
     )
 
     created = AutoCreatedField()

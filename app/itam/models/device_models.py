@@ -27,10 +27,12 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
 
     manufacturer = models.ForeignKey(
         Manufacturer,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Manufacturer this model is from',
         null = True,
-        blank= True
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Manufacturer'
     )
 
     page_layout: dict = [
