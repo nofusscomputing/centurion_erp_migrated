@@ -76,6 +76,44 @@ class Port(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'display_name',
+                        'description',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+            ]
+        },
+        {
+            "name": "Services",
+            "slug": "services",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "services",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return str(self.protocol) + '/' + str(self.number)
