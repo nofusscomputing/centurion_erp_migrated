@@ -48,6 +48,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
         elif hasattr(view, 'queryset'):
 
             if view.queryset.model._meta:
+
                 self.obj = view.queryset.model
 
         object_organization = None
