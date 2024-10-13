@@ -34,6 +34,8 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
             'name'
         ]
 
+        verbose_name = 'Manufacturer'
+
         verbose_name_plural = 'Manufacturers'
 
 
