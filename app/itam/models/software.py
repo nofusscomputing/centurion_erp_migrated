@@ -161,6 +161,17 @@ class Software(SoftwareCommonFields, SaveHistory):
         }
     ]
 
+
+    table_fields: list = [
+        "name",
+        "publisher",
+        "category",
+        "organization",
+        "created",
+        "modified",
+    ]
+
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
