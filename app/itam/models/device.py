@@ -615,6 +615,22 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         default = None,
     )
 
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        'operating_system_version',
+                        'version',
+                        'installdate'
+                    ],
+                }
+            ]
+        }
+    ]
 
     @property
     def parent_object(self):
