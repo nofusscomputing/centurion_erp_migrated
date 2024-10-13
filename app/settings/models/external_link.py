@@ -80,6 +80,48 @@ class ExternalLink(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'template',
+                        'colour',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes'
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "name": "Assignable to",
+                    "layout": "double",
+                    "left": [
+                        'cluster',
+                        'software',
+                    ],
+                    "right": [
+                        'devices'
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
         """ Return the Template to render """
 
