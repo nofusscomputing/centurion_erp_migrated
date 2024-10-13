@@ -40,10 +40,6 @@ class KnowledgeBaseCategory(TenancyObject):
         verbose_name = 'Title',
     )
 
-
-    slug = AutoSlugField()
-
-
     target_team = models.ManyToManyField(
         Team,
         blank = True,
@@ -140,9 +136,11 @@ class KnowledgeBase(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this KB article',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
 

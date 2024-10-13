@@ -141,65 +141,70 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     name = models.CharField(
         blank = False,
+        help_text = 'Hostname of this device',
         max_length = 50,
         unique = True,
-        validators = [ validate_hostname_format ]
+        validators = [ validate_hostname_format ],
+        verbose_name = 'Name'
     )
 
     serial_number = models.CharField(
-        verbose_name = 'Serial Number',
-        max_length = 50,
-        default = None,
-        null = True,
         blank = True,
-        unique = True,
+        default = None,
         help_text = 'Serial number of the device.',
+        max_length = 50,
+        null = True,
+        unique = True,
+        verbose_name = 'Serial Number',
         
     )
 
     uuid = models.CharField(
-        verbose_name = 'UUID',
-        max_length = 50,
-        default = None,
-        null = True,
         blank = True,
-        unique = True,
+        default = None,
         help_text = 'System GUID/UUID.',
-        validators = [ validate_uuid_format ]
+        max_length = 50,
+        null = True,
+        unique = True,
+        validators = [ validate_uuid_format ],
+        verbose_name = 'UUID'
     )
 
     device_model = models.ForeignKey(
         DeviceModel,
-        on_delete=models.CASCADE,
-        default = None,
-        null = True,
         blank= True,
+        default = None,
         help_text = 'Model of the device.',
+        null = True,
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Model'
     )
 
     device_type = models.ForeignKey(
         DeviceType,
-        on_delete=models.CASCADE,
-        default = None,
-        null = True,
         blank= True,
+        default = None,
         help_text = 'Type of device.',
+        null = True,
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Type'
     )
 
 
     config = models.JSONField(
         blank = True,
         default = None,
+        help_text = 'Configuration for this device',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
         verbose_name = 'Host Configuration',
-        help_text = 'Configuration for this device'
     )
 
     inventorydate = models.DateTimeField(
-        verbose_name = 'Last Inventory Date',
-        null = True,
         blank = True,
+        help_text = 'Date and time of the last inventory',
+        null = True,
+        verbose_name = 'Last Inventory Date',
     )
 
     is_virtual = models.BooleanField(
@@ -502,15 +507,19 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
     device = models.ForeignKey(
         Device,
         blank= False,
+        help_text = 'Device this software is on',
         on_delete=models.CASCADE,
         null = False,
+        verbose_name = 'Device'
     )
 
     software = models.ForeignKey(
         Software,
         blank= False,
+        help_text = 'Software Name',
         null = False,
         on_delete=models.CASCADE,
+        verbose_name = 'Software'
     )
 
     action = models.CharField(
@@ -538,6 +547,7 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         SoftwareVersion,
         blank= True,
         default = None,
+        help_text = 'Version that is installed',
         null = True,
         on_delete=models.CASCADE,
         related_name = 'installedversion',
@@ -633,33 +643,38 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     device = models.ForeignKey(
         Device,
+        blank = False,
+        help_text = 'Device for the Operating System',
         on_delete = models.CASCADE,
         null = False,
-        blank = False,
+        verbose_name = 'Device'
         
     )
 
     operating_system_version = models.ForeignKey(
         OperatingSystemVersion,
-        verbose_name = 'Operating System/Version',
-        on_delete = models.CASCADE,
+        blank = False,
+        help_text = 'Operating system version',
         null = False,
-        blank = False
+        on_delete = models.CASCADE,
+        verbose_name = 'Operating System/Version',
         
     )
 
     version = models.CharField(
-        verbose_name = 'Installed Version',
+        blank = False,
+        help_text = 'Version detected as installed',
         max_length = 15,
         null = False,
-        blank = False,
+        verbose_name = 'Installed Version',
     )
 
     installdate = models.DateTimeField(
-        verbose_name = 'Install Date',
-        null = True,
         blank = True,
         default = None,
+        help_text = 'Date and time detected as installed',
+        null = True,
+        verbose_name = 'Install Date',
     )
 
     page_layout: list = [
