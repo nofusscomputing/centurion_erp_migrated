@@ -39,6 +39,10 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name',
+        ]
+
         verbose_name_plural = 'Software Categories'
 
 
