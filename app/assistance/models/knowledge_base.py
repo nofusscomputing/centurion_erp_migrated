@@ -316,6 +316,15 @@ class KnowledgeBase(TenancyObject):
         },
     ]
 
+    table_fields: list = [
+        'title',
+        'category',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return self.title
