@@ -131,6 +131,16 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'publisher',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return self.name
