@@ -306,6 +306,12 @@ class Team(Group, TenancyObject):
         },
     ]
 
+    table_fields: list = [
+        'team_name',
+        'modified',
+        'created',
+    ]
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
