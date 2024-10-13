@@ -632,6 +632,9 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         }
     ]
 
+    table_fields: list = []
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
