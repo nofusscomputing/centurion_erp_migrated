@@ -86,6 +86,90 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
     )
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'parent',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Child Groups",
+            "slug": "child_groups",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "child_groups",
+                }
+            ]
+        },
+        {
+            "name": "Hosts",
+            "slug": "hosts",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "hosts",
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "hosts",
+                }
+            ]
+        },
+        {
+            "name": "Configuration",
+            "slug": "configuration",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "rendered_configuration",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "ticket",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def config_keys_ansible_variable(self, value: dict):
 
         clean_value = {}
