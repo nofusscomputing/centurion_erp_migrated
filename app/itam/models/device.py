@@ -28,6 +28,11 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
+
         verbose_name_plural = 'Device Types'
 
 
