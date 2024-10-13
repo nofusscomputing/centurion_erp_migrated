@@ -155,6 +155,8 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
             'name',
         ]
 
+        verbose_name = 'Operating System Version'
+
         verbose_name_plural = 'Operating System Versions'
 
 
