@@ -213,6 +213,17 @@ class Cluster(TenancyObject):
         },
     ]
 
+
+    table_fields: list = [
+        'name',
+        'parent_cluster',
+        'cluster_type',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     @property
     def rendered_config(self):
 
