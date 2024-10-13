@@ -407,6 +407,9 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         blank= True
     )
 
+    # This model is not intended to be viewable on it's own page
+    # as it's a sub model for config groups
+    page_layout: dict = []
 
     @property
     def parent_object(self):
