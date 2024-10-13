@@ -42,6 +42,8 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             'name'
         ]
 
+        verbose_name = 'Config Group'
+
         verbose_name_plural = 'Config Groups'
 
 
