@@ -247,6 +247,76 @@ class Service(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'config_key_variable',
+                        'template',
+                        'is_template',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'dependent_service'
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "name": "Ports",
+                    "fields": [
+                        'port'
+                    ],
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     table_fields: list = [
         "nbsp",
         "name",
