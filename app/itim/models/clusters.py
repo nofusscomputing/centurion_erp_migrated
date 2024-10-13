@@ -54,6 +54,61 @@ class ClusterType(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
     def __str__(self):
 
         return self.name
