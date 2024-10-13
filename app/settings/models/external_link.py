@@ -10,6 +10,11 @@ class ExternalLink(TenancyObject):
 
     class Meta:
 
+        ordering = [
+            'name',
+            'organization',
+        ]
+
         verbose_name_plural = 'External Links'
 
 
