@@ -92,6 +92,75 @@ class Software(SoftwareCommonFields, SaveHistory):
     )
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'publisher',
+                        'name',
+                        'category',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Versions",
+            "slug": "version",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "versions",
+                }
+            ]
+        },
+        # {
+        #     "name": "Licences",
+        #     "slug": "licence",
+        #     "sections": [
+        #         {
+        #             "layout": "table",
+        #             "field": "licences",
+        #         }
+        #     ],
+        # },
+        {
+            "name": "Installations",
+            "slug": "installs",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "installations",
+                }
+            ],
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ],
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    ]
+
     def clean(self):
 
         app_settings = AppSettings.objects.get(owner_organization=None)
