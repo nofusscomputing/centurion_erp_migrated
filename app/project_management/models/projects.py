@@ -182,6 +182,76 @@ class Project(ProjectCommonFieldsName):
     )
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'code',
+                        'name'
+                        'priority',
+                        'project_type',
+                        'state',
+                        'percent_completed',
+                    ],
+                    "right": [
+                        'planned_start_date',
+                        'planned_finish_date',
+                        'real_start_date',
+                        'real_finish_date',
+                        'duration_project'
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "left": [
+                        'manager_user',
+                    ],
+                    "right": [
+                        'manager_team',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'description'
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tasks",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Milestones",
+            "slug": "milestones",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "milestones",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
 
     fields_all: list = []
 
