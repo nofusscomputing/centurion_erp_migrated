@@ -20,6 +20,8 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
             'name',
         ]
 
+        verbose_name = 'Device Model'
+
         verbose_name_plural = 'Device Models'
 
 
@@ -30,14 +32,6 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
         null = True,
         blank= True
     )
-
-    table_fields: list = [
-        'manufacturer',
-        'name',
-        'organization',
-        'created',
-        'modified'
-    ]
 
     page_layout: dict = [
         {
@@ -50,16 +44,29 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
                         'organization',
                         'manufacturer',
                         'name',
-                        'created',
-                        'modified',
+                        'is_global',
                     ],
                     "right": [
                         'model_notes',
-                        'is_global',
+                        'created',
+                        'modified',
                     ]
                 }
             ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
         }
+    ]
+
+    table_fields: list = [
+        'manufacturer',
+        'name',
+        'organization',
+        'created',
+        'modified'
     ]
 
 
