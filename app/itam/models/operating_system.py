@@ -151,6 +151,10 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name',
+        ]
+
         verbose_name_plural = 'Operating System Versions'
 
 
