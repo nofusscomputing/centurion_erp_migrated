@@ -30,16 +30,6 @@ Models are tested using the following test cases:
 
 - [View Permission (organization Manager)](./model_permission_view_organization_manager.md)
 
-- [ALL API Model Permission](./model_permissions_api.md)
-
-- [API Add Permission](./model_permission_api_add.md)
-
-- [API Change Permission](./model_permission_api_change.md)
-
-- [API Delete Permission](./model_permission_api_delete.md)
-
-- [API View Permission](./model_permission_api_view.md)
-
 - [History Entry](./model_history.md)
 
 - [History Entry (Child Item)](./model_history_child_item.md)
