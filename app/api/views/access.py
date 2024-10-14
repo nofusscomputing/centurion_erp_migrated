@@ -12,7 +12,7 @@ from access.models import Organization, Team
 from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer, TeamPermissionSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Fetch Organizations",
@@ -34,7 +34,7 @@ class OrganizationList(generics.ListAPIView):
         return "Organizations"
 
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Get An Organization",
