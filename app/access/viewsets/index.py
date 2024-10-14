@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "organization": "ToDo"
+                "organization": reverse('API:_api_v2_organization-list', request=request)
             }
         )

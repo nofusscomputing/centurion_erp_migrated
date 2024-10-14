@@ -12,6 +12,7 @@ from core.mixin.history_save import SaveHistory
 class Organization(SaveHistory):
 
     class Meta:
+        verbose_name = "Organization"
         verbose_name_plural = "Organizations"
         ordering = ['name']
 
@@ -98,7 +99,12 @@ class Organization(SaveHistory):
         {
             "name": "Teams",
             "slug": "teams",
-            "sections": []
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "teams"
+                }
+            ]
         },
         {
             "name": "Notes",
