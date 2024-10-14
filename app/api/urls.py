@@ -33,6 +33,11 @@ from api.viewsets import (
     index as v2
 )
 
+from app.viewsets.base import (
+    index as base_index_v2,
+    user as user_v2
+)
+
 from access.viewset import (
     index as access_v2
 )
