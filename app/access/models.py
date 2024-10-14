@@ -369,35 +369,51 @@ class Team(Group, TenancyObject):
 class TeamUsers(SaveHistory):
 
     class Meta:
-        # proxy = True
-        verbose_name_plural = "Team Users"
+
         ordering = ['user']
 
+        verbose_name = "Team User"
+
+        verbose_name_plural = "Team Users"
+
+
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Team User',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     team = models.ForeignKey(
         Team,
+        help_text = 'Team user belongs to',
+        on_delete=models.CASCADE,
         related_name="team",
-        on_delete=models.CASCADE)
+        verbose_name = 'Team'
+    )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        help_text = 'User who will be added to the team',
+        on_delete=models.CASCADE,
+        verbose_name = 'User'
     )
 
     manager = models.BooleanField(
-        verbose_name='manager',
+        blank=True,
         default=False,
-        blank=True
+        help_text = 'Is this user to be a manager of this team',
+        verbose_name='manager',
     )
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+    page_layout: list = []
+
+    table_fields: list = []
 
 
     def delete(self, using=None, keep_parents=False):
