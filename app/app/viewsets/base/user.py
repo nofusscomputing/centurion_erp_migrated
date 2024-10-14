@@ -1,10 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
-
-from api.react_ui_metadata import ReactUIMetadata
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import ReadOnlyModelViewSet
 
 from app.serializers.user import (
     User,
@@ -32,7 +28,7 @@ from app.serializers.user import (
     ),
 )
 class ViewSet(
-    viewsets.ReadOnlyModelViewSet
+    ReadOnlyModelViewSet
 ):
 
 
@@ -45,15 +41,7 @@ class ViewSet(
         'is_active'
     ]
 
-    metadata_class = ReactUIMetadata
-
     model = User
-
-    permission_classes = [
-        IsAuthenticated,
-    ]
-
-    queryset = User.objects.all()
 
     search_fields = [
         'username',
