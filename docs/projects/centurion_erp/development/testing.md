@@ -24,7 +24,7 @@ To aid in development we have written test classes that you can inherit from for
 
 - API Permission Checks
 
-    _These tests ensure that only a user with the correct permissions can perform an action against a Model within Centurion_
+    _These test cases ensure that only a user with the correct permissions can perform an action against a Model within Centurion_
 
     - `api.tests.abstract.api_permissions_viewset.APIPermissionAdd` _Add permission checks_
 
@@ -36,10 +36,20 @@ To aid in development we have written test classes that you can inherit from for
 
     - `api.tests.abstract.api_permissions_viewset.APIPermissions` _Add, Change, Delete and View permission checks_
 
+- API Field Checks
+
+    _These test cases ensure that all of the specified fields are rendered as part of an API response_
+
+    - `api.tests.abstract.api_fields.APICommonFields` _Fields that should be part of ALL API responses_
+
+    - `api.tests.abstract.api_fields.APIModelFields` _Fields that should be part of ALL model API Responses. Includes `APICommonFields` test cases_
+
+    - `api.tests.abstract.api_fields.APITenancyObject` _Fields that should be part of ALL Tenancy Object model API Responses. Includes `APICommonFields` and `APIModelFields` test cases_
+
 
 ## Writing Tests
 
-We use class based tests. Each class will require a `setUpTestData` method for test setup. To furhter assist in the writing of tests, we have written the test cases for common items as an abstract class. You are advised to inherit from our test classes _(see above)_ as a strating point and extend from there.
+We use class based tests. Each class will require a `setUpTestData` method for test setup. To furhter assist in the writing of tests, we have written the test cases for common items as an abstract class. You are advised to inherit from our test classes _(see above)_ as a starting point and extend from there.
 
 Naming of test classes is in `CamelCase` in format `<Model Name><what's being tested>` for example the class name for device model history entry tests would be `DeviceHistory`.
 
@@ -147,7 +157,7 @@ Items to test include, and are not limited to:
 
 - API Fields
 
-    _Field exists, Type is checked_
+    _Field(s) exists, Type is checked_
 
 
 ## Running Tests
