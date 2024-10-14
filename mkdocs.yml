@@ -139,16 +139,6 @@ nav:
 
           - projects/centurion_erp/development/api/tests/model_permission_view_organization_manager.md
 
-          - projects/centurion_erp/development/api/tests/model_permissions_api.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_api_add.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_api_change.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_api_delete.md
-
-          - projects/centurion_erp/development/api/tests/model_permission_api_view.md
-
           - projects/centurion_erp/development/api/tests/model_tenancy_object.md
 
           - projects/centurion_erp/development/api/tests/model_views.md
