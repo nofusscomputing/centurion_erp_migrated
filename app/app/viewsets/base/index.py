@@ -24,6 +24,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "content_type": reverse('API:_api_v2_content_type-list', request=request),
                 "user": reverse('API:_api_v2_user-list', request=request)
             }
         )
