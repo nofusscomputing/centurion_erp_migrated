@@ -80,8 +80,10 @@ class Project(ProjectCommonFieldsName):
 
     description = models.TextField(
         blank = True,
+        help_text = 'Outline of this Project',
         default = None,
         null= True,
+        verbose_name = 'Description'
     )
 
     priority = models.IntegerField(
@@ -152,18 +154,20 @@ class Project(ProjectCommonFieldsName):
     manager_user = models.ForeignKey(
         User,
         blank= True,
-        help_text = '',
+        help_text = 'User who is the Project Manager',
         on_delete=models.SET_NULL,
         null = True,
-        related_name = 'manager_user'
+        related_name = 'manager_user',
+        verbose_name = 'Manager'
     )
 
     manager_team =  models.ForeignKey(
         Team,
         blank= True,
-        help_text = '',
+        help_text = 'Team which contains the Project Managers',
         on_delete=models.SET_NULL,
         null = True,
+        verbose_name = 'Project Manager Team'
     )
 
     model_notes = None
@@ -181,6 +185,86 @@ class Project(ProjectCommonFieldsName):
         verbose_name = 'Deleted',
     )
 
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'code',
+                        'name',
+                        'priority',
+                        'project_type',
+                        'state',
+                        'percent_completed',
+                    ],
+                    "right": [
+                        'planned_start_date',
+                        'planned_finish_date',
+                        'real_start_date',
+                        'real_finish_date',
+                        'duration_project'
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "left": [
+                        'manager_user',
+                    ],
+                    "right": [
+                        'manager_team',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'description'
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tasks",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Milestones",
+            "slug": "milestones",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "milestones",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'code',
+        'name',
+        'project_type'
+        'state',
+        'organization',
+        'modified'
+    ]
 
 
     fields_all: list = []

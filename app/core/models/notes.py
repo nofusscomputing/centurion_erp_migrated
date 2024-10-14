@@ -20,9 +20,11 @@ class NotesCommonFields(TenancyObject, models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this note',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -46,78 +48,100 @@ class Notes(NotesCommonFields):
             '-created'
         ]
 
+        verbose_name = 'Note'
+
         verbose_name_plural = 'Notes'
 
 
 
     note = models.TextField(
-        verbose_name = 'Note',
         blank = True,
         default = None,
-        null = True
+        help_text = 'The tid bit you wish to add',
+        null = True,
+        verbose_name = 'Note',
     )
 
 
     usercreated = models.ForeignKey(
         User,
-        verbose_name = 'Added By',
-        related_name = 'usercreated',
-        on_delete=models.SET_DEFAULT,
+        blank= True,
         default = None,
+        help_text = 'User whom added Note',
         null = True,
-        blank= True
+        on_delete=models.DO_NOTHING,
+        related_name = 'usercreated',
+        verbose_name = 'Added By',
     )
 
     usermodified = models.ForeignKey(
         User,
-        verbose_name = 'Edited By',
-        related_name = 'usermodified',
-        on_delete=models.SET_DEFAULT,
+        blank= True,
         default = None,
+        help_text = 'User whom modified the note',
         null = True,
-        blank= True
+        on_delete=models.DO_NOTHING,
+        related_name = 'usermodified',
+        verbose_name = 'Edited By',
     )
 
     config_group = models.ForeignKey(
         ConfigGroups,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Config group this note belongs to',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Config Group'
     )
 
     device = models.ForeignKey(
         Device,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Device this note belongs to',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Device'
     )
 
     service = models.ForeignKey(
         Service,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Service this note belongs to',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Service'
     )
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Software this note belongs to',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Software'
     )
 
     operatingsystem = models.ForeignKey(
         OperatingSystem,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Operating system this note belongs to',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Operating System'
     )
 
+    # this model is not intended to have its own viewable page as
+    # it's a sub model
+    page_layout: dict = []
+
+    # This model is not expected to be viewable in a table
+    # as it's a sub-model
+    table_fields: list = []
 
     def __str__(self):
 

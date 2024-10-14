@@ -38,11 +38,19 @@ All models must meet the following requirements:
     !!! danger "Requirement"
         Multi-field validation, or validation that requires access to multiple fields must be done within the [form class](./forms.md#requirements).
 
-- contains a `Meta` sub-class with following parameters:
+- contains a `Meta` sub-class with following attributes:
 
-    - `verbose_name_plural`
+    - `ordering` _Order the results are returned in._
+
+    - `verbose_name` _Name of the Model._
+
+    - `verbose_name_plural` _Plural Name of the model_
 
 - If creating a new model, function `access.functions.permissions.permission_queryset()` has been updated to display the models permission(s)
+
+- Attribute `page_layout` is defined with the models UI page layout
+
+- Attribute `table_fields` is defined with the fields to display by default for viewing the model within a table.
 
 
 ## Checklist
@@ -52,6 +60,9 @@ This section details the additional items that may need to be done when adding a
 - If the model is a primary model, add it to model reference rendering in `app/core/lib/markdown_plugins/model_reference.py` function `tag_html`
 
 - If the model is a primary model, add it to the model link slash command in `app/core/lib/slash_commands/linked_model.py` function `command_linked_model`
+
+!!! tip
+    It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
 
 
 ## History

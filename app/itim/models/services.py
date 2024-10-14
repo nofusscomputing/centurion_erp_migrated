@@ -40,9 +40,11 @@ class Port(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this port',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     number = models.IntegerField(
@@ -74,6 +76,53 @@ class Port(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'display_name',
+                        'description',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+            ]
+        },
+        {
+            "name": "Services",
+            "slug": "services",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "services",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'display_name',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def __str__(self):
@@ -109,9 +158,11 @@ class Service(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'Id for this Service',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     is_template = models.BooleanField(
@@ -198,6 +249,87 @@ class Service(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'config_key_variable',
+                        'template',
+                        'is_template',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'dependent_service'
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "name": "Ports",
+                    "fields": [
+                        'port'
+                    ],
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'deployed_to'
+        'organization',
+        'created',
+        'modified'
+    ]
+
 
     @property
     def config_variables(self):

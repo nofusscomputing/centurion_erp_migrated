@@ -40,10 +40,6 @@ class KnowledgeBaseCategory(TenancyObject):
         verbose_name = 'Title',
     )
 
-
-    slug = AutoSlugField()
-
-
     target_team = models.ManyToManyField(
         Team,
         blank = True,
@@ -70,6 +66,52 @@ class KnowledgeBaseCategory(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'title',
+                        'parent_category',
+                        'target_user',
+                        'target_team',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'organization',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "slug": "article",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "articles",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'title',
+        'parent',
+        'organization',
+    ]
+
+
     def __str__(self):
 
         return self.name
@@ -94,9 +136,11 @@ class KnowledgeBase(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this KB article',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
 
@@ -212,6 +256,71 @@ class KnowledgeBase(TenancyObject):
 
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'title',
+                        'category',
+                        'responsible_user',
+                        'responsible_teams',
+                        'is_global',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'release_date',
+                        'expiry_date',
+                        'target_user',
+                        'target_team',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'summary',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'content',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Articles",
+            "slug": "article",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "articles",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'title',
+        'category',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def __str__(self):

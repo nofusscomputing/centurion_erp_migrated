@@ -22,9 +22,11 @@ class GroupsCommonFields(TenancyObject, models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Group',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -37,6 +39,12 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
     class Meta:
+
+        ordering = [
+            'name'
+        ]
+
+        verbose_name = 'Config Group'
 
         verbose_name_plural = 'Config Groups'
 
@@ -58,26 +66,124 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     parent = models.ForeignKey(
         'self',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Parent of this Group',
         null = True,
-        blank= True
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Parent Group'
     )
 
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this Group',
         max_length = 50,
         unique = False,
+        verbose_name = 'Name'
     )
 
 
     config = models.JSONField(
         blank = True,
         default = None,
+        help_text = 'Configuration for this Group',
         null = True,
-        validators=[ validate_config_keys_not_reserved ]
+        validators=[ validate_config_keys_not_reserved ],
+        verbose_name = 'Configuration'
     )
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'parent',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Child Groups",
+            "slug": "child_groups",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "child_groups",
+                }
+            ]
+        },
+        {
+            "name": "Hosts",
+            "slug": "hosts",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "hosts",
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "hosts",
+                }
+            ]
+        },
+        {
+            "name": "Configuration",
+            "slug": "configuration",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "rendered_configuration",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "ticket",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'count_children',
+        'organization'
+    ]
 
 
     def config_keys_ansible_variable(self, value: dict):
@@ -236,18 +342,22 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
 
     host = models.ForeignKey(
         Device,
+        blank= False,
+        help_text = 'Host that will be apart of this config group',
         on_delete=models.CASCADE,
         null = False,
-        blank= False,
-        validators = [ validate_host_no_parent_group ]
+        validators = [ validate_host_no_parent_group ],
+        verbose_name = 'Host',
     )
 
 
     group = models.ForeignKey(
         ConfigGroups,
+        blank= False,
+        help_text = 'Group that this host is part of',
         on_delete=models.CASCADE,
         null = False,
-        blank= False
+        verbose_name = 'Group',
     )
 
 
@@ -265,46 +375,70 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     """ A way to configure software to install/remove per config group """
 
     class Meta:
+
         ordering = [
             '-action',
             'software'
         ]
+
+        verbose_name = 'Config Group Software'
 
         verbose_name_plural = 'Config Group Softwares'
 
 
     config_group = models.ForeignKey(
         ConfigGroups,
-        on_delete=models.CASCADE,
+        blank= False,
         default = None,
+        help_text = 'Config group this softwre will be linked to',
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
+        verbose_name = 'Config Group'
     )
 
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
         default = None,
+        help_text = 'Software to add to this config Group',
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
+        verbose_name = 'Software'
     )
 
+
     action = models.CharField(
-        max_length=1,
+        blank = True,
         choices=DeviceSoftware.Actions,
         default=None,
+        help_text = 'ACtion to perform with this software',
+        max_length=1,
         null=True,
-        blank = True,
+        verbose_name = 'Action'
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Software Version for this config group',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Verrsion',
     )
+
+    # This model is not intended to be viewable on it's own page
+    # as it's a sub model for config groups
+    page_layout: dict = []
+
+
+    table_fields: list = [
+        'software',
+        'category',
+        'action',
+        'version'
+    ]
 
 
     @property

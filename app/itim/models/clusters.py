@@ -24,9 +24,11 @@ class ClusterType(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster type',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
@@ -54,6 +56,70 @@ class ClusterType(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return self.name
@@ -75,9 +141,11 @@ class Cluster(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     parent_cluster = models.ForeignKey(
@@ -86,7 +154,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Parent Cluster for this cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Parent Cluster',
     )
 
@@ -96,7 +164,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Type of Cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Cluster Type',
     )
 
@@ -139,6 +207,89 @@ class Cluster(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'parent_cluster',
+                        'cluster_type',
+                        'name'
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Nodes",
+                    "field": "nodes",
+                },
+                {
+                    "layout": "table",
+                    "name": "Devices",
+                    "field": "devices",
+                },
+                {
+                    "layout": "table",
+                    "name": "Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'parent_cluster',
+        'cluster_type',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     @property

@@ -29,6 +29,39 @@ from .views.itam.device import DeviceViewSet
 from .views.itam import inventory
 
 
+from api.viewsets import (
+    index as v2
+)
+
+from access.viewset import (
+    index as access_v2
+)
+
+from assistance.viewset import (
+    index as assistance_index_v2
+)
+
+from config_management.viewset import (
+    index as config_management_v2
+)
+
+from itam.viewset import (
+    index as itam_index_v2,
+)
+
+from itim.viewsets import (
+    index as itim_v2
+)
+
+from project_management.viewsets import (
+    index as project_management_v2
+)
+
+from settings.viewsets import (
+    index as settings_index_v2,
+)
+
+
 app_name = "API"
 
 
@@ -64,6 +97,22 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
+# API V2
+router.register('v2', v2.Index, basename='_api_v2_home')
+
+router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+
+router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+
+router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
+
+router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
+
+router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
+
+router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
+
+router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 
 urlpatterns = [
 

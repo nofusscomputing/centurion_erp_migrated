@@ -136,6 +136,10 @@ class OrganizationMixin():
         Override of 'PermissionRequiredMixin' method so that this mixin can obtain the required permission.
         """
 
+        if not hasattr(self, 'permission_required'):
+
+                return []
+
         if self.permission_required is None:
             raise ImproperlyConfigured(
                 f"{self.__class__.__name__} is missing the "

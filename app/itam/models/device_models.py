@@ -20,16 +20,56 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
             'name',
         ]
 
+        verbose_name = 'Device Model'
+
         verbose_name_plural = 'Device Models'
 
 
     manufacturer = models.ForeignKey(
         Manufacturer,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Manufacturer this model is from',
         null = True,
-        blank= True
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Manufacturer'
     )
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'manufacturer',
+                        'name',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    ]
+
+    table_fields: list = [
+        'manufacturer',
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def clean(self):
