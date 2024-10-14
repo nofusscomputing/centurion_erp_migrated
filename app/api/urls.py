@@ -40,8 +40,9 @@ from app.viewsets.base import (
     user as user_v2
 )
 
-from access.viewset import (
-    index as access_v2
+from access.viewsets import (
+    index as access_v2,
+    team as team_v2
 )
 
 from assistance.viewset import (
@@ -108,6 +109,7 @@ router.register('software', software.SoftwareViewSet, basename='software')
 router.register('v2', v2.Index, basename='_api_v2_home')
 
 router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+router.register('v2/access/organization/(?P<organization_id>[0-9]+)/teams', team_v2.ViewSet, basename='_api_v2_organization_team')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 
