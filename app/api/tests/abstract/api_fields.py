@@ -230,6 +230,7 @@ class APITenancyObject(
 
         assert type(self.api_data['organization']['display_name']) is str
 
+
     def test_api_field_exists_organization_url(self):
         """ Test for existance of API Field
 
