@@ -35,6 +35,7 @@ from api.viewsets import (
 
 from app.viewsets.base import (
     index as base_index_v2,
+    content_type as content_type_v2,
     user as user_v2
 )
 
@@ -106,6 +107,9 @@ router.register('software', software.SoftwareViewSet, basename='software')
 router.register('v2', v2.Index, basename='_api_v2_home')
 
 router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+
+router.register('v2/base', base_index_v2.Index, basename='_api_v2_base_home')
+router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 
