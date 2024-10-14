@@ -31,6 +31,7 @@ class Index(CommonViewSet):
             {
                 "access": reverse('API:_api_v2_access_home-list', request=request),
                 "assistance": reverse('API:_api_v2_assistance_home-list', request=request),
+                "base": reverse('API:_api_v2_base_home-list', request=request),
                 "itam": reverse('API:_api_v2_itam_home-list', request=request),
                 "itim": reverse('API:_api_v2_itim_home-list', request=request),
                 "config_management": reverse('API:_api_v2_config_management_home-list', request=request),
