@@ -1,15 +1,14 @@
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 
-from access.models import Team
-from access.serializers.organization import OrganizationBaseSerializer
-
-from app.serializers.permission import PermissionBaseSerializer
-
+from access.models import TeamUsers
+from app.serializers.user import UserBaseSerializer
 
 
-class TeamBaseSerializer(serializers.ModelSerializer):
+
+class TeamUserBaseSerializer(serializers.ModelSerializer):
 
 
     display_name = serializers.SerializerMethodField('get_display_name')
@@ -23,10 +22,11 @@ class TeamBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_organization_team-detail",
+            "API:_api_v2_organization_team_user-detail",
             request=self.context['view'].request,
             kwargs={
-                'organization_id': item.organization.id,
+                'organization_id': item.team.organization.id,
+                'team_id': item.team.id,
                 'pk': item.pk
             }
         )
@@ -34,26 +34,23 @@ class TeamBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = Team
+        model = TeamUsers
 
         fields = [
             'id',
             'display_name',
-            'team_name',
             'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
-            'team_name',
             'url',
         ]
 
 
 
-class TeamModelSerializer(TeamBaseSerializer):
-
+class TeamUserModelSerializer(TeamUserBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
@@ -61,19 +58,12 @@ class TeamModelSerializer(TeamBaseSerializer):
 
         return {
             '_self': reverse(
-                'API:_api_v2_organization_team-detail',
+                'API:_api_v2_organization_team_user-detail',
                 request=self.context['view'].request,
                 kwargs={
-                    'organization_id': item.organization.id,
+                    'organization_id': item.team.organization.id,
+                    'team_id': item.team.id,
                     'pk': item.pk
-                }
-            ),
-            'users': reverse(
-                'API:_api_v2_organization_team_user-list',
-                request=self.context['view'].request,
-                kwargs={
-                    'organization_id': item.organization.id,
-                    'team_id': item.pk
                 }
             )
         }
@@ -81,28 +71,21 @@ class TeamModelSerializer(TeamBaseSerializer):
 
     class Meta:
 
-        model = Team
-
-        fields = '__all__'
+        model = TeamUsers
 
         fields =  [
              'id',
             'display_name',
-            'team_name',
-            'model_notes',
-            'permissions',
-            'organization',
-            'is_global',
+            'manager',
+            'user',
             'created',
             'modified',
             '_urls',
         ]
 
         read_only_fields = [
-            'id',
+             'id',
             'display_name',
-            'name',
-            'organization',
             'created',
             'modified',
             '_urls',
@@ -118,11 +101,11 @@ class TeamModelSerializer(TeamBaseSerializer):
 
             is_valid = super().is_valid(raise_exception=raise_exception)
 
-            self.validated_data['organization_id'] = int(self._context['view'].kwargs['organization_id'])
+            self.validated_data['team_id'] = int(self._context['view'].kwargs['team_id'])
 
         except Exception as unhandled_exception:
 
-            serializers.ParseError( 
+            ParseError( 
                 detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
             )
 
@@ -130,8 +113,6 @@ class TeamModelSerializer(TeamBaseSerializer):
 
 
 
-class TeamViewSerializer(TeamModelSerializer):
+class TeamUserViewSerializer(TeamUserModelSerializer):
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
-
-    permissions = PermissionBaseSerializer(many = True)
+    user = UserBaseSerializer(read_only = True)
