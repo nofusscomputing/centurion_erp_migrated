@@ -6,9 +6,13 @@ from django.contrib.auth.models import User
 
 from access.models import Organization, Team, TeamUsers, Permission
 
+from app.tests.abstract.models import BaseModel
 
 
-class TeamUsersModel(TestCase):
+class TeamUsersModel(
+    TestCase,
+    BaseModel
+):
 
     model = TeamUsers
 
