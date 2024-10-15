@@ -50,6 +50,18 @@ class CommonViewSet(
     required to generate the UI.
     """
 
+    model_documentation: str = None
+    """Model Documentation URL
+    
+    _Optional_, if specified will be add to detail view metadata"""
+
+    page_layout: list = []
+    """ Page layout class
+
+    _Optional_, used by metadata to add the page layout to the HTTP/Options method
+    for detail view, Enables the UI can setup the page layout.
+    """
+
     permission_classes = [ OrganizationPermissionAPI ]
     """Permission Class
 
@@ -59,6 +71,38 @@ class CommonViewSet(
     view_description: str = None
 
     view_name: str = None
+
+
+    def get_model_documentation(self):
+
+        if not self.model_documentation:
+
+            if hasattr(self.model, 'documentataion'):
+
+                self.model_documentation = self.model.documentation
+
+            else:
+
+                self.model_documentation = ''
+
+        return self.model_documentation
+
+
+    def get_page_layout(self):
+
+        if len(self.page_layout) < 1:
+
+            if hasattr(self, 'model'):
+
+                if hasattr(self.model, 'page_layout'):
+
+                    self.page_layout = self.model.page_layout
+
+                else:
+
+                    self.page_layout = []
+
+        return self.page_layout
 
 
     def get_view_description(self, html=False) -> str:
@@ -111,18 +155,6 @@ class ModelViewSetBase(
     _Mandatory_, Django model used for this view.
     """
 
-    model_documentation: str = None
-    """Model Documentation URL
-    
-    _Optional_, if specified will be add to detail view metadata"""
-
-    page_layout: list = []
-    """ Page layout class
-
-    _Optional_, used by metadata to add the page layout to the HTTP/Options method
-    for detail view, Enables the UI can setup the page layout.
-    """
-
     queryset: object = None
     """View Queryset
 
@@ -134,36 +166,6 @@ class ModelViewSetBase(
 
     _Optional_, Used by API text search as the fields to search.
     """
-
-
-    def get_model_documentation(self):
-
-        if not self.model_documentation:
-
-            if hasattr(self.model, 'documentataion'):
-
-                self.model_documentation = self.model.documentation
-
-            else:
-
-                self.model_documentation = ''
-
-        return self.model_documentation
-
-
-    def get_page_layout(self):
-
-        if len(self.page_layout) < 1:
-
-            if hasattr(self.model, 'page_layout'):
-
-                self.page_layout = self.model.page_layout
-
-            else:
-
-               self.page_layout = []
-
-        return self.page_layout
 
 
     def get_queryset(self):
