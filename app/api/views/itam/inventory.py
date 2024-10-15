@@ -105,7 +105,7 @@ this setting populated, no device will be created and the endpoint will return H
         except ValidationError as e:
 
             status = Http.Status.BAD_REQUEST
-            response_data = e.message
+            response_data = e.detail
 
         except Exception as e:
 
