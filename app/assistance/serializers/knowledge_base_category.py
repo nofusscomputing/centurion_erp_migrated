@@ -123,8 +123,33 @@ class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
 
         is_valid = super().is_valid(raise_exception=raise_exception)
 
+        target_team = None
+        target_user = None
 
-        if self.validated_data['target_team'] and self.validated_data['target_user']:
+
+        if self.instance:
+
+            if len(self.instance.target_team.filter()) > 0:
+
+                target_team = self.instance.target_team.filter()[0]
+
+
+            if hasattr(self.instance, 'target_user_id'):
+
+                target_user = self.instance.target_user_id
+
+
+        if 'target_team' in self.validated_data:
+
+            target_team = self.validated_data['target_team']
+
+
+        if 'target_user' in self.validated_data:
+
+            target_user = self.validated_data['target_user']
+
+
+        if target_team and target_user:
 
             is_valid = False
 
