@@ -18,6 +18,15 @@ class Index(CommonViewSet):
 
     page_layout: list = [
         {
+            "name": "Assistanace",
+            "links": [
+                {
+                    "name": "Knowledge Base Categories",
+                    "model": "knowledge_base_category"
+                }
+            ]
+        },
+        {
             "name": "Core",
             "links": [
                 {
@@ -46,5 +55,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
             }
         )
