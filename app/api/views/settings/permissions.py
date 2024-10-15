@@ -9,7 +9,7 @@ from access.functions import permissions
 from core.http.common import Http
 
 
-
+@extend_schema(deprecated=True)
 class View(views.APIView):
 
     permission_classes = [
