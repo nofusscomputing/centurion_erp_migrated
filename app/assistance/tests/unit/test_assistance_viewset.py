@@ -6,7 +6,7 @@ from access.models import Organization
 
 from api.tests.abstract.viewsets import ViewSetCommon
 
-from assistance.viewset.index import Index
+from assistance.viewsets.index import Index
 
 
 class AssistanceViewset(
