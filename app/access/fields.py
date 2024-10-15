@@ -40,6 +40,14 @@ class AutoLastModifiedField(AutoCreatedField):
 
     verbose_name = 'Modified'
 
+    def __init__(self, *args, **kwargs):
+
+        kwargs.setdefault("help_text", self.help_text)
+
+        kwargs.setdefault("verbose_name", self.verbose_name)
+
+        super().__init__(*args, **kwargs)
+
     def pre_save(self, model_instance, add):
 
         value = now()
