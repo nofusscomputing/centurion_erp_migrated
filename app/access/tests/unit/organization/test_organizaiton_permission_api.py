@@ -204,7 +204,7 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
         client.force_login(self.different_organization_user)
         response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
 
-        assert response.status_code == 405
+        assert response.status_code == 403
 
 
     def test_add_is_prohibited_super_user(self):
@@ -220,7 +220,7 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
         client.force_login(self.super_user)
         response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
 
-        assert response.status_code == 405
+        assert response.status_code == 403
 
 
     def test_add_is_prohibited_user_same_org(self):
@@ -236,4 +236,4 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
         client.force_login(self.add_user)
         response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
 
-        assert response.status_code == 405
+        assert response.status_code == 403
