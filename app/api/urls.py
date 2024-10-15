@@ -47,7 +47,7 @@ from access.viewsets import (
     team_user as team_user_v2
 )
 
-from assistance.viewset import (
+from assistance.viewsets import (
     index as assistance_index_v2
 )
 
