@@ -83,7 +83,7 @@ class KnowledgeBaseValidationAPI(
                 "responsible_user": self.add_user.id,
             })
 
-            serializer.is_valid()
+            serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['title'][0] == 'required'
 
@@ -104,7 +104,7 @@ class KnowledgeBaseValidationAPI(
                 "responsible_user": self.add_user.id,
             })
 
-            serializer.is_valid()
+            serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
@@ -122,7 +122,7 @@ class KnowledgeBaseValidationAPI(
                 "responsible_user": self.add_user.id,
             })
 
-            serializer.is_valid()
+            serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_need_target_team_or_user'
 
@@ -140,7 +140,7 @@ class KnowledgeBaseValidationAPI(
                 partial=True,
             )
 
-            serializer.is_valid()
+            serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
 
@@ -157,6 +157,6 @@ class KnowledgeBaseValidationAPI(
                 partial=True,
             )
 
-            serializer.is_valid()
+            serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['non_field_errors'][0] == 'invalid_not_both_target_team_user'
