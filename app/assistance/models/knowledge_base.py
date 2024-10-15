@@ -127,9 +127,9 @@ class KnowledgeBase(TenancyObject):
             'title',
         ]
 
-        verbose_name = "Article"
+        verbose_name = "Knowledge Base"
 
-        verbose_name_plural = "Articles"
+        verbose_name_plural = "Knowledge Base Articles"
 
 
     model_notes = None
@@ -294,16 +294,6 @@ class KnowledgeBase(TenancyObject):
                     "fields": [
                         'content',
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Articles",
-            "slug": "article",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "articles",
                 }
             ]
         },
