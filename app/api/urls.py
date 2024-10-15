@@ -48,7 +48,8 @@ from access.viewsets import (
 )
 
 from assistance.viewsets import (
-    index as assistance_index_v2
+    index as assistance_index_v2,
+    knowledge_base as knowledge_base_v2
 )
 
 from config_management.viewset import (
@@ -116,6 +117,7 @@ router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team', team_
 router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+router.register('v2/assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
 
 router.register('v2/base', base_index_v2.Index, basename='_api_v2_base_home')
 router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
