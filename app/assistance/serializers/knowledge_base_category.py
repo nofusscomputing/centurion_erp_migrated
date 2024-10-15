@@ -98,6 +98,8 @@ class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
             'id',
             'organization',
             'name',
+            'display_name',
+            'model_notes',
             'parent_category',
             'target_user',
             'target_team',
