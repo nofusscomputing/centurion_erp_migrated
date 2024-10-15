@@ -49,7 +49,8 @@ from access.viewsets import (
 
 from assistance.viewsets import (
     index as assistance_index_v2,
-    knowledge_base as knowledge_base_v2
+    knowledge_base as knowledge_base_v2,
+    knowledge_base_category as knowledge_base_category_v2
 )
 
 from config_management.viewset import (
@@ -133,6 +134,7 @@ router.register('v2/config_management', config_management_v2.Index, basename='_a
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 
 urlpatterns = [
 
