@@ -33,8 +33,18 @@ from api.viewsets import (
     index as v2
 )
 
-from access.viewset import (
-    index as access_v2
+from app.viewsets.base import (
+    index as base_index_v2,
+    content_type as content_type_v2,
+    permisson as permission_v2,
+    user as user_v2
+)
+
+from access.viewsets import (
+    index as access_v2,
+    organization as organization_v2,
+    team as team_v2,
+    team_user as team_user_v2
 )
 
 from assistance.viewset import (
@@ -101,8 +111,16 @@ router.register('software', software.SoftwareViewSet, basename='software')
 router.register('v2', v2.Index, basename='_api_v2_home')
 
 router.register('v2/access', access_v2.Index, basename='_api_v2_access_home')
+router.register('v2/access/organization', organization_v2.ViewSet, basename='_api_v2_organization')
+router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team', team_v2.ViewSet, basename='_api_v2_organization_team')
+router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+
+router.register('v2/base', base_index_v2.Index, basename='_api_v2_base_home')
+router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
+router.register('v2/base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
+router.register('v2/base/user', user_v2.ViewSet, basename='_api_v2_user')
 
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 

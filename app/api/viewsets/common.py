@@ -1,6 +1,7 @@
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from access.mixin import OrganizationMixin
 
@@ -94,8 +95,7 @@ class CommonViewSet(
 
 
 
-class ModelViewSet(
-    viewsets.ModelViewSet,
+class ModelViewSetBase(
     CommonViewSet
 ):
 
@@ -187,3 +187,22 @@ class ModelViewSet(
 
 
         return globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
+
+
+
+class ModelViewSet(
+    viewsets.ModelViewSet,
+    ModelViewSetBase
+):
+
+    pass
+
+
+class ReadOnlyModelViewSet(
+    viewsets.ReadOnlyModelViewSet,
+    ModelViewSetBase
+):
+
+    permission_classes = [
+        IsAuthenticated,
+    ]

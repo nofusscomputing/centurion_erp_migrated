@@ -16,7 +16,13 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 - Views are class based
 
-- Inherits from base class `api.viewsets.common.CommonViewSet`
+- Inherits from one of the following base class':
+
+    - Index Viewset `api.viewsets.common.CommonViewSet`
+
+    - Model Viewset `api.viewsets.common.ModelViewSet`
+
+    - Model Viewset that are to be Read-Only `api.viewsets.common.ReadOnlyModelViewSet`
 
 - **ALL** views are `ViewSets`
 
