@@ -91,6 +91,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 metadata['documentation'] = view.documentation
 
+            if hasattr(view, 'page_layout'):
+
+                metadata['layout'] = view.get_page_layout()
+
 
         metadata['navigation'] = [
             {
@@ -100,7 +104,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Organization",
                         "name": "organization",
-                        "icon": "device",
                         "link": "/access/organization"
                     }
                 ]
@@ -114,6 +117,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "request",
                         "icon": "ticket",
                         "link": "/assistance/ticket/request"
+                    },
+                    {
+                        "display_name": "Knowledge Base",
+                        "name": "knowledge_base",
+                        "icon": "kb",
+                        "link": "/assistance/knowledge_base"
                     }
                 ]
             },
