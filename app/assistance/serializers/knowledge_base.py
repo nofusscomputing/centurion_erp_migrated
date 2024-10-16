@@ -155,8 +155,6 @@ class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
 
         if target_team and target_user:
 
-            is_valid = False
-
             raise ValidationError(
                 detail = [
                     'Both a Target Team or Target User Cant be assigned at the same time. Use one or the other'
@@ -167,8 +165,6 @@ class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
 
         if not target_team and not target_user:
 
-            is_valid = False
-
             raise ValidationError(
                 detail = [
                     'A Target Team or Target User must be assigned.'
@@ -176,7 +172,6 @@ class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
                 code='invalid_need_target_team_or_user'
             )
 
-        
         return super().validate(attrs)
 
 

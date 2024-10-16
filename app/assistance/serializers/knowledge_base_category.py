@@ -119,11 +119,7 @@ class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
 
 
 
-    def is_valid(self, *, raise_exception=True) -> bool:
-
-        is_valid = False
-
-        is_valid = super().is_valid(raise_exception=raise_exception)
+    def validate(self, attrs):
 
         target_team = None
         target_user = None
@@ -141,24 +137,37 @@ class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
                 target_user = self.instance.target_user_id
 
 
-        if 'target_team' in self.validated_data:
+        if 'target_team' in self.initial_data:
 
-            target_team = self.validated_data['target_team']
+            target_team = self.initial_data['target_team']
 
 
-        if 'target_user' in self.validated_data:
+        if 'target_user' in self.initial_data:
 
-            target_user = self.validated_data['target_user']
+            target_user = self.initial_data['target_user']
 
 
         if target_team and target_user:
 
-            is_valid = False
+            raise ValidationError(
+                detail = [
+                    'Both a Target Team or Target User Cant be assigned at the same time. Use one or the other'
+                ],
+                code = 'invalid_not_both_target_team_user'
+            )
 
-            raise ValidationError('Both a Target Team or Target User Cant be assigned at the same time. Use one or the other or None')
+
+        if not target_team and not target_user:
+
+            raise ValidationError(
+                detail = [
+                    'A Target Team or Target User must be assigned.'
+                ],
+                code='invalid_need_target_team_or_user'
+            )
 
 
-        return is_valid
+        return super().validate(attrs)
 
 
 
