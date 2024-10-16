@@ -74,6 +74,7 @@ class ConfigGroupsSerializer(ConfigGroupsSerializerBase):
             'parent',
             'name',
             'config',
+            'hosts',
             'url',
         ]
         read_only_fields = [
