@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "group": "ToDo",
+                "group": reverse('API:_api_v2_config_group-list', request=request),
             }
         )
