@@ -54,7 +54,8 @@ from assistance.viewsets import (
 )
 
 from config_management.viewsets import (
-    index as config_management_v2
+    index as config_management_v2,
+    config_group as config_group_v2
 )
 
 from itam.viewset import (
@@ -126,6 +127,8 @@ router.register('v2/base/permission', permission_v2.ViewSet, basename='_api_v2_p
 router.register('v2/base/user', user_v2.ViewSet, basename='_api_v2_user')
 
 router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
+router.register('v2/config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
+router.register('v2/config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
 
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 
