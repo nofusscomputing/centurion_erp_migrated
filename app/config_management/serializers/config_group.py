@@ -6,8 +6,6 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from config_management.models.groups import ConfigGroups
 
-from api.v2.serializers.itam.device import DeviceModelBaseSerializer
-
 class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
 
@@ -161,8 +159,6 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
 
 
 class ConfigGroupViewSerializer(ConfigGroupModelSerializer):
-
-    hosts = DeviceModelBaseSerializer(read_only = True, many = True)
 
     parent = ConfigGroupBaseSerializer( read_only = True )
 

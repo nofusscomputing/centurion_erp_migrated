@@ -58,7 +58,7 @@ from config_management.viewsets import (
     config_group as config_group_v2
 )
 
-from itam.viewset import (
+from itam.viewsets import (
     index as itam_index_v2,
 )
 
