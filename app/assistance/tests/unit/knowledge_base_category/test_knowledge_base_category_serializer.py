@@ -8,16 +8,15 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization, Team
 
-from assistance.models.knowledge_base import KnowledgeBase
-from assistance.serializers.knowledge_base import KnowledgeBaseModelSerializer
+from assistance.serializers.knowledge_base_category import KnowledgeBaseCategory, KnowledgeBaseCategoryModelSerializer
 
 
 
-class KnowledgeBaseValidationAPI(
+class KnowledgeBaseCategoryValidationAPI(
     TestCase,
 ):
 
-    model = KnowledgeBase
+    model = KnowledgeBaseCategory
 
     app_namespace = 'API'
     
@@ -46,50 +45,38 @@ class KnowledgeBaseValidationAPI(
 
         self.item_has_target_user = self.model.objects.create(
             organization=organization,
-            title = 'random title',
-            content = 'random note',
-            summary = 'a summary',
+            name = 'random title',
             target_user = self.add_user,
-            release_date = '2024-01-01 12:00:00',
-            expiry_date = '2024-01-01 12:00:01',
-            responsible_user = self.add_user,
         )
 
         self.item_has_target_team = self.model.objects.create(
             organization=organization,
-            title = 'random title',
-            content = 'random note',
-            summary = 'a summary',
-            release_date = '2024-01-01 12:00:00',
-            expiry_date = '2024-01-01 12:00:01',
-            responsible_user = self.add_user,
+            name = 'random title0',
         )
 
         self.item_has_target_team.target_team.set([ self.add_team ])
 
 
 
-    def test_serializer_validation_no_title(self):
+    def test_serializer_validation_no_name(self):
         """Serializer Validation Check
 
-        Ensure that if creating and no title is provided a validation error occurs
+        Ensure that if creating and no name is provided a validation error occurs
         """
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseCategoryModelSerializer(data={
                 "organization": self.organization.id,
-                "content": "random note",
                 "target_user": self.add_user.id,
                 "target_team": [
                     self.add_team.id
-                ],
-                "responsible_user": self.add_user.id,
+                ]
             })
 
             serializer.is_valid(raise_exception = True)
 
-        assert err.value.get_codes()['title'][0] == 'required'
+        assert err.value.get_codes()['name'][0] == 'required'
 
 
 
@@ -101,15 +88,13 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseCategoryModelSerializer(data={
                 "organization": self.organization.id,
-                "title": "teamone",
-                "content": "random note",
+                "name": "teamone",
                 "target_user": self.add_user.id,
                 "target_team": [
                     self.add_team.id
-                ],
-                "responsible_user": self.add_user.id,
+                ]
             })
 
             serializer.is_valid(raise_exception = True)
@@ -124,14 +109,11 @@ class KnowledgeBaseValidationAPI(
         Ensure that if either target user and target team is missing it raises validation error
         """
 
-
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseCategoryModelSerializer(data={
                 "organization": self.organization.id,
-                "title": 'teamone',
-                "content": 'random note',
-                "responsible_user": self.add_user.id,
+                "name": 'teamone' 
             })
 
             serializer.is_valid(raise_exception = True)
@@ -149,7 +131,7 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(
+            serializer = KnowledgeBaseCategoryModelSerializer(
                 self.item_has_target_user,
                 data={
                     "target_team": [ self.add_team.id ]
@@ -171,7 +153,7 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(
+            serializer = KnowledgeBaseCategoryModelSerializer(
                 self.item_has_target_team,
                 data={
                     "target_user": self.add_user.id
