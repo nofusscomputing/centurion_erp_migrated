@@ -48,20 +48,18 @@
 
     {% include 'content/section.html.j2' with tab=form.tabs.hosts %}
 
-    <input type="button" value="Add Host" onclick="window.location='{% url 'Config Management:_group_add_host' group.id %}';">
-
     <table class="data">
         <tr>
             <th>Name</th>
             <th>Organization</th>
             <th>&nbsp;</th>
         </tr>
-        {% if config_group_hosts %}
-        {% for host in config_group_hosts %}
+        {% if group.hosts %}
+        {% for host in group.hosts.all %}
         <tr>
-            <td><a href="{% url 'ITAM:_device_view' pk=host.host.id %}">{{ host.host }}</a></td>
-            <td>{{ host.host.organization }}</td>
-            <td><a href="{% url 'Config Management:_group_delete_host' group_id=group.id pk=host.id %}">Delete</a></td>
+            <td><a href="{% url 'ITAM:_device_view' pk=host.id %}">{{ host }}</a></td>
+            <td>{{ host.organization }}</td>
+            <td>&nbsp;</td>
         </tr>
         {% endfor %}
         {% else %}
