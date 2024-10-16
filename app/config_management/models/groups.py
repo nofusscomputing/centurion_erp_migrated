@@ -95,6 +95,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         verbose_name = 'Configuration'
     )
 
+    hosts = models.ManyToManyField(
+        to = Device,
+        blank = True,
+        help_text = 'Hosts that are part of this group',
+        verbose_name = 'Hosts'
+    )
+
 
     page_layout: dict = [
         {

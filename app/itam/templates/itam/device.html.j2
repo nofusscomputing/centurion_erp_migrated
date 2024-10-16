@@ -196,17 +196,17 @@
         <th>Added</th>
         <th>&nbsp;</th>
       </tr>
-      {% if config_groups %}
-      {% for group in config_groups %}
+      {% if device.configgroups_set %}
+      {% for group in device.configgroups_set.all %}
       <tr>
-        <td><a href="{% url 'Config Management:_group_view' pk=group.group.id %}">{{ group.group }}</a></td>
+        <td><a href="{% url 'Config Management:_group_view' pk=group.id %}">{{ group }}</a></td>
         <td>{{ group.created }}</td>
-        <td><a href="{% url 'Config Management:_group_delete_host' group_id=group.group.id pk=group.id %}">Delete</a></td>
+        <td>&nbsp;</td>
       </tr>
       {% endfor %}
       {% else %}
       <tr>
-        <td colspan="3">Nothing Found</td>
+        <td colspan="3">Nothing Found.</td>
       </tr>
       {% endif %}
     </table>
