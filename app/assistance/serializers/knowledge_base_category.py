@@ -137,6 +137,18 @@ class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
                 target_user = self.instance.target_user_id
 
 
+            if 'parent_category' in self.initial_data:
+
+                if self.instance.id == self.initial_data['parent_category']:
+
+                    raise ValidationError(
+                        detail = {
+                            'parent_category': 'Can not assign self as parent caategory'
+                        },
+                        code = 'parent_category_not_self'
+                    )
+
+
         if 'target_team' in self.initial_data:
 
             target_team = self.initial_data['target_team']
