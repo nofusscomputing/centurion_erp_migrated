@@ -80,6 +80,28 @@ class KnowledgeBaseCategoryValidationAPI(
 
 
 
+    def test_serializer_validation_parent_category_not_self(self):
+        """Serializer Validation Check
+
+        Ensure that you cant assisgn self as parent category
+        """
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = KnowledgeBaseCategoryModelSerializer(
+                self.item_has_target_user,
+                data={
+                    "parent_category": self.item_has_target_user.id
+                },
+                partial=True,
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['parent_category'][0] == 'parent_category_not_self'
+
+
+
     def test_serializer_validation_both_target_team_target_user(self):
         """Serializer Validation Check
 
