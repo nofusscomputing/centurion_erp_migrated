@@ -8,9 +8,6 @@ from django.utils.decorators import method_decorator
 
 from access.models import Organization
 
-from config_management.models.groups import ConfigGroupHosts
-
-
 from ..models.device import Device, DeviceSoftware, DeviceOperatingSystem
 from ..models.software import Software
 
@@ -143,7 +140,6 @@ class View(ChangeView):
         config = self.object.get_configuration
         context['config'] = json.dumps(config, indent=4, sort_keys=True)
 
-        context['config_groups'] = ConfigGroupHosts.objects.filter(host = self.object.id)
 
         context['model_pk'] = self.kwargs['pk']
         context['model_name'] = self.model._meta.verbose_name.replace(' ', '')
