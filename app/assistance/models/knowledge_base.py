@@ -16,9 +16,9 @@ class KnowledgeBaseCategory(TenancyObject):
             'name',
         ]
 
-        verbose_name = "Category"
+        verbose_name = "Knowledge Base Category"
 
-        verbose_name_plural = "Categorys"
+        verbose_name_plural = "Knowledge Base Categories"
 
 
     parent_category = models.ForeignKey(
@@ -74,27 +74,17 @@ class KnowledgeBaseCategory(TenancyObject):
                 {
                     "layout": "double",
                     "left": [
-                        'title',
+                        'organization',
                         'parent_category',
+                        'name',
                         'target_user',
                         'target_team',
-                        'created',
-                        'modified',
                     ],
                     "right": [
                         'model_notes',
-                        'organization',
+                        'created',
+                        'modified',
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Articles",
-            "slug": "article",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "articles",
                 }
             ]
         },
@@ -106,8 +96,9 @@ class KnowledgeBaseCategory(TenancyObject):
     ]
 
     table_fields: list = [
-        'title',
-        'parent',
+        'name',
+        'parent_category',
+        'is_global',
         'organization',
     ]
 
@@ -127,9 +118,9 @@ class KnowledgeBase(TenancyObject):
             'title',
         ]
 
-        verbose_name = "Article"
+        verbose_name = "Knowledge Base"
 
-        verbose_name_plural = "Articles"
+        verbose_name_plural = "Knowledge Base Articles"
 
 
     model_notes = None
@@ -294,16 +285,6 @@ class KnowledgeBase(TenancyObject):
                     "fields": [
                         'content',
                     ]
-                }
-            ]
-        },
-        {
-            "name": "Articles",
-            "slug": "article",
-            "sections": [
-                {
-                    "layout": "table",
-                    "field": "articles",
                 }
             ]
         },

@@ -1,11 +1,10 @@
 import json
 import re
 
-from django.core.exceptions import ValidationError, PermissionDenied
-
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 from rest_framework import generics, views
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from api.views.mixin import OrganizationPermissionAPI
@@ -91,11 +90,12 @@ this setting populated, no device will be created and the endpoint will return H
 
             if not self.permission_check(request=request, view=self, obj=device):
 
-                raise Http404
+                raise PermissionDenied()
 
             task = process_inventory.delay(request.body, self.default_organization.id)
 
             response_data: dict = {"task_id": f"{task.id}"}
+
 
         except PermissionDenied as e:
 
@@ -105,7 +105,7 @@ this setting populated, no device will be created and the endpoint will return H
         except ValidationError as e:
 
             status = Http.Status.BAD_REQUEST
-            response_data = e.message
+            response_data = e.detail
 
         except Exception as e:
 

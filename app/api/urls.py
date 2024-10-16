@@ -47,8 +47,10 @@ from access.viewsets import (
     team_user as team_user_v2
 )
 
-from assistance.viewset import (
-    index as assistance_index_v2
+from assistance.viewsets import (
+    index as assistance_index_v2,
+    knowledge_base as knowledge_base_v2,
+    knowledge_base_category as knowledge_base_category_v2
 )
 
 from config_management.viewset import (
@@ -116,6 +118,7 @@ router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team', team_
 router.register('v2/access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_id>[0-9]+)/user', team_user_v2.ViewSet, basename='_api_v2_organization_team_user')
 
 router.register('v2/assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
+router.register('v2/assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
 
 router.register('v2/base', base_index_v2.Index, basename='_api_v2_base_home')
 router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_v2_content_type')
@@ -131,6 +134,7 @@ router.register('v2/config_management', config_management_v2.Index, basename='_a
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 
 urlpatterns = [
 
