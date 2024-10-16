@@ -129,15 +129,36 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
 
         is_valid = super().is_valid(raise_exception=raise_exception)
 
-        if 'parent_group' in self._context['view'].kwargs:
+        if 'view' in self._context:
 
-            self.validated_data['parent_id'] = int(self._context['view'].kwargs['parent_group'])
+            if 'parent_group' in self._context['view'].kwargs:
 
-            organization = self.Meta.model.objects.get(pk = int(self._context['view'].kwargs['parent_group']))
+                self.validated_data['parent_id'] = int(self._context['view'].kwargs['parent_group'])
 
-            self.validated_data['organization_id'] = organization.id
+                organization = self.Meta.model.objects.get(pk = int(self._context['view'].kwargs['parent_group']))
+
+                self.validated_data['organization_id'] = organization.id
 
         return is_valid
+
+
+    def validate(self, attrs):
+
+        if self.instance:
+
+            if hasattr(self.instance, 'parent_id') and 'parent' in self.initial_data:
+
+                if self.initial_data['parent'] == self.instance.id:
+
+                    raise serializers.ValidationError(
+                        detail = {
+                            'parent': 'Can not assign self as parent'
+                        },
+                        code = 'self_not_parent'
+                    )
+
+        return super().validate(attrs)
+
 
 
 class ConfigGroupViewSerializer(ConfigGroupModelSerializer):

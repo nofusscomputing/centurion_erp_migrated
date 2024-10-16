@@ -56,12 +56,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     def validate_config_keys_not_reserved(self):
 
-        value: dict = self
+        if self is not None:
 
-        for invalid_key in ConfigGroups.reserved_config_keys:
+            value: dict = self
 
-            if invalid_key in value.keys():
-                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+            for invalid_key in ConfigGroups.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
 
 
     parent = models.ForeignKey(
@@ -103,14 +105,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'parent',
-                        'is_global',
+                        'is_global'
                     ],
                     "right": [
                         'model_notes',
                         'created',
-                        'modified',
+                        'modified'
                     ]
                 },
                 {
