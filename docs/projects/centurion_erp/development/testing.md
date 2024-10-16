@@ -107,12 +107,13 @@ example file system structure showing the layout of the tests directory for a mo
 │   └── unit
 │       ├── __init__.py
 │       └── <model name>
+│           ├── test_<model name>.py
 │           ├── test_<model name>_api.py
-│           ├── test_<model name>_permission_api.py
-│           ├── test_<model name>_permission.py
 │           ├── test_<model name>_core_history.py
 │           ├── test_<model name>_history_permission.py
-│           ├── test_<model name>.py
+│           ├── test_<model name>_permission_api.py
+│           ├── test_<model name>_permission.py
+│           ├── test_<model name>_serializer.py
 │           └── test_<model name>_viewsets.py
 
 ```
@@ -158,6 +159,8 @@ Items to test include, and are not limited to:
 - API Fields
 
     _Field(s) exists, Type is checked_
+
+- Serializer Validations
 
 
 ## Running Tests
