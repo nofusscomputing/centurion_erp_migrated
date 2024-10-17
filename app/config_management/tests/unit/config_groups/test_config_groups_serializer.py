@@ -16,10 +16,6 @@ class ConfigGroupsValidationAPI(
 
     model = ConfigGroups
 
-    app_namespace = 'API'
-    
-    url_name = '_api_v2_knowledge_base'
-
     @classmethod
     def setUpTestData(self):
         """Setup Test
