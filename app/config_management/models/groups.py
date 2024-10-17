@@ -245,13 +245,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.parent
 
 
-    def render_config(self) -> str:
+    def render_config(self):
 
         config: dict = dict()
 
         if self.parent:
 
-            config.update(json.loads(ConfigGroups.objects.get(id=self.parent.id).render_config()))
+            config.update(ConfigGroups.objects.get(id=self.parent.id).render_config())
 
         if self.config:
 
@@ -294,7 +294,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
             config['software'] = merge_software(config['software'], software_actions['software'])
 
-        return json.dumps(config)
+        return config
 
 
 
