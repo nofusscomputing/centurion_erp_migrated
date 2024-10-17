@@ -499,9 +499,9 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
 
 
-    class Actions(models.TextChoices):
-        INSTALL = '1', 'Install'
-        REMOVE = '0', 'Remove'
+    class Actions(models.IntegerChoices):
+        INSTALL = 1, 'Install'
+        REMOVE = 0, 'Remove'
 
 
     device = models.ForeignKey(
@@ -522,12 +522,11 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         verbose_name = 'Software'
     )
 
-    action = models.CharField(
+    action = models.IntegerField(
         blank = True,
         choices=Actions,
         default=None,
         help_text = 'Action to perform',
-        max_length=1,
         null=True,
         verbose_name = 'Action',
     )
