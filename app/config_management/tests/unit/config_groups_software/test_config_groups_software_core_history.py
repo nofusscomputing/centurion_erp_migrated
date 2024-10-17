@@ -62,7 +62,7 @@ class ConfigGroupSoftwareHistory(TestCase, HistoryEntry, HistoryEntryChildItem):
         self.item_change.action = DeviceSoftware.Actions.REMOVE
         self.item_change.save()
 
-        self.field_after_expected_value = '{"action": "' + DeviceSoftware.Actions.REMOVE + '"}'
+        self.field_after_expected_value = '{"action": "' + str(DeviceSoftware.Actions.REMOVE) + '"}'
 
         self.history_change = History.objects.get(
             action = History.Actions.UPDATE[0],
