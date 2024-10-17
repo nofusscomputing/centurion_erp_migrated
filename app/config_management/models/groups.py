@@ -155,7 +155,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "hosts",
+                    "field": "group_software",
                 }
             ]
         },
@@ -164,8 +164,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "slug": "configuration",
             "sections": [
                 {
-                    "layout": "table",
-                    "field": "rendered_configuration",
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config"
+                    ],
                 }
             ]
         },
@@ -189,6 +191,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     table_fields: list = [
         'name',
+        'parent',
         'count_children',
         'organization'
     ]
