@@ -61,7 +61,7 @@ class ConfigGroupsModel(
     def test_config_groups_rendered_config_is_dict(self):
         """ Rendered Config is a string """
 
-        assert type(self.item.render_config()) is str
+        assert type(self.item.render_config()) is dict
 
 
     def test_config_groups_rendered_config_is_correct(self):

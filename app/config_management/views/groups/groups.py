@@ -155,7 +155,7 @@ class View(ChangeView):
 
         context['child_groups'] = ConfigGroups.objects.filter(parent=self.kwargs['pk'])
 
-        context['config'] = json.dumps(json.loads(self.object.render_config()), indent=4, sort_keys=True)
+        context['config'] = json.dumps(self.object.render_config(), indent=4, sort_keys=True)
 
 
         context['tickets'] = TicketLinkedItem.objects.filter(
