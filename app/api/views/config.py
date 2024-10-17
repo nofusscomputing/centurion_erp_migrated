@@ -8,7 +8,7 @@ from api.views.mixin import OrganizationPermissionAPI
 from config_management.models.groups import ConfigGroups
 
 
-
+@extend_schema( deprecated = True )
 @extend_schema_view(
     get=extend_schema(
         summary = "Fetch Config groups",
@@ -31,6 +31,7 @@ class ConfigGroupsList(generics.ListAPIView):
 
 
 
+@extend_schema( deprecated = True )
 @extend_schema_view(
     get=extend_schema(
         summary = "Get A Config Group",
