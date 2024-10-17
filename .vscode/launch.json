@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug: Django",
+            "name": "Centurion",
             "type": "debugpy",
             "request": "launch",
             "args": [
@@ -17,8 +17,19 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
+            "name": "Migrate",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "migrate"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/app/manage.py"
+        },
+        {
             "name": "Debug: Celery",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "celery",
             "console": "integratedTerminal",

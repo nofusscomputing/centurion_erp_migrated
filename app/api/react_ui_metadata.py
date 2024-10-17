@@ -138,6 +138,18 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 ]
             },
+            {
+                "display_name": "Config Management",
+                "name": "config_management",
+                "icon": "ansible",
+                "pages": [
+                    {
+                        "display_name": "Groups",
+                        "name": "config_group",
+                        "link": "/config_management/group"
+                    }
+                ]
+            },
 
             {
                 "display_name": "Settings",

@@ -374,24 +374,6 @@ class DeviceAPI(TestCase):
         assert type(self.api_data['modified']) is str
 
 
-    def test_api_field_exists_groups(self):
-        """ Test for existance of API Field
-
-        groups field must exist
-        """
-
-        assert 'groups' in self.api_data
-
-
-    def test_api_field_type_groups(self):
-        """ Test for type for API Field
-
-        groups field must be list
-        """
-
-        assert type(self.api_data['groups']) is list
-
-
     def test_api_field_exists_organization(self):
         """ Test for existance of API Field
 
@@ -426,63 +408,6 @@ class DeviceAPI(TestCase):
         """
 
         assert type(self.api_data['url']) is Hyperlink
-
-
-
-
-    def test_api_field_exists_groups_id(self):
-        """ Test for existance of API Field
-
-        groups.id field must exist
-        """
-
-        assert 'id' in self.api_data['groups'][0]
-
-
-    def test_api_field_type_groups_id(self):
-        """ Test for type for API Field
-
-        groups.id field must be int
-        """
-
-        assert type(self.api_data['groups'][0]['id']) is int
-
-
-    def test_api_field_exists_groups_name(self):
-        """ Test for existance of API Field
-
-        groups.name field must exist
-        """
-
-        assert 'name' in self.api_data['groups'][0]
-
-
-    def test_api_field_type_groups_name(self):
-        """ Test for type for API Field
-
-        groups.name field must be str
-        """
-
-        assert type(self.api_data['groups'][0]['name']) is str
-
-
-    def test_api_field_exists_groups_url(self):
-        """ Test for existance of API Field
-
-        groups.url field must exist
-        """
-
-        assert 'url' in self.api_data['groups'][0]
-
-
-    def test_api_field_type_groups_url(self):
-        """ Test for type for API Field
-
-        groups.url field must be str
-        """
-
-        assert type(self.api_data['groups'][0]['url']) is Hyperlink
-
 
 
     def test_api_create_device_existing_uuid_matches_status_200(self):

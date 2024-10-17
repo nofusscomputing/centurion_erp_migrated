@@ -1,4 +1,3 @@
-import json
 import re
 
 from django.db import models
@@ -56,12 +55,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     def validate_config_keys_not_reserved(self):
 
-        value: dict = self
+        if self is not None:
 
-        for invalid_key in ConfigGroups.reserved_config_keys:
+            value: dict = self
 
-            if invalid_key in value.keys():
-                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+            for invalid_key in ConfigGroups.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
 
 
     parent = models.ForeignKey(
@@ -93,6 +94,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         verbose_name = 'Configuration'
     )
 
+    hosts = models.ManyToManyField(
+        to = Device,
+        blank = True,
+        help_text = 'Hosts that are part of this group',
+        verbose_name = 'Hosts'
+    )
+
 
     page_layout: dict = [
         {
@@ -103,14 +111,14 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'parent',
-                        'is_global',
+                        'is_global'
                     ],
                     "right": [
                         'model_notes',
                         'created',
-                        'modified',
+                        'modified'
                     ]
                 },
                 {
@@ -147,7 +155,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "hosts",
+                    "field": "group_software",
                 }
             ]
         },
@@ -156,8 +164,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "slug": "configuration",
             "sections": [
                 {
-                    "layout": "table",
-                    "field": "rendered_configuration",
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config"
+                    ],
                 }
             ]
         },
@@ -181,6 +191,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     table_fields: list = [
         'name',
+        'parent',
         'count_children',
         'organization'
     ]
@@ -236,13 +247,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.parent
 
 
-    def render_config(self) -> str:
+    def render_config(self):
 
         config: dict = dict()
 
         if self.parent:
 
-            config.update(json.loads(ConfigGroups.objects.get(id=self.parent.id).render_config()))
+            config.update(ConfigGroups.objects.get(id=self.parent.id).render_config())
 
         if self.config:
 
@@ -285,7 +296,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
             config['software'] = merge_software(config['software'], software_actions['software'])
 
-        return json.dumps(config)
+        return config
 
 
 
@@ -408,12 +419,11 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     )
 
 
-    action = models.CharField(
+    action = models.IntegerField(
         blank = True,
         choices=DeviceSoftware.Actions,
         default=None,
         help_text = 'ACtion to perform with this software',
-        max_length=1,
         null=True,
         verbose_name = 'Action'
     )

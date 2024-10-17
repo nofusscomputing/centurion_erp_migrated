@@ -53,11 +53,13 @@ from assistance.viewsets import (
     knowledge_base_category as knowledge_base_category_v2
 )
 
-from config_management.viewset import (
-    index as config_management_v2
+from config_management.viewsets import (
+    index as config_management_v2,
+    config_group as config_group_v2,
+    config_group_software as config_group_software_v2
 )
 
-from itam.viewset import (
+from itam.viewsets import (
     index as itam_index_v2,
 )
 
@@ -125,11 +127,14 @@ router.register('v2/base/content_type', content_type_v2.ViewSet, basename='_api_
 router.register('v2/base/permission', permission_v2.ViewSet, basename='_api_v2_permission')
 router.register('v2/base/user', user_v2.ViewSet, basename='_api_v2_user')
 
+router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
+router.register('v2/config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
+router.register('v2/config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
+router.register('v2/config_management/group/(?P<group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
+
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 
 router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
-
-router.register('v2/config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 

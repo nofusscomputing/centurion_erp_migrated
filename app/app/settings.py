@@ -191,7 +191,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "http://127.0.0.1:3000"
 LOGOUT_REDIRECT_URL = "login"
 
 LOGIN_URL = '/account/login'
@@ -309,7 +309,7 @@ curl:
 
         """,
         'VERSION': '1.0.0',
-        'SCHEMA_PATH_PREFIX': '/api/v2/([a-z]+)|/api',
+        'SCHEMA_PATH_PREFIX': '/api/v2/([a-z_]+)/|/api/',
         'SERVE_INCLUDE_SCHEMA': False,
 
         'SWAGGER_UI_DIST': 'SIDECAR',
