@@ -417,12 +417,11 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     )
 
 
-    action = models.CharField(
+    action = models.IntegerField(
         blank = True,
         choices=DeviceSoftware.Actions,
         default=None,
         help_text = 'ACtion to perform with this software',
-        max_length=1,
         null=True,
         verbose_name = 'Action'
     )
