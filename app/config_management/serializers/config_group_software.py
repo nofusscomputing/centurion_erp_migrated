@@ -8,6 +8,7 @@ from config_management.models.groups import ConfigGroupSoftware
 from config_management.serializers.config_group import ConfigGroups, ConfigGroupBaseSerializer
 
 from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software_version import SoftwareVersion, SoftwareVersionBaseSerializer
 
 
 
@@ -213,3 +214,5 @@ class ConfigGroupSoftwareViewSerializer(ConfigGroupSoftwareModelSerializer):
     organization = OrganizationBaseSerializer( many=False, read_only=True )
 
     software = SoftwareBaseSerializer( read_only = True )
+
+    version = SoftwareVersionBaseSerializer( read_only = True )
