@@ -177,14 +177,14 @@ class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
 
                     if 'software' in self.initial_data:
 
-                        software = self.initial_data['software']
+                        software = int(self.initial_data['software'])
 
                     elif self.instance:
 
                         software = self.instance.software
 
 
-                    if software != current_object.software:
+                    if software != current_object.software.id:
 
                         raise serializers.ValidationError(
                                 detail = {
