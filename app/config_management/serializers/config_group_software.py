@@ -7,6 +7,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 from config_management.models.groups import ConfigGroupSoftware
 from config_management.serializers.config_group import ConfigGroups, ConfigGroupBaseSerializer
 
+from itam.serializers.software import SoftwareBaseSerializer
+
 
 
 class ConfigGroupSoftwareBaseSerializer(serializers.ModelSerializer):
@@ -209,3 +211,5 @@ class ConfigGroupSoftwareViewSerializer(ConfigGroupSoftwareModelSerializer):
     config_group = ConfigGroupBaseSerializer(read_only = True )
 
     organization = OrganizationBaseSerializer( many=False, read_only=True )
+
+    software = SoftwareBaseSerializer( read_only = True )
