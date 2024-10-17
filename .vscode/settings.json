@@ -17,4 +17,5 @@
         "ITSM"
     ],
     "cSpell.language": "en-AU",
+    "jest.enable": false,
 }
