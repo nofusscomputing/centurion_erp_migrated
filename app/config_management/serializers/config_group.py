@@ -65,6 +65,13 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
                     'pk': item.pk
                 }
             ),
+            'child_groups': reverse(
+                'API:_api_v2_config_group_child-list',
+                request = self.context['view'].request,
+                kwargs = {
+                    'parent_group': item.pk
+                }
+            ),
             'configgroups': reverse(
                 'API:_api_v2_config_group-list',
                 request = self.context['view'].request,
@@ -86,6 +93,8 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
             ),
         }
 
+    rendered_config = serializers.JSONField( source = 'render_config', read_only=True )
+
 
     class Meta:
 
@@ -100,6 +109,7 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
             'model_notes',
             'config',
             'hosts',
+            'rendered_config',
             'is_global',
             'created',
             'modified',
