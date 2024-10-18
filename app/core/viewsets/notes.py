@@ -69,13 +69,25 @@ class ViewSet(ModelViewSet):
 
         queryset = super().get_queryset()
 
-        if 'group_id' in self.kwargs:
+        if 'device_id' in self.kwargs:
+
+            self.queryset = queryset.filter(device_id=self.kwargs['device_id']).order_by('-created')
+
+        elif 'group_id' in self.kwargs:
 
             self.queryset = queryset.filter(config_group_id=self.kwargs['group_id']).order_by('-created')
 
-        elif 'device_id' in self.kwargs:
+        elif 'operating_system_id' in self.kwargs:
 
-            self.queryset = queryset.filter(device_id=self.kwargs['device_id']).order_by('-created')
+            self.queryset = queryset.filter(operatingsystem_id=self.kwargs['operating_system_id']).order_by('-created')
+
+        elif 'service_id' in self.kwargs:
+
+            self.queryset = queryset.filter(service_id=self.kwargs['service_id']).order_by('-created')
+
+        elif 'software_id' in self.kwargs:
+
+            self.queryset = queryset.filter(software_id=self.kwargs['software_id']).order_by('-created')
 
         else:
 
