@@ -77,6 +77,36 @@ class NoteModelSerializer(NoteBaseSerializer):
                 }
             )
 
+        elif 'operating_system_id' in self._kwargs['context']['view'].kwargs:
+
+            _self = reverse("API:_api_v2_operating_system_notes-detail", 
+                request=self._context['view'].request,
+                kwargs={
+                    'operating_system_id': self._kwargs['context']['view'].kwargs['operating_system_id'],
+                    'pk': item.pk
+                }
+            )
+
+        elif 'service_id' in self._kwargs['context']['view'].kwargs:
+
+            _self = reverse("API:_api_v2_service_notes-detail", 
+                request=self._context['view'].request,
+                kwargs={
+                    'service_id': self._kwargs['context']['view'].kwargs['service_id'],
+                    'pk': item.pk
+                }
+            )
+
+        elif 'software_id' in self._kwargs['context']['view'].kwargs:
+
+            _self = reverse("API:_api_v2_software_notes-detail", 
+                request=self._context['view'].request,
+                kwargs={
+                    'software_id': self._kwargs['context']['view'].kwargs['software_id'],
+                    'pk': item.pk
+                }
+            )
+
 
         return {
             '_self': _self,
@@ -143,6 +173,30 @@ class NoteModelSerializer(NoteBaseSerializer):
                 key = 'device_id'
 
                 self.validated_data['device_id'] = int(self._context['view'].kwargs['device_id'])
+
+            elif 'operating_system_id' in self._kwargs['context']['view'].kwargs:
+
+                from itam.models.operating_system import OperatingSystem as model
+
+                key = 'operating_system_id'
+
+                self.validated_data['operatingsystem_id'] = int(self._context['view'].kwargs['operating_system_id'])
+
+            elif 'service_id' in self._kwargs['context']['view'].kwargs:
+
+                from itim.models.services import Service as model
+
+                key = 'service_id'
+
+                self.validated_data['service_id'] = int(self._context['view'].kwargs['service_id'])
+
+            elif 'software_id' in self._kwargs['context']['view'].kwargs:
+
+                from itam.models.software import Software as model
+
+                key = 'software_id'
+
+                self.validated_data['software_id'] = int(self._context['view'].kwargs['software_id'])
 
 
             item = model.objects.get(pk = int(self._context['view'].kwargs[key]))
