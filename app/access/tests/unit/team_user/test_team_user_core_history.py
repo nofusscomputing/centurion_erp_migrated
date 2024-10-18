@@ -48,7 +48,7 @@ class TeamUsersHistory(TestCase, HistoryEntry, HistoryEntryChildItem):
 
 
         self.history_create = History.objects.get(
-            action = History.Actions.ADD[0],
+            action = int(History.Actions.ADD),
             item_pk = self.item_create.pk,
             item_class = self.model._meta.model_name,
         )
@@ -60,7 +60,7 @@ class TeamUsersHistory(TestCase, HistoryEntry, HistoryEntryChildItem):
         self.field_after_expected_value = '{"manager": true}'
 
         self.history_change = History.objects.get(
-            action = History.Actions.UPDATE[0],
+            action = int(History.Actions.UPDATE),
             item_pk = self.item_change.pk,
             item_class = self.model._meta.model_name,
         )
@@ -81,7 +81,7 @@ class TeamUsersHistory(TestCase, HistoryEntry, HistoryEntryChildItem):
         self.item_delete.delete()
 
         self.history_delete = History.objects.get(
-            action = History.Actions.DELETE[0],
+            action = int(History.Actions.DELETE),
             item_pk = self.deleted_pk,
             item_class = self.model._meta.model_name,
         )
