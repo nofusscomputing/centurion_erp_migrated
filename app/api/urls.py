@@ -141,6 +141,7 @@ router.register('v2/config_management/group/(?P<group_id>[0-9]+)/software', conf
 router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
+router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
 
 router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
 
