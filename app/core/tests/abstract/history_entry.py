@@ -15,7 +15,7 @@ class HistoryEntry:
 
         history = self.history_create.__dict__
 
-        assert history['action'] == int(History.Actions.ADD[0])
+        assert history['action'] == int(History.Actions.ADD)
         # assert type(history['action']) is int
 
 
@@ -69,7 +69,7 @@ class HistoryEntry:
 
         history = self.history_change.__dict__
 
-        assert history['action'] == int(History.Actions.UPDATE[0])
+        assert history['action'] == int(History.Actions.UPDATE)
         # assert type(history['action']) is int
 
 
