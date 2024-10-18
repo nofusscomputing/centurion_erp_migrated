@@ -35,10 +35,10 @@ class History(HistoryCommonFields):
         verbose_name_plural = 'History'
 
 
-    class Actions(models.TextChoices):
-        ADD = '1', 'Create'
-        UPDATE = '2', 'Update'
-        DELETE = '3', 'Delete'
+    class Actions(models.IntegerChoices):
+        ADD = 1, 'Create'
+        UPDATE = 2, 'Update'
+        DELETE = 3, 'Delete'
 
 
     before = models.JSONField(
