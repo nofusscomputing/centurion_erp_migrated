@@ -30,6 +30,10 @@ class History(HistoryCommonFields):
             '-created'
         ]
 
+        verbose_name = 'History'
+
+        verbose_name_plural = 'History'
+
 
     class Actions(models.TextChoices):
         ADD = '1', 'Create'
