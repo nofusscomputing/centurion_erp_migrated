@@ -6,18 +6,18 @@ from core.tests.abstract.test_notes_viewset import NoteViewSetCommon
 
 from core.models.notes import Notes
 
-from itam.models.device import Device
+from itam.models.operating_system import OperatingSystem
 
 
 
-class DeviceNotePermissionsAPI(
+class OperatingSystemNotePermissionsAPI(
     NoteViewSetCommon,
     TestCase,
 ):
 
     app_namespace = 'API'
     
-    url_name = '_api_v2_device_notes'
+    url_name = '_api_v2_operating_system_notes'
 
 
     @classmethod
@@ -35,7 +35,7 @@ class DeviceNotePermissionsAPI(
 
 
 
-        self.note_item = Device.objects.create(
+        self.note_item = OperatingSystem.objects.create(
             organization = self.organization,
             name = 'history-device'
         )
@@ -44,12 +44,12 @@ class DeviceNotePermissionsAPI(
             organization = self.organization,
             note = 'a note',
             usercreated = self.view_user,
-            device = self.note_item
+            operatingsystem = self.note_item
         )
 
 
-        self.url_kwargs = {'device_id': self.note_item.id}
+        self.url_kwargs = {'operating_system_id': self.note_item.id}
 
-        self.url_view_kwargs = {'device_id': self.note_item.id, 'pk': self.item.pk }
+        self.url_view_kwargs = {'operating_system_id': self.note_item.id, 'pk': self.item.pk }
 
         self.add_data = {'note': 'a note added', 'organization': self.organization.id}
