@@ -59,6 +59,10 @@ from config_management.viewsets import (
     config_group_software as config_group_software_v2
 )
 
+from core.viewsets import (
+    history as history_v2
+)
+
 from itam.viewsets import (
     index as itam_index_v2,
 )
@@ -131,6 +135,8 @@ router.register('v2/config_management', config_management_v2.Index, basename='_a
 router.register('v2/config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
 router.register('v2/config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
 router.register('v2/config_management/group/(?P<group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
+
+router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 
