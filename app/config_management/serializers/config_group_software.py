@@ -75,6 +75,7 @@ class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
                 'API:_api_v2_organization-list',
                 request=self.context['view'].request,
             ),
+            'softwareversion': 'ToDo',
         }
 
 
@@ -135,7 +136,7 @@ class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
 
                 parent_item = ConfigGroups.objects.get(pk = int(self._context['view'].kwargs['group_id']))
 
-                self.validated_data['organization_id'] = parent_item.id
+                self.validated_data['organization_id'] = parent_item.organization.id
 
         return is_valid
 
