@@ -5,12 +5,11 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from core.serializers.manufacturer import ManufacturerBaseSerializer
 
-from itam.models.software import Software
-from itam.serializers.software_category import SoftwareCategoryBaseSerializer
+from itam.models.software import SoftwareCategory
 
 
 
-class SoftwareBaseSerializer(serializers.ModelSerializer):
+class SoftwareCategoryBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -19,29 +18,29 @@ class SoftwareBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
+        view_name="API:_api_v2_software_category-detail", format="html"
     )
 
     class Meta:
 
-        model = Software
+        model = SoftwareCategory
 
         fields = [
             'id',
             'display_name',
             'name',
-            'url'
+            'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
             'name',
-            'url'
+            'url',
         ]
 
 
-class SoftwareModelSerializer(SoftwareBaseSerializer):
+class SoftwareCategoryModelSerializer(SoftwareCategoryBaseSerializer):
 
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -49,19 +48,9 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_software-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'history': reverse(
-                "API:_api_v2_model_history-list",
-                request=self._context['view'].request,
-                kwargs={
-                    'model_class': self.Meta.model._meta.model_name,
-                    'model_id': item.pk
-                }
-            ),
-            'notes': reverse("API:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
-            'publisher': reverse("API:_api_v2_manufacturer-list", request=self._context['view'].request),
-            'services': 'ToDo',
-            'tickets': 'ToDo'
+            '_self': reverse("API:_api_v2_software_category-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'history': 'ToDo',
+            'notes': 'ToDo',
         }
 
 
@@ -72,17 +61,15 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
 
     class Meta:
 
-        model = Software
+        model = SoftwareCategory
 
         fields = '__all__'
 
         fields =  [
              'id',
             'organization',
-            'publisher',
             'display_name',
             'name',
-            'category',
             'model_notes',
             'is_global',
             'created',
@@ -100,10 +87,6 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
 
 
 
-class SoftwareViewSerializer(SoftwareModelSerializer):
-
-    category = SoftwareCategoryBaseSerializer( many = False, read_only = True )
+class SoftwareCategoryViewSerializer(SoftwareCategoryModelSerializer):
 
     organization = OrganizationBaseSerializer( many = False, read_only = True )
-
-    publisher = ManufacturerBaseSerializer( many = False, read_only = True )

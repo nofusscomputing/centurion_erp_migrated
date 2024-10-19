@@ -69,6 +69,8 @@ from itam.viewsets import (
     index as itam_index_v2,
     device as device_v2,
     device_model as device_model_v2,
+    software as software_v2,
+    software_category as software_category_v2
 )
 
 from itim.viewsets import (
@@ -147,6 +149,7 @@ router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
 router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
 router.register('v2/itim/operating_system/(?P<operating_system_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_operating_system_notes')
+router.register('v2/itam/software', software_v2.ViewSet, basename='_api_v2_software')
 router.register('v2/itim/software/(?P<software_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_software_notes')
 
 router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
@@ -159,6 +162,7 @@ router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
+router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 
 urlpatterns = [
 
