@@ -52,6 +52,10 @@ class Index(CommonViewSet):
                     "model": "device_model"
                 },
                 {
+                    "name": "Device Type",
+                    "model": "device_type"
+                },
+                {
                     "name": "Software Category",
                     "model": "software_category"
                 }
@@ -69,6 +73,7 @@ class Index(CommonViewSet):
         return Response(
             {
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
+                "device_type": reverse('API:_api_v2_device_type-list', request=request),
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),

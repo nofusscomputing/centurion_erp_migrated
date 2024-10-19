@@ -161,6 +161,7 @@ router.register('v2/project_management', project_management_v2.Index, basename='
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
+router.register('v2/settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
