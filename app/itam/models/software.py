@@ -169,7 +169,7 @@ class Software(SoftwareCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "versions",
+                    "field": "software_version",
                 }
             ]
         },
@@ -242,6 +242,12 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
+        verbose_name = 'Software Version'
+
         verbose_name_plural = 'Software Versions'
 
 
@@ -259,6 +265,13 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         unique = False,
         verbose_name = 'Name'
     )
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified',
+    ]
 
 
     @property
