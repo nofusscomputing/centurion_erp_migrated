@@ -19,7 +19,7 @@ class SoftwareBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
+        view_name="API:_api_v2_software-detail", format="html"
     )
 
     class Meta:

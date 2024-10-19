@@ -597,18 +597,6 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
 
     @property
-    def category(self):
-
-        category = None
-
-        if self.software:
-
-            category = self.software.category.id
-
-        return category
-
-
-    @property
     def parent_object(self):
         """ Fetch the parent object """
         
