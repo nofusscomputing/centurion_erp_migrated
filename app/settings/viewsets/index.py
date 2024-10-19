@@ -27,6 +27,15 @@ class Index(CommonViewSet):
             ]
         },
         {
+            "name": "Common",
+            "links": [
+                {
+                    "name": "Manufacturers",
+                    "model": "manufacturer"
+                }
+            ]
+        },
+        {
             "name": "Core",
             "links": [
                 {
@@ -56,5 +65,6 @@ class Index(CommonViewSet):
         return Response(
             {
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
+                "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
             }
         )
