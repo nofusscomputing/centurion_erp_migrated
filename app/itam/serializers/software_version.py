@@ -23,7 +23,7 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
         return reverse(
             "API:_api_v2_software_version-detail",
-            request=self._context['view'].request,
+            request=self.context['view'].request,
             kwargs={
                 'software_id': item.software.pk,
                 'pk': item.pk
