@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "device": reverse('API:_api_v2_device-list', request=request)
+                "device": reverse('API:_api_v2_device-list', request=request),
             }
         )
