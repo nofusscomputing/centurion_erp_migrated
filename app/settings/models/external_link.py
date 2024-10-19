@@ -97,7 +97,7 @@ class ExternalLink(TenancyObject):
                         'is_global',
                     ],
                     "right": [
-                        'model_notes'
+                        'model_notes',
                         'created',
                         'modified',
                     ]
@@ -111,8 +111,6 @@ class ExternalLink(TenancyObject):
                     ],
                     "right": [
                         'devices'
-                        'created',
-                        'modified',
                     ]
                 }
             ]
