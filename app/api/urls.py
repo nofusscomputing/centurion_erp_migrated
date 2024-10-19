@@ -60,8 +60,9 @@ from config_management.viewsets import (
 )
 
 from core.viewsets import (
+    history as history_v2,
     notes as notes_v2,
-    history as history_v2
+    manufacturer as manufacturer_v2
 )
 
 from itam.viewsets import (
@@ -150,6 +151,8 @@ router.register('v2/project_management', project_management_v2.Index, basename='
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
+router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
+router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
 
 urlpatterns = [
 
