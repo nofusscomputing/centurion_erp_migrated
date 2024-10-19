@@ -61,6 +61,13 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
             'notes': reverse("API:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
             'publisher': reverse("API:_api_v2_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',
+            'software_version': reverse(
+                "API:_api_v2_software_version-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'software_id': item.pk
+                }
+            ),
             'tickets': 'ToDo'
         }
 
