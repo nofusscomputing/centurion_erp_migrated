@@ -64,6 +64,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
             }
