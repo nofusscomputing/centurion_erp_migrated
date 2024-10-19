@@ -46,7 +46,7 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
