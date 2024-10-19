@@ -362,10 +362,10 @@ class NotesAPI(
     def test_api_field_type_device_url(self):
         """ Test for type for API Field
 
-        device.url field must be str
+        device.url field must be Hyperlink
         """
 
-        assert type(self.api_data['device']['url']) is str
+        assert type(self.api_data['device']['url']) is Hyperlink
 
 
 
