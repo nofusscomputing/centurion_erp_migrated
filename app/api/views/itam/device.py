@@ -14,7 +14,7 @@ from api.views.mixin import OrganizationPermissionAPI
 from itam.models.device import Device
 
 
-
+@extend_schema( deprecated = True )
 class DeviceViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [
