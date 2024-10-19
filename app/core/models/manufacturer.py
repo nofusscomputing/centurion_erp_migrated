@@ -23,7 +23,7 @@ class ManufacturerCommonFields(models.Model):
 
     created = AutoCreatedField()
 
-    modified = AutoCreatedField()
+    modified = AutoLastModifiedField()
 
 
 
@@ -61,7 +61,7 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
