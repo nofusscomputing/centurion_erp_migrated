@@ -50,6 +50,7 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
 
         return {
             '_self': reverse("API:_api_v2_software-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
             'history': reverse(
                 "API:_api_v2_model_history-list",
                 request=self._context['view'].request,

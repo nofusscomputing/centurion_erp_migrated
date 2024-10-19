@@ -58,6 +58,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'device_model': reverse("API:_api_v2_device_model-list", request=self._context['view'].request),
             'device_type': reverse("API:_api_v2_device_type-list", request=self._context['view'].request),
+            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
             'history': reverse(
                 "API:_api_v2_model_history-list",
                 request=self._context['view'].request,
