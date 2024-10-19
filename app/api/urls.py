@@ -68,6 +68,7 @@ from core.viewsets import (
 from itam.viewsets import (
     index as itam_index_v2,
     device as device_v2,
+    device_model as device_model_v2,
 )
 
 from itim.viewsets import (
@@ -154,6 +155,7 @@ router.register('v2/itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
