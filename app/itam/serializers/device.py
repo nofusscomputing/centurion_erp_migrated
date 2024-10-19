@@ -11,9 +11,10 @@ from api.viewsets.common import ModelViewSet
 
 from core.fields.icon import Icon, IconField
 
-from itam.serializers.device_model import DeviceModelBaseSerializer
-
 from itam.models.device import Device
+from itam.serializers.device_model import DeviceModelBaseSerializer
+from itam.serializers.device_type import DeviceTypeBaseSerializer
+
 
 
 
@@ -25,6 +26,10 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name="API:_api_v2_device-detail", format="html"
+    )
+
     class Meta:
 
         model = Device
@@ -33,12 +38,14 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
             'id',
             'display_name',
             'name',
+            'url',
         ]
 
         read_only_fields = [
             'id',
             'display_name',
             'name',
+            'url',
         ]
 
 class DeviceModelSerializer(DeviceBaseSerializer):
@@ -50,6 +57,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
         return {
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'device_model': reverse("API:_api_v2_device_model-list", request=self._context['view'].request),
+            'device_type': reverse("API:_api_v2_device_type-list", request=self._context['view'].request),
             'history': reverse(
                 "API:_api_v2_model_history-list",
                 request=self._context['view'].request,
@@ -59,6 +67,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
                 }
             ),
             'notes': reverse("API:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
         }
 
 
@@ -131,5 +140,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 class DeviceViewSerializer(DeviceModelSerializer):
 
     device_model = DeviceModelBaseSerializer( many = False, read_only = True )
+
+    device_type = DeviceTypeBaseSerializer( many = False, read_only = True )
 
     organization = OrganizationBaseSerializer( many = False, read_only = True )
