@@ -55,10 +55,9 @@ class Notes(NotesCommonFields):
 
 
     note = models.TextField(
-        blank = True,
-        default = None,
+        blank = False,
         help_text = 'The tid bit you wish to add',
-        null = True,
+        null = False,
         verbose_name = 'Note',
     )
 
