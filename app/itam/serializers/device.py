@@ -11,7 +11,7 @@ from api.viewsets.common import ModelViewSet
 
 from core.fields.icon import Icon, IconField
 
-from access.serializers.organization import OrganizationBaseSerializer
+from itam.serializers.device_model import DeviceModelBaseSerializer
 
 from itam.models.device import Device
 
@@ -49,6 +49,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
         return {
             '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'device_model': reverse("API:_api_v2_device_model-list", request=self._context['view'].request),
             'history': reverse(
                 "API:_api_v2_model_history-list",
                 request=self._context['view'].request,
@@ -129,4 +130,6 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
 class DeviceViewSerializer(DeviceModelSerializer):
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    device_model = DeviceModelBaseSerializer( many = False, read_only = True )
+
+    organization = OrganizationBaseSerializer( many = False, read_only = True )
