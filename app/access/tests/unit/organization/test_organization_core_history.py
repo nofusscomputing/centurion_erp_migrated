@@ -34,7 +34,7 @@ class OrganizationHistory(TestCase):
 
 
         self.history_create = History.objects.get(
-            action = History.Actions.ADD[0],
+            action = int(History.Actions.ADD),
             item_pk = self.item_create.pk,
             item_class = self.model._meta.model_name,
         )
@@ -44,7 +44,7 @@ class OrganizationHistory(TestCase):
         self.item_change.save()
 
         self.history_change = History.objects.get(
-            action = History.Actions.UPDATE[0],
+            action = int(History.Actions.UPDATE),
             item_pk = self.item_change.pk,
             item_class = self.model._meta.model_name,
         )
@@ -72,7 +72,7 @@ class OrganizationHistory(TestCase):
 
         history = self.history_create.__dict__
 
-        assert history['action'] == int(History.Actions.ADD[0])
+        assert history['action'] == int(History.Actions.ADD)
         # assert type(history['action']) is int
 
 
@@ -125,7 +125,7 @@ class OrganizationHistory(TestCase):
 
         history = self.history_change.__dict__
 
-        assert history['action'] == int(History.Actions.UPDATE[0])
+        assert history['action'] == int(History.Actions.UPDATE)
         # assert type(history['action']) is int
 
 

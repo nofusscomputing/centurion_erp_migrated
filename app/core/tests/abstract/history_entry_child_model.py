@@ -21,7 +21,7 @@ class HistoryEntryChildItem:
 
         history = self.history_delete.__dict__
 
-        assert history['action'] == int(History.Actions.DELETE[0])
+        assert history['action'] == int(History.Actions.DELETE)
         # assert type(history['action']) is int
 
 
