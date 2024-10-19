@@ -69,6 +69,7 @@ from itam.viewsets import (
     index as itam_index_v2,
     device as device_v2,
     device_model as device_model_v2,
+    device_type as device_type_v2,
     software as software_v2,
     software_category as software_category_v2,
     software_version as software_version_v2,
