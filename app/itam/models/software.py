@@ -268,6 +268,10 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         verbose_name = 'Name'
     )
 
+    # model does not have it's own page
+    # as it's a secondary model. 
+    page_layout: list = []
+
     table_fields: list = [
         'name',
         'organization',
