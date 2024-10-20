@@ -94,6 +94,7 @@ class DeviceSoftwareModelSerializer(DeviceSoftwareBaseSerializer):
 
         read_only_fields = [
             'id',
+            'software',
             'category',
             'device',
             'installed',
