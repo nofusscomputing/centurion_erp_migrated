@@ -309,7 +309,7 @@ curl:
 
         """,
         'VERSION': '1.0.0',
-        'SCHEMA_PATH_PREFIX': '/api/v2/([a-z_]+)/|/api/',
+        'SCHEMA_PATH_PREFIX': '/api/v2/|/api/',
         'SERVE_INCLUDE_SCHEMA': False,
 
         'SWAGGER_UI_DIST': 'SIDECAR',
