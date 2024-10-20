@@ -356,7 +356,7 @@ class ConfigGroupsAPI(
     def test_api_field_type_version_url(self):
         """ Test for type for API Field
 
-        version.url field must be Hyperlink
+        version.url field must be str
         """
 
-        assert type(self.api_data['version']['url']) is Hyperlink
+        assert type(self.api_data['version']['url']) is str

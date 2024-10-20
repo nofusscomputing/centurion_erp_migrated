@@ -135,6 +135,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "device",
                         "icon": "device",
                         "link": "/itam/device"
+                    },
+                    {
+                        "display_name": "Operating System",
+                        "name": "operating_system",
+                        "link": "/itam/operating_system"
+                    },
+                    {
+                        "display_name": "Software",
+                        "name": "software",
+                        "link": "/itam/software"
                     }
                 ]
             },

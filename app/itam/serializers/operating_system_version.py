@@ -1,14 +1,17 @@
 from rest_framework.reverse import reverse
+
 from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
-from itam.models.software import Software, SoftwareVersion
-from itam.serializers.software import SoftwareBaseSerializer
+from core.serializers.manufacturer import ManufacturerBaseSerializer
+
+from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
+from itam.serializers.operating_system import OperatingSystemBaseSerializer
 
 
 
-class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
+class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -22,10 +25,10 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
     def my_url(self, item):
 
         return reverse(
-            "API:_api_v2_software_version-detail",
+            "API:_api_v2_operating_system_version-detail",
             request=self.context['view'].request,
             kwargs={
-                'software_id': item.software.pk,
+                'operating_system_id': self._context['view'].kwargs['operating_system_id'],
                 'pk': item.pk
             }
         )
@@ -33,8 +36,9 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     class Meta:
 
-        model = SoftwareVersion
+        model = OperatingSystemVersion
 
+        fields = '__all__'
         fields = [
             'id',
             'display_name',
@@ -50,7 +54,9 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
+class OperatingSystemVersionModelSerializer(OperatingSystemVersionBaseSerializer):
+
+
 
     _urls = serializers.SerializerMethodField('get_url')
 
@@ -58,10 +64,10 @@ class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
 
         return {
             '_self': reverse(
-                "API:_api_v2_software_version-detail",
+                "API:_api_v2_operating_system_version-detail",
                 request=self._context['view'].request,
                 kwargs={
-                    'software_id': item.software.pk,
+                    'operating_system_id': self._context['view'].kwargs['operating_system_id'],
                     'pk': item.pk
                 }
             ),
@@ -73,20 +79,28 @@ class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
                     'model_id': item.pk
                 }
             ),
+            'notes': reverse(
+                "API:_api_v2_operating_system_notes-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'operating_system_id': item.pk
+                }
+            ),
             'tickets': 'ToDo'
         }
 
 
+
     class Meta:
 
-        model = SoftwareVersion
+        model = OperatingSystemVersion
 
         fields =  [
              'id',
-            'display_name',
             'organization',
-            'software',
+            'display_name',
             'name',
+            'operating_system',
             'model_notes',
             'is_global',
             'created',
@@ -96,9 +110,9 @@ class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
 
         read_only_fields = [
             'id',
-            'display_name',
             'organization',
-            'software',
+            'display_name',
+            'operating_system',
             'created',
             'modified',
             '_urls',
@@ -112,19 +126,20 @@ class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
 
         if 'view' in self._context:
 
-            if 'software_id' in self._context['view'].kwargs:
+            if 'operating_system_id' in self._context['view'].kwargs:
 
-                software = Software.objects.get( id = self._context['view'].kwargs['software_id'] )
+                operating_system = OperatingSystem.objects.get(id=self._context['view'].kwargs['operating_system_id'])
 
-                self.validated_data['software'] = software
-                self.validated_data['organization'] = software.organization
+                self.validated_data['operating_system'] = operating_system
+                self.validated_data['organization'] = operating_system.organization
 
         return is_valid
 
 
 
-class SoftwareVersionViewSerializer(SoftwareVersionModelSerializer):
+class OperatingSystemVersionViewSerializer(OperatingSystemVersionModelSerializer):
 
-    software = SoftwareBaseSerializer( many = False, read_only = True )
+    operating_system = OperatingSystemBaseSerializer( many = False, read_only = True )
 
     organization = OrganizationBaseSerializer( many = False, read_only = True )
+

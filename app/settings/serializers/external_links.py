@@ -4,13 +4,11 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
-from core.serializers.manufacturer import ManufacturerBaseSerializer
-
-from itam.models.operating_system import OperatingSystem
+from settings.models.external_link import ExternalLink
 
 
 
-class OperatingSystemBaseSerializer(serializers.ModelSerializer):
+class ExternalLinkBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
@@ -19,14 +17,13 @@ class OperatingSystemBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_operating_system-detail", format="html"
+        view_name="API:_api_v2_external_link-detail", format="html"
     )
 
     class Meta:
 
-        model = OperatingSystem
+        model = ExternalLink
 
-        fields = '__all__'
         fields = [
             'id',
             'display_name',
@@ -42,16 +39,15 @@ class OperatingSystemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class OperatingSystemModelSerializer(OperatingSystemBaseSerializer):
 
-
+class ExternalLinkModelSerializer(ExternalLinkBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_operating_system-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("API:_api_v2_external_link-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'history': reverse(
                 "API:_api_v2_model_history-list",
                 request=self._context['view'].request,
@@ -60,25 +56,27 @@ class OperatingSystemModelSerializer(OperatingSystemBaseSerializer):
                     'model_id': item.pk
                 }
             ),
-            'notes': reverse("API:_api_v2_operating_system_notes-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
-            'tickets': 'ToDo',
-            'version': reverse("API:_api_v2_operating_system_version-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
+            'notes': reverse("API:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
         }
-
 
 
     class Meta:
 
-        model = OperatingSystem
+        model = ExternalLink
+
+        fields = '__all__'
 
         fields =  [
-             'id',
+            'id',
             'organization',
             'display_name',
-            'publisher',
             'name',
+            'template',
+            'colour',
+            'cluster',
+            'devices',
+            'software',
             'model_notes',
-            'is_global',
             'created',
             'modified',
             '_urls',
@@ -93,10 +91,6 @@ class OperatingSystemModelSerializer(OperatingSystemBaseSerializer):
         ]
 
 
-
-class OperatingSystemViewSerializer(OperatingSystemModelSerializer):
+class ExternalLinkViewSerializer(ExternalLinkModelSerializer):
 
     organization = OrganizationBaseSerializer( many = False, read_only = True )
-
-    publisher = ManufacturerBaseSerializer( many = False, read_only = True )
-

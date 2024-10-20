@@ -169,7 +169,7 @@ class Software(SoftwareCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "versions",
+                    "field": "version",
                 }
             ]
         },
@@ -242,12 +242,20 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
+        verbose_name = 'Software Version'
+
         verbose_name_plural = 'Software Versions'
 
 
     software = models.ForeignKey(
         Software,
+        blank = False,
         help_text = 'Software this version applies',
+        null = False,
         on_delete=models.CASCADE,
         verbose_name = 'Software',
     )
@@ -259,6 +267,17 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
         unique = False,
         verbose_name = 'Name'
     )
+
+    # model does not have it's own page
+    # as it's a secondary model. 
+    page_layout: list = []
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified',
+    ]
 
 
     @property
