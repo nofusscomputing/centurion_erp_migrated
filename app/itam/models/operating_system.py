@@ -96,7 +96,7 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "software_version",
+                    "field": "version",
                 }
             ]
         },
@@ -187,7 +187,9 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
 
     table_fields: list = [
         'name',
-        'installations'
+        'installations',
+        'created',
+        'modified',
     ]
 
 
