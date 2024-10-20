@@ -169,7 +169,7 @@ class Software(SoftwareCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "software_version",
+                    "field": "version",
                 }
             ]
         },
