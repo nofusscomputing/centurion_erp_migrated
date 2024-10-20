@@ -61,7 +61,8 @@ class OperatingSystemModelSerializer(OperatingSystemBaseSerializer):
                 }
             ),
             'notes': reverse("API:_api_v2_operating_system_notes-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
-            'tickets': 'ToDo'
+            'tickets': 'ToDo',
+            'version': reverse("API:_api_v2_operating_system_version-list", request=self._context['view'].request, kwargs={'operating_system_id': item.pk}),
         }
 
 
@@ -69,8 +70,6 @@ class OperatingSystemModelSerializer(OperatingSystemBaseSerializer):
     class Meta:
 
         model = OperatingSystem
-
-        fields = '__all__'
 
         fields =  [
              'id',
