@@ -79,7 +79,7 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
                     "left": [
                         'organization',
                         'publisher',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
