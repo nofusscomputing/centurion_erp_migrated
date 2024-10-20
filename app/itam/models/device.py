@@ -6,6 +6,8 @@ from datetime import timedelta
 from django.db import models
 from django.forms import ValidationError
 
+from rest_framework import serializers
+
 from access.fields import *
 from access.models import TenancyObject
 
@@ -124,7 +126,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self)):
 
-            raise ValidationError(f'UUID must be formated to match regex {str(pattern)}')
+            raise serializers.ValidationError(
+                f'UUID must be formated to match regex {str(pattern)}',
+                code = 'invalid_uuid'
+            )
 
 
     def validate_hostname_format(self):
@@ -133,9 +138,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self).lower()):
 
-            raise ValidationError(
+            raise serializers.ValidationError(
                 '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
-                and have as interior characters only letters, digits, and hyphen.'''
+                and have as interior characters only letters, digits, and hyphen.''',
+                code = 'invalid_hostname'
             )
 
 

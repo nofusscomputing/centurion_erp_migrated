@@ -72,10 +72,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
         }
 
 
-    rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
-
     context = serializers.SerializerMethodField('get_cont')
-
 
     def get_cont(self, item) -> dict:
 
@@ -90,7 +87,9 @@ class DeviceModelSerializer(DeviceBaseSerializer):
         context: dict = {}
 
         return context
-    
+
+
+    rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
 
     def get_rendered_config(self, item):
 
@@ -98,6 +97,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
 
     status_icon = IconField(read_only = True, label='')
+
 
     class Meta:
 
