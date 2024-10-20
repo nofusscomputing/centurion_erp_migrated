@@ -2,6 +2,7 @@ from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
+from rest_framework.fields import empty
 
 from access.serializers.organization import OrganizationBaseSerializer
 
@@ -94,9 +95,7 @@ class DeviceSoftwareModelSerializer(DeviceSoftwareBaseSerializer):
 
         read_only_fields = [
             'id',
-            'software',
             'category',
-            'device',
             'installed',
             'installedversion',
             'organization',
@@ -104,6 +103,17 @@ class DeviceSoftwareModelSerializer(DeviceSoftwareBaseSerializer):
             'modified',
             '_urls',
         ]
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+
+        super().__init__(instance=instance, data=data, **kwargs)
+
+        if isinstance(self.instance, DeviceSoftware):
+                
+            self.fields.fields['device'].read_only = True
+
+            self.fields.fields['software'].read_only = True
+
 
 
     def is_valid(self, *, raise_exception=False):
