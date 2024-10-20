@@ -84,4 +84,8 @@ class DeviceModel(DeviceCommonFieldsName, SaveHistory):
 
     def __str__(self):
 
-        return self.manufacturer.name + ' ' + self.name
+        if self.manufacturer:
+
+            return self.manufacturer.name + ' ' + self.name
+
+        return self.name
