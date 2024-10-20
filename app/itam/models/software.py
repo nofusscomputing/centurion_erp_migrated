@@ -253,7 +253,9 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     software = models.ForeignKey(
         Software,
+        blank = False,
         help_text = 'Software this version applies',
+        null = False,
         on_delete=models.CASCADE,
         verbose_name = 'Software',
     )
