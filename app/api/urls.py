@@ -80,6 +80,7 @@ from itam.viewsets import (
 
 from itim.viewsets import (
     index as itim_v2,
+    cluster_type as cluster_type_v2,
     service as service_v2,
 )
 
@@ -170,6 +171,8 @@ router.register('v2/itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/cluster_type', cluster_type_v2.ViewSet, basename='_api_v2_cluster_type')
+router.register('v2/settings/cluster_type/(?P<cluster_type_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_type_notes')
 router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
 router.register('v2/settings/device_type', device_type_v2.ViewSet, basename='_api_v2_device_type')
 router.register('v2/settings/external_link', external_link_v2.ViewSet, basename='_api_v2_external_link')
