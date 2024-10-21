@@ -528,6 +528,25 @@ class DeviceAPI(
 
 
 
+    def test_api_field_exists_urls_service(self):
+        """ Test for existance of API Field
+
+        _urls.service field must exist
+        """
+
+        assert 'service' in self.api_data['_urls']
+
+
+    def test_api_field_type_urls_service(self):
+        """ Test for type for API Field
+
+        _urls.service field must be str
+        """
+
+        assert type(self.api_data['_urls']['service']) is str
+
+
+
     def test_api_field_exists_urls_software(self):
         """ Test for existance of API Field
 
@@ -546,3 +565,20 @@ class DeviceAPI(
         assert type(self.api_data['_urls']['software']) is str
 
 
+
+    def test_api_field_exists_urls_tickets(self):
+        """ Test for existance of API Field
+
+        _urls.tickets field must exist
+        """
+
+        assert 'tickets' in self.api_data['_urls']
+
+
+    def test_api_field_type_urls_tickets(self):
+        """ Test for type for API Field
+
+        _urls.tickets field must be str
+        """
+
+        assert type(self.api_data['_urls']['tickets']) is str
