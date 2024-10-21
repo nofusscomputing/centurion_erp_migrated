@@ -64,7 +64,7 @@ class ServiceModelSerializer(ServiceBaseSerializer):
         }
 
 
-    rendered_config = serializers.JSONField(source='config_variables')
+    rendered_config = serializers.JSONField( source='config_variables', read_only = True )
 
 
     class Meta:
@@ -129,6 +129,141 @@ class ServiceModelSerializer(ServiceBaseSerializer):
                 self.validated_data['organization'] = device.organization
 
         return is_valid
+
+
+    def validate(self, attrs):
+
+        attrs = super().validate(attrs=attrs)
+        
+        cluster = None
+
+        config_key_variable = None
+
+        device = None
+
+        port = []
+
+        port_required = False
+
+        if self.instance:
+
+            cluster = self.instance.cluster
+
+            config_key_variable = self.instance.config_key_variable
+
+            device = self.instance.device
+
+            port = self.instance.port.all()
+
+
+        if 'is_template' in attrs:
+
+            is_template = attrs['is_template']
+
+        else:
+
+            is_template = self.fields.fields['is_template'].initial
+
+
+        if 'template' in attrs:
+
+            template = attrs['template']
+
+        else:
+
+            template = self.fields.fields['template'].initial
+
+
+        if 'device' in attrs:
+
+            device = attrs['device']
+
+
+        if 'cluster' in attrs:
+
+            cluster = attrs['cluster']
+
+        
+        if 'config_key_variable' in attrs:
+
+            config_key_variable = attrs['config_key_variable']
+
+
+        if 'port' in attrs:
+
+            port = attrs['port']
+
+
+        if not is_template and not template:
+
+            if not device and not cluster:
+
+                raise serializers.ValidationError(
+                    detail = 'A Service must be assigned to either a "Cluster" or a "Device".',
+                    code = 'one_of_cluster_or_device'
+                )
+
+
+            if device and cluster:
+
+                raise serializers.ValidationError(
+                    detail = 'A Service must only be assigned to either a "Cluster" or a "Device". Not both.',
+                    code = 'either_cluster_or_device'
+                )
+
+            if len(port) == 0:
+
+               port_required = True
+
+
+        if template:
+
+            if len(template.port.all()) == 0 and len(port) == 0:
+
+                port_required = True
+
+
+        if not is_template and not config_key_variable:
+
+            raise serializers.ValidationError(
+                detail = {
+                    'config_key_variable': 'Configuration Key must be specified'
+                },
+                code = 'required'
+            )
+
+        if 'dependent_service' in attrs:
+
+            if len(attrs['dependent_service']) > 0:
+
+                for dependency in attrs['dependent_service']:
+
+                    if hasattr(self.instance, 'pk'):
+
+                        query = Service.objects.filter(
+                            dependent_service = self.instance.pk,
+                            id = dependency.id,
+                        )
+
+                        if query.exists():
+
+                            raise serializers.ValidationError(
+                                detail = {
+                                    'dependent_service': 'A dependent service already depends upon this service. Circular dependencies are not allowed.'
+                                },
+                                code = 'no_circular_dependencies'
+                            )
+
+        if port_required:
+
+             raise serializers.ValidationError(
+                detail = {
+                    'port': 'Port(s) must be assigned to a service.'
+                },
+                code = 'required'
+            )
+
+        return attrs
 
 
 
