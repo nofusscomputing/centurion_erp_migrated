@@ -67,7 +67,6 @@ class Port(TenancyObject):
     protocol = models.CharField(
         blank = False,
         choices=Protocol.choices,
-        default = Protocol.TCP,
         help_text = 'Layer 4 Network Protocol',
         max_length = 3,
         verbose_name = 'Protocol',
