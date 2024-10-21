@@ -208,7 +208,7 @@ class Cluster(TenancyObject):
                         'organization',
                         'parent_cluster',
                         'cluster_type',
-                        'name'
+                        'name',
                         'is_global',
                     ],
                     "right": [
