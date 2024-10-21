@@ -29,6 +29,6 @@ class Index(CommonViewSet):
                 "cluster": "ToDo",
                 "incident": "ToDo",
                 "problem": "ToDo",
-                "service": "ToDo",
+                "service": reverse('API:_api_v2_service-list', request=request),
             }
         )
