@@ -1,8 +1,13 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from itim.serializers.service import Service, ServiceModelSerializer, ServiceViewSerializer
-
 from api.viewsets.common import ModelViewSet
+
+from itim.serializers.service import (
+    Service,
+    ServiceModelSerializer,
+    ServiceViewSerializer
+)
+
 
 
 @extend_schema_view(
@@ -15,7 +20,27 @@ from api.viewsets.common import ModelViewSet
     )
 class ViewSet(ModelViewSet):
 
+    filterset_fields = [
+        'cluster',
+        'port',
+    ]
+
+    search_fields = [
+        'name',
+    ]
+
     model = Service
+
+
+    def get_queryset(self):
+
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(device_id=self.kwargs['device_id'])
+
+        self.queryset =  queryset
+
+        return self.queryset
 
 
     def get_serializer_class(self):
@@ -29,14 +54,3 @@ class ViewSet(ModelViewSet):
 
 
         return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
-
-
-    def get_queryset(self):
-
-        queryset = super().queryset()
-
-        queryset = queryset.filter(device_id=self.kwargs['device_id'])
-
-        self.queryset =  queryset
-
-        return self.queryset
