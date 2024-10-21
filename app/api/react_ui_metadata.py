@@ -149,6 +149,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 ]
             },
             {
+                "display_name": "ITIM",
+                "name": "itim",
+                "pages": [
+                    {
+                        "display_name": "Services",
+                        "name": "service",
+                        "link": "/itim/service"
+                    },
+                ]
+            },
+            {
                 "display_name": "Config Management",
                 "name": "config_management",
                 "icon": "ansible",

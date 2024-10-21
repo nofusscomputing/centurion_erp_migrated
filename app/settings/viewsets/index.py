@@ -60,6 +60,15 @@ class Index(CommonViewSet):
                     "model": "software_category"
                 }
             ]
+        },
+        {
+            "name": "ITIM",
+            "links": [
+                {
+                    "name": "Cluster Type",
+                    "model": "cluster_type"
+                },
+            ]
         }
     ]
 
@@ -72,6 +81,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "device_type": reverse('API:_api_v2_device_type-list', request=request),
                 "external_link": reverse('API:_api_v2_external_link-list', request=request),
