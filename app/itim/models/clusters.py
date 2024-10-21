@@ -213,6 +213,7 @@ class Cluster(TenancyObject):
                     ],
                     "right": [
                         'model_notes',
+                        'resources',
                         'created',
                         'modified',
                     ]
