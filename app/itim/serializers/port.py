@@ -70,6 +70,7 @@ class PortModelSerializer(PortBaseSerializer):
         fields =  [
              'id',
             'organization',
+            'display_name',
             'name',
             'model_notes',
             'number',
