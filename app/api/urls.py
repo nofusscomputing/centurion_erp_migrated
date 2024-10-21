@@ -79,7 +79,8 @@ from itam.viewsets import (
 )
 
 from itim.viewsets import (
-    index as itim_v2
+    index as itim_v2,
+    service as service_v2,
 )
 
 from project_management.viewsets import (
@@ -163,6 +164,7 @@ router.register('v2/itam/software/(?P<software_id>[0-9]+)/notes', notes_v2.ViewS
 router.register('v2/itam/software/(?P<software_id>[0-9]+)/version', software_version_v2.ViewSet, basename='_api_v2_software_version')
 
 router.register('v2/itim', itim_v2.Index, basename='_api_v2_itim_home')
+router.register('v2/itim/service', service_v2.ViewSet, basename='_api_v2_service')
 router.register('v2/itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
