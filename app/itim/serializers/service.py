@@ -1,13 +1,14 @@
-from rest_framework.reverse import reverse
+from rest_framework.fields import empty
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
-
-from itam.serializers.device import DeviceBaseSerializer
 
 from itim.serializers.cluster import ClusterBaseSerializer
 from itim.serializers.port import PortBaseSerializer
 from itim.models.services import Service
+
+from itam.serializers.device import Device, DeviceBaseSerializer
 
 
 
@@ -99,6 +100,35 @@ class ServiceModelSerializer(ServiceBaseSerializer):
             'modified',
             '_urls',
         ]
+
+
+    def get_field_names(self, declared_fields, info):
+
+        if 'view' in self._context:
+
+            if 'device_id' in self._context['view'].kwargs:
+                    
+                self.Meta.read_only_fields += [ 'cluster', 'device', 'organization', 'is_global' ]
+
+        fields = super().get_field_names(declared_fields, info)
+
+        return fields
+
+
+    def is_valid(self, *, raise_exception=False):
+
+        is_valid = super().is_valid(raise_exception=raise_exception)
+
+        if 'view' in self._context:
+
+            if 'device_id' in self._context['view'].kwargs:
+
+                device = Device.objects.get( id = self._context['view'].kwargs['device_id'] )
+
+                self.validated_data['device'] = device
+                self.validated_data['organization'] = device.organization
+
+        return is_valid
 
 
 
