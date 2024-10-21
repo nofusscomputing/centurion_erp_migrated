@@ -111,18 +111,20 @@ class ClusterModelSerializer(ClusterBaseSerializer):
         is_valid = super().is_valid(raise_exception=raise_exception)
 
 
-        if hasattr(self.instance, 'id') and self.validated_data['parent_cluster']:
+        if 'parent_cluster' in self.validated_data:
 
-            if self.validated_data['parent_cluster'].id == self.instance.id:
+            if hasattr(self.instance, 'id') and self.validated_data['parent_cluster']:
 
-                is_valid = False
+                if self.validated_data['parent_cluster'].id == self.instance.id:
 
-                raise serializers.ValidationError(
-                    detail = {
-                        "parent_cluster": "Cluster can't have itself as its parent cluster"
-                    },
-                    code = 'parent_not_self'
-                )
+                    is_valid = False
+
+                    raise serializers.ValidationError(
+                        detail = {
+                            "parent_cluster": "Cluster can't have itself as its parent cluster"
+                        },
+                        code = 'parent_not_self'
+                    )
 
         return is_valid
 
