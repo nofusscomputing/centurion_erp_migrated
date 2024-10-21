@@ -68,6 +68,10 @@ class Index(CommonViewSet):
                     "name": "Cluster Type",
                     "model": "cluster_type"
                 },
+                {
+                    "name": "Service Port",
+                    "model": "port"
+                },
             ]
         }
     ]
@@ -87,6 +91,7 @@ class Index(CommonViewSet):
                 "external_link": reverse('API:_api_v2_external_link-list', request=request),
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
+                "port": reverse('API:_api_v2_port-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
             }
         )
