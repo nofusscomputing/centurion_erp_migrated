@@ -62,7 +62,14 @@ class ClusterModelSerializer(ClusterBaseSerializer):
         }
 
 
-    rendered_config = serializers.JSONField()
+    rendered_config = serializers.JSONField( read_only = True)
+    
+    resources = serializers.CharField(
+        label = 'Available Resources',
+        read_only = True,
+        initial = 'xx/yy CPU, xx/yy RAM, xx/yy Storage',
+        default = 'xx/yy CPU, xx/yy RAM, xx/yy Storage',
+    )
 
 
     class Meta:
@@ -77,6 +84,7 @@ class ClusterModelSerializer(ClusterBaseSerializer):
             'model_notes',
             'parent_cluster',
             'cluster_type',
+            'resources',
             'config',
             'rendered_config',
             'nodes',
@@ -91,10 +99,30 @@ class ClusterModelSerializer(ClusterBaseSerializer):
             'id',
             'display_name',
             'rendered_config',
+            'resources',
             'created',
             'modified',
             '_urls',
         ]
+
+
+    def is_valid(self, *, raise_exception=False):
+
+        is_valid = super().is_valid(raise_exception=False)
+
+
+        if hasattr(self.instance, 'id') and self.validated_data['parent_cluster']:
+
+            if self.validated_data['parent_cluster'].id == self.instance.id:
+
+                is_valid = False
+
+                raise serializers.ValidationError(
+                    detail = "Cluster can't have itself as its parent cluster",
+                    code = 'parent_not_self'
+                )
+
+        return is_valid
 
 
 
