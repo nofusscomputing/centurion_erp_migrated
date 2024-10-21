@@ -82,6 +82,7 @@ from itim.viewsets import (
     index as itim_v2,
     cluster as cluster_v2,
     cluster_type as cluster_type_v2,
+    port as port_v2,
     service as service_v2,
 )
 
@@ -182,6 +183,8 @@ router.register('v2/settings/external_link', external_link_v2.ViewSet, basename=
 router.register('v2/settings/knowledge_base_category', knowledge_base_category_v2.ViewSet, basename='_api_v2_knowledge_base_category')
 router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_api_v2_manufacturer')
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
+router.register('v2/settings/port', port_v2.ViewSet, basename='_api_v2_port')
+router.register('v2/settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
 router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 
 urlpatterns = [
