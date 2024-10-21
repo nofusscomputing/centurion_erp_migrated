@@ -23,9 +23,9 @@ class Port(TenancyObject):
             'protocol',
         ]
 
-        verbose_name = "Protocol"
+        verbose_name = "Port"
 
-        verbose_name_plural = "Protocols"
+        verbose_name_plural = "Ports"
 
 
     class Protocol(models.TextChoices):
