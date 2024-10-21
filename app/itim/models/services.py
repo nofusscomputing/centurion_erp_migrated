@@ -334,23 +334,22 @@ class Service(TenancyObject):
     @property
     def config_variables(self):
 
-        if self.is_template:
+        config: dict = {}
 
-            return self.config
 
         if self.template:
 
-            template_config: dict = Service.objects.get(id=self.template.id).config
+            if self.template.config:
 
-            template_config.update(self.config)
+                config.update(self.template.config)
 
-            return template_config
 
-        else:
+        if self.config:
 
-            return self.config
+            config.update(self.config)
 
-        return None
+        return config
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
