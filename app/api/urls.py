@@ -84,6 +84,7 @@ from itim.viewsets import (
     cluster_type as cluster_type_v2,
     port as port_v2,
     service as service_v2,
+    service_device as service_device_v2
 )
 
 from project_management.viewsets import (
@@ -158,6 +159,7 @@ router.register('v2/core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', hist
 router.register('v2/itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 router.register('v2/itam/device', device_v2.ViewSet, basename='_api_v2_device')
 router.register('v2/itam/device/(?P<device_id>[0-9]+)/software', device_software_v2.ViewSet, basename='_api_v2_device_software')
+router.register('v2/itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
 router.register('v2/itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
 router.register('v2/itam/operating_system', operating_system_v2.ViewSet, basename='_api_v2_operating_system')
 router.register('v2/itam/operating_system/(?P<operating_system_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_operating_system_notes')
