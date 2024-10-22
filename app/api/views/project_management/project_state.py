@@ -9,7 +9,7 @@ from api.views.core.tickets import View
 from api.views.mixin import OrganizationPermissionAPI
 
 
-
+@extend_schema(deprecated = True )
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [

@@ -73,6 +73,15 @@ class Index(CommonViewSet):
                     "model": "port"
                 },
             ]
+        },
+        {
+            "name": "Project Management",
+            "links": [
+                {
+                    "name": "Project State",
+                    "model": "project_state"
+                },
+            ]
         }
     ]
 
@@ -92,6 +101,7 @@ class Index(CommonViewSet):
                 "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
                 "port": reverse('API:_api_v2_port-list', request=request),
+                "project_state": reverse('API:_api_v2_project_state-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
             }
         )
