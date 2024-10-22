@@ -1,5 +1,6 @@
-from rest_framework.reverse import reverse
 from rest_framework import serializers
+from rest_framework.fields import empty
+from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
@@ -60,7 +61,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
                 }
             ),
             'milestone': reverse("API:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
-            'notes': reverse("API:_api_v2_cluster_notes-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
+            'notes': reverse("API:_api_v2_project_notes-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'tickets': 'ToDo'
         }
 
@@ -102,6 +103,21 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             'modified',
             '_urls',
         ]
+
+
+
+    def __init__(self, instance=None, data=empty, **kwargs):
+
+        super().__init__(instance=instance, data=data, **kwargs)
+
+        if 'view' in self.context:
+
+            if not self.context['view'].is_import_user:
+
+                self.Meta.read_only_fields += [
+                    'external_ref',
+                    'external_system',
+                ]
 
 
 
