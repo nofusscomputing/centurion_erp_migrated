@@ -1,3 +1,13 @@
+## 1.2.1 (2024-10-22)
+
+### Fixes
+
+- **project_management**: Ensure user cant see projects for organizations they are apart of
+
+### Refactoring
+
+- **project_management**: dont order queryset for project
+
 ## 1.2.0 (2024-10-11)
 
 ### feat
