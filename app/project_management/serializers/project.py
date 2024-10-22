@@ -56,6 +56,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
                     'model_id': item.pk
                 }
             ),
+            'milestone': reverse("API:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'notes': reverse("API:_api_v2_cluster_notes-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
             'tickets': 'ToDo'
         }
@@ -64,8 +65,6 @@ class ProjectModelSerializer(ProjectBaseSerializer):
     class Meta:
 
         model = Project
-
-        fields = '__all__'
 
         fields =  [
             'id',
@@ -87,8 +86,6 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             'manager_team',
             'team_members',
             'is_deleted',
-
-
             'is_global',
             'created',
             'modified',
