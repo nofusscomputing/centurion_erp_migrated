@@ -16,7 +16,7 @@ from project_management.models.projects import Project
 from settings.models.user_settings import UserSettings
 
 
-
+@extend_schema(deprecated = True )
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     filterset_fields = [
