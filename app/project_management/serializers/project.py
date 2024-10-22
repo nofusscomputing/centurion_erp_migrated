@@ -6,6 +6,10 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from itam.serializers.device import DeviceBaseSerializer
 
+from app.serializers.user import UserBaseSerializer
+
+from access.serializers.teams import TeamBaseSerializer
+
 from project_management.models.projects import Project
 from project_management.serializers.project_states import ProjectStateBaseSerializer
 from project_management.serializers.project_type import ProjectTypeBaseSerializer
@@ -123,8 +127,14 @@ class ProjectModelSerializer(ProjectBaseSerializer):
 
 class ProjectViewSerializer(ProjectModelSerializer):
 
+    manager_team = TeamBaseSerializer( many = False, read_only = True )
+
+    manager_user = UserBaseSerializer( many = False, read_only = True )
+
     organization = OrganizationBaseSerializer( many = False, read_only = True )
 
     state = ProjectStateBaseSerializer( many = False, read_only = True )
+
+    team_members = UserBaseSerializer( many = True, read_only = True )
 
     project_type = ProjectTypeBaseSerializer( many = False, read_only = True )

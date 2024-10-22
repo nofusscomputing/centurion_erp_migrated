@@ -176,6 +176,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     }
                 ]
             },
+            {
+                "display_name": "Project Management",
+                "name": "project_management",
+                "pages": [
+                    {
+                        "display_name": "Projects",
+                        "name": "project",
+                        "link": "/project_management/project"
+                    }
+                ]
+            },
 
             {
                 "display_name": "Settings",
