@@ -241,11 +241,11 @@ class Project(ProjectCommonFieldsName):
         },
         {
             "name": "Milestones",
-            "slug": "milestones",
+            "slug": "milestone",
             "sections": [
                 {
                     "layout": "table",
-                    "field": "milestones",
+                    "field": "milestone",
                 }
             ]
         },
