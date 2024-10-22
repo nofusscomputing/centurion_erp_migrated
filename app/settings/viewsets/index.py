@@ -81,6 +81,10 @@ class Index(CommonViewSet):
                     "name": "Project State",
                     "model": "project_state"
                 },
+                {
+                    "name": "Project Type",
+                    "model": "project_type"
+                },
             ]
         }
     ]
@@ -102,6 +106,7 @@ class Index(CommonViewSet):
                 "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
                 "port": reverse('API:_api_v2_port-list', request=request),
                 "project_state": reverse('API:_api_v2_project_state-list', request=request),
+                "project_type": reverse('API:_api_v2_project_type-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
             }
         )
