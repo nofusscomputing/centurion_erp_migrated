@@ -8,6 +8,8 @@ from project_management.serializers.project import (
     ProjectViewSerializer
 )
 
+from settings.models.user_settings import UserSettings
+
 
 
 @extend_schema_view(
@@ -64,6 +66,8 @@ class ViewSet( ModelViewSet ):
         'state',
     ]
 
+    is_import_user: bool = False
+
     search_fields = [
         'name',
         'description',
@@ -75,7 +79,15 @@ class ViewSet( ModelViewSet ):
 
     view_description = 'Physical Devices'
 
+
     def get_serializer_class(self):
+
+        if self.has_organization_permission(
+            organization = UserSettings.objects.get(user = self.request.user).default_organization.id,
+            permissions_required = ['project_management.import_project']
+        ) or self.request.user.is_superuser:
+
+            self.is_import_user = True
 
         if (
             self.action == 'list'

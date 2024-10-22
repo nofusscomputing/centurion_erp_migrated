@@ -97,6 +97,16 @@ class NoteModelSerializer(NoteBaseSerializer):
                 }
             )
 
+        elif 'project_id' in self._kwargs['context']['view'].kwargs:
+
+            _self = reverse("API:_api_v2_project_notes-detail", 
+                request=self._context['view'].request,
+                kwargs={
+                    'project_id': self._kwargs['context']['view'].kwargs['project_id'],
+                    'pk': item.pk
+                }
+            )
+
         elif 'software_id' in self._kwargs['context']['view'].kwargs:
 
             _self = reverse("API:_api_v2_software_notes-detail", 
