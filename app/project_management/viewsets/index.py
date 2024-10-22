@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "project": "ToDo",
+                "project": reverse('API:_api_v2_project-list', request=request),
             }
         )
