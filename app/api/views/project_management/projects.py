@@ -98,6 +98,17 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
 
+    def get_queryset(self):
+
+        if self.request.user.is_superuser:
+
+            return self.queryset.filter()
+
+        else:
+
+            return self.queryset.filter(Q(organization__in=self.user_organizations()) | Q(is_global = True))
+
+
     def get_view_name(self):
         if self.detail:
             return "Project"
