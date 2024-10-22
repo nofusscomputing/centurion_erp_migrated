@@ -6,6 +6,7 @@ from access.serializers.organization import OrganizationBaseSerializer
 from itam.serializers.device import DeviceBaseSerializer
 
 from project_management.models.projects import Project
+from project_management.serializers.project_states import ProjectStateBaseSerializer
 
 
 
@@ -38,6 +39,7 @@ class ProjectBaseSerializer(serializers.ModelSerializer):
             'name',
             'url',
         ]
+
 
 
 class ProjectModelSerializer(ProjectBaseSerializer):
@@ -105,3 +107,5 @@ class ProjectModelSerializer(ProjectBaseSerializer):
 class ProjectViewSerializer(ProjectModelSerializer):
 
     organization = OrganizationBaseSerializer( many = False, read_only = True )
+
+    state = ProjectStateBaseSerializer( many = False, read_only = True )

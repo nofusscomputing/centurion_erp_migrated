@@ -82,7 +82,7 @@ class ProjectState(ProjectStateCommonFields):
                         'is_completed',
                     ],
                     "right": [
-                        'model_notes'
+                        'model_notes',
                         'created',
                         'modified',
                     ]
