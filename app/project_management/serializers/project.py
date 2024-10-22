@@ -7,6 +7,7 @@ from itam.serializers.device import DeviceBaseSerializer
 
 from project_management.models.projects import Project
 from project_management.serializers.project_states import ProjectStateBaseSerializer
+from project_management.serializers.project_type import ProjectTypeBaseSerializer
 
 
 
@@ -109,3 +110,5 @@ class ProjectViewSerializer(ProjectModelSerializer):
     organization = OrganizationBaseSerializer( many = False, read_only = True )
 
     state = ProjectStateBaseSerializer( many = False, read_only = True )
+
+    project_type = ProjectTypeBaseSerializer( many = False, read_only = True )
