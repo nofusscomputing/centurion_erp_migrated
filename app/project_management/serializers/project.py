@@ -103,26 +103,28 @@ class ProjectModelSerializer(ProjectBaseSerializer):
         read_only_fields = [
             'id',
             'display_name',
+            'external_ref',
+            'external_system',
             'created',
             'modified',
             '_urls',
         ]
 
 
-    def get_field_names(self, declared_fields, info):
 
-        if 'view' in self.context:
+class ProjectImportSerializer(ProjectModelSerializer):
 
-            if not self.context['view'].is_import_user:
 
-                self.Meta.read_only_fields += [
-                    'external_ref',
-                    'external_system',
-                ]
+    class Meta(ProjectModelSerializer.Meta):
 
-        fields = super().get_field_names(declared_fields, info)
 
-        return fields
+        read_only_fields = [
+            'id',
+            'display_name',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
 
 
