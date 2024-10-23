@@ -2,7 +2,8 @@ import pytest
 
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.shortcuts import reverse
+from django.test import Client, TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 
@@ -109,6 +110,29 @@ class ProjectPermissionsAPI(TestCase, APIPermissions):
         delete_team.permissions.set([delete_permissions])
 
 
+        import_permissions = Permission.objects.get(
+                codename = 'import_' + self.model._meta.model_name,
+                content_type = ContentType.objects.get(
+                    app_label = self.model._meta.app_label,
+                    model = self.model._meta.model_name,
+                )
+            )
+
+        import_team = Team.objects.create(
+            team_name = 'import_team',
+            organization = organization,
+        )
+
+        import_team.permissions.set( [ import_permissions, add_permissions ] )
+
+
+        self.import_user = User.objects.create_user(username="test_user_import", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = import_team,
+            user = self.import_user
+        )
+
+
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
@@ -130,6 +154,14 @@ class ProjectPermissionsAPI(TestCase, APIPermissions):
         self.add_data = {
             'name': 'team-post',
             'organization': self.organization.id,
+        }
+
+
+        self.add_data_import_fields = {
+            'name': 'team-post',
+            'organization': self.organization.id,
+            'external_ref': 1,
+            'external_system': int(Project.Ticket_ExternalSystem.CUSTOM_1)
         }
 
 
@@ -170,4 +202,58 @@ class ProjectPermissionsAPI(TestCase, APIPermissions):
         TeamUsers.objects.create(
             team = different_organization_team,
             user = self.different_organization_user
+        )
+
+
+
+    def test_add_has_permission_no_import_fields(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.add_data_import_fields)
+
+        assert (
+            response.status_code == 201
+            and response.data['external_ref'] is None
+            and response.data['external_system'] is None
+        )
+
+
+
+    def test_add_has_permission_import_fields(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        client.force_login(self.import_user)
+        response = client.post(url, data=self.add_data_import_fields)
+
+        assert (
+            response.status_code == 201
+            and response.data['external_ref'] == 1
+            and response.data['external_system'] == int(Project.Ticket_ExternalSystem.CUSTOM_1)
         )
