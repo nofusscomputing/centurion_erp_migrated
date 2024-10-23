@@ -109,10 +109,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
         ]
 
 
-
-    def __init__(self, instance=None, data=empty, **kwargs):
-
-        super().__init__(instance=instance, data=data, **kwargs)
+    def get_field_names(self, declared_fields, info):
 
         if 'view' in self.context:
 
@@ -122,6 +119,10 @@ class ProjectModelSerializer(ProjectBaseSerializer):
                     'external_ref',
                     'external_system',
                 ]
+
+        fields = super().get_field_names(declared_fields, info)
+
+        return fields
 
 
 
