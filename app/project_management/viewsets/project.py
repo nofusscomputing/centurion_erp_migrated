@@ -4,6 +4,7 @@ from api.viewsets.common import ModelViewSet
 
 from project_management.serializers.project import (
     Project,
+    ProjectImportSerializer,
     ProjectModelSerializer,
     ProjectViewSerializer
 )
@@ -66,8 +67,6 @@ class ViewSet( ModelViewSet ):
         'state',
     ]
 
-    is_import_user: bool = False
-
     search_fields = [
         'name',
         'description',
@@ -104,7 +103,7 @@ class ViewSet( ModelViewSet ):
                 permissions_required = ['project_management.import_project']
             ) or self.request.user.is_superuser:
 
-                self.is_import_user = True
+                return globals()[str( self.model._meta.verbose_name) + 'ImportSerializer']
 
 
         if (

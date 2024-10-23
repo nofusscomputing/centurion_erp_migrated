@@ -8,6 +8,7 @@ from access.models import Organization
 
 from project_management.serializers.project import (
     Project,
+    ProjectImportSerializer,
     ProjectModelSerializer
 )
 
@@ -112,7 +113,7 @@ class ProjectValidationAPI(
             is_import_user = True
 
 
-        serializer = ProjectModelSerializer(
+        serializer = ProjectImportSerializer(
             context = {
                 'view': MockView
             },
