@@ -82,20 +82,30 @@ class ViewSet( ModelViewSet ):
 
     def get_serializer_class(self):
 
+        organization = None
 
-        user_default_organization = UserSettings.objects.get(user = self.request.user).default_organization
+        if 'organization' in self.request._full_data:
 
-        if user_default_organization:
+            organization = self.request._full_data['organization']
 
-            if hasattr(user_default_organization, 'default_organization'):
+        elif self.queryset:
+        
+            if list(self.queryset) == 1:
+
+                obj = list(self.queryset)[0]
+
+                organization = obj.organization.id
 
 
-                if self.has_organization_permission(
-                    organization = user_default_organization.default_organization.id,
-                    permissions_required = ['project_management.import_project']
-                ) or self.request.user.is_superuser:
+        if organization:
 
-                    self.is_import_user = True
+            if self.has_organization_permission(
+                organization = organization,
+                permissions_required = ['project_management.import_project']
+            ) or self.request.user.is_superuser:
+
+                self.is_import_user = True
+
 
         if (
             self.action == 'list'
