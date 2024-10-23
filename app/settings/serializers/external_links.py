@@ -64,8 +64,6 @@ class ExternalLinkModelSerializer(ExternalLinkBaseSerializer):
 
         model = ExternalLink
 
-        fields = '__all__'
-
         fields =  [
             'id',
             'organization',
