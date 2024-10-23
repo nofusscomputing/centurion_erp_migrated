@@ -8,7 +8,7 @@ from api.serializers.project_management.project_type import ProjectType, Project
 from api.views.mixin import OrganizationPermissionAPI
 
 
-
+@extend_schema(deprecated = True )
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [

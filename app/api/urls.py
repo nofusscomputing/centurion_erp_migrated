@@ -88,7 +88,11 @@ from itim.viewsets import (
 )
 
 from project_management.viewsets import (
-    index as project_management_v2
+    index as project_management_v2,
+    project as project_v2,
+    project_milestone as project_milestone_v2,
+    project_state as project_state_v2,
+    project_type as project_type_v2,
 )
 
 from settings.viewsets import (
@@ -175,6 +179,9 @@ router.register('v2/itim/service', service_v2.ViewSet, basename='_api_v2_service
 router.register('v2/itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
 router.register('v2/project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
+router.register('v2/project_management/project', project_v2.ViewSet, basename='_api_v2_project')
+router.register('v2/project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
+router.register('v2/itim/project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
 router.register('v2/settings/cluster_type', cluster_type_v2.ViewSet, basename='_api_v2_cluster_type')
@@ -187,6 +194,8 @@ router.register('v2/settings/manufacturer', manufacturer_v2.ViewSet, basename='_
 router.register('v2/settings/manufacturer/(?P<manufacturer_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_manufacturer_notes')
 router.register('v2/settings/port', port_v2.ViewSet, basename='_api_v2_port')
 router.register('v2/settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_port_notes')
+router.register('v2/settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
+router.register('v2/settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 
 urlpatterns = [

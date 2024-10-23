@@ -16,7 +16,7 @@ from project_management.models.projects import Project
 from settings.models.user_settings import UserSettings
 
 
-
+@extend_schema(deprecated = True )
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     filterset_fields = [
@@ -39,12 +39,18 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.has_organization_permission(
-            organization = UserSettings.objects.get(user = self.request.user).default_organization,
-            permissions_required = ['project_management.import_project']
-        ) or self.request.user.is_superuser:
+        user_default_organization = UserSettings.objects.get(user = self.request.user).default_organization
 
-            return ProjectImportSerializer
+        if user_default_organization:
+
+            if hasattr(user_default_organization, 'default_organization'):
+
+                if self.has_organization_permission(
+                    organization = user_default_organization.default_organization.id,
+                    permissions_required = ['project_management.import_project']
+                ) or self.request.user.is_superuser:
+
+                    return ProjectImportSerializer
 
         return ProjectSerializer
 
