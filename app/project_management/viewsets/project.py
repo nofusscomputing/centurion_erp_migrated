@@ -84,9 +84,9 @@ class ViewSet( ModelViewSet ):
 
         organization = None
 
-        if 'organization' in self.request._full_data:
+        if 'organization' in self.request.data:
 
-            organization = self.request._full_data['organization']
+            organization = self.request.data['organization']
 
         elif self.queryset:
         
