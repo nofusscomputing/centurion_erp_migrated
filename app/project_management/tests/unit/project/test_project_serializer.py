@@ -119,20 +119,14 @@ class ProjectValidationAPI(
             data={
                 "name": 'another project',
                 "organization": self.organization.id,
-                'external_ref': 1,
-                'external_system': int(Project.Ticket_ExternalSystem.CUSTOM_1)
+                "external_ref": 1,
+                "external_system": int(Project.Ticket_ExternalSystem.CUSTOM_1)
             },
         )
 
         serializer.is_valid(raise_exception = True)
 
         serializer.save()
-
-        print(f'[Debug] instance {serializer.instance.__dict__}')
-
-        for project in Project.objects.all():
-
-            print(f'[Trace] project found: {project.__dict__}')
 
         assert (
             serializer.instance.external_ref == 1 and 
