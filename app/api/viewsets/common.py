@@ -200,6 +200,19 @@ class ModelViewSet(
     pass
 
 
+
+class ModelRetrieveUpdateViewSet(
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+    ModelViewSetBase
+):
+    """ Use for models that you wish to update and view ONLY!"""
+
+    pass
+
+
+
 class ReadOnlyModelViewSet(
     viewsets.ReadOnlyModelViewSet,
     ModelViewSetBase
