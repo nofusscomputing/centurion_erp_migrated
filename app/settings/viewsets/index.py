@@ -108,6 +108,7 @@ class Index(CommonViewSet):
         return Response(
             {
                 "app_settings": reverse('API:_api_v2_app_settings-detail', request=request, kwargs={'pk': 1}),
+                "celery_log": reverse('API:_api_v2_celery_log-list', request=request),
                 "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "device_type": reverse('API:_api_v2_device_type-list', request=request),
