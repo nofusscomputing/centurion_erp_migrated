@@ -83,9 +83,9 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         elif view.suffix == 'List':
 
-            if hasattr(view, 'model'):
+            if hasattr(view, 'table_fields'):
 
-                metadata['table_fields'] = view.model.table_fields
+                metadata['table_fields'] = view.get_table_fields()
 
             if view.documentation:
 
