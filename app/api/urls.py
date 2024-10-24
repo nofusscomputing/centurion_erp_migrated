@@ -62,7 +62,8 @@ from config_management.viewsets import (
 from core.viewsets import (
     history as history_v2,
     notes as notes_v2,
-    manufacturer as manufacturer_v2
+    manufacturer as manufacturer_v2,
+    celery_log as celery_log_v2
 )
 
 from itam.viewsets import (
@@ -201,6 +202,9 @@ router.register('v2/settings/project_state', project_state_v2.ViewSet, basename=
 router.register('v2/settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('v2/settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
+
+
+router.register('v2/settings/celery_log', celery_log_v2.ViewSet, basename='_api_v2_celery_log')
 
 urlpatterns = [
 
