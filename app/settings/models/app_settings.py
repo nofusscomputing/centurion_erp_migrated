@@ -111,6 +111,12 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
 
     page_layout: list = []
 
+
+    def get_organization(self):
+
+        return self.global_organization
+
+
     def clean(self):
         from django.core.exceptions import ValidationError
 
