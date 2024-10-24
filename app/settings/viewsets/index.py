@@ -118,5 +118,12 @@ class Index(CommonViewSet):
                 "project_state": reverse('API:_api_v2_project_state-list', request=request),
                 "project_type": reverse('API:_api_v2_project_type-list', request=request),
                 "software_category": reverse('API:_api_v2_software_category-list', request=request),
+                "user_settings": reverse(
+                    'API:_api_v2_user_settings-detail',
+                    request=request,
+                    kwargs={
+                        'pk': request.user.id 
+                    }
+                ),
             }
         )
