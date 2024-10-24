@@ -197,6 +197,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "name": "system",
                         "icon": "settings",
                         "link": "/settings"
+                    },
+                    {
+                        "display_name": "Task Log",
+                        "name": "celery_task_log",
+                        # "icon": "settings",
+                        "link": "/settings/celery_log"
                     }
                 ]
             }
