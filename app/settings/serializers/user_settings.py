@@ -73,15 +73,11 @@ class UserSettingsModelSerializer(UserSettingsBaseSerializer):
         #     '_urls',
         # ]
 
-        # read_only_fields = [
-        #     'id',
-        #     'display_name',
-        #     'created',
-        #     'modified',
-        #     '_urls',
-        # ]
+        read_only_fields = [
+            'user',
+        ]
 
 
 class UserSettingsViewSerializer(UserSettingsModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True )
+    default_organization = OrganizationBaseSerializer( many = False, read_only = True )
