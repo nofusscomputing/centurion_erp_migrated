@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import ModelRetrieveUpdateViewSet
 
 from settings.serializers.app_settings import (
     AppSettings,
@@ -57,7 +57,7 @@ from settings.serializers.app_settings import (
         }
     ),
 )
-class ViewSet(ModelViewSet):
+class ViewSet(ModelRetrieveUpdateViewSet):
 
     model = AppSettings
 
