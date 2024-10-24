@@ -18,6 +18,15 @@ class Index(CommonViewSet):
 
     page_layout: list = [
         {
+            "name": "Application",
+            "links": [
+                {
+                    "name": "Settings",
+                    "model": "app_settings"
+                }
+            ]
+        },
+        {
             "name": "Assistanace",
             "links": [
                 {
@@ -98,6 +107,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
+                "app_settings": reverse('API:_api_v2_app_settings-list', request=request),
                 "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
                 "device_model": reverse('API:_api_v2_device_model-list', request=request),
                 "device_type": reverse('API:_api_v2_device_type-list', request=request),
