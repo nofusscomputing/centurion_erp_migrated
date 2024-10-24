@@ -61,6 +61,11 @@ class UserSettings(UserSettingsCommonFields):
     )
 
 
+    def get_organization(self):
+
+        return self.default_organization
+
+
     @receiver(post_save, sender=User)
     def new_user_callback(sender, **kwargs):
         settings = UserSettings.objects.filter(user=kwargs['instance'])
