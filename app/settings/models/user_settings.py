@@ -30,6 +30,17 @@ class UserSettingsCommonFields(models.Model):
 
 class UserSettings(UserSettingsCommonFields):
 
+    class Meta:
+
+        ordering = [
+            'user'
+        ]
+
+        verbose_name = 'User Settings'
+
+        verbose_name_plural = 'User Settings'
+
+
     user = models.ForeignKey(
         User,
         blank= False,
