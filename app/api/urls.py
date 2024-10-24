@@ -96,6 +96,7 @@ from project_management.viewsets import (
 )
 
 from settings.viewsets import (
+    app_settings as app_settings_v2,
     external_link as external_link_v2,
     index as settings_index_v2,
 )
@@ -184,6 +185,7 @@ router.register('v2/project_management/project/(?P<project_id>[0-9]+)/milestone'
 router.register('v2/itim/project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
 
 router.register('v2/settings', settings_index_v2.Index, basename='_api_v2_settings_home')
+router.register('v2/settings/app_settings', app_settings_v2.ViewSet, basename='_api_v2_app_settings')
 router.register('v2/settings/cluster_type', cluster_type_v2.ViewSet, basename='_api_v2_cluster_type')
 router.register('v2/settings/cluster_type/(?P<cluster_type_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_type_notes')
 router.register('v2/settings/device_model', device_model_v2.ViewSet, basename='_api_v2_device_model')
