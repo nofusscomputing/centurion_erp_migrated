@@ -68,6 +68,13 @@ class CommonViewSet(
     _Mandatory_, Permission check class
     """
 
+    table_fields: list = []
+    """ Table layout list
+
+    _Optional_, used by metadata for the table fields and added to the HTTP/Options
+    method for detail view, Enables the UI can setup the table.
+    """
+
     view_description: str = None
 
     view_name: str = None
@@ -103,6 +110,23 @@ class CommonViewSet(
                     self.page_layout = []
 
         return self.page_layout
+
+
+    def get_table_fields(self):
+
+        if len(self.table_fields) < 1:
+
+            if hasattr(self, 'model'):
+
+                if hasattr(self.model, 'table_fields'):
+
+                    self.table_fields = self.model.table_fields
+
+                else:
+
+                    self.table_fields = []
+
+        return self.table_fields
 
 
     def get_view_description(self, html=False) -> str:
