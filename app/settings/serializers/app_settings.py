@@ -84,4 +84,4 @@ class AppSettingsModelSerializer(AppSettingsBaseSerializer):
 
 class AppSettingsViewSerializer(AppSettingsModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True )
+    global_organization = OrganizationBaseSerializer( many = False, read_only = True )
