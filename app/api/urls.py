@@ -99,6 +99,7 @@ from settings.viewsets import (
     app_settings as app_settings_v2,
     external_link as external_link_v2,
     index as settings_index_v2,
+    user_settings as user_settings_v2
 )
 
 
@@ -199,6 +200,7 @@ router.register('v2/settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, 
 router.register('v2/settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('v2/settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('v2/settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
+router.register('v2/settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
 
 urlpatterns = [
 
