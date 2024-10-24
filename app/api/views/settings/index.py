@@ -10,7 +10,7 @@ from rest_framework.reverse import reverse
 from core.http.common import Http
 
 
-
+@extend_schema( deprecated = True )
 class View(views.APIView):
 
     permission_classes = [
