@@ -26,6 +26,7 @@ from assistance.viewsets import (
     index as assistance_index_v2,
     knowledge_base as knowledge_base_v2,
     knowledge_base_category as knowledge_base_category_v2,
+    request as request_ticket_v2,
 )
 
 from config_management.viewsets import (
@@ -94,6 +95,7 @@ router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_i
 
 router.register('assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 router.register('assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
+router.register('assistance/ticket/request', request_ticket_v2.ViewSet, basename='_api_v2_ticket_request')
 
 
 router.register('base', base_index_v2.Index, basename='_api_v2_base_home')
