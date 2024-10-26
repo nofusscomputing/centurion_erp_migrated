@@ -22,15 +22,16 @@ class TicketComment(
     class Meta:
 
         ordering = [
+            'created',
             'ticket',
             'parent_id'
         ]
 
         unique_together = ('external_system', 'external_ref',)
 
-        verbose_name = "Comment"
+        verbose_name = "Ticket Comment"
 
-        verbose_name_plural = "Comments"
+        verbose_name_plural = "Ticket Comments"
 
 
 
