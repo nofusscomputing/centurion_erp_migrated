@@ -1,6 +1,14 @@
 from api.exceptions import UnknownTicketType
 from api.viewsets.common import ModelViewSet
 
+from assistance.serializers.request import (
+    RequestAddTicketModelSerializer,
+    RequestChangeTicketModelSerializer,
+    RequestTriageTicketModelSerializer,
+    RequestImportTicketModelSerializer,
+    RequestTicketModelSerializer,
+    RequestTicketViewSerializer
+)
 from core.serializers.ticket import (
     Ticket,
 )
