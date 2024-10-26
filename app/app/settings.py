@@ -274,12 +274,19 @@ if API_ENABLED:
         # 'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
         'TEST_REQUEST_DEFAULT_FORMAT': 'json',
         'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+        'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+        'DEFAULT_VERSION': 'v1',
+        'ALLOWED_VERSIONS': [
+            'v1',
+            'v2'
+        ]
     }
 
     SPECTACULAR_SETTINGS = {
-        'TITLE': 'ITSM API',
-        'DESCRIPTION': """This UI is intended to serve as the API documentation.
+        'TITLE': 'Centurion ERP API',
+        'DESCRIPTION': """This UI exists to server the purpose of being the API documentation.
 
+Centurion ERP's API is versioned, with [v1 Depreciated](/api/swagger) and [v2 as the current](/api/v2/docs).
 ## Authentication
 
 Access to the API is restricted and requires authentication. Available authentication methods are:
@@ -308,10 +315,9 @@ curl:
     ```
 
         """,
-        'VERSION': '1.0.0',
+        'VERSION': '',
         'SCHEMA_PATH_PREFIX': '/api/v2/|/api/',
         'SERVE_INCLUDE_SCHEMA': False,
-
         'SWAGGER_UI_DIST': 'SIDECAR',
         'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
         'REDOC_DIST': 'SIDECAR',

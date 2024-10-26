@@ -80,7 +80,7 @@ class SoftwareAPI(
         )
 
         client = Client()
-        url = reverse('API:_api_v2_software-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_software-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -308,3 +308,22 @@ class SoftwareAPI(
         """
 
         assert type(self.api_data['_urls']['version']) is str
+
+
+
+    def test_api_field_exists_urls_tickets(self):
+        """ Test for existance of API Field
+
+        _urls.tickets field must exist
+        """
+
+        assert 'tickets' in self.api_data['_urls']
+
+
+    def test_api_field_type_urls_tickets(self):
+        """ Test for type for API Field
+
+        _urls.tickets field must be str
+        """
+
+        assert type(self.api_data['_urls']['tickets']) is str

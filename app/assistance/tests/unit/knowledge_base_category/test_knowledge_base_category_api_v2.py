@@ -21,7 +21,7 @@ class KnowledgeBaseCategoryAPI(
 
     model = KnowledgeBaseCategory
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_knowledge_base_category'
 

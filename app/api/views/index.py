@@ -18,10 +18,10 @@ class Index(viewsets.ViewSet):
 
 
     def get_view_name(self):
-        return "API Index"
+        return "API"
 
     def get_view_description(self, html=False) -> str:
-        text = "My REST API"
+        text = "Centurion ERP Rest API"
         if html:
             return mark_safe(f"<p>{text}</p>")
         else:
@@ -32,15 +32,15 @@ class Index(viewsets.ViewSet):
 
         API: dict = {
             # "teams": reverse("_api_teams", request=request),
-            'assistance': reverse("API:_api_assistance", request=request),
-            "devices": reverse("API:device-list", request=request),
-            "config_groups": reverse("API:_api_config_groups", request=request),
-            'itim': reverse("API:_api_itim", request=request),
-            "organizations": reverse("API:_api_orgs", request=request),
-            'project_management': reverse("API:_api_project_management", request=request),
-            "settings": reverse('API:_settings', request=request),
-            "software": reverse("API:software-list", request=request),
-            'v2': reverse("API:_api_v2_home-list", request=request)
+            'assistance': reverse("v1:_api_assistance", request=request),
+            "devices": reverse("v1:device-list", request=request),
+            "config_groups": reverse("v1:_api_config_groups", request=request),
+            'itim': reverse("v1:_api_itim", request=request),
+            "organizations": reverse("v1:_api_orgs", request=request),
+            'project_management': reverse("v1:_api_project_management", request=request),
+            "settings": reverse('v1:_settings', request=request),
+            "software": reverse("v1:software-list", request=request),
+            'v2': reverse("v2:_api_v2_home-list", request=request)
         }
 
         return Response( API )

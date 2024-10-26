@@ -17,7 +17,7 @@ class OrganizationAPI(TestCase):
 
     model = Organization
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_organization'
 

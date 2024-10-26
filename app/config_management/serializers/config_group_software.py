@@ -26,7 +26,7 @@ class ConfigGroupSoftwareBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_config_group-detail",
+            "v2:_api_v2_config_group-detail",
             request=self.context['view'].request,
             kwargs={
                 'group_id': item.config_group.pk,
@@ -64,7 +64,7 @@ class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
 
         return {
             '_self': reverse(
-                'API:_api_v2_config_group_software-detail',
+                'v2:_api_v2_config_group_software-detail',
                 request = self.context['view'].request,
                 kwargs = {
                     'group_id': item.config_group.pk,
@@ -72,7 +72,7 @@ class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
                 }
             ),
             'organization': reverse(
-                'API:_api_v2_organization-list',
+                'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
             ),
             'softwareversion': 'ToDo',

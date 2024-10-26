@@ -16,7 +16,7 @@ class OperatingSystemVersionPermissionsAPI(TestCase, APIPermissions):
 
     model = OperatingSystemVersion
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_operating_system_version'
 

@@ -16,7 +16,7 @@ class OperatingSystemPermissionsAPI(TestCase, APIPermissions):
 
     model = OperatingSystem
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_operating_system'
 

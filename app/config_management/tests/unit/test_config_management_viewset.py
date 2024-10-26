@@ -16,7 +16,7 @@ class ConfigManagementViewset(
 
     viewset = Index
 
-    route_name = 'API:_api_v2_config_management_home'
+    route_name = 'v2:_api_v2_config_management_home'
 
 
     @classmethod

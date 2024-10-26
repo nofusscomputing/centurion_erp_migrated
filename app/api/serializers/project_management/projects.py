@@ -22,7 +22,7 @@ class ProjectSerializer(
 
         request = self.context.get('request')
 
-        return request.build_absolute_uri(reverse("API:_api_projects-detail", args=[item.pk]))
+        return request.build_absolute_uri(reverse("v1:_api_projects-detail", args=[item.pk]))
 
 
     project_tasks_url = serializers.SerializerMethodField('get_url_project_tasks')
@@ -34,7 +34,7 @@ class ProjectSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:_api_project_tasks-list',
+                'v1:_api_project_tasks-list',
                 kwargs={
                     'project_id': item.id
                 }
@@ -50,7 +50,7 @@ class ProjectSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:_api_project_milestone-list',
+                'v1:_api_project_milestone-list',
                 kwargs={
                     'project_id': item.id
                 }
