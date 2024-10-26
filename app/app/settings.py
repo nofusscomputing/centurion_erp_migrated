@@ -320,6 +320,10 @@ curl:
         'SERVE_INCLUDE_SCHEMA': False,
         'SWAGGER_UI_DIST': 'SIDECAR',
         'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+        "SWAGGER_UI_SETTINGS": '''{
+            filter: true,
+            defaultModelsExpandDepth: -1,
+        }''',
         'REDOC_DIST': 'SIDECAR',
         'PREPROCESSING_HOOKS': [
             'drf_spectacular.hooks.preprocess_exclude_path_format'
