@@ -17,7 +17,7 @@ class ProjectManagementViewset(
 
     viewset = Index
 
-    route_name = 'API:_api_v2_project_management_home'
+    route_name = 'v2:_api_v2_project_management_home'
 
 
     @classmethod

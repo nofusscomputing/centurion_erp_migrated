@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "organization": reverse('API:_api_v2_organization-list', request=request)
+                "organization": reverse('v2:_api_v2_organization-list', request=request)
             }
         )

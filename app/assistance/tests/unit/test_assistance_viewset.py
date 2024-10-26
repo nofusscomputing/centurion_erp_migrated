@@ -16,7 +16,7 @@ class AssistanceViewset(
 
     viewset = Index
 
-    route_name = 'API:_api_v2_assistance_home'
+    route_name = 'v2:_api_v2_assistance_home'
 
 
     @classmethod

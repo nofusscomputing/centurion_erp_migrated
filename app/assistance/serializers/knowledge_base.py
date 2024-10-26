@@ -26,7 +26,7 @@ class KnowledgeBaseBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_knowledge_base-detail",
+            "v2:_api_v2_knowledge_base-detail",
             request=self.context['view'].request,
             kwargs={
                 'pk': item.pk
@@ -63,29 +63,29 @@ class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
 
         return {
             '_self': reverse(
-                'API:_api_v2_knowledge_base-detail',
+                'v2:_api_v2_knowledge_base-detail',
                 request=self.context['view'].request,
                 kwargs={
                     'pk': item.pk
                 }
             ),
             'category': reverse(
-                'API:_api_v2_knowledge_base_category-list',
+                'v2:_api_v2_knowledge_base_category-list',
                 request=self.context['view'].request,
             ),
             'organization': reverse(
-                'API:_api_v2_organization-list',
+                'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
             ),
             'team': reverse(
-                'API:_api_v2_organization_team-list',
+                'v2:_api_v2_organization_team-list',
                 request=self.context['view'].request,
                 kwargs={
                     'organization_id': item.organization.id,
                 }
             ),
             'user': reverse(
-                'API:_api_v2_user-list',
+                'v2:_api_v2_user-list',
                 request=self.context['view'].request,
             )
         }

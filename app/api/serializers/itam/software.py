@@ -7,7 +7,7 @@ from itam.models.device import Software
 class SoftwareSerializer(serializers.ModelSerializer):
     
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:software-detail", format="html"
+        view_name="v1:software-detail", format="html"
     )
 
     class Meta:

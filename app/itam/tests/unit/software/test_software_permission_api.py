@@ -18,7 +18,7 @@ class SoftwarePermissionsAPI(TestCase, APIPermissions):
 
     model = Software
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = 'software-detail'
 

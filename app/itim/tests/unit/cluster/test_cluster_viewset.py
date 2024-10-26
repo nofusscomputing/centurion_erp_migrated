@@ -16,7 +16,7 @@ class ClusterPermissionsAPI(TestCase, APIPermissions):
 
     model = Cluster
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_cluster'
 

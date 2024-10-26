@@ -85,7 +85,7 @@ class ProjectMilestoneAPI(
         self.url_view_kwargs = {'project_id': project.id, 'pk': self.item.id}
 
         client = Client()
-        url = reverse('API:_api_v2_project_milestone-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_project_milestone-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

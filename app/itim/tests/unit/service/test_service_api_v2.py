@@ -108,7 +108,7 @@ class ServiceAPI(
         )
 
         client = Client()
-        url = reverse('API:_api_v2_service-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_service-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -117,7 +117,7 @@ class ServiceAPI(
         self.api_data = response.data
 
 
-        url = reverse('API:_api_v2_service-detail', kwargs={'pk': self.item_two.id})
+        url = reverse('v2:_api_v2_service-detail', kwargs={'pk': self.item_two.id})
 
         client.force_login(self.view_user)
         response = client.get(url)

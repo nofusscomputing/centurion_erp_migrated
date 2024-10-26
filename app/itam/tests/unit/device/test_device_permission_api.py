@@ -17,7 +17,7 @@ class DevicePermissionsAPI(TestCase, APIPermissions):
 
     model = Device
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = 'device-detail'
 

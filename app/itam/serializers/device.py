@@ -27,7 +27,7 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
+        view_name="v2:_api_v2_device-detail", format="html"
     )
 
     class Meta:
@@ -55,21 +55,21 @@ class DeviceModelSerializer(DeviceBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'device_model': reverse("API:_api_v2_device_model-list", request=self._context['view'].request),
-            'device_type': reverse("API:_api_v2_device_type-list", request=self._context['view'].request),
-            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
+            '_self': reverse("v2:_api_v2_device-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'device_model': reverse("v2:_api_v2_device_model-list", request=self._context['view'].request),
+            'device_type': reverse("v2:_api_v2_device_type-list", request=self._context['view'].request),
+            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',
             'history': reverse(
-                "API:_api_v2_model_history-list",
+                "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self.Meta.model._meta.model_name,
                     'model_id': item.pk
                 }
             ),
-            'notes': reverse("API:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            'service': reverse("API:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
-            'software': reverse("API:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'notes': reverse("v2:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'software': reverse("v2:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
         }
 
 

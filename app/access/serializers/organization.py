@@ -17,7 +17,7 @@ class OrganizationBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_organization-detail", format="html"
+        view_name="v2:_api_v2_organization-detail", format="html"
     )
 
     class Meta:
@@ -47,8 +47,8 @@ class OrganizationModelSerializer(OrganizationBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_organization-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'teams': reverse("API:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
+            '_self': reverse("v2:_api_v2_organization-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 
 

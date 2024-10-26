@@ -26,7 +26,7 @@ class NoteBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
+        view_name="v2:_api_v2_device-detail", format="html"
     )
 
     class Meta:
@@ -59,7 +59,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         if 'group_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_config_group_notes-detail", 
+            _self = reverse("v2:_api_v2_config_group_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'group_id': self._kwargs['context']['view'].kwargs['group_id'],
@@ -69,7 +69,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         elif 'device_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_device_notes-detail", 
+            _self = reverse("v2:_api_v2_device_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'device_id': self._kwargs['context']['view'].kwargs['device_id'],
@@ -79,7 +79,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         elif 'operating_system_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_operating_system_notes-detail", 
+            _self = reverse("v2:_api_v2_operating_system_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'operating_system_id': self._kwargs['context']['view'].kwargs['operating_system_id'],
@@ -89,7 +89,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         elif 'service_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_service_notes-detail", 
+            _self = reverse("v2:_api_v2_service_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'service_id': self._kwargs['context']['view'].kwargs['service_id'],
@@ -99,7 +99,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         elif 'project_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_project_notes-detail", 
+            _self = reverse("v2:_api_v2_project_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'project_id': self._kwargs['context']['view'].kwargs['project_id'],
@@ -109,7 +109,7 @@ class NoteModelSerializer(NoteBaseSerializer):
 
         elif 'software_id' in self._kwargs['context']['view'].kwargs:
 
-            _self = reverse("API:_api_v2_software_notes-detail", 
+            _self = reverse("v2:_api_v2_software_notes-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'software_id': self._kwargs['context']['view'].kwargs['software_id'],

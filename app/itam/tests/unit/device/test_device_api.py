@@ -199,7 +199,7 @@ class DeviceAPI(TestCase):
 
 
         client = Client()
-        url = reverse('API:device-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v1:device-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
@@ -420,7 +420,7 @@ class DeviceAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:device-list')
+        url = reverse('v1:device-list')
 
 
         client.force_login(self.add_user)
@@ -444,7 +444,7 @@ class DeviceAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:device-list')
+        url = reverse('v1:device-list')
 
 
         client.force_login(self.add_user)
@@ -468,7 +468,7 @@ class DeviceAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:device-list')
+        url = reverse('v1:device-list')
 
 
         client.force_login(self.add_user)
@@ -492,7 +492,7 @@ class DeviceAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:device-list')
+        url = reverse('v1:device-list')
 
 
         client.force_login(self.add_user)
