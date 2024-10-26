@@ -6,6 +6,7 @@ from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.exceptions import UnknownTicketType
 from core.models.ticket.ticket import Ticket
 
 from core.fields.badge import Badge, BadgeField
@@ -145,6 +146,8 @@ class TicketModelSerializer(TicketBaseSerializer):
         except:
 
             is_valid = False
+
+            raise UnknownTicketType()
 
 
         return is_valid

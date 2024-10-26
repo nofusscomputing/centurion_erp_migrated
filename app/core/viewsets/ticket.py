@@ -1,3 +1,4 @@
+from api.exceptions import UnknownTicketType
 from api.viewsets.common import ModelViewSet
 
 from core.serializers.ticket import (
@@ -67,6 +68,11 @@ class TicketViewSet(ModelViewSet):
                     break
 
             self._ticket_type_id = ticket_type_id
+
+
+        if self._ticket_type_id is None:
+
+            raise UnknownTicketType()
 
 
     def get_serializer_class(self):
