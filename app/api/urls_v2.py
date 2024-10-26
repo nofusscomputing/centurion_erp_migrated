@@ -36,10 +36,11 @@ from config_management.viewsets import (
 )
 
 from core.viewsets import (
+    celery_log as celery_log_v2,
     history as history_v2,
-    notes as notes_v2,
     manufacturer as manufacturer_v2,
-    celery_log as celery_log_v2
+    notes as notes_v2,
+    ticket_category,
 )
 
 from itam.viewsets import (
@@ -156,6 +157,7 @@ router.register('settings/port/(?P<port_id>[0-9]+)/notes', notes_v2.ViewSet, bas
 router.register('settings/project_state', project_state_v2.ViewSet, basename='_api_v2_project_state')
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
+router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
 
 
