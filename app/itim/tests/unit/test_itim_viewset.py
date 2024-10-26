@@ -16,7 +16,7 @@ class ITIMViewset(
 
     viewset = Index
 
-    route_name = 'API:_api_v2_itim_home'
+    route_name = 'v2:_api_v2_itim_home'
 
 
     @classmethod

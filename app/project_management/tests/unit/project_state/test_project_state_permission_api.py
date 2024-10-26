@@ -19,7 +19,7 @@ class ProjectStatePermissionsAPI(TestCase, APIPermissions):
 
     model = ProjectState
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_project_state-detail'
 

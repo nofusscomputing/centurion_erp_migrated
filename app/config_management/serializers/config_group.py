@@ -22,7 +22,7 @@ class ConfigGroupBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_config_group-detail",
+            "v2:_api_v2_config_group-detail",
             request=self.context['view'].request,
             kwargs={
                 'pk': item.pk
@@ -59,41 +59,41 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
 
         return {
             '_self': reverse(
-                'API:_api_v2_config_group-detail',
+                'v2:_api_v2_config_group-detail',
                 request = self.context['view'].request,
                 kwargs = {
                     'pk': item.pk
                 }
             ),
             'child_groups': reverse(
-                'API:_api_v2_config_group_child-list',
+                'v2:_api_v2_config_group_child-list',
                 request = self.context['view'].request,
                 kwargs = {
                     'parent_group': item.pk
                 }
             ),
             'configgroups': reverse(
-                'API:_api_v2_config_group-list',
+                'v2:_api_v2_config_group-list',
                 request = self.context['view'].request,
             ),
             'group_software': reverse(
-                'API:_api_v2_config_group_software-list',
+                'v2:_api_v2_config_group_software-list',
                 request=self.context['view'].request,
                 kwargs = {
                     'group_id': item.pk
                 }
             ),
             'notes': reverse(
-                "API:_api_v2_config_group_notes-list",
+                "v2:_api_v2_config_group_notes-list",
                 request=self._context['view'].request,
                 kwargs={'group_id': item.pk}
             ),
             'organization': reverse(
-                'API:_api_v2_organization-list',
+                'v2:_api_v2_organization-list',
                 request=self.context['view'].request,
             ),
             'parent': reverse(
-                'API:_api_v2_config_group-list',
+                'v2:_api_v2_config_group-list',
                 request=self.context['view'].request,
             ),
         }

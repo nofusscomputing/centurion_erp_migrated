@@ -28,7 +28,7 @@ class ParentGroupSerializer(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        return request.build_absolute_uri(reverse("API:_api_config_group", args=[obj.pk]))
+        return request.build_absolute_uri(reverse("v1:_api_config_group", args=[obj.pk]))
 
 
 
@@ -59,7 +59,7 @@ class ConfigGroupsSerializerBase(serializers.ModelSerializer):
 
         request = self.context.get('request')
 
-        return request.build_absolute_uri(reverse("API:_api_config_group", args=[obj.pk]))
+        return request.build_absolute_uri(reverse("v1:_api_config_group", args=[obj.pk]))
 
 
 

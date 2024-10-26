@@ -25,7 +25,7 @@ class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
     def my_url(self, item):
 
         return reverse(
-            "API:_api_v2_operating_system_version-detail",
+            "v2:_api_v2_operating_system_version-detail",
             request=self.context['view'].request,
             kwargs={
                 'operating_system_id': self._context['view'].kwargs['operating_system_id'],
@@ -64,7 +64,7 @@ class OperatingSystemVersionModelSerializer(OperatingSystemVersionBaseSerializer
 
         return {
             '_self': reverse(
-                "API:_api_v2_operating_system_version-detail",
+                "v2:_api_v2_operating_system_version-detail",
                 request=self._context['view'].request,
                 kwargs={
                     'operating_system_id': self._context['view'].kwargs['operating_system_id'],
@@ -72,7 +72,7 @@ class OperatingSystemVersionModelSerializer(OperatingSystemVersionBaseSerializer
                 }
             ),
             'history': reverse(
-                "API:_api_v2_model_history-list",
+                "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self.Meta.model._meta.model_name,
@@ -80,7 +80,7 @@ class OperatingSystemVersionModelSerializer(OperatingSystemVersionBaseSerializer
                 }
             ),
             'notes': reverse(
-                "API:_api_v2_operating_system_notes-list",
+                "v2:_api_v2_operating_system_notes-list",
                 request=self._context['view'].request,
                 kwargs={
                     'operating_system_id': item.pk

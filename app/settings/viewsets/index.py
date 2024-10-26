@@ -107,20 +107,20 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "app_settings": reverse('API:_api_v2_app_settings-detail', request=request, kwargs={'pk': 1}),
-                "celery_log": reverse('API:_api_v2_celery_log-list', request=request),
-                "cluster_type": reverse('API:_api_v2_cluster_type-list', request=request),
-                "device_model": reverse('API:_api_v2_device_model-list', request=request),
-                "device_type": reverse('API:_api_v2_device_type-list', request=request),
-                "external_link": reverse('API:_api_v2_external_link-list', request=request),
-                "knowledge_base_category": reverse('API:_api_v2_knowledge_base_category-list', request=request),
-                "manufacturer": reverse('API:_api_v2_manufacturer-list', request=request),
-                "port": reverse('API:_api_v2_port-list', request=request),
-                "project_state": reverse('API:_api_v2_project_state-list', request=request),
-                "project_type": reverse('API:_api_v2_project_type-list', request=request),
-                "software_category": reverse('API:_api_v2_software_category-list', request=request),
+                "app_settings": reverse('v2:_api_v2_app_settings-detail', request=request, kwargs={'pk': 1}),
+                "celery_log": reverse('v2:_api_v2_celery_log-list', request=request),
+                "cluster_type": reverse('v2:_api_v2_cluster_type-list', request=request),
+                "device_model": reverse('v2:_api_v2_device_model-list', request=request),
+                "device_type": reverse('v2:_api_v2_device_type-list', request=request),
+                "external_link": reverse('v2:_api_v2_external_link-list', request=request),
+                "knowledge_base_category": reverse('v2:_api_v2_knowledge_base_category-list', request=request),
+                "manufacturer": reverse('v2:_api_v2_manufacturer-list', request=request),
+                "port": reverse('v2:_api_v2_port-list', request=request),
+                "project_state": reverse('v2:_api_v2_project_state-list', request=request),
+                "project_type": reverse('v2:_api_v2_project_type-list', request=request),
+                "software_category": reverse('v2:_api_v2_software_category-list', request=request),
                 "user_settings": reverse(
-                    'API:_api_v2_user_settings-detail',
+                    'v2:_api_v2_user_settings-detail',
                     request=request,
                     kwargs={
                         'pk': request.user.id 

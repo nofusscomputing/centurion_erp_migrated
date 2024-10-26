@@ -13,7 +13,7 @@ class TicketCommentCategorySerializer(
 ):
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_ticket_comment_category-detail", format="html"
+        view_name="v1:_api_ticket_comment_category-detail", format="html"
     )
 
 

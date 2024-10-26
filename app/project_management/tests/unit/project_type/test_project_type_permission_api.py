@@ -19,7 +19,7 @@ class ProjectTypePermissionsAPI(TestCase, APIPermissions):
 
     model = ProjectType
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_project_type-detail'
 

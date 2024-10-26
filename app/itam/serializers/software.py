@@ -19,7 +19,7 @@ class SoftwareBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_software-detail", format="html"
+        view_name="v2:_api_v2_software-detail", format="html"
     )
 
     class Meta:
@@ -49,21 +49,21 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_software-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
-            'external_links': reverse("API:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
+            '_self': reverse("v2:_api_v2_software-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
             'history': reverse(
-                "API:_api_v2_model_history-list",
+                "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self.Meta.model._meta.model_name,
                     'model_id': item.pk
                 }
             ),
-            'notes': reverse("API:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
-            'publisher': reverse("API:_api_v2_manufacturer-list", request=self._context['view'].request),
+            'notes': reverse("v2:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
+            'publisher': reverse("v2:_api_v2_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',
             'version': reverse(
-                "API:_api_v2_software_version-list",
+                "v2:_api_v2_software_version-list",
                 request=self._context['view'].request,
                 kwargs={
                     'software_id': item.pk

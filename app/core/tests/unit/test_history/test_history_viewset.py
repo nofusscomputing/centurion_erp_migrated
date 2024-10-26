@@ -23,7 +23,7 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
 
     model = History
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_model_history'
 

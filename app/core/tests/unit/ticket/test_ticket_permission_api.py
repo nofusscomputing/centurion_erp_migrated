@@ -186,7 +186,7 @@ class ChangeTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_change-detail'
 
@@ -202,7 +202,7 @@ class IncidentTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_incident-detail'
 
@@ -218,7 +218,7 @@ class ProblemTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_problem-detail'
 
@@ -234,7 +234,7 @@ class RequestTicketPermissionsAPI(TicketPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_assistance_request-detail'
 

@@ -25,6 +25,6 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "project": reverse('API:_api_v2_project-list', request=request),
+                "project": reverse('v2:_api_v2_project-list', request=request),
             }
         )

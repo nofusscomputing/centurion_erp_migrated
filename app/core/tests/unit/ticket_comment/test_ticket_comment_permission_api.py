@@ -251,7 +251,7 @@ class ChangeCommentTicketPermissionsAPI(TicketCommentPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.CHANGE.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_change_ticket_comments-detail'
 
@@ -267,7 +267,7 @@ class IncidentTicketCommentPermissionsAPI(TicketCommentPermissionsAPI, TestCase)
 
     ticket_type_enum: int = int(Ticket.TicketType.INCIDENT.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_incident_ticket_comments-detail'
 
@@ -283,7 +283,7 @@ class ProblemTicketCommentPermissionsAPI(TicketCommentPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.PROBLEM.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_itim_problem_ticket_comments-detail'
 
@@ -299,7 +299,7 @@ class RequestTicketCommentPermissionsAPI(TicketCommentPermissionsAPI, TestCase):
 
     ticket_type_enum: int = int(Ticket.TicketType.REQUEST.value)
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_assistance_request_ticket_comments-detail'
 
