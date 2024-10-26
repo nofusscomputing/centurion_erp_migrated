@@ -16,26 +16,23 @@ class Index(CommonViewSet):
         'OPTIONS'
     ]
 
-    view_description = """Centurion ERP API V2.
+    view_description = 'Centurion ERP API V2.'
 
-    This endpoint will move to path `/api/` on release of 
-    v2.0.0 of Centurion ERP.
-    """
-
-    view_name = "API v2"
+    view_name = "v2"
 
 
     def list(self, request, *args, **kwargs):
 
         return Response(
             {
-                "access": reverse('API:_api_v2_access_home-list', request=request),
-                "assistance": reverse('API:_api_v2_assistance_home-list', request=request),
-                "base": reverse('API:_api_v2_base_home-list', request=request),
-                "itam": reverse('API:_api_v2_itam_home-list', request=request),
-                "itim": reverse('API:_api_v2_itim_home-list', request=request),
-                "config_management": reverse('API:_api_v2_config_management_home-list', request=request),
-                "project_management": reverse('API:_api_v2_project_management_home-list', request=request),
-                "settings": reverse('API:_api_v2_settings_home-list', request=request)
+                "access": reverse('v2:_api_v2_access_home-list', request=request),
+                "assistance": reverse('v2:_api_v2_assistance_home-list', request=request),
+                "docs": reverse('v2:_api_v2_docs', request=request),
+                "base": reverse('v2:_api_v2_base_home-list', request=request),
+                "itam": reverse('v2:_api_v2_itam_home-list', request=request),
+                "itim": reverse('v2:_api_v2_itim_home-list', request=request),
+                "config_management": reverse('v2:_api_v2_config_management_home-list', request=request),
+                "project_management": reverse('v2:_api_v2_project_management_home-list', request=request),
+                "settings": reverse('v2:_api_v2_settings_home-list', request=request)
             }
         )

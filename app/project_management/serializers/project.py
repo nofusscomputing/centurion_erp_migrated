@@ -25,7 +25,7 @@ class ProjectBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_project-detail", format="html"
+        view_name="v2:_api_v2_project-detail", format="html"
     )
 
     class Meta:
@@ -55,17 +55,17 @@ class ProjectModelSerializer(ProjectBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_project-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_v2_project-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
             'history': reverse(
-                "API:_api_v2_model_history-list",
+                "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self.Meta.model._meta.model_name,
                     'model_id': item.pk
                 }
             ),
-            'milestone': reverse("API:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
-            'notes': reverse("API:_api_v2_project_notes-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
+            'milestone': reverse("v2:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
+            'notes': reverse("v2:_api_v2_project_notes-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'tickets': 'ToDo'
         }
 

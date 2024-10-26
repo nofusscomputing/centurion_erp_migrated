@@ -19,7 +19,7 @@ class HistoryBaseSerializer(serializers.ModelSerializer):
 
     def get_my_url(self, item):
 
-        return reverse("API:_api_v2_model_history-detail", 
+        return reverse("v2:_api_v2_model_history-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self._kwargs['context']['view'].kwargs['model_class'],
@@ -58,7 +58,7 @@ class HistoryModelSerializer(HistoryBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_model_history-detail", 
+            '_self': reverse("v2:_api_v2_model_history-detail", 
                 request=self._context['view'].request,
                 kwargs={
                     'model_class': self._kwargs['context']['view'].kwargs['model_class'],

@@ -34,7 +34,7 @@ class TaskResultPermissionsAPI(
 
     model = TaskResult
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_celery_log'
 

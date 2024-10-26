@@ -54,7 +54,7 @@ class TicketSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:' + view_name + '-detail',
+                'v1:' + view_name + '-detail',
                 kwargs = kwargs
             )
         )
@@ -100,7 +100,7 @@ class TicketSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:' + view_name + '-list',
+                'v1:' + view_name + '-list',
                 kwargs = kwargs
             )
         )

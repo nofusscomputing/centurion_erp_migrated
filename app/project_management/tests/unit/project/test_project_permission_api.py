@@ -18,7 +18,7 @@ class TicketCommentCategoryPermissionsAPI(TestCase, APIPermissions):
 
     model = TicketCommentCategory
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_ticket_comment_category-detail'
 

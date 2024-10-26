@@ -17,7 +17,7 @@ class AppSettingsBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_app_settings-detail", format="html"
+        view_name="v2:_api_v2_app_settings-detail", format="html"
     )
 
     class Meta:
@@ -47,7 +47,7 @@ class AppSettingsModelSerializer(AppSettingsBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_app_settings-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_v2_app_settings-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
         }
 
 

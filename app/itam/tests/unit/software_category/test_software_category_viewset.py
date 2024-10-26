@@ -16,7 +16,7 @@ class SoftwareCategoryPermissionsAPI(TestCase, APIPermissions):
 
     model = SoftwareCategory
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_software_category'
 

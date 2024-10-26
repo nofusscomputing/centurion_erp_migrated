@@ -25,7 +25,7 @@ class Index(CommonViewSet):
 
         return Response(
             {
-                "knowledge_base": reverse('API:_api_v2_knowledge_base-list', request=request),
-                "request": "ToDo"
+                "knowledge_base": reverse('v2:_api_v2_knowledge_base-list', request=request),
+                "request": reverse('v2:_api_v2_ticket_request-list', request=request),
             }
         )

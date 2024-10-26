@@ -70,7 +70,7 @@ class ConfigGroupsAPI(
         )
 
         client = Client()
-        url = reverse('API:_api_config_group', kwargs=self.url_view_kwargs)
+        url = reverse('v1:_api_config_group', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)
