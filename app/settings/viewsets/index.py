@@ -50,6 +50,10 @@ class Index(CommonViewSet):
                 {
                     "name": "External Links",
                     "model": "external_link"
+                },
+                {
+                    "name": "Ticket Category",
+                    "model": "ticket_category"
                 }
             ]
         },
@@ -119,6 +123,7 @@ class Index(CommonViewSet):
                 "project_state": reverse('v2:_api_v2_project_state-list', request=request),
                 "project_type": reverse('v2:_api_v2_project_type-list', request=request),
                 "software_category": reverse('v2:_api_v2_software_category-list', request=request),
+                "ticket_category": reverse('v2:_api_v2_ticket_category-list', request=request),
                 "user_settings": reverse(
                     'v2:_api_v2_user_settings-detail',
                     request=request,

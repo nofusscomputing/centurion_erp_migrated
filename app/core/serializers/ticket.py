@@ -10,6 +10,7 @@ from api.exceptions import UnknownTicketType
 from core.models.ticket.ticket import Ticket
 
 from core.fields.badge import Badge, BadgeField
+from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 
 
@@ -159,6 +160,8 @@ class TicketViewSerializer(TicketModelSerializer):
     assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
     assigned_teams = TeamBaseSerializer(many=True)
+
+    category = TicketCategoryBaseSerializer()
 
     opened_by = UserBaseSerializer()
 
