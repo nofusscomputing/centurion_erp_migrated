@@ -22,7 +22,7 @@ class ProjectMilestoneBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_project_milestone-detail",
+            "v2:_api_v2_project_milestone-detail",
             request=self._context['view'].request,
             kwargs={
                 'project_id': item.project.id,
@@ -58,7 +58,7 @@ class ProjectMilestoneModelSerializer(ProjectMilestoneBaseSerializer):
 
         return {
             '_self': reverse(
-                "API:_api_v2_project_milestone-detail",
+                "v2:_api_v2_project_milestone-detail",
                 request=self._context['view'].request,
                 kwargs={
                     'project_id': item.project.id,

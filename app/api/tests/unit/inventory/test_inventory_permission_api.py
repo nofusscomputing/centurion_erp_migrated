@@ -201,7 +201,7 @@ class InventoryPermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
 
         response = client.put(url, data=self.inventory, content_type='application/json')
@@ -218,7 +218,7 @@ class InventoryPermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
 
         client.force_login(self.no_permissions_user)
@@ -236,7 +236,7 @@ class InventoryPermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
 
         client.force_login(self.different_organization_user)
@@ -254,7 +254,7 @@ class InventoryPermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
 
         client.force_login(self.view_user)
@@ -272,7 +272,7 @@ class InventoryPermissionsAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
 
         client.force_login(self.add_user)

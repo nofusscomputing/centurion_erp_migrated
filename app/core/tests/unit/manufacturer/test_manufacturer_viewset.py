@@ -20,7 +20,7 @@ class ManufacturerPermissionsAPI(TestCase, APIPermissions):
 
     model = Manufacturer
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_manufacturer'
 

@@ -19,7 +19,7 @@ class ProjectTypeBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_project_type-detail", format="html"
+        view_name="v2:_api_v2_project_type-detail", format="html"
     )
 
 
@@ -50,7 +50,7 @@ class ProjectTypeModelSerializer(ProjectTypeBaseSerializer):
 
         return {
             '_self': reverse(
-                "API:_api_v2_project_type-detail",
+                "v2:_api_v2_project_type-detail",
                 request=self._context['view'].request,
                 kwargs={
                     'pk': item.pk

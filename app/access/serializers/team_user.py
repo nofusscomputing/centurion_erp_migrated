@@ -22,7 +22,7 @@ class TeamUserBaseSerializer(serializers.ModelSerializer):
     def get_url(self, item):
 
         return reverse(
-            "API:_api_v2_organization_team_user-detail",
+            "v2:_api_v2_organization_team_user-detail",
             request=self.context['view'].request,
             kwargs={
                 'organization_id': item.team.organization.id,
@@ -58,7 +58,7 @@ class TeamUserModelSerializer(TeamUserBaseSerializer):
 
         return {
             '_self': reverse(
-                'API:_api_v2_organization_team_user-detail',
+                'v2:_api_v2_organization_team_user-detail',
                 request=self.context['view'].request,
                 kwargs={
                     'organization_id': item.team.organization.id,

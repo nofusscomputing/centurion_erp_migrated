@@ -12,7 +12,7 @@ class ProjectStateSerializer(
 ):
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_project_state-detail", format="html"
+        view_name="v1:_api_project_state-detail", format="html"
     )
 
 

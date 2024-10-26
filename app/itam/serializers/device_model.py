@@ -20,7 +20,7 @@ class DeviceModelBaseSerializer(serializers.ModelSerializer):
 
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device_model-detail", format="html"
+        view_name="v2:_api_v2_device_model-detail", format="html"
     )
 
     class Meta:
@@ -50,7 +50,7 @@ class DeviceModelModelSerializer(DeviceModelBaseSerializer):
     def get_url(self, obj):
 
         return {
-            '_self': reverse("API:_api_v2_device_model-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})
+            '_self': reverse("v2:_api_v2_device_model-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})
         }
 
     class Meta:

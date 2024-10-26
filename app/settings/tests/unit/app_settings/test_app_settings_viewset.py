@@ -28,7 +28,7 @@ class AppSettingsPermissionsAPI(
 
     model = AppSettings
 
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_app_settings'
 

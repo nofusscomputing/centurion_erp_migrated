@@ -95,7 +95,7 @@ class ClusterAPI(
         )
 
         client = Client()
-        url = reverse('API:_api_v2_cluster-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_cluster-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.view_user)

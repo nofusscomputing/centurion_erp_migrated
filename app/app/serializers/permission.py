@@ -16,7 +16,7 @@ class PermissionBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_permission-detail", format="html"
+        view_name="v2:_api_v2_permission-detail", format="html"
     )
 
     class Meta:
@@ -49,7 +49,7 @@ class PermissionViewSerializer(PermissionBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("API:_api_v2_permission-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': reverse("v2:_api_v2_permission-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
         }
 
 
