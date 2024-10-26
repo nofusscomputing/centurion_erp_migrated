@@ -217,8 +217,8 @@ class ModelViewSetBase(
 
 
 class ModelViewSet(
+    ModelViewSetBase,
     viewsets.ModelViewSet,
-    ModelViewSetBase
 ):
 
     pass
