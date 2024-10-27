@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import TenancyObject
 
@@ -229,6 +231,15 @@ class Software(SoftwareCommonFields, SaveHistory):
 
             self.organization = app_settings.global_organization
             self.is_global = app_settings.software_is_global
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_software-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_software-detail", kwargs={'pk': self.id})
 
 
     def __str__(self):
