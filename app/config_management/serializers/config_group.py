@@ -100,6 +100,14 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
                 'v2:_api_v2_config_group-list',
                 request=self.context['view'].request,
             ),
+            'tickets': reverse(
+                "v2:_api_v2_item_tickets-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'item_class': 'cluster',
+                    'item_id': item.pk
+                    }
+            ),
         }
 
     rendered_config = serializers.JSONField( source = 'render_config', read_only=True )

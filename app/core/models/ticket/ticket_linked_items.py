@@ -69,7 +69,7 @@ class TicketLinkedItem(TenancyObject):
     )
 
     table_fields: list = [
-        'display_name',
+        'ticket',
         'status_badge',
         'created'
     ]
