@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -1103,6 +1105,11 @@ class RelatedTickets(TenancyObject):
             'id'
         ]
 
+        verbose_name = 'Related Ticket'
+
+        verbose_name_plural = 'Related Tickets'
+
+
     class Related(models.IntegerChoices):
         RELATED = '1', 'Related'
 
@@ -1159,9 +1166,32 @@ class RelatedTickets(TenancyObject):
     ]
 
 
-    # def __str__(self):
+    def get_url( self, ticket_id, request = None ) -> str:
 
-    #     return ''
+        if not ticket_id:
+
+            return ''
+
+        if request:
+
+            return reverse(
+                "v2:_api_v2_ticket_related-detail",
+                request = request,
+                kwargs={
+                    'ticket_id': ticket_id,
+                    'pk': self.id
+                }
+            )
+
+        return reverse("v2:_api_v2_ticket_related-detail", kwargs={'pk': self.id})
+
+
+    def __str__(self):
+
+        # return '#' + str( self.id )
+
+        return '#'
+
 
     @property
     def parent_object(self):
