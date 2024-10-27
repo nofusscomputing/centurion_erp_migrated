@@ -73,6 +73,7 @@ class TicketModelSerializer(TicketBaseSerializer):
                     'pk': item.pk
                 }
             ),
+            'comments': reverse('v2:_api_v2_ticket_' + str(item.get_ticket_type_display()).lower() + '_comments-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
 

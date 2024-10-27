@@ -323,6 +323,7 @@ curl:
         "SWAGGER_UI_SETTINGS": '''{
             filter: true,
             defaultModelsExpandDepth: -1,
+            deepLinking: true,
         }''',
         'REDOC_DIST': 'SIDECAR',
         'PREPROCESSING_HOOKS': [

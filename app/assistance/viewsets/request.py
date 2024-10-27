@@ -33,7 +33,7 @@ Responses from the API are the same for all users when the request returns
         status `HTTP/20x`.
         """,
         request = PolymorphicProxySerializer(
-            component_name = None,
+            component_name = 'Ticket',
             serializers=[
                 RequestImportTicketModelSerializer,
                 RequestAddTicketModelSerializer,
