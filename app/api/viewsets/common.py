@@ -225,6 +225,19 @@ class ModelViewSet(
 
 
 
+class ModelListRetrieveDeleteViewSet(
+    viewsets.mixins.ListModelMixin,
+    viewsets.mixins.RetrieveModelMixin,
+    viewsets.mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+    ModelViewSetBase
+):
+    """ Use for models that you wish to delete and view ONLY!"""
+
+    pass
+
+
+
 class ModelRetrieveUpdateViewSet(
     viewsets.mixins.RetrieveModelMixin,
     viewsets.mixins.UpdateModelMixin,
