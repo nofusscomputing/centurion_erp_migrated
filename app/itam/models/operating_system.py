@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import TenancyObject
 
@@ -145,6 +147,15 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
         'created',
         'modified'
     ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_operating_system-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_operating_system-detail", kwargs={'pk': self.id})
 
 
     def __str__(self):
