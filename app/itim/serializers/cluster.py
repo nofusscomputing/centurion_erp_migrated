@@ -19,7 +19,7 @@ class ClusterBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="v2:_api_v2_cluster-detail", format="html"
+        view_name="v2:_api_v2_cluster-detail",
     )
 
     class Meta:
@@ -48,7 +48,7 @@ class ClusterModelSerializer(ClusterBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("v2:_api_v2_cluster-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': item.get_url( request = self._context['view'].request ),
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
