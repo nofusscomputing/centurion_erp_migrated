@@ -75,6 +75,7 @@ class TicketModelSerializer(TicketBaseSerializer):
             ),
             'comments': reverse('v2:_api_v2_ticket_' + str(item.get_ticket_type_display()).lower() + '_comments-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
 
