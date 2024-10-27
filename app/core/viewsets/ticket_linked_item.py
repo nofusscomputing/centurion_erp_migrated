@@ -90,9 +90,29 @@ class ViewSet(ModelViewSet):
 
             for choice in list(map(lambda c: c.name, TicketLinkedItem.Modules)):
 
-                if str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
+                if str(getattr(TicketLinkedItem.Modules, 'CLUSTER').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'CLUSTER').value
+
+                elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').value
+
+                elif str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
+
+                elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
+
+                elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'SERVICE').value
+
+                elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE').label).lower() == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
 
             self.queryset = TicketLinkedItem.objects.filter(
                 item=int(self.kwargs['item_id']),
