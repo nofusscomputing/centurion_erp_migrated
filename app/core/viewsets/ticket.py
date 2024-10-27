@@ -47,6 +47,47 @@ class TicketViewSet(ModelViewSet):
     """
 
 
+    def get_dynamic_permissions(self):
+
+        if self.action == 'create':
+
+            action_keyword = 'add'
+
+        elif self.action == 'destroy':
+
+            action_keyword = 'delete'
+
+        elif self.action == 'list':
+
+            action_keyword = 'view'
+
+        elif self.action == 'partial_update':
+
+            action_keyword = 'change'
+
+        elif self.action == 'retrieve':
+
+            action_keyword = 'view'
+
+        elif self.action == 'update':
+
+            action_keyword = 'change'
+
+        elif self.action is None:
+
+            action_keyword = 'view'
+
+        else:
+
+            raise ValueError('unable to determin the action_keyword')
+
+        self.permission_required = [
+            str('core.' + action_keyword + '_ticket_' + self._ticket_type).lower(),
+        ]
+
+        return super().get_permission_required()
+
+
     def get_queryset(self):
 
         self.get_ticket_type()
