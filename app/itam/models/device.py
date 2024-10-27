@@ -7,6 +7,7 @@ from django.db import models
 from django.forms import ValidationError
 
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import TenancyObject
@@ -308,6 +309,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             ]
         }
     ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_device-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_device-detail", kwargs={'pk': self.id})
 
 
     def save(
