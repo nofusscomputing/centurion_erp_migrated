@@ -54,8 +54,16 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
     def get_url(self, item):
 
+        request = None
+
+        if 'view' in self._context:
+
+            if hasattr(self._context['view'], 'request'):
+
+                request = self._context['view'].request
+
         return {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url( request = request ),
             'device_model': reverse("v2:_api_v2_device_model-list", request=self._context['view'].request),
             'device_type': reverse("v2:_api_v2_device_type-list", request=self._context['view'].request),
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?devices=true',

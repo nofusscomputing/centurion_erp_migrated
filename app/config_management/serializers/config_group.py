@@ -21,7 +21,15 @@ class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item):
 
-        return item.get_url( request = self._context['view'].request )
+        request = None
+
+        if 'view' in self._context:
+
+            if hasattr(self._context['view'], 'request'):
+
+                request = self._context['view'].request
+
+        return item.get_url( request = request )
 
 
     class Meta:
@@ -51,8 +59,16 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
 
     def get_url(self, item):
 
+        request = None
+
+        if 'view' in self._context:
+
+            if hasattr(self._context['view'], 'request'):
+
+                request = self._context['view'].request
+
         return {
-            '_self': item.get_url( request = self._context['view'].request ),
+            '_self': item.get_url( request = request ),
             'child_groups': reverse(
                 'v2:_api_v2_config_group_child-list',
                 request = self.context['view'].request,
