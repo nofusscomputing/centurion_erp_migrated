@@ -179,7 +179,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "sections": [
                 {
                     "layout": "table",
-                    "field": "ticket",
+                    "field": "tickets",
                 }
             ]
         },

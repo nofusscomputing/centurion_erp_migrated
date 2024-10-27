@@ -78,6 +78,14 @@ class DeviceModelSerializer(DeviceBaseSerializer):
             'notes': reverse("v2:_api_v2_device_notes-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'service': reverse("v2:_api_v2_service_device-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
             'software': reverse("v2:_api_v2_device_software-list", request=self._context['view'].request, kwargs={'device_id': item.pk}),
+            'tickets': reverse(
+                "v2:_api_v2_item_tickets-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'item_class': 'device',
+                    'item_id': item.pk
+                    }
+            )
         }
 
 
