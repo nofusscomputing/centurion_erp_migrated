@@ -77,7 +77,14 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
                     'software_id': item.pk
                 }
             ),
-            'tickets': 'ToDo'
+            'tickets': reverse(
+                "v2:_api_v2_item_tickets-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'item_class': 'software',
+                    'item_id': item.pk
+                    }
+            )
         }
 
 
