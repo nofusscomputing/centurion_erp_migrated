@@ -3,6 +3,8 @@ import re
 from django.db import models
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import TenancyObject
 
@@ -238,6 +240,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return count
 
 
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_config_group-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
 
 
     @property
