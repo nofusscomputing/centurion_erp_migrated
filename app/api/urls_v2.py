@@ -121,7 +121,7 @@ router.register('config_management/group/(?P<group_id>[0-9]+)/software', config_
 router.register('core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/linked_item', ticket_linked_item.ViewSet, basename='_api_v2_ticket_linked_item')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/related_ticket', related_ticket.ViewSet, basename='_api_v2_ticket_related')
-router.register('core/(?P<item_class>[a-z]+)/(?P<item_id>[0-9]+)/item_ticket', ticket_linked_item.ViewSet, basename='_api_v2_item_tickets')
+router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', ticket_linked_item.ViewSet, basename='_api_v2_item_tickets')
 
 
 router.register('itam', itam_index_v2.Index, basename='_api_v2_itam_home')
