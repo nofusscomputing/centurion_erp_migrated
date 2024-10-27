@@ -41,6 +41,8 @@ from core.viewsets import (
     manufacturer as manufacturer_v2,
     notes as notes_v2,
     ticket_category,
+    ticket_comment,
+
 )
 
 from itam.viewsets import (
@@ -97,6 +99,8 @@ router.register('access/organization/(?P<organization_id>[0-9]+)/team/(?P<team_i
 router.register('assistance', assistance_index_v2.Index, basename='_api_v2_assistance_home')
 router.register('assistance/knowledge_base', knowledge_base_v2.ViewSet, basename='_api_v2_knowledge_base')
 router.register('assistance/ticket/request', request_ticket_v2.ViewSet, basename='_api_v2_ticket_request')
+router.register('assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_request_comments')
+router.register('assistance/ticket/request/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_request_comment_threads')
 
 
 router.register('base', base_index_v2.Index, basename='_api_v2_base_home')
