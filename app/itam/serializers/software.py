@@ -49,7 +49,7 @@ class SoftwareModelSerializer(SoftwareBaseSerializer):
     def get_url(self, item):
 
         return {
-            '_self': reverse("v2:_api_v2_software-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': item.get_url( request = self._context['view'].request ),
             'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?software=true',
             'history': reverse(
                 "v2:_api_v2_model_history-list",
