@@ -94,7 +94,7 @@ class ViewSet(ModelViewSet):
 
                     item_type = getattr(TicketLinkedItem.Modules, 'CLUSTER').value
 
-                elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower() == self.kwargs['item_class']:
+                elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower().replace(' ', '_') == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').value
 
@@ -102,7 +102,7 @@ class ViewSet(ModelViewSet):
 
                     item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
 
-                elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower() == self.kwargs['item_class']:
+                elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower().replace(' ', '_') == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
 
