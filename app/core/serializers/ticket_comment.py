@@ -175,16 +175,28 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
                 if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
-                    ticket = Ticket.objects.get(pk=int(self._kwargs['context']['view'].kwargs['ticket_id']))
-                    self.fields.fields['organization'].initial = ticket.organization.id
-
-                    self.fields.fields['ticket'].initial = ticket.id
 
                     self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
 
                     self.fields.fields['user'].initial = kwargs['context']['request']._user.id
 
         super().__init__(instance=instance, data=data, **kwargs)
+
+
+    def is_valid(self, *, raise_exception=False):
+
+        is_valid: bool = False
+
+        is_valid = super().is_valid(raise_exception=raise_exception)
+
+
+        if 'view' in self._context:
+
+            if self._context['view'].action == 'create':
+
+                self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+
+        return is_valid
 
 
 
