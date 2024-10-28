@@ -107,9 +107,7 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
                     "layout": "double",
                     "left": [
                         'organization',
-                        'parent'
-                        'name'
-                        'runbook',
+                        'name',
                         'is_global',
                     ],
                     "right": [
@@ -118,17 +116,6 @@ class TicketCommentCategory(TicketCommentCategoryCommonFields):
                         'modified',
                     ]
                 },
-                {
-                    "layout": "double",
-                    "left": [
-                        'comment',
-                        'solution'
-                    ],
-                    "right": [
-                        'notification',
-                        'task',
-                    ]
-                }
             ]
         },
         {
