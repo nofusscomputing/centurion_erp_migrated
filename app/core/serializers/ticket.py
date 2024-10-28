@@ -145,13 +145,22 @@ class TicketModelSerializer(TicketBaseSerializer):
 
         try:
 
-            self.validated_data['ticket_type'] = self._context['view'].ticket_type_id
+            self.validated_data['ticket_type'] = self._context['view']._ticket_type_id
 
         except:
 
             is_valid = False
 
             raise UnknownTicketType()
+
+
+        if 'view' in self._context:
+
+            if self._context['view'].action == 'create':
+
+                if hasattr(self._context['view'], 'request'):
+
+                    self.validated_data['opened_by_id'] = self._context['view'].request.user.id
 
 
         return is_valid
