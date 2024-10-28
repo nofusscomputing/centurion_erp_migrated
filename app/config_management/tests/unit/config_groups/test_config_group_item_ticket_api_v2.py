@@ -10,7 +10,7 @@ from config_management.models.groups import ConfigGroups
 
 
 
-class ServiceItemTicketAPI(
+class ConfigGroupsTicketAPI(
     ItemTicketAPI,
     TestCase,
 ):
