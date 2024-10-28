@@ -42,6 +42,7 @@ from core.viewsets import (
     notes as notes_v2,
     ticket_category,
     ticket_comment,
+    ticket_comment_category,
     ticket_linked_item,
     related_ticket,
 
@@ -167,6 +168,7 @@ router.register('settings/project_state', project_state_v2.ViewSet, basename='_a
 router.register('settings/project_type', project_type_v2.ViewSet, basename='_api_v2_project_type')
 router.register('settings/software_category', software_category_v2.ViewSet, basename='_api_v2_software_category')
 router.register('settings/ticket_category', ticket_category.ViewSet, basename='_api_v2_ticket_category')
+router.register('settings/ticket_comment_category', ticket_comment_category.ViewSet, basename='_api_v2_ticket_comment_category')
 router.register('settings/user_settings', user_settings_v2.ViewSet, basename='_api_v2_user_settings')
 
 
