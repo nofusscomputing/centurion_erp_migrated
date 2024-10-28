@@ -91,7 +91,13 @@ class ViewSet(ModelViewSet):
     filterset_fields = [
         'category',
         'external_system',
+        'external_system',
+        'is_template',
         'organization',
+        'parent',
+        'source',
+        'status',
+        'template',
     ]
 
     search_fields = [
