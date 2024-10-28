@@ -51,6 +51,67 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
 class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
+
+    _urls = serializers.SerializerMethodField('get_url')
+
+    def get_url(self, item):
+
+        return {
+            '_self': item.get_url( request = self._context['view'].request )
+        }
+
+
+    class Meta:
+
+        model = TicketLinkedItem
+
+        fields = [
+            'id',
+            'display_name',
+            'item',
+            'item_type',
+            'ticket',
+            'organization',
+            'created',
+            '_urls',
+        ]
+
+        read_only_fields = [
+            'id',
+            'display_name',
+            # 'item',
+            # 'item_type',
+            'ticket',
+            'organization',
+            'created',
+            '_urls',
+        ]
+
+    
+
+    def is_valid(self, *, raise_exception=False):
+
+        is_valid = super().is_valid( raise_exception = raise_exception )
+
+
+        if 'view' in self._context:
+
+            ticket = Ticket.objects.get(pk = int(self._context['view'].kwargs['ticket_id']) )
+
+            self.validated_data['ticket'] = ticket
+
+            self.validated_data['organization_id'] = ticket.organization.id
+
+
+        return is_valid
+
+
+
+class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
+
+
+    organization = OrganizationBaseSerializer(many=False, read_only=True)
+
     item = serializers.SerializerMethodField('get_item')
 
     def get_item(self, item) -> dict:
@@ -128,66 +189,5 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
             model,
             context=self._context
         ).data
-
-
-    _urls = serializers.SerializerMethodField('get_url')
-
-    def get_url(self, item):
-
-        return {
-            '_self': item.get_url( request = self._context['view'].request )
-        }
-
-
-    class Meta:
-
-        model = TicketLinkedItem
-
-        fields = [
-            'id',
-            'display_name',
-            'item',
-            'item_type',
-            'ticket',
-            'organization',
-            'created',
-            '_urls',
-        ]
-
-        read_only_fields = [
-            'id',
-            'display_name',
-            'item',
-            'item_type',
-            'ticket',
-            'organization',
-            'created',
-            '_urls',
-        ]
-
-    
-
-    def is_valid(self, *, raise_exception=False):
-
-        is_valid = super().is_valid( raise_exception = raise_exception )
-
-
-        if 'view' in self._context:
-
-            ticket = Ticket.objects.get(pk = int(self._context['view'].kwargs['ticket_id']) )
-
-            self.validated_data['ticket'] = ticket
-
-            self.validated_data['organization_id'] = ticket.organization.id
-
-
-        return is_valid
-
-
-
-class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
-
-
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
 
     ticket = TicketBaseSerializer(read_only = True)
