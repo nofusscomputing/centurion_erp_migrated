@@ -23,7 +23,7 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_device-detail", format="html"
+        view_name="API:_api_v2_ticket_comments-detail", format="html"
     )
 
     class Meta:
@@ -75,7 +75,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
         urls: dict = {
             '_self': reverse(
-                    'API:_api_v2_ticket_' + str(ticket_type_name).lower().replace(' ', '_') + '_comments-detail',
+                    'API:_api_v2_ticket_comments-detail',
                     request = self._context['view'].request,
                     kwargs={
                         'ticket_id': ticket_id,
@@ -90,7 +90,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
             urls.update({
                 'threads': reverse(
-                    'API:_api_v2_ticket_' + str(ticket_type_name).lower().replace(' ', '_') + '_comment_threads-list',
+                    'API:_api_v2_ticket_comment_threads-list',
                     request = self._context['view'].request,
                     kwargs={
                         'ticket_id': ticket_id,
