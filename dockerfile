@@ -2,7 +2,10 @@ ARG CI_PROJECT_URL=''
 ARG CI_COMMIT_SHA=''
 ARG CI_COMMIT_TAG=''
 
-FROM python:3.11-alpine3.19 as build
+ARG ALPINE_VERSION=3.20
+ARG PYTHON_VERSION=3.11.10
+
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} as build
 
 
 RUN pip --disable-pip-version-check list --outdated --format=json | \
@@ -60,7 +63,7 @@ RUN cd /tmp/python_modules \
 
 
 
-FROM python:3.11-alpine3.19
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION}
 
 LABEL \
   org.opencontainers.image.vendor="No Fuss Computing" \
