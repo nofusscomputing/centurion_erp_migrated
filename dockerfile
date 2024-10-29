@@ -100,6 +100,7 @@ ENV CI_PROJECT_URL=${CI_PROJECT_URL}
 ENV CI_COMMIT_SHA=${CI_COMMIT_SHA}
 ENV CI_COMMIT_TAG=${CI_COMMIT_TAG}
 
+
 COPY requirements.txt requirements.txt
 COPY requirements_test.txt requirements_test.txt
 
@@ -127,7 +128,8 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
   pip install --no-cache-dir /tmp/python_builds/*.*; \
     python /app/manage.py collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
-    ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled; \
+    rm /etc/nginx/sites-enabled; \
+    ln -s /etc/nginx/sites-available/centurion-erp /etc/nginx/sites-enabled; \
     # Check for errors and fail if so
     nginx -t; \
     # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
