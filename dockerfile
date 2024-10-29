@@ -130,6 +130,11 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
     ln -s /etc/nginx/sites-available/myproject /etc/nginx/sites-enabled; \
     # Check for errors and fail if so
     nginx -t; \
+    # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
+    if [ ! $(python -m django --version) ]; then \
+      echo "Django not Installed"; \
+      exit 1; \
+    fi; \
     export
 
 
