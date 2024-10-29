@@ -106,7 +106,9 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
+
+            user = request.user
 
 
             if user.is_authenticated:

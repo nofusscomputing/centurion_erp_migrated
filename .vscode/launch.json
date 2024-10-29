@@ -17,6 +17,25 @@
             "program": "${workspaceFolder}/app/manage.py"
         },
         {
+            "name": "Debug: Gunicorn",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "gunicorn",
+            "args": [
+                "--access-logfile",
+                "-",
+                "--workers",
+                "3",
+                "--bind",
+                "0.0.0.0:8002",
+                "app.wsgi:application",
+
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "cwd": "${workspaceFolder}/app"
+        },
+        {
             "name": "Debug: Celery",
             "type": "python",
             "request": "launch",
