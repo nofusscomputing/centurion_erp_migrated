@@ -129,8 +129,8 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
     python /app/manage.py collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
     rm /etc/nginx/sites-enabled; \
-    rm /etc/nginx/sites-available/default.conf; \
-    mv /etc/nginx/sites-available/centurion.conf /etc/nginx/sites-available/default.conf; \
+    rm /etc/nginx/conf.d/default.conf; \
+    mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf; \
     # Check for errors and fail if so
     nginx -t; \
     # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
