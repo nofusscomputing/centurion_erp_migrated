@@ -6,3 +6,6 @@ psycopg2==2.9.9 # postgresql16-dev postgresql16-client libpq-dev
 
 # Production Web server
 gunicorn==23.0.0
+
+# SupervisorD
+supervisor==4.2.5
