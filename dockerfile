@@ -138,6 +138,7 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
       echo "Django not Installed"; \
       exit 1; \
     fi; \
+    chmod +x /entrypoint.sh; \
     export
 
 
@@ -153,4 +154,4 @@ HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD \
   supervisorctl status || exit 1
 
 
-CMD [ "/usr/local/bin/supervisord" ]
+  ENTRYPOINT ["/entrypoint.sh"]
