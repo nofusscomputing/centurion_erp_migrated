@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Centurion ERP is a simple application to deploy with the only additional requirements being that you have already deployed a database server and a RabbitMQ server. Centurion ERP is container based and is deployable via Docker or upon Kubernetes. Our images are available on [Docker Hub](https://hub.docker.com/r/nofusscomputing/centurion-erp).
 
+Deployment of Centurion ERP is recommended to be behind a reverse proxy. This is required as the method used to setup the containers does not include any SSL setup. Due to this the reverse proxy will be required to conduct the SSL termination.
+
 !!! note "TL;DR"
     `docker pull nofusscomputing/centurion-erp:latest`.
 

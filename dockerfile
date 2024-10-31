@@ -147,7 +147,7 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
 
 WORKDIR /app
 
-
+# In future, adjust port to 80 as nginX is now used (Will be breaking change)
 EXPOSE 8000
 
 VOLUME [ "/data", "/etc/itsm" ]
