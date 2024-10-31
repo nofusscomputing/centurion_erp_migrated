@@ -66,6 +66,7 @@ class TicketCommentCategoryModelSerializer(TicketCommentCategoryBaseSerializer):
             'id',
             'organization',
             'display_name',
+            'parent',
             'name',
             'model_notes',
             'is_global',
@@ -81,6 +82,40 @@ class TicketCommentCategoryModelSerializer(TicketCommentCategoryBaseSerializer):
             'modified',
             '_urls',
         ]
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        if 'view' in self._context:
+
+            if(
+                self._context['view'].action == 'partial_update'
+                or self._context['view'].action == 'update'
+            ):
+
+                self.fields['parent'].queryset = self.fields['parent'].queryset.exclude(
+                    id=self.instance.pk
+                )
+
+
+    def validate(self, attrs):
+
+        if self.instance:
+
+            if 'parent' in attrs:
+
+                if int(attrs['parent'].id) == self.instance.pk:
+
+                    raise serializers.ValidationError(
+                        detail = {
+                            'parent': 'Cant set self as parent category'
+                        },
+                        code = 'parent_not_self'
+                    )
+
+        return attrs
 
 
 
