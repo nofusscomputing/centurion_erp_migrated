@@ -73,8 +73,8 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
         if 'view' in self._context:
 
             if(
-                self._context['view'].action == 'create'
-                or self._context['view'].action == 'list'
+                self._context['view'].action == 'partial_update'
+                or self._context['view'].action == 'update'
             ):
 
                 self.fields['parent'].queryset = self.fields['parent'].queryset.exclude(
@@ -83,8 +83,6 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
 
 
     def validate(self, attrs) -> bool:
-
-        attrs = super().validate(attrs = attrs)
 
         if self.instance:
 
