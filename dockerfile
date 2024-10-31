@@ -141,6 +141,7 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
       exit 1; \
     fi; \
     chmod +x /entrypoint.sh; \
+    mkdir -p /etc/supervisor/conf.d; \
     export
 
 

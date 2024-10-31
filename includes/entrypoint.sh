@@ -2,6 +2,8 @@
 
 set -e
 
+mkdir -p /etc/supervisor/conf.d;
+
 if [ "$1" == "" ]; then
 
 
