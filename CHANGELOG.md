@@ -1,3 +1,32 @@
+## 1.3.0 (2024-10-31)
+
+### feat
+
+- **docker**: Add worker service config for SupervisorD
+- **docker**: ensure supervisor starts
+- **docker**: use correct file location for nginx config
+- **docker**: Fail the build if django is not found
+- **docker**: Install NginX to serve site
+- **docker**: Add supervisord for install
+- **docker**: Add gunicorn for install
+- update docker image alpine 3.19 ->3.20
+
+### Fixes
+
+- **docker**: Ensure SupervisorD daemon config directory exists.
+- **docker**: use alias for static
+- **access**: testing of param causing gunicorn to fail
+- **docker**: place nginx conf in correct path
+- **docker**: gunicorn must call method
+- **docker**: Ensure NginX config applied after it's installed
+- **docker**: Add proxy params for NginX
+- **docker**: Make centurion the default nginx conf
+- **docker**: Correct NginX start command
+
+### Refactoring
+
+- **docker**: Switch to entrypoint
+
 ## 1.2.2 (2024-10-29)
 
 ### Fixes
