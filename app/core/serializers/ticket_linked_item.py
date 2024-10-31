@@ -79,8 +79,6 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
         read_only_fields = [
             'id',
             'display_name',
-            # 'item',
-            # 'item_type',
             'ticket',
             'organization',
             'created',
@@ -101,6 +99,15 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
             self.validated_data['ticket'] = ticket
 
             self.validated_data['organization_id'] = ticket.organization.id
+
+        else:
+
+            raise serializers.ValidationError(
+                detail = {
+                    'ticket': 'Ticket is required'
+                },
+                code = 'required'
+            )
 
 
         return is_valid
