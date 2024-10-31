@@ -2,7 +2,11 @@ ARG CI_PROJECT_URL=''
 ARG CI_COMMIT_SHA=''
 ARG CI_COMMIT_TAG=''
 
-FROM python:3.11-alpine3.19 as build
+ARG ALPINE_VERSION=3.20
+ARG NGINX_VERSION=1.27.2-r1
+ARG PYTHON_VERSION=3.11.10
+
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} as build
 
 
 RUN pip --disable-pip-version-check list --outdated --format=json | \
@@ -27,8 +31,24 @@ RUN apk add --update \
         pkgconf \
         postgresql16-dev \
         postgresql16-client \
-        libpq-dev
+        libpq-dev \
+        # NginX: to download items
+        openssl \
+        curl \
+        ca-certificates
 
+RUN printf "%s%s%s%s\n" \
+  "@nginx " \
+  "http://nginx.org/packages/mainline/alpine/v" \
+  `egrep -o '^[0-9]+\.[0-9]+' /etc/alpine-release` \
+  "/main" \
+  | tee -a /etc/apk/repositories
+
+RUN curl -o /tmp/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub; \
+  openssl rsa -pubin -in /tmp/nginx_signing.rsa.pub -text -noout;
+
+
+  
 RUN pip install --upgrade \
     setuptools \
     wheel \
@@ -60,7 +80,7 @@ RUN cd /tmp/python_modules \
 
 
 
-FROM python:3.11-alpine3.19
+FROM python:${PYTHON_VERSION}-alpine${ALPINE_VERSION}
 
 LABEL \
   org.opencontainers.image.vendor="No Fuss Computing" \
@@ -74,9 +94,14 @@ ARG CI_PROJECT_URL
 ARG CI_COMMIT_SHA
 ARG CI_COMMIT_TAG
 
+ARG NGINX_VERSION
+
 ENV CI_PROJECT_URL=${CI_PROJECT_URL}
 ENV CI_COMMIT_SHA=${CI_COMMIT_SHA}
 ENV CI_COMMIT_TAG=${CI_COMMIT_TAG}
+
+ENV IS_WORKER=False
+
 
 COPY requirements.txt requirements.txt
 COPY requirements_test.txt requirements_test.txt
@@ -85,6 +110,11 @@ COPY requirements_test.txt requirements_test.txt
 COPY ./app/. app
 
 COPY --from=build /tmp/python_builds /tmp/python_builds
+
+COPY --from=build /etc/apk/repositories /etc/apk/repositories
+
+COPY --from=build /tmp/nginx_signing.rsa.pub /etc/apk/keys/nginx_signing.rsa.pub
+
 
 COPY includes/ /
 
@@ -95,19 +125,36 @@ RUN pip --disable-pip-version-check list --outdated --format=json | \
   apk add --no-cache \
     mariadb-client \
     mariadb-dev \
-    postgresql16-client; \
+    postgresql16-client \
+    nginx@nginx=${NGINX_VERSION}; \
   pip install --no-cache-dir /tmp/python_builds/*.*; \
     python /app/manage.py collectstatic --noinput; \
     rm -rf /tmp/python_builds; \
+    rm /etc/nginx/sites-enabled; \
+    rm /etc/nginx/conf.d/default.conf; \
+    mv /etc/nginx/conf.d/centurion.conf /etc/nginx/conf.d/default.conf; \
+    # Check for errors and fail if so
+    nginx -t; \
+    # sanity check, https://github.com/nofusscomputing/centurion_erp/pull/370
+    if [ ! $(python -m django --version) ]; then \
+      echo "Django not Installed"; \
+      exit 1; \
+    fi; \
+    chmod +x /entrypoint.sh; \
+    mkdir -p /etc/supervisor/conf.d; \
     export
 
 
 WORKDIR /app
 
-
+# In future, adjust port to 80 as nginX is now used (Will be breaking change)
 EXPOSE 8000
 
 VOLUME [ "/data", "/etc/itsm" ]
 
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD \
+  supervisorctl status || exit 1
+
+
+  ENTRYPOINT ["/entrypoint.sh"]

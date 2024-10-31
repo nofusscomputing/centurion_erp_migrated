@@ -8,6 +8,8 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 Centurion ERP is a simple application to deploy with the only additional requirements being that you have already deployed a database server and a RabbitMQ server. Centurion ERP is container based and is deployable via Docker or upon Kubernetes. Our images are available on [Docker Hub](https://hub.docker.com/r/nofusscomputing/centurion-erp).
 
+Deployment of Centurion ERP is recommended to be behind a reverse proxy. This is required as the method used to setup the containers does not include any SSL setup. Due to this the reverse proxy will be required to conduct the SSL termination.
+
 !!! note "TL;DR"
     `docker pull nofusscomputing/centurion-erp:latest`.
 
@@ -50,7 +52,7 @@ The [web container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is t
 
 ### Background Worker Container
 
-The [Background Worker container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is a worker that waits for tasks sent to the RabbitMQ server. The worker is based upon [Celery](https://docs.celeryq.dev/en/stable/index.html). On the worker not being busy, it'll pickup and run the task. This container is scalable with nil additional requirements for launching additional workers. If deploying to Kubernetes the setting the deployment `replicas` to the number of desired containers is the simplest method to scale. The container start command will need to be set to `celery -A app worker -l INFO` so that the worker is started on container startup.
+The [Background Worker container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is a worker that waits for tasks sent to the RabbitMQ server. The worker is based upon [Celery](https://docs.celeryq.dev/en/stable/index.html). On the worker not being busy, it'll pickup and run the task. This container is scalable with nil additional requirements for launching additional workers. If deploying to Kubernetes the setting the deployment `replicas` to the number of desired containers is the simplest method to scale. There is no container start command, however you will need to set environmental variable `IS_WORKER` to value `'True'` within the container.
 
 Configuration for the worker resides in directory `/etc/itsm/` within the container. see below for the `CELERY_` configuration.
 
