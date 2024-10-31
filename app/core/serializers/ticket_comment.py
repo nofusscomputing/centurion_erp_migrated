@@ -10,6 +10,7 @@ from api.exceptions import UnknownTicketType
 
 from app.serializers.user import UserBaseSerializer
 
+from core import exceptions as centurion_exceptions
 from core.models.ticket.ticket_comment import Ticket, TicketComment
 
 
@@ -193,7 +194,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
             and self._context['view'].action == 'create'
         ):
 
-            raise serializers.ValidationError(
+            raise centurion_exceptions.ValidationError(
                 detail = {
                     'comment_type': 'Comment Type is required'
                 },
@@ -208,7 +209,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
             )
         ):
 
-            raise serializers.ValidationError(
+            raise centurion_exceptions.ValidationError(
                 detail = {
                     'comment_type': 'Comment Type is not editable'
                 },
@@ -238,7 +239,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
                 else:
 
-                    raise serializers.ValidationError(
+                    raise centurion_exceptions.ValidationError(
                         detail = {
                             'ticket': 'Ticket is a required field'
                         },
