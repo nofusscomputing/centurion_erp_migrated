@@ -7,6 +7,25 @@ if [ "$1" == "" ]; then
 
     echo "[Info] Setup SupervisorD"
 
+    if [ ${IS_WORKER} == 'True' ] || [ ${IS_WORKER} == 'true' ]; then
+
+
+        echo '[info] Creating worker service config';
+
+        cp /etc/supervisor/conf.source/worker.conf /etc/supervisor/conf.d/worker.conf;
+
+        if [ -f '/etc/supervisor/conf.d/worker.conf' ]; then
+
+            echo '[info] Worker service config Created';
+
+        else
+
+            echo '[crit] Worker service config not created';
+
+        fi;
+
+
+    else
 
         echo '[info] Creating gunicorn service config';
 
@@ -36,6 +55,9 @@ if [ "$1" == "" ]; then
             echo '[crit] NginX service config not created';
 
         fi;
+
+
+    fi;
 
 
     echo "[Info] SupervisorD Setup successfully"

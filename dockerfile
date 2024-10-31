@@ -100,6 +100,8 @@ ENV CI_PROJECT_URL=${CI_PROJECT_URL}
 ENV CI_COMMIT_SHA=${CI_COMMIT_SHA}
 ENV CI_COMMIT_TAG=${CI_COMMIT_TAG}
 
+ENV IS_WORKER=False
+
 
 COPY requirements.txt requirements.txt
 COPY requirements_test.txt requirements_test.txt
