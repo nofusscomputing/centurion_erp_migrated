@@ -140,10 +140,8 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
         read_only_fields = [
             'id',
             'parent',
-            'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             'private',
             'duration',
             'category',
@@ -169,18 +167,58 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
    
     def __init__(self, instance=None, data=empty, **kwargs):
 
-        if 'context' in self._kwargs:
-
-            if 'view' in self._kwargs['context']:
-
-                if 'ticket_id' in self._kwargs['context']['view'].kwargs:
-
-
-                    self.fields.fields['comment_type'].initial = TicketComment.CommentType.COMMENT
-
-                    self.fields.fields['user'].initial = kwargs['context']['request']._user.id
-
         super().__init__(instance=instance, data=data, **kwargs)
+
+        if 'context' in kwargs:
+
+            if 'view' in kwargs['context']:
+
+                if kwargs['context']['view'].action == 'create':
+
+
+                    if 'request' in kwargs['context']['view'].kwargs:
+
+                        self.fields.fields['user'].initial = kwargs['context']['request']._user.id
+
+
+
+
+    def validate(self, attrs):
+
+        if(
+            (
+                'comment_type' not in attrs
+                or attrs['comment_type'] is None
+            )
+            and self._context['view'].action == 'create'
+        ):
+
+            raise serializers.ValidationError(
+                detail = {
+                    'comment_type': 'Comment Type is required'
+                },
+                code = 'required'
+            )
+
+        elif (
+            'comment_type' in attrs
+            and (
+                self._context['view'].action == 'partial_update'
+                or self._context['view'].action == 'update'
+            )
+        ):
+
+            raise serializers.ValidationError(
+                detail = {
+                    'comment_type': 'Comment Type is not editable'
+                },
+                code = 'read_only'
+            )
+
+
+        return attrs
+
+
 
 
     def is_valid(self, *, raise_exception=False):
@@ -194,7 +232,20 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
             if self._context['view'].action == 'create':
 
-                self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                if 'ticket_id' in self._kwargs['context']['view'].kwargs:
+
+                    self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+
+                else:
+
+                    raise serializers.ValidationError(
+                        detail = {
+                            'ticket': 'Ticket is a required field'
+                        },
+                        code = 'required'
+                    )
+
+                
 
         return is_valid
 
@@ -246,7 +297,6 @@ class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             'body',
             'private',
             'duration',
@@ -286,7 +336,6 @@ class TicketCommentITILFollowUpModelSerializer(TicketCommentITILModelSerializer)
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             # 'body',
             'private',
             'duration',
@@ -326,7 +375,6 @@ class TicketCommentITILTaskModelSerializer(TicketCommentITILModelSerializer):
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             # 'body',
             'private',
             'duration',
@@ -366,7 +414,6 @@ class TicketCommentITILSolutionModelSerializer(TicketCommentITILModelSerializer)
             'ticket',
             'external_ref',
             'external_system',
-            'comment_type',
             'private',
             'duration',
             'is_template',
