@@ -171,6 +171,7 @@ class TicketCommentPermissionsAPI(
             'organization': self.organization.id,
             'body': 'comment body',
             'ticket': self.ticket.id,
+            'comment_type': int(TicketComment.CommentType.COMMENT)
         }
 
 

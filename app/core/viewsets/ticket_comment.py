@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse, PolymorphicProxySerializer
 
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, exceptions
 from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
@@ -140,6 +140,18 @@ class ViewSet(ModelViewSet):
         serializer_prefix:str = 'TicketComment'
 
         if (
+            'comment_type' not in self.request.data
+            and self.action == 'create'
+        ):
+
+            raise  exceptions.ValidationError(
+                detail = {
+                    'comment_type': 'comment type is required'
+                },
+                code = 'required'
+            )
+
+        elif (
             self.action == 'create'
         ):
 
@@ -157,6 +169,26 @@ class ViewSet(ModelViewSet):
                 ):
 
                     serializer_prefix = serializer_prefix + 'Import'
+
+                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.COMMENT):
+
+                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+
+                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.SOLUTION):
+
+                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+
+                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.TASK):
+
+                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+
+                else:
+
+                    raise  exceptions.ValidationError(
+                        detail = 'Unable to determine the serializer',
+                        code = 'serializer_unknwon'
+                    )
+
 
         if (
             self.action == 'list'
