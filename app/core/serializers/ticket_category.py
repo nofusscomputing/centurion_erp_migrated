@@ -15,6 +15,7 @@ class TicketCategoryBaseSerializer(serializers.ModelSerializer):
 
         return str( item )
 
+
     url = serializers.HyperlinkedIdentityField(
         view_name="v2:_api_v2_ticket_category-detail", format="html"
     )
@@ -63,6 +64,42 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
             'modified',
             '_urls',
         ]
+
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        if 'view' in self._context:
+
+            if(
+                self._context['view'].action == 'create'
+                or self._context['view'].action == 'list'
+            ):
+
+                self.fields['parent'].queryset = self.fields['parent'].queryset.exclude(
+                    id=self.instance.pk
+                )
+
+
+    def validate(self, attrs) -> bool:
+
+        attrs = super().validate(attrs = attrs)
+
+        if self.instance:
+
+            if 'parent' in attrs:
+
+                if int(attrs['parent'].id) == self.instance.pk:
+
+                    raise serializers.ValidationError(
+                        detail = {
+                            'parent': 'Cant set self as parent category'
+                        },
+                        code = 'parent_not_self'
+                    )
+
+        return attrs
 
 
 

@@ -52,6 +52,29 @@ class TicketCategoryValidationAPI(
 
 
 
+    def test_serializer_validation_self_not_parent(self):
+        """Serializer Validation Check
+
+        Ensure that a validation error is raised if an attempt to add
+        self as parent category.
+        """
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = TicketCategoryModelSerializer(
+                self.item,
+                data={
+                    "parent": self.item.id,
+                },
+                partial = True
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['parent'][0] == 'parent_not_self'
+
+
+
     def test_serializer_validation_no_name(self):
         """Serializer Validation Check
 
