@@ -3,7 +3,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import Organization, OrganizationBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
 from api.exceptions import UnknownTicketType
@@ -47,7 +47,9 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
 
 
-class TicketCommentModelSerializer(TicketCommentBaseSerializer):
+class TicketCommentModelSerializer(
+    TicketCommentBaseSerializer,
+):
     """Base class for Ticket Comment Model
 
     Args:
@@ -164,13 +166,22 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
             '_urls',
         ]
 
+    is_triage: bool = False
+    """ If the serializers is a Triage serializer"""
 
-   
+    request = None
+    """ HTTP Request that wwas made"""
+
+
     def __init__(self, instance=None, data=empty, **kwargs):
 
         super().__init__(instance=instance, data=data, **kwargs)
 
         if 'context' in kwargs:
+
+            if 'request' in kwargs['context']:
+
+                self.request = kwargs['context']['request']
 
             if 'view' in kwargs['context']:
 
@@ -179,8 +190,7 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
 
                     if 'request' in kwargs['context']['view'].kwargs:
 
-                        self.fields.fields['user'].initial = kwargs['context']['request']._user.id
-
+                        self.fields.fields['user'].initial = self.request._user.id
 
 
 
@@ -215,6 +225,10 @@ class TicketCommentModelSerializer(TicketCommentBaseSerializer):
                 },
                 code = 'read_only'
             )
+
+        if self.is_triage:
+
+            attrs = self.validate_triage(attrs)
 
 
         return attrs
@@ -322,7 +336,7 @@ class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
 
 
 
-class TicketCommentITILFollowUpModelSerializer(TicketCommentITILModelSerializer):
+class TicketCommentITILFollowUpAddModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Followup Comment
 
     Args:
@@ -337,21 +351,20 @@ class TicketCommentITILFollowUpModelSerializer(TicketCommentITILModelSerializer)
             'ticket',
             'external_ref',
             'external_system',
-            # 'body',
             'private',
             'duration',
-            # 'category',
-            # 'template',
+            'category',
+            'template',
             'is_template',
-            # 'source',
+            'source',
             'status',
-            # 'responsible_user',
-            # 'responsible_team',
+            'responsible_user',
+            'responsible_team',
             'user',
-            # 'planned_start_date',
-            # 'planned_finish_date',
-            # # 'real_start_date',
-            # 'real_finish_date',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'organization',
             'date_closed',
             'created',
@@ -361,8 +374,14 @@ class TicketCommentITILFollowUpModelSerializer(TicketCommentITILModelSerializer)
 
 
 
-class TicketCommentITILTaskModelSerializer(TicketCommentITILModelSerializer):
-    """ITIL Task Comment
+class TicketCommentITILFollowUpChangeModelSerializer(TicketCommentITILFollowUpAddModelSerializer):
+
+    pass
+
+
+
+class TicketCommentITILFollowUpTriageModelSerializer(TicketCommentITILModelSerializer):
+    """ITIL Followup Comment
 
     Args:
         TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
@@ -376,21 +395,20 @@ class TicketCommentITILTaskModelSerializer(TicketCommentITILModelSerializer):
             'ticket',
             'external_ref',
             'external_system',
-            # 'body',
-            'private',
+            # 'private',
             'duration',
             # 'category',
             # 'template',
-            'is_template',
-            'source',
+            # 'is_template',
+            # 'source',
             'status',
-            # 'responsible_user',
-            # 'responsible_team',
+            'responsible_user',
+            'responsible_team',
             'user',
-            # 'planned_start_date',
-            # 'planned_finish_date',
-            # 'real_start_date',
-            # 'real_finish_date',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'organization',
             'date_closed',
             'created',
@@ -398,9 +416,14 @@ class TicketCommentITILTaskModelSerializer(TicketCommentITILModelSerializer):
             '_urls',
         ]
 
+    is_triage: bool = True
+
+    def validate_triage(self, attrs):
+
+        return attrs
 
 
-class TicketCommentITILSolutionModelSerializer(TicketCommentITILModelSerializer):
+class TicketCommentITILSolutionAddModelSerializer(TicketCommentITILModelSerializer):
     """ITIL Solution Comment
 
     Args:
@@ -433,6 +456,143 @@ class TicketCommentITILSolutionModelSerializer(TicketCommentITILModelSerializer)
             'modified',
             '_urls',
         ]
+
+
+
+class TicketCommentITILSolutionChangeModelSerializer(TicketCommentITILSolutionAddModelSerializer):
+
+    pass
+
+
+
+class TicketCommentITILSolutionTriageModelSerializer(TicketCommentITILModelSerializer):
+    """ITIL Solution Comment
+
+    Args:
+        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
+    """
+
+    class Meta(TicketCommentITILModelSerializer.Meta):
+
+        read_only_fields = [
+            'id',
+            'parent',
+            'ticket',
+            'external_ref',
+            'external_system',
+            # 'private',
+            'duration',
+            # 'is_template',
+            # 'source',
+            'status',
+            'responsible_user',
+            'responsible_team',
+            'user',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
+            'organization',
+            'date_closed',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
+    is_triage: bool = True
+
+    def validate_triage(self, attrs):
+
+        return attrs
+
+
+
+class TicketCommentITILTaskAddModelSerializer(TicketCommentITILModelSerializer):
+    """ITIL Task Comment
+
+    Args:
+        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
+    """
+
+    class Meta(TicketCommentITILModelSerializer.Meta):
+
+        read_only_fields = [
+            'id',
+            'parent',
+            'ticket',
+            'external_ref',
+            'external_system',
+            'private',
+            'duration',
+            'category',
+            'template',
+            'is_template',
+            'source',
+            'status',
+            'responsible_user',
+            'responsible_team',
+            'user',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
+            'organization',
+            'date_closed',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
+
+
+class TicketCommentITILTaskChangeModelSerializer(TicketCommentITILTaskAddModelSerializer):
+
+    pass
+
+
+
+class TicketCommentITILTaskTriageModelSerializer(TicketCommentITILModelSerializer):
+    """ITIL Task Comment
+
+    Args:
+        TicketCommentITILModelSerializer (class): Base class for ALL ITIL comment types.
+    """
+
+    class Meta(TicketCommentITILModelSerializer.Meta):
+
+        read_only_fields = [
+            'id',
+            'parent',
+            'ticket',
+            'external_ref',
+            'external_system',
+            # 'body',
+            # 'private',
+            'duration',
+            # 'category',
+            # 'template',
+            # 'is_template',
+            # 'source',
+            # 'status',
+            # 'responsible_user',
+            # 'responsible_team',
+            'user',
+            # 'planned_start_date',
+            # 'planned_finish_date',
+            # 'real_start_date',
+            # 'real_finish_date',
+            'organization',
+            'date_closed',
+            'created',
+            'modified',
+            '_urls',
+        ]
+
+    is_triage: bool = True
+
+    def validate_triage(self, attrs):
+
+        return attrs
 
 
 

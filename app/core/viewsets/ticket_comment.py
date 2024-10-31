@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse, PolymorphicProxySerializer
 
-from rest_framework import generics, viewsets, exceptions
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
@@ -11,13 +11,24 @@ from access.mixin import OrganizationMixin
 from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
+from core import exceptions as centurion_exceptions
 from core.serializers.ticket_comment import (
     Ticket,
     TicketComment,
     TicketCommentImportModelSerializer,
-    TicketCommentITILFollowUpModelSerializer,
-    TicketCommentITILSolutionModelSerializer,
-    TicketCommentITILTaskModelSerializer,
+
+    TicketCommentITILFollowUpAddModelSerializer,
+    TicketCommentITILFollowUpChangeModelSerializer,
+    TicketCommentITILFollowUpTriageModelSerializer,
+
+    TicketCommentITILSolutionAddModelSerializer,
+    TicketCommentITILSolutionChangeModelSerializer,
+    TicketCommentITILSolutionTriageModelSerializer,
+
+    TicketCommentITILTaskAddModelSerializer,
+    TicketCommentITILTaskChangeModelSerializer,
+    TicketCommentITILTaskTriageModelSerializer,
+
     TicketCommentModelSerializer,
     TicketCommentViewSerializer
 )
@@ -39,10 +50,18 @@ Responses from the API are the same for all users when the request returns
             component_name = 'TicketComment',
             serializers=[
                 TicketCommentImportModelSerializer,
-                TicketCommentITILFollowUpModelSerializer,
-                TicketCommentITILSolutionModelSerializer,
-                TicketCommentITILTaskModelSerializer,
-                TicketCommentModelSerializer
+
+                TicketCommentITILFollowUpAddModelSerializer,
+                TicketCommentITILFollowUpChangeModelSerializer,
+                TicketCommentITILFollowUpTriageModelSerializer,
+
+                TicketCommentITILSolutionAddModelSerializer,
+                TicketCommentITILSolutionChangeModelSerializer,
+                TicketCommentITILSolutionTriageModelSerializer,
+
+                TicketCommentITILTaskAddModelSerializer,
+                TicketCommentITILTaskChangeModelSerializer,
+                TicketCommentITILTaskTriageModelSerializer,
             ],
             resource_type_field_name=None,
             many = False
@@ -144,50 +163,100 @@ class ViewSet(ModelViewSet):
             and self.action == 'create'
         ):
 
-            raise  exceptions.ValidationError(
+            raise  centurion_exceptions.ValidationError(
                 detail = {
                     'comment_type': 'comment type is required'
                 },
                 code = 'required'
             )
 
-        elif (
-            self.action == 'create'
-        ):
 
-            ticket = Ticket.objects.get(pk = int(self.kwargs['ticket_id']))
+        ticket = Ticket.objects.get(pk = int(self.kwargs['ticket_id']))
 
-            organization = int(ticket.organization.id)
+        ticket_type = str(ticket.get_ticket_type_display()).lower().replace(' ' , '_')
 
-            if organization:
+        organization = int(ticket.organization.id)
 
-                if self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.import_ticketcomment'
-                    ]
+        if organization:
+
+            if self.has_organization_permission(
+                organization = organization,
+                permissions_required = [
+                    'core.import_ticketcomment'
+                ]
+            ):
+
+                serializer_prefix = serializer_prefix + 'Import'
+
+            elif (
+                self.action == 'create'
+                or self.action == 'partial_update'
+                or self.action == 'update'
+            ):
+
+                if(
+                    self.action == 'partial_update'
+                    or self.action == 'update'
                 ):
 
-                    serializer_prefix = serializer_prefix + 'Import'
-
-                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.COMMENT):
-
-                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
-
-                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.SOLUTION):
-
-                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
-
-                elif int(self.request.data['comment_type']) == int(TicketComment.CommentType.TASK):
-
-                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+                    comment_type = list(self.queryset)[0].comment_type
 
                 else:
 
-                    raise  exceptions.ValidationError(
+                    comment_type = int(self.request.data['comment_type'])
+
+
+                if comment_type == int(TicketComment.CommentType.COMMENT):
+
+                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+
+                elif comment_type == int(TicketComment.CommentType.SOLUTION):
+
+                    serializer_prefix = serializer_prefix + 'ITILSolution'
+
+                elif comment_type == int(TicketComment.CommentType.TASK):
+
+                    serializer_prefix = serializer_prefix + 'ITILTask'
+
+                else:
+
+                    raise  centurion_exceptions.ValidationError(
                         detail = 'Unable to determine the serializer',
                         code = 'serializer_unknwon'
                     )
+
+
+        if 'Import' not in serializer_prefix:
+
+            if self.action == 'create':
+
+                if self.has_organization_permission(
+                    organization = ticket.organization.id,
+                    permissions_required = [ 'core.triage_ticket_'+ ticket_type ],
+                ) and not self.request.user.is_superuser:
+
+                    serializer_prefix = serializer_prefix + 'Triage'
+
+                else:
+
+                    serializer_prefix = serializer_prefix + 'Add'
+
+
+            elif (
+                self.action == 'partial_update'
+                or self.action == 'update'
+            ):
+
+                if self.has_organization_permission(
+                    organization = ticket.organization.id,
+                    permissions_required = [ 'core.triage_ticket_'+ ticket_type ],
+                ) and not self.request.user.is_superuser:
+
+                    serializer_prefix = serializer_prefix + 'Triage'
+
+                else:
+
+                    serializer_prefix = serializer_prefix + 'Change'
 
 
         if (
