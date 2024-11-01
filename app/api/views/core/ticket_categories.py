@@ -10,7 +10,7 @@ from api.serializers.core.ticket_category import TicketCategory, TicketCategoryS
 from api.views.mixin import OrganizationPermissionAPI
 
 
-
+@extend_schema(deprecated=True)
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [
