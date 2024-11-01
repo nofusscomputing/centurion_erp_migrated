@@ -10,7 +10,6 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import (
     APIPermissionChange,
-    APIPermissionDelete,
     APIPermissionView
 )
 
@@ -20,7 +19,6 @@ from settings.models.user_settings import UserSettings
 class UserSettingsPermissionsAPI(
     TestCase,
     APIPermissionChange,
-    APIPermissionDelete,
     APIPermissionView
 ):
 
@@ -214,7 +212,7 @@ class UserSettingsPermissionsAPI(
         client.force_login(self.delete_user)
         response = client.delete(url, data=self.delete_data)
 
-        assert response.status_code == 403
+        assert response.status_code == 405
 
 
 
