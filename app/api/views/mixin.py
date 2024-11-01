@@ -6,6 +6,8 @@ from rest_framework.permissions import DjangoObjectPermissions
 
 from access.mixin import OrganizationMixin
 
+from core import exceptions as centurion_exceptions
+
 
 
 class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
@@ -66,7 +68,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                 if 'organization' in request.data:
 
                     if not request.data['organization']:
-                        raise ValidationError('you must provide an organization')
+                        raise centurion_exceptions.ValidationError('you must provide an organization')
 
                     object_organization = int(request.data['organization'])
             elif method == 'patch':
@@ -174,6 +176,10 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
             if not self.has_organization_permission(object_organization) and not request.user.is_superuser:
 
                 raise PermissionDenied('You are not part of this organization')
+
+        except centurion_exceptions.MethodNotAllowed as e:
+
+            raise centurion_exceptions.MethodNotAllowed( str(method).upper() )
 
         except Exception as e:
 
