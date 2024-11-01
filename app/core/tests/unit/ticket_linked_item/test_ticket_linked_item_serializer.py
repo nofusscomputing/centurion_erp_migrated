@@ -92,6 +92,26 @@ class TicketLinkedItemValidationAPI(
 
 
 
+    def test_serializer_validation_add_valid_item_related_ticket(self):
+        """Serializer Validation Check
+
+        Ensure that a valid item it does not raise a validation error
+        when adding a ticket as related to an item
+        """
+
+        serializer = TicketLinkedItemModelSerializer(
+            data={
+                "organization": self.organization.id,
+                "ticket": self.ticket.id,
+                "item_type": int(TicketLinkedItem.Modules.DEVICE),
+                "item": self.device_two.id,
+            }
+        )
+
+        assert serializer.is_valid(raise_exception = True)
+
+
+
     def test_serializer_validation_no_ticket(self):
         """Serializer Validation Check
 
@@ -111,7 +131,7 @@ class TicketLinkedItemValidationAPI(
 
             serializer.is_valid(raise_exception = True)
 
-        assert err.value.get_codes()['ticket'] == 'required'
+        assert err.value.get_codes()['ticket'][0] == 'required'
 
 
 
