@@ -186,7 +186,12 @@ class ViewSet(ModelViewSet):
                 ]
             ):
 
-                serializer_prefix = serializer_prefix + 'Import'
+                if (
+                    self.action == 'create'
+                    or self.action == 'partial_update'
+                    or self.action == 'update'
+                ):
+                    serializer_prefix = serializer_prefix + 'Import'
 
             elif (
                 self.action == 'create'
