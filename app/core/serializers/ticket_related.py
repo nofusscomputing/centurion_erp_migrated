@@ -4,8 +4,9 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
-from core.serializers.ticket import TicketBaseSerializer
+from core.serializers.ticket import Ticket, TicketBaseSerializer
 
+from core import exceptions as centurion_exceptions
 from core.models.ticket.ticket import RelatedTickets
 
 
@@ -101,13 +102,32 @@ class RelatedTicketModelSerializer(RelatedTicketBaseSerializer):
         read_only_fields = [
              'id',
             'display_name',
-            'to_ticket_id',
-            'from_ticket_id',
-            'how_related',
-            'organization',
             '_urls',
         ]
 
+
+    def validate(self, attrs):
+
+        check_db = self.Meta.model.objects.filter(
+            to_ticket_id = attrs['to_ticket_id'],
+            from_ticket_id = attrs['from_ticket_id'],
+        )
+
+        check_db_inverse = self.Meta.model.objects.filter(
+            to_ticket_id = attrs['from_ticket_id'],
+            from_ticket_id = attrs['to_ticket_id'],
+        )
+
+        if check_db.count() > 0 or check_db_inverse.count() > 0:
+
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'to_ticket_id': f"Ticket is already related to #{attrs['to_ticket_id'].id}"
+                },
+                code = 'duplicate_entry'
+            )
+
+        return attrs
 
 
 class RelatedTicketViewSerializer(RelatedTicketModelSerializer):
