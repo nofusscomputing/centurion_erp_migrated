@@ -137,22 +137,7 @@ class TicketModelSerializer(TicketBaseSerializer):
         ]
 
 
-    def is_valid(self, *, raise_exception=False):
-
-        is_valid: bool = False
-
-        is_valid = super().is_valid(raise_exception=raise_exception)
-
-        try:
-
-            self.validated_data['ticket_type'] = self._context['view']._ticket_type_id
-
-        except:
-
-            is_valid = False
-
-            raise UnknownTicketType()
-
+    def validate(self, data):
 
         if 'view' in self._context:
 
@@ -160,10 +145,19 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                 if hasattr(self._context['view'], 'request'):
 
-                    self.validated_data['opened_by_id'] = self._context['view'].request.user.id
+                    data['opened_by_id'] = self._context['view'].request.user.id
 
 
-        return is_valid
+            if hasattr(self._context['view'], '_ticket_type_id'):
+
+                data['ticket_type'] = self._context['view']._ticket_type_id
+
+            else:
+
+                raise UnknownTicketType()
+
+
+        return data
 
 
 

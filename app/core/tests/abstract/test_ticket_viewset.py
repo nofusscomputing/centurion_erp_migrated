@@ -220,12 +220,26 @@ class TicketViewSetPermissionsAPI(
             user = self.triage_user
         )
 
+        user_settings = UserSettings.objects.get(user=self.triage_user)
+
+        user_settings.default_organization = self.organization
+
+        user_settings.save()
+
 
         self.import_user = User.objects.create_user(username="test_user_import", password="password")
         teamuser = TeamUsers.objects.create(
             team = import_team,
             user = self.import_user
         )
+
+
+        user_settings = UserSettings.objects.get(user=self.import_user)
+
+        user_settings.default_organization = self.organization
+
+        user_settings.save()
+
 
 
         self.different_organization_user = User.objects.create_user(username="test_different_organization_user", password="password")
@@ -290,8 +304,14 @@ class TicketViewSetPermissionsAPI(
             url = reverse(self.app_namespace + ':' + self.url_name + '-list')
 
 
+        data = self.add_data.copy()
+
+        data.update({
+            'opened_by': self.import_user.id
+        })
+
         client.force_login(self.import_user)
-        response = client.post(url, data=self.add_data)
+        response = client.post(url, data=data)
 
         assert response.status_code == 201
 
