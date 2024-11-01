@@ -14,17 +14,14 @@ from api.tests.abstract.api_permissions_viewset import (
 
 from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 
-from itam.models.device import Device
-
 from settings.models.user_settings import UserSettings
 
 
 
-class TicketLinkedItemPermissionsAPI(
+class BaseTicketLinkedItemPermissionsAPI(
     APIPermissionAdd,
     APIPermissionDelete,
     APIPermissionView,
-    TestCase
 ):
     """ Test Cases common to ALL ticket types """
 
@@ -40,9 +37,8 @@ class TicketLinkedItemPermissionsAPI(
 
     url_name = '_api_v2_ticket_linked_item'
 
-
     @classmethod
-    def setUpTestData(self):
+    def CreateOrg(self):
         """Setup Test
 
         1. Create an organization for user and item
@@ -58,6 +54,26 @@ class TicketLinkedItemPermissionsAPI(
 
         self.organization = organization
 
+        # different_organization = Organization.objects.create(name='test_different_organization')
+
+
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
+
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a team
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
+        """
+
+        
+
+        # organization = Organization.objects.create(name='test_org')
+
+        # self.organization = organization
+
         different_organization = Organization.objects.create(name='test_different_organization')
 
 
@@ -71,7 +87,7 @@ class TicketLinkedItemPermissionsAPI(
 
         view_team = Team.objects.create(
             team_name = 'view_team',
-            organization = organization,
+            organization = self.organization,
         )
 
         view_team.permissions.set([view_permissions])
@@ -88,7 +104,7 @@ class TicketLinkedItemPermissionsAPI(
 
         add_team = Team.objects.create(
             team_name = 'add_team',
-            organization = organization,
+            organization = self.organization,
         )
 
         add_team.permissions.set([add_permissions])
@@ -105,7 +121,7 @@ class TicketLinkedItemPermissionsAPI(
 
         change_team = Team.objects.create(
             team_name = 'change_team',
-            organization = organization,
+            organization = self.organization,
         )
 
         change_team.permissions.set([change_permissions])
@@ -122,7 +138,7 @@ class TicketLinkedItemPermissionsAPI(
 
         delete_team = Team.objects.create(
             team_name = 'delete_team',
-            organization = organization,
+            organization = self.organization,
         )
 
         delete_team.permissions.set([delete_permissions])
@@ -147,32 +163,22 @@ class TicketLinkedItemPermissionsAPI(
             status = Ticket.TicketStatus.All.NEW
         )
 
-        self.device = Device.objects.create(
-            organization = self.organization,
-            name = 'one',
-        )
-
-        self.device_two = Device.objects.create(
-            organization = self.organization,
-            name = 'two',
-        )
-
         self.item = self.model.objects.create(
             organization = self.organization,
-            item = self.device.id,
-            item_type = TicketLinkedItem.Modules.DEVICE,
+            item = self.linked_item.id,
+            item_type = self.item_type,
             ticket = self.ticket,
         )
 
 
-        self.url_kwargs = {'ticket_id': self.ticket.id}
+        # self.url_kwargs = {'ticket_id': self.ticket.id}
 
-        self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
+        # self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
 
         self.add_data = {
             'organization': self.organization.id,
             'ticket': self.ticket.id,
-            'item': self.device_two.id,
+            'item': self.linked_item_two.id,
             'item_type': int(TicketLinkedItem.Modules.DEVICE),
         }
 
@@ -223,3 +229,320 @@ class TicketLinkedItemPermissionsAPI(
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class TicketLinkedItemPermissionsAPI(
+    BaseTicketLinkedItemPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+    model = TicketLinkedItem
+
+    app_namespace = 'v2'
+    
+    delete_data = {}
+
+    ticket_type: str = 'request'
+
+    ticket_type_enum = Ticket.TicketType.REQUEST
+
+    url_name = '_api_v2_ticket_linked_item'
+
+    item_class: str = 'device'
+
+    item_type =  TicketLinkedItem.Modules.DEVICE
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itam.models.device import Device
+
+        self.CreateOrg()
+
+        self.linked_item = Device.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = Device.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+        super().setUpTestData()
+
+        self.url_kwargs = {'ticket_id': self.ticket.id}
+
+        self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
+
+
+
+class BaseItemTicketPermissionsAPI(
+    BaseTicketLinkedItemPermissionsAPI,
+):
+    """ Test Cases common to ALL ticket types """
+
+    model = TicketLinkedItem
+
+    app_namespace = 'v2'
+    
+    delete_data = {}
+
+    ticket_type: str = 'request'
+
+    ticket_type_enum = Ticket.TicketType.REQUEST
+
+    url_name = '_api_v2_item_tickets'
+
+    item_class: str = None
+
+    item_type = None
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itam.models.device import Device
+
+        super().setUpTestData()
+
+        self.url_kwargs = {'item_class': self.item_class, 'item_id': self.linked_item.id}
+
+        self.url_view_kwargs = {'item_class': self.item_class, 'item_id': self.linked_item.id, 'pk': self.item.id}
+
+
+
+    def test_add_has_permission(self):
+        """ Check correct permission for add 
+
+        Add not allowed from this endpoint
+        """
+
+        client = Client()
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.add_data)
+
+        assert response.status_code == 201
+
+
+
+
+class ItemClusterTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'cluster'
+
+    item_type =  TicketLinkedItem.Modules.CLUSTER
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itim.models.clusters import Cluster
+
+        self.CreateOrg()
+
+        self.linked_item = Cluster.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = Cluster.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+
+        super().setUpTestData()
+
+
+
+class ItemConfigGroupsTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'config_group'
+
+    item_type =  TicketLinkedItem.Modules.CONFIG_GROUP
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from config_management.models.groups import ConfigGroups
+
+        self.CreateOrg()
+
+        self.linked_item = ConfigGroups.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = ConfigGroups.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+
+        super().setUpTestData()
+
+
+
+class ItemDeviceTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'device'
+
+    item_type =  TicketLinkedItem.Modules.DEVICE
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itam.models.device import Device
+
+        self.CreateOrg()
+
+        self.linked_item = Device.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = Device.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+        super().setUpTestData()
+
+
+class ItemOperatingSystemTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'operating_system'
+
+    item_type =  TicketLinkedItem.Modules.OPERATING_SYSTEM
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itam.models.operating_system import OperatingSystem
+
+        self.CreateOrg()
+
+        self.linked_item = OperatingSystem.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = OperatingSystem.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+
+        super().setUpTestData()
+
+
+
+class ItemServiceTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'service'
+
+    item_type =  TicketLinkedItem.Modules.SERVICE
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itim.models.services import Service
+
+        self.CreateOrg()
+
+        self.linked_item = Service.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = Service.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+
+        super().setUpTestData()
+
+
+
+class ItemSoftwareTicketPermissionsAPI(
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'software'
+
+    item_type =  TicketLinkedItem.Modules.SOFTWARE
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from itam.models.software import Software
+
+        self.CreateOrg()
+
+        self.linked_item = Software.objects.create(
+            organization = self.organization,
+            name = 'one',
+        )
+
+
+        self.linked_item_two = Software.objects.create(
+            organization = self.organization,
+            name = 'two',
+        )
+
+
+        super().setUpTestData()
+
+
