@@ -79,26 +79,36 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
         read_only_fields = [
             'id',
             'display_name',
-            'ticket',
             'organization',
             'created',
             '_urls',
         ]
 
-    
 
-    def is_valid(self, *, raise_exception=False):
+    def validate(self, data):
 
-        is_valid = super().is_valid( raise_exception = raise_exception )
-
+        ticket = None
 
         if 'view' in self._context:
 
-            ticket = Ticket.objects.get(pk = int(self._context['view'].kwargs['ticket_id']) )
+            if 'ticket_id' in self._context['view'].kwargs:
 
-            self.validated_data['ticket'] = ticket
+                ticket = Ticket.objects.get(pk = int(self._context['view'].kwargs['ticket_id']) )
 
-            self.validated_data['organization_id'] = ticket.organization.id
+
+        if (
+            'ticket' in data
+            and ticket is None
+        ):
+
+            ticket = data['ticket']
+
+
+        if ticket:
+
+            data['ticket'] = ticket
+
+            data['organization_id'] = ticket.organization.id
 
         else:
 
@@ -110,7 +120,7 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
             )
 
 
-        return is_valid
+        return data
 
 
 
