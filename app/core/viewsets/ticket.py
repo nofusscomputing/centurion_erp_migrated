@@ -1,6 +1,8 @@
 from api.exceptions import UnknownTicketType
 from api.viewsets.common import ModelViewSet
 
+from access.models import Organization
+
 from assistance.serializers.request import (
     RequestAddTicketModelSerializer,
     RequestChangeTicketModelSerializer,
@@ -49,9 +51,45 @@ class TicketViewSet(ModelViewSet):
 
     def get_dynamic_permissions(self):
 
+        organization = None
+
+
+        if(
+            self.action == 'create'
+            or self.action == 'partial_update'
+            or self.action == 'update'
+        ):
+
+            if 'organization' in self.request.data:
+
+                organization = Organization.objects.get(
+                    pk = int(self.request.data['organization'])
+                )
+
+            elif(
+                self.action == 'partial_update'
+                or self.action == 'update'
+            ):
+
+                obj = list(self.queryset)[0]
+
+                organization = obj.organization
+
         if self.action == 'create':
 
             action_keyword = 'add'
+
+            if organization:
+
+                if self.has_organization_permission(
+                    organization = organization.id,
+                    permissions_required = [
+                        str('core.import_ticket_' + self._ticket_type).lower()
+                    ]
+                ):
+
+                    action_keyword = 'import'
+
 
         elif self.action == 'destroy':
 
@@ -65,6 +103,18 @@ class TicketViewSet(ModelViewSet):
 
             action_keyword = 'change'
 
+            if organization:
+
+                if self.has_organization_permission(
+                    organization = organization.id,
+                    permissions_required = [
+                        str('core.triage_ticket_' + self._ticket_type).lower()
+                    ]
+                ):
+
+                    action_keyword = 'triage'
+
+
         elif self.action == 'retrieve':
 
             action_keyword = 'view'
@@ -72,6 +122,16 @@ class TicketViewSet(ModelViewSet):
         elif self.action == 'update':
 
             action_keyword = 'change'
+
+            if self.has_organization_permission(
+                organization = organization.id,
+                permissions_required = [
+                    str('core.triage_ticket_' + self._ticket_type).lower()
+                ]
+            ):
+
+                action_keyword = 'triage'
+
 
         elif self.action is None:
 

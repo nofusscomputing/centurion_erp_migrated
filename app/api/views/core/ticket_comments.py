@@ -12,7 +12,7 @@ from api.views.mixin import OrganizationPermissionAPI
 from core.models.ticket.ticket_comment import TicketComment
 
 
-
+@extend_schema(deprecated=True)
 class View(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [

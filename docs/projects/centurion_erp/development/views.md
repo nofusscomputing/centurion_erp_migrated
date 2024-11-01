@@ -35,6 +35,31 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 - Model VieSets must be tested against tests `from api.tests.abstract.viewsets import ViewSetModel`
 
 
+## Permissions
+
+If you wish to deviate from the standard CRUD permissions, define a function called `get_dynamic_permissions` within the `view`/`ViewSet`. The function must return a list of permissions. This is useful if you have added additional permissions to a model.
+
+Example of the function `get_dynamic_permissions`
+
+``` py
+
+def get_dynamic_permissions(self):
+
+    if self.action == 'create':
+
+        self.permission_required = [
+            'core.random_permission_name',
+        ]
+
+    else:
+
+        raise ValueError('unable to determine the action_keyword')
+
+    return super().get_permission_required()
+
+```
+
+
 ## Pre v1.3 Docs
 
 !!! warning

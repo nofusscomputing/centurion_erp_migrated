@@ -1,7 +1,8 @@
 from rest_framework import exceptions, status
 from rest_framework.exceptions import (
+    MethodNotAllowed,
+    PermissionDenied,
     ValidationError,
-    PermissionDenied
 )
 
 class MissingAttribute(Exception):

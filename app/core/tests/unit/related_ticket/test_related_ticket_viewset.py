@@ -1,34 +1,38 @@
 import pytest
+import unittest
+import requests
 
-from django.contrib.auth.models import User
+
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import reverse
 from django.test import Client, TestCase
-from django import urls
 
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import (
-    APIPermissionChange,
-    APIPermissionView
+    APIPermissionDelete,
+    APIPermissionView,
 )
 
-from settings.models.user_settings import UserSettings
+from core.models.ticket.ticket import Ticket, RelatedTickets
 
 
-class UserSettingsPermissionsAPI(
+
+class RelatedTicketsPermissionsAPI(
+    APIPermissionDelete,
+    APIPermissionView,
     TestCase,
-    APIPermissionChange,
-    APIPermissionView
 ):
 
-    model = UserSettings
+    model = RelatedTickets
 
     app_namespace = 'v2'
     
-    url_name = '_api_v2_user_settings'
+    url_name = '_api_v2_ticket_related'
 
-    change_data = {'device_model_is_global': True}
+    change_data = {'from_ticket_id': 1, 'organization': 1,}
 
     delete_data = {}
 
@@ -48,9 +52,6 @@ class UserSettingsPermissionsAPI(
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.different_organization = different_organization
-
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -128,18 +129,42 @@ class UserSettingsPermissionsAPI(
             user = self.view_user
         )
 
-        self.item = self.model.objects.get( id = 1 )
+        ticket_one = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ticket',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.view_user,
+            status = Ticket.TicketStatus.All.NEW.value
+        )
 
-        self.item.default_organization = self.organization
+        ticket_two = Ticket.objects.create(
+            organization = self.organization,
+            title = 'B ticket',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.view_user,
+            status = Ticket.TicketStatus.All.NEW.value
+        )
 
-        self.item.save()
+
+        self.item = self.model.objects.create(
+            organization = self.organization,
+            from_ticket_id = ticket_one,
+            to_ticket_id = ticket_two,
+            how_related = RelatedTickets.Related.BLOCKS
+        )
 
 
-        self.url_view_kwargs = {'pk': self.item.id}
+        self.url_view_kwargs = {'ticket_id': ticket_one.id, 'pk': self.item.id}
+
+        self.url_kwargs = {'ticket_id': ticket_one.id}
 
         self.add_data = {
-            'name': 'team-post',
             'organization': self.organization.id,
+            'from_ticket_id': ticket_two.id,
+            'to_ticket_id': ticket_one.id,
+            'how_related': RelatedTickets.Related.RELATED
         }
 
 
@@ -184,56 +209,57 @@ class UserSettingsPermissionsAPI(
 
 
 
-    def test_add_create_not_allowed(self):
+    def test_add_has_permission_post_not_allowed(self):
         """ Check correct permission for add 
 
-        Not allowed to add.
-        Ensure that the list view for HTTP/POST does not exist.
+        Attempt to add as user with permission
         """
 
-        with pytest.raises(urls.exceptions.NoReverseMatch) as e:
+        client = Client()
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list')
 
-        assert e.typename == 'NoReverseMatch'
+
+        client.force_login(self.add_user)
+        response = client.post(url, data=self.add_data)
+
+        assert response.status_code == 405
 
 
 
-    def test_delete_has_permission(self):
-        """ Check correct permission for delete
+    def test_change_has_permission_patch_not_allowed(self):
+        """ Check correct permission for change
 
-        Delete item as user with delete permission
+        Make change with user who has change permission
         """
 
         client = Client()
         url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
 
 
-        client.force_login(self.delete_user)
-        response = client.delete(url, data=self.delete_data)
+        client.force_login(self.change_user)
+        response = client.patch(url, data=self.change_data, content_type='application/json')
 
         assert response.status_code == 405
 
 
 
-    def test_change_has_permission(self):
+    def test_change_has_permission_put_not_allowed(self):
         """ Check correct permission for change
 
         Make change with user who has change permission
         """
 
-
-        item = self.model.objects.get( id = self.change_user.id )
-
-        item.default_organization = self.organization
-
-        item.save()
-
         client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs={'pk': item.id})
+        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
 
 
         client.force_login(self.change_user)
-        response = client.patch(url, data={'different_organization': self.different_organization.id}, content_type='application/json')
+        response = client.put(url, data=self.change_data, content_type='application/json')
 
-        assert response.status_code == 200
+        assert response.status_code == 405
