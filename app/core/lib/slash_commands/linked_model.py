@@ -122,7 +122,7 @@ For this command to process the following conditions must be met:
 
                 ticket = self
 
-            elif str(self._meta.verbose_name).lower() == 'comment':
+            elif str(self._meta.verbose_name).lower() == 'ticket comment':
 
                 ticket = self.ticket
 
