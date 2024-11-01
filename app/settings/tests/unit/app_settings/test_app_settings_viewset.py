@@ -10,7 +10,6 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import (
     APIPermissionChange,
-    APIPermissionDelete,
     APIPermissionView
 )
 
@@ -22,7 +21,6 @@ class AppSettingsPermissionsAPI(
     TestCase,
     # APIPermissions
     APIPermissionChange,
-    APIPermissionDelete,
     APIPermissionView
 ):
 
@@ -215,53 +213,4 @@ class AppSettingsPermissionsAPI(
         client.force_login(self.delete_user)
         response = client.delete(url, data=self.delete_data)
 
-        assert response.status_code == 403
-
-
-    # def test_view_has_permission(self):
-    #     """ Check correct permission for view
-
-    #     Attempt to view as user with view permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
-
-
-    #     client.force_login(self.view_user)
-    #     response = client.get(url)
-
-    #     assert response.status_code == 403
-
-
-    # def test_change_has_permission(self):
-    #     """ Check correct permission for change
-
-    #     Make change with user who has change permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
-
-
-    #     client.force_login(self.change_user)
-    #     response = client.patch(url, data=self.change_data, content_type='application/json')
-
-    #     assert response.status_code == 403
-
-
-    # def test_delete_has_permission(self):
-    #     """ Check correct permission for delete
-
-    #     Delete item as user with delete permission
-    #     """
-
-    #     client = Client()
-    #     url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
-
-
-    #     client.force_login(self.delete_user)
-    #     response = client.delete(url, data=self.delete_data)
-
-    #     assert response.status_code == 403
-
+        assert response.status_code == 405
