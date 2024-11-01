@@ -75,7 +75,7 @@ For this command to process the following conditions must be met:
 
                 to_ticket = self.__class__.objects.get(pk = ticket_id)
 
-            elif str(self._meta.verbose_name).lower() == 'comment':
+            elif str(self._meta.verbose_name).lower() == 'ticket comment':
 
                 from_ticket = self.ticket
 
