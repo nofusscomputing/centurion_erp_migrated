@@ -1,5 +1,7 @@
 from django.utils.safestring import mark_safe
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework import generics, permissions, routers, views
 # from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
