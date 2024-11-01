@@ -37,12 +37,11 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 ## Permissions
 
-If you wish to deviate from the standard CRUD permissions, define a function called `get_dynamic_permissions` within the `view`/`ViewSet`. The function must return a list of permissions. This is useful if you have added additional permissions to a model. 
+If you wish to deviate from the standard CRUD permissions, define a function called `get_dynamic_permissions` within the `view`/`ViewSet`. The function must return a list of permissions. This is useful if you have added additional permissions to a model.
 
 Example of the function `get_dynamic_permissions`
 
 ``` py
-
 
 def get_dynamic_permissions(self):
 
