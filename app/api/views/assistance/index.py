@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 
-
+@extend_schema(deprecated=True)
 class Index(views.APIView):
 
     permission_classes = [
