@@ -48,7 +48,7 @@ For this command to process the following conditions must be met:
 
         if ticket_id is not None:
 
-            from core.models.ticket.ticket import RelatedTickets
+            from core.serializers.ticket_related import RelatedTicketModelSerializer
 
             if command == 'relate':
 
@@ -82,12 +82,22 @@ For this command to process the following conditions must be met:
                 to_ticket = self.ticket.__class__.objects.get(pk = ticket_id)
 
 
-            RelatedTickets.objects.create(
-                from_ticket_id = from_ticket,
-                how_related = how_related,
-                to_ticket_id = to_ticket,
-                organization = self.organization
+            item = RelatedTicketModelSerializer(
+                data = {
+                    'from_ticket_id': from_ticket.id,
+                    'how_related': int(how_related),
+                    'to_ticket_id': to_ticket.id,
+                    'organization': from_ticket.organization.id
+                }
             )
+
+            if item.is_valid( raise_exception = False ):
+
+                item.save()
+
+            else:
+
+                return str(match.string[match.start():match.end()])
 
         else:
 
