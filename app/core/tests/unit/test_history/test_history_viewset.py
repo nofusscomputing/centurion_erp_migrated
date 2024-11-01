@@ -11,7 +11,7 @@ from django.test import Client, TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 
-from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_permissions_viewset import APIPermissionView
 
 from core.models.history import History
 
@@ -19,7 +19,7 @@ from itam.models.device import Device
 
 
 
-class HistoryPermissionsAPI(TestCase, APIPermissions):
+class HistoryPermissionsAPI(APIPermissionView, TestCase):
 
     model = History
 
@@ -27,7 +27,7 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
     
     url_name = '_api_v2_model_history'
 
-    # change_data = {'name': 'device'}
+    change_data = {'name': 'device'}
 
     delete_data = {}
 
@@ -253,7 +253,7 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
         assert response.status_code == 403
 
 
-    def test_add_has_permission(self):
+    def test_add_has_permission_method_not_allowed(self):
         """ Check correct permission for add 
 
         Custom permission of test case with same name.
@@ -275,10 +275,11 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
         client.force_login(self.add_user)
         response = client.post(url, data=self.add_data)
 
-        assert response.status_code == 403
+        assert response.status_code == 405
 
 
-    def test_change_has_permission(self):
+
+    def test_change_has_permission_method_not_allowed(self):
         """ Check correct permission for change
 
         Custom permission of test case with same name.
@@ -294,10 +295,10 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
         client.force_login(self.change_user)
         response = client.patch(url, data=self.change_data, content_type='application/json')
 
-        assert response.status_code == 403
+        assert response.status_code == 405
 
 
-    def test_delete_has_permission(self):
+    def test_delete_has_permission_method_not_allowed(self):
         """ Check correct permission for delete
 
         Custom permission of test case with same name.
@@ -313,5 +314,4 @@ class HistoryPermissionsAPI(TestCase, APIPermissions):
         client.force_login(self.delete_user)
         response = client.delete(url, data=self.delete_data)
 
-        assert response.status_code == 403
-
+        assert response.status_code == 405
