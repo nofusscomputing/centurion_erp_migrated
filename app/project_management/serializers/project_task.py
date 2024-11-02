@@ -23,8 +23,8 @@ class ProjectTaskTicketBaseSerializer(
 
 
 class ProjectTaskTicketModelSerializer(
-    ProjectTaskTicketBaseSerializer,
     TicketModelSerializer,
+    ProjectTaskTicketBaseSerializer,
 ):
 
 
@@ -117,8 +117,6 @@ class ProjectTaskAddTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
-            'project',
             'milestone',
             'subscribed_teams',
             'subscribed_users',
