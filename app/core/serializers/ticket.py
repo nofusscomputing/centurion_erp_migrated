@@ -276,6 +276,18 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                 raise UnknownTicketType()
 
+
+            if self.instance is None:
+
+                subscribed_users: list = []
+
+                if 'subscribed_users' in data:
+
+                    subscribed_users: list = data['subscribed_users']
+
+                data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
+
+
         self.validate_field_organization()
 
         self.validate_field_milestone()
