@@ -66,6 +66,7 @@ from itim.viewsets import (
     change,
     cluster as cluster_v2,
     cluster_type as cluster_type_v2,
+    incident,
     port as port_v2,
     service as service_v2,
     service_device as service_device_v2
@@ -142,6 +143,7 @@ router.register('itam/software/(?P<software_id>[0-9]+)/version', software_versio
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
 router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
 router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
+router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
 router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
 router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
@@ -149,7 +151,7 @@ router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, b
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
-router.register('itim/project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
+router.register('project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
 
 
 router.register('settings', settings_index_v2.Index, basename='_api_v2_settings_home')

@@ -25,6 +25,15 @@ from itim.serializers.change import (
     ChangeTicketViewSerializer,
 )
 
+from itim.serializers.incident import (
+    IncidentAddTicketModelSerializer,
+    IncidentChangeTicketModelSerializer,
+    IncidentImportTicketModelSerializer,
+    IncidentTriageTicketModelSerializer,
+    IncidentTicketModelSerializer,
+    IncidentTicketViewSerializer,
+)
+
 from settings.models.user_settings import UserSettings
 
 
