@@ -1,6 +1,7 @@
 from rest_framework import exceptions, status
 from rest_framework.exceptions import (
     MethodNotAllowed,
+    ParseError,
     PermissionDenied,
     ValidationError,
 )
