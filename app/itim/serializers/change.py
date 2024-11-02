@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.fields import empty
 
 from app.serializers.user import UserBaseSerializer
 
@@ -12,7 +13,7 @@ from core.serializers.ticket import (
 
 
 
-class RequestTicketBaseSerializer(
+class ChangeTicketBaseSerializer(
     TicketBaseSerializer
 ):
 
@@ -22,20 +23,21 @@ class RequestTicketBaseSerializer(
 
 
 
-class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
+class ChangeTicketModelSerializer(
+    ChangeTicketBaseSerializer,
     TicketModelSerializer,
 ):
 
 
     category = serializers.PrimaryKeyRelatedField(
         queryset = TicketCategory.objects.filter(
-            request = True
+            change = True
         ),
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
+    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Change])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -81,17 +83,17 @@ class RequestTicketModelSerializer(
 
 
 
-class RequestAddTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ChangeAddTicketModelSerializer(
+    ChangeTicketModelSerializer,
 ):
     """Serializer for `Add` user
 
     Args:
-        RequestTicketModelSerializer (class): Model Serializer
+        ChangeTicketModelSerializer (class): Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ChangeTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -125,16 +127,16 @@ class RequestAddTicketModelSerializer(
 
 
 
-class RequestChangeTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ChangeChangeTicketModelSerializer(
+    ChangeTicketModelSerializer,
 ):
     """Serializer for `Change` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ChangeTicketModelSerializer (class): Change Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ChangeTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -169,17 +171,17 @@ class RequestChangeTicketModelSerializer(
 
 
 
-class RequestTriageTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ChangeTriageTicketModelSerializer(
+    ChangeTicketModelSerializer,
 ):
     """Serializer for `Triage` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ChangeTicketModelSerializer (class): Change Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ChangeTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -204,16 +206,16 @@ class RequestTriageTicketModelSerializer(
 
 
 
-class RequestImportTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ChangeImportTicketModelSerializer(
+    ChangeTicketModelSerializer,
 ):
     """Serializer for `Import` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ChangeTicketModelSerializer (class): Change Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ChangeTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -225,9 +227,9 @@ class RequestImportTicketModelSerializer(
 
 
 
-class RequestTicketViewSerializer(
+class ChangeTicketViewSerializer(
     TicketViewSerializer,
-    RequestTicketModelSerializer,
+    ChangeTicketModelSerializer,
 ):
 
     pass

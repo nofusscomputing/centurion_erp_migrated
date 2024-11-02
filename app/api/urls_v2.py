@@ -63,9 +63,12 @@ from itam.viewsets import (
 
 from itim.viewsets import (
     index as itim_v2,
+    change,
     cluster as cluster_v2,
     cluster_type as cluster_type_v2,
+    incident,
     port as port_v2,
+    problem,
     service as service_v2,
     service_device as service_device_v2
 )
@@ -75,6 +78,7 @@ from project_management.viewsets import (
     project as project_v2,
     project_milestone as project_milestone_v2,
     project_state as project_state_v2,
+    project_task,
     project_type as project_type_v2,
 )
 
@@ -139,8 +143,11 @@ router.register('itam/software/(?P<software_id>[0-9]+)/version', software_versio
 
 
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
+router.register('itim/ticket/change', change.ViewSet, basename='_api_v2_ticket_change')
 router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
 router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
+router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
+router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')
 router.register('itim/service', service_v2.ViewSet, basename='_api_v2_service')
 router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_service_notes')
 
@@ -148,7 +155,8 @@ router.register('itim/service/(?P<service_id>[0-9]+)/notes', notes_v2.ViewSet, b
 router.register('project_management', project_management_v2.Index, basename='_api_v2_project_management_home')
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
-router.register('itim/project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
+router.register('project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
+router.register('project_management/project/(?P<project_id>[0-9]+)/project_task', project_task.ViewSet, basename='_api_v2_ticket_project_task')
 
 
 router.register('settings', settings_index_v2.Index, basename='_api_v2_settings_home')

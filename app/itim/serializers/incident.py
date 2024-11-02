@@ -12,7 +12,7 @@ from core.serializers.ticket import (
 
 
 
-class RequestTicketBaseSerializer(
+class IncidentTicketBaseSerializer(
     TicketBaseSerializer
 ):
 
@@ -22,20 +22,20 @@ class RequestTicketBaseSerializer(
 
 
 
-class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
+class IncidentTicketModelSerializer(
+    IncidentTicketBaseSerializer,
     TicketModelSerializer,
 ):
 
-
     category = serializers.PrimaryKeyRelatedField(
         queryset = TicketCategory.objects.filter(
-            request = True
+            incident = True
         ),
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
+    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Incident])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -81,17 +81,17 @@ class RequestTicketModelSerializer(
 
 
 
-class RequestAddTicketModelSerializer(
-    RequestTicketModelSerializer,
+class IncidentAddTicketModelSerializer(
+    IncidentTicketModelSerializer,
 ):
     """Serializer for `Add` user
 
     Args:
-        RequestTicketModelSerializer (class): Model Serializer
+        IncidentTicketModelSerializer (class): Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(IncidentTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -125,16 +125,16 @@ class RequestAddTicketModelSerializer(
 
 
 
-class RequestChangeTicketModelSerializer(
-    RequestTicketModelSerializer,
+class IncidentChangeTicketModelSerializer(
+    IncidentTicketModelSerializer,
 ):
-    """Serializer for `Change` user
+    """Serializer for `Incident` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        IncidentTicketModelSerializer (class): Incident Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(IncidentTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -169,17 +169,17 @@ class RequestChangeTicketModelSerializer(
 
 
 
-class RequestTriageTicketModelSerializer(
-    RequestTicketModelSerializer,
+class IncidentTriageTicketModelSerializer(
+    IncidentTicketModelSerializer,
 ):
     """Serializer for `Triage` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        IncidentTicketModelSerializer (class): Incident Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(IncidentTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -204,16 +204,16 @@ class RequestTriageTicketModelSerializer(
 
 
 
-class RequestImportTicketModelSerializer(
-    RequestTicketModelSerializer,
+class IncidentImportTicketModelSerializer(
+    IncidentTicketModelSerializer,
 ):
     """Serializer for `Import` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        IncidentTicketModelSerializer (class): Incident Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(IncidentTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -225,9 +225,9 @@ class RequestImportTicketModelSerializer(
 
 
 
-class RequestTicketViewSerializer(
+class IncidentTicketViewSerializer(
     TicketViewSerializer,
-    RequestTicketModelSerializer,
+    IncidentTicketModelSerializer,
 ):
 
     pass

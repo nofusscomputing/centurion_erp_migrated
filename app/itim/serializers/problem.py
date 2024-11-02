@@ -12,7 +12,7 @@ from core.serializers.ticket import (
 
 
 
-class RequestTicketBaseSerializer(
+class ProblemTicketBaseSerializer(
     TicketBaseSerializer
 ):
 
@@ -22,20 +22,21 @@ class RequestTicketBaseSerializer(
 
 
 
-class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
+class ProblemTicketModelSerializer(
+    ProblemTicketBaseSerializer,
     TicketModelSerializer,
 ):
 
 
     category = serializers.PrimaryKeyRelatedField(
         queryset = TicketCategory.objects.filter(
-            request = True
+            problem = True
         ),
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
+    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Problem])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -81,17 +82,17 @@ class RequestTicketModelSerializer(
 
 
 
-class RequestAddTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProblemAddTicketModelSerializer(
+    ProblemTicketModelSerializer,
 ):
     """Serializer for `Add` user
 
     Args:
-        RequestTicketModelSerializer (class): Model Serializer
+        ProblemTicketModelSerializer (class): Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProblemTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -125,16 +126,16 @@ class RequestAddTicketModelSerializer(
 
 
 
-class RequestChangeTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProblemChangeTicketModelSerializer(
+    ProblemTicketModelSerializer,
 ):
-    """Serializer for `Change` user
+    """Serializer for `Problem` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProblemTicketModelSerializer (class): Problem Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProblemTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -169,17 +170,17 @@ class RequestChangeTicketModelSerializer(
 
 
 
-class RequestTriageTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProblemTriageTicketModelSerializer(
+    ProblemTicketModelSerializer,
 ):
     """Serializer for `Triage` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProblemTicketModelSerializer (class): Problem Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProblemTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -204,16 +205,16 @@ class RequestTriageTicketModelSerializer(
 
 
 
-class RequestImportTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProblemImportTicketModelSerializer(
+    ProblemTicketModelSerializer,
 ):
     """Serializer for `Import` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProblemTicketModelSerializer (class): Problem Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProblemTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -225,9 +226,9 @@ class RequestImportTicketModelSerializer(
 
 
 
-class RequestTicketViewSerializer(
+class ProblemTicketViewSerializer(
     TicketViewSerializer,
-    RequestTicketModelSerializer,
+    ProblemTicketModelSerializer,
 ):
 
     pass

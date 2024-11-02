@@ -66,7 +66,13 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             ),
             'milestone': reverse("v2:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'notes': reverse("v2:_api_v2_project_notes-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
-            'tickets': 'ToDo'
+            'tickets': reverse(
+                "v2:_api_v2_ticket_project_task-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'project_id': item.pk
+                }
+            ),
         }
 
 

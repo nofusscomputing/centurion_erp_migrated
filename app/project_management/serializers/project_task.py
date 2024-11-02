@@ -12,7 +12,7 @@ from core.serializers.ticket import (
 
 
 
-class RequestTicketBaseSerializer(
+class ProjectTaskTicketBaseSerializer(
     TicketBaseSerializer
 ):
 
@@ -22,20 +22,21 @@ class RequestTicketBaseSerializer(
 
 
 
-class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
+class ProjectTaskTicketModelSerializer(
     TicketModelSerializer,
+    ProjectTaskTicketBaseSerializer,
 ):
 
 
     category = serializers.PrimaryKeyRelatedField(
         queryset = TicketCategory.objects.filter(
-            request = True
+            project_task = True
         ),
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
+    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.ProjectTask])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -81,17 +82,17 @@ class RequestTicketModelSerializer(
 
 
 
-class RequestAddTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProjectTaskAddTicketModelSerializer(
+    ProjectTaskTicketModelSerializer,
 ):
     """Serializer for `Add` user
 
     Args:
-        RequestTicketModelSerializer (class): Model Serializer
+        ProjectTaskTicketModelSerializer (class): Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProjectTaskTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -116,7 +117,6 @@ class RequestAddTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'project',
             'milestone',
             'subscribed_teams',
             'subscribed_users',
@@ -125,16 +125,16 @@ class RequestAddTicketModelSerializer(
 
 
 
-class RequestChangeTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProjectTaskChangeTicketModelSerializer(
+    ProjectTaskTicketModelSerializer,
 ):
-    """Serializer for `Change` user
+    """Serializer for `ProjectTask` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProjectTaskTicketModelSerializer (class): ProjectTask Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProjectTaskTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -169,17 +169,17 @@ class RequestChangeTicketModelSerializer(
 
 
 
-class RequestTriageTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProjectTaskTriageTicketModelSerializer(
+    ProjectTaskTicketModelSerializer,
 ):
     """Serializer for `Triage` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProjectTaskTicketModelSerializer (class): ProjectTask Model Serializer
     """
 
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProjectTaskTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -204,16 +204,16 @@ class RequestTriageTicketModelSerializer(
 
 
 
-class RequestImportTicketModelSerializer(
-    RequestTicketModelSerializer,
+class ProjectTaskImportTicketModelSerializer(
+    ProjectTaskTicketModelSerializer,
 ):
     """Serializer for `Import` user
 
     Args:
-        RequestTicketModelSerializer (class): Request Model Serializer
+        ProjectTaskTicketModelSerializer (class): ProjectTask Model Serializer
     """
 
-    class Meta(RequestTicketModelSerializer.Meta):
+    class Meta(ProjectTaskTicketModelSerializer.Meta):
 
         read_only_fields = [
             'id',
@@ -225,9 +225,9 @@ class RequestImportTicketModelSerializer(
 
 
 
-class RequestTicketViewSerializer(
+class ProjectTaskTicketViewSerializer(
     TicketViewSerializer,
-    RequestTicketModelSerializer,
+    ProjectTaskTicketModelSerializer,
 ):
 
     pass

@@ -78,7 +78,7 @@ class TicketAPI(
 
         self.view_team.permissions.set([view_permissions])
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+        self.view_user = User.objects.create_user(username="test_user_view", password="password", is_superuser = True)
         teamuser = TeamUsers.objects.create(
             team = self.view_team,
             user = self.view_user
@@ -485,7 +485,61 @@ class TicketAPI(
         project field must be int
         """
 
-        assert type(self.api_data['project']) is int
+        assert type(self.api_data['project']) is dict
+
+
+    def test_api_field_exists_project_id(self):
+        """ Test for existance of API Field
+
+        project.id field must exist
+        """
+
+        assert 'id' in self.api_data['project']
+
+
+    def test_api_field_type_project_id(self):
+        """ Test for type for API Field
+
+        project.id field must be int
+        """
+
+        assert type(self.api_data['project']['id']) is int
+
+
+    def test_api_field_exists_project_display_name(self):
+        """ Test for existance of API Field
+
+        project.display_name field must exist
+        """
+
+        assert 'display_name' in self.api_data['project']
+
+
+    def test_api_field_type_project_display_name(self):
+        """ Test for type for API Field
+
+        project.display_name field must be str
+        """
+
+        assert type(self.api_data['project']['display_name']) is str
+
+
+    def test_api_field_exists_project_url(self):
+        """ Test for existance of API Field
+
+        project.url field must exist
+        """
+
+        assert 'url' in self.api_data['project']
+
+
+    def test_api_field_type_project_url(self):
+        """ Test for type for API Field
+
+        project.url field must be Hyperlink
+        """
+
+        assert type(self.api_data['project']['url']) is Hyperlink
 
 
 
@@ -504,7 +558,61 @@ class TicketAPI(
         milestone field must be int
         """
 
-        assert type(self.api_data['milestone']) is int
+        assert type(self.api_data['milestone']) is dict
+
+
+    def test_api_field_exists_milestone_id(self):
+        """ Test for existance of API Field
+
+        milestone.id field must exist
+        """
+
+        assert 'id' in self.api_data['milestone']
+
+
+    def test_api_field_type_milestone_id(self):
+        """ Test for type for API Field
+
+        milestone.id field must be int
+        """
+
+        assert type(self.api_data['milestone']['id']) is int
+
+
+    def test_api_field_exists_milestone_display_name(self):
+        """ Test for existance of API Field
+
+        milestone.display_name field must exist
+        """
+
+        assert 'display_name' in self.api_data['milestone']
+
+
+    def test_api_field_type_milestone_display_name(self):
+        """ Test for type for API Field
+
+        milestone.display_name field must be str
+        """
+
+        assert type(self.api_data['milestone']['display_name']) is str
+
+
+    def test_api_field_exists_milestone_url(self):
+        """ Test for existance of API Field
+
+        milestone.url field must exist
+        """
+
+        assert 'url' in self.api_data['milestone']
+
+
+    def test_api_field_type_milestone_url(self):
+        """ Test for type for API Field
+
+        milestone.url field must be str
+        """
+
+        assert type(self.api_data['milestone']['url']) is str
 
 
 
