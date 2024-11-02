@@ -5,6 +5,7 @@ from rest_framework.fields import empty
 
 from api.serializers.core.ticket_comment import TicketCommentSerializer
 
+from core import exceptions as centurion_exception
 from core.forms.validate_ticket import TicketValidation
 from core.models.ticket.ticket import Ticket
 
@@ -188,7 +189,7 @@ class TicketSerializer(
         
         except Exception as unhandled_exception:
 
-            serializers.ParseError( 
+            centurion_exception.ParseError( 
                 detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
             )
 

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from app.serializers.user import UserBaseSerializer
 
+from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket import (
     Ticket,
     TicketBaseSerializer,
@@ -26,7 +27,16 @@ class ProjectTaskTicketModelSerializer(
     TicketModelSerializer,
 ):
 
+
+    category = serializers.PrimaryKeyRelatedField(
+        queryset = TicketCategory.objects.filter(
+            project_task = True
+        ),
+        required = False
+    )
+
     status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.ProjectTask])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -218,8 +228,8 @@ class ProjectTaskImportTicketModelSerializer(
 
 
 class ProjectTaskTicketViewSerializer(
-    ProjectTaskTicketModelSerializer,
     TicketViewSerializer,
+    ProjectTaskTicketModelSerializer,
 ):
 
     pass
