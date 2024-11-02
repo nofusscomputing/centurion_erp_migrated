@@ -79,8 +79,6 @@ class TicketModelSerializer(TicketBaseSerializer):
 
         context = self.context.copy()
 
-        context = self.context.copy()
-
         ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
 
         if ticket_type == 'project_task':
@@ -96,8 +94,7 @@ class TicketModelSerializer(TicketBaseSerializer):
                 'pk': item.pk
             }
 
-
-        return {
+        url_dict: dict = {
             '_self': reverse(
                 "v2:_api_v2_ticket_" + ticket_type + "-detail",
                 request=context['view'].request,
@@ -105,8 +102,25 @@ class TicketModelSerializer(TicketBaseSerializer):
             ),
             'comments': reverse('v2:_api_v2_ticket_comments-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
-            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
         }
+
+        if item.category:
+
+            url_dict.update({
+            'ticketcategory': reverse(
+                'v2:_api_v2_ticket_category-list',
+                request=context['view'].request,
+                kwargs={},
+            ) + '?' + ticket_type + '=true',
+            })
+
+
+        url_dict.update({
+            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+        })
+
+
+        return url_dict
 
 
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
@@ -190,19 +204,18 @@ class TicketModelSerializer(TicketBaseSerializer):
         return data
 
 
-
 class TicketViewSerializer(TicketModelSerializer):
 
-    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
-
     assigned_teams = TeamBaseSerializer(many=True)
+
+    assigned_users = UserBaseSerializer(many=True, label='Assigned Users')
 
     category = TicketCategoryBaseSerializer()
 
     opened_by = UserBaseSerializer()
 
-    subscribed_users = UserBaseSerializer(many=True)
+    organization = OrganizationBaseSerializer(many=False, read_only=True)
 
     subscribed_teams = TeamBaseSerializer(many=True)
 
-    organization = OrganizationBaseSerializer(many=False, read_only=True)
+    subscribed_users = UserBaseSerializer(many=True)
