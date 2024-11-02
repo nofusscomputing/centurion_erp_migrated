@@ -21,9 +21,11 @@ class ProjectMilestoneBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item):
 
+        context = self.context.copy()
+
         return reverse(
             "v2:_api_v2_project_milestone-detail",
-            request=self._context['view'].request,
+            request=context['view'].request,
             kwargs={
                 'project_id': item.project.id,
                 'pk': item.pk
