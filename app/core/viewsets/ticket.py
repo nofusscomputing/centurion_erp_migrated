@@ -219,7 +219,7 @@ class TicketViewSet(ModelViewSet):
 
                 if self._ticket_type.lower() == str(ticket_types[i].label).lower():
 
-                    ticket_type_id = i
+                    ticket_type_id = int(ticket_types[i])
 
                     break
 
