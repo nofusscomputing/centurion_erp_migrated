@@ -14,6 +14,8 @@ from core.models.ticket.ticket import Ticket
 from core.fields.badge import Badge, BadgeField
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
+from project_management.serializers.project import ProjectBaseSerializer
+
 
 
 class TicketBaseSerializer(serializers.ModelSerializer):
@@ -304,6 +306,8 @@ class TicketViewSerializer(TicketModelSerializer):
     opened_by = UserBaseSerializer()
 
     organization = OrganizationBaseSerializer(many=False, read_only=True)
+
+    project = ProjectBaseSerializer(many=False, read_only=True)
 
     subscribed_teams = TeamBaseSerializer(many=True)
 
