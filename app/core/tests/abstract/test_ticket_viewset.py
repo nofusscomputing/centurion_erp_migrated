@@ -9,6 +9,8 @@ from api.tests.abstract.api_permissions_viewset import APIPermissions
 
 from core.models.ticket.ticket import Ticket
 
+from project_management.models.projects import Project
+
 from settings.models.user_settings import UserSettings
 
 
@@ -51,8 +53,6 @@ class TicketViewSetPermissionsAPI(
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
-
-        self.url_kwargs = {}
 
 
         view_permissions = Permission.objects.get(
@@ -166,17 +166,34 @@ class TicketViewSetPermissionsAPI(
         )
 
 
+        self.project = Project.objects.create(
+            organization = self.organization,
+            name = 'proj name'
+        )
+
+
         self.item = self.model.objects.create(
             organization = self.organization,
             title = 'one',
             description = 'some text for body',
             opened_by = self.view_user,
             ticket_type = self.ticket_type_enum,
-            status = Ticket.TicketStatus.All.NEW
+            status = Ticket.TicketStatus.All.NEW,
+            project = self.project,
         )
 
+        if self.ticket_type == 'project_task':
 
-        self.url_view_kwargs = {'pk': self.item.id}
+            self.url_kwargs = { 'project_id': self.project.id }
+
+            self.url_view_kwargs = { 'project_id': self.project.id, 'pk': self.item.id}
+
+        else:
+
+            self.url_kwargs = {}
+
+            self.url_view_kwargs = {'pk': self.item.id}
+
 
         self.add_data = {
             'title': 'team_post',
@@ -184,6 +201,7 @@ class TicketViewSetPermissionsAPI(
             'description': 'article text',
             'ticket_type': int(self.ticket_type_enum),
             'status': int(Ticket.TicketStatus.All.NEW),
+            'project': self.project.id,
         }
 
 
