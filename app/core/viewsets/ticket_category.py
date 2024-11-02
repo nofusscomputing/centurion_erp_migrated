@@ -56,7 +56,12 @@ from core.serializers.ticket_category import (
 class ViewSet(ModelViewSet):
 
     filterset_fields = [
+        'change',
+        'incident',
         'organization',
+        'problem',
+        'project_task',
+        'request',
     ]
 
     search_fields = [
