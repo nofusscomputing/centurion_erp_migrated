@@ -78,7 +78,7 @@ class TicketAPI(
 
         self.view_team.permissions.set([view_permissions])
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
+        self.view_user = User.objects.create_user(username="test_user_view", password="password", is_superuser = True)
         teamuser = TeamUsers.objects.create(
             team = self.view_team,
             user = self.view_user
