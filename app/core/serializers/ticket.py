@@ -221,6 +221,42 @@ class TicketModelSerializer(TicketBaseSerializer):
 
         return is_valid
 
+
+    def validate_field_milestone( self ) -> bool:
+
+        is_valid: bool = False
+
+        if self.instance is not None:
+
+            if self.instance.milestone is None:
+
+                return True
+
+            else:
+
+                if self.instance.project is None:
+
+                    raise centurion_exception.ValidationError(
+                        details = 'Milestones require a project',
+                        code = 'milestone_requires_project',
+                    )
+
+                    return False
+
+                if self.instance.project.id == self.instance.milestone.project.id:
+
+                    return True
+
+                else:
+
+                    raise centurion_exception.ValidationError(
+                        detail = 'Milestone must be from the same project',
+                        code = 'milestone_same_project',
+                    )
+
+        return is_valid
+
+
     def validate(self, data):
 
         if 'view' in self._context:
@@ -241,6 +277,8 @@ class TicketModelSerializer(TicketBaseSerializer):
                 raise UnknownTicketType()
 
         self.validate_field_organization()
+
+        self.validate_field_milestone()
 
         return data
 
