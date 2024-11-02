@@ -104,6 +104,12 @@ class TicketModelSerializer(TicketBaseSerializer):
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
+        if item.project:
+
+            url_dict.update({
+                'project': reverse("v2:_api_v2_project-list", request=context['view'].request, kwargs={}),
+            })
+
         if item.category:
 
             url_dict.update({
