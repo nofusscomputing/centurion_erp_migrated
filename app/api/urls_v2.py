@@ -63,6 +63,7 @@ from itam.viewsets import (
 
 from itim.viewsets import (
     index as itim_v2,
+    change,
     cluster as cluster_v2,
     cluster_type as cluster_type_v2,
     port as port_v2,

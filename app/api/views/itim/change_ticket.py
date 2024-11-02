@@ -5,7 +5,7 @@ from api.serializers.itim.change import ChangeTicketSerializer
 from api.views.core.tickets import View
 
 
-
+@extend_schema(deprecated=True)
 class View(View):
 
     _ticket_type:str = 'change'
