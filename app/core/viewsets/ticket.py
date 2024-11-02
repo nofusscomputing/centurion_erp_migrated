@@ -16,7 +16,17 @@ from core.serializers.ticket import (
     Ticket,
 )
 
+from itim.serializers.change import (
+    ChangeAddTicketModelSerializer,
+    ChangeChangeTicketModelSerializer,
+    ChangeImportTicketModelSerializer,
+    ChangeTriageTicketModelSerializer,
+    ChangeTicketModelSerializer,
+    ChangeTicketViewSerializer,
+)
+
 from settings.models.user_settings import UserSettings
+
 
 
 class TicketViewSet(ModelViewSet):
