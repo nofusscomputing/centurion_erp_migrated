@@ -15,6 +15,7 @@ from core.fields.badge import Badge, BadgeField
 from core.serializers.ticket_category import TicketCategoryBaseSerializer
 
 from project_management.serializers.project import ProjectBaseSerializer
+from project_management.serializers.project_milestone import ProjectMilestoneBaseSerializer
 
 
 
@@ -308,6 +309,8 @@ class TicketViewSerializer(TicketModelSerializer):
     organization = OrganizationBaseSerializer(many=False, read_only=True)
 
     project = ProjectBaseSerializer(many=False, read_only=True)
+
+    milestone = ProjectMilestoneBaseSerializer(many=False, read_only=True)
 
     subscribed_teams = TeamBaseSerializer(many=True)
 
