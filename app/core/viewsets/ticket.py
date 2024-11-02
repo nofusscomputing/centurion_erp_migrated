@@ -121,7 +121,7 @@ class TicketViewSet(ModelViewSet):
                 if self.has_organization_permission(
                     organization = organization.id,
                     permissions_required = [
-                        str('core.import_ticket_' + self._ticket_type).lower()
+                        str('core.import_ticket_' + self._ticket_type).lower().replace(' ', '_')
                     ]
                 ):
 
@@ -145,7 +145,7 @@ class TicketViewSet(ModelViewSet):
                 if self.has_organization_permission(
                     organization = organization.id,
                     permissions_required = [
-                        str('core.triage_ticket_' + self._ticket_type).lower()
+                        str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
                     ]
                 ):
 
@@ -163,7 +163,7 @@ class TicketViewSet(ModelViewSet):
             if self.has_organization_permission(
                 organization = organization.id,
                 permissions_required = [
-                    str('core.triage_ticket_' + self._ticket_type).lower()
+                    str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
                 ]
             ):
 
@@ -179,7 +179,7 @@ class TicketViewSet(ModelViewSet):
             raise ValueError('unable to determin the action_keyword')
 
         self.permission_required = [
-            str('core.' + action_keyword + '_ticket_' + self._ticket_type).lower(),
+            str('core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'),
         ]
 
         return super().get_permission_required()
