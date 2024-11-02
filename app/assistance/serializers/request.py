@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from app.serializers.user import UserBaseSerializer
 
+from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket import (
     Ticket,
     TicketBaseSerializer,
@@ -25,6 +26,14 @@ class RequestTicketModelSerializer(
     RequestTicketBaseSerializer,
     TicketModelSerializer,
 ):
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        queryset = TicketCategory.objects.filter(
+            request = True
+        ),
+        required = False
+    )
 
     status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
 
@@ -217,8 +226,8 @@ class RequestImportTicketModelSerializer(
 
 
 class RequestTicketViewSerializer(
-    RequestTicketModelSerializer,
     TicketViewSerializer,
+    RequestTicketModelSerializer,
 ):
 
     pass

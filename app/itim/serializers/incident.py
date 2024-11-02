@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from app.serializers.user import UserBaseSerializer
 
+from core.models.ticket.ticket_category import TicketCategory
 from core.serializers.ticket import (
     Ticket,
     TicketBaseSerializer,
@@ -26,7 +27,15 @@ class IncidentTicketModelSerializer(
     TicketModelSerializer,
 ):
 
+    category = serializers.PrimaryKeyRelatedField(
+        queryset = TicketCategory.objects.filter(
+            incident = True
+        ),
+        required = False
+    )
+
     status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Incident])
+
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -218,8 +227,8 @@ class IncidentImportTicketModelSerializer(
 
 
 class IncidentTicketViewSerializer(
-    IncidentTicketModelSerializer,
     TicketViewSerializer,
+    IncidentTicketModelSerializer,
 ):
 
     pass
