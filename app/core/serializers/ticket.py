@@ -7,6 +7,8 @@ from access.serializers.teams import TeamBaseSerializer
 from app.serializers.user import UserBaseSerializer
 
 from api.exceptions import UnknownTicketType
+
+from core import exceptions as centurion_exception
 from core.models.ticket.ticket import Ticket
 
 from core.fields.badge import Badge, BadgeField
@@ -187,6 +189,38 @@ class TicketModelSerializer(TicketBaseSerializer):
         ]
 
 
+
+    def validate_field_organization(self) -> bool:
+        """Check `organization field`
+
+        Raises:
+            ValidationError: user tried to change the organization
+
+        Returns:
+            True (bool): OK
+            False (bool): User tried to edit the organization
+        """
+
+        is_valid: bool = True
+
+        if self.instance is not None:
+
+            if self.instance.pk is not None:
+
+                if 'organization' in self.get_user_changed_fields:
+
+                    if self.field_edited('organization'):
+
+                        is_valid = False
+
+                        centurion_exception.ValidationError(
+                            detail = 'cant edit field: organization',
+                            code = 'cant_edit_field_organization',
+                        )
+
+
+        return is_valid
+
     def validate(self, data):
 
         if 'view' in self._context:
@@ -206,6 +240,7 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                 raise UnknownTicketType()
 
+        self.validate_field_organization()
 
         return data
 
