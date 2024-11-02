@@ -78,6 +78,7 @@ from project_management.viewsets import (
     project as project_v2,
     project_milestone as project_milestone_v2,
     project_state as project_state_v2,
+    project_task,
     project_type as project_type_v2,
 )
 
@@ -155,6 +156,7 @@ router.register('project_management', project_management_v2.Index, basename='_ap
 router.register('project_management/project', project_v2.ViewSet, basename='_api_v2_project')
 router.register('project_management/project/(?P<project_id>[0-9]+)/milestone', project_milestone_v2.ViewSet, basename='_api_v2_project_milestone')
 router.register('project_management/project/(?P<project_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_project_notes')
+router.register('project_management/project/(?P<project_id>[0-9]+)/project_task', project_task.ViewSet, basename='_api_v2_ticket_project_task')
 
 
 router.register('settings', settings_index_v2.Index, basename='_api_v2_settings_home')
