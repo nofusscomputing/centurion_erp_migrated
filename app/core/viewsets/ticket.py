@@ -34,6 +34,16 @@ from itim.serializers.incident import (
     IncidentTicketViewSerializer,
 )
 
+from itim.serializers.problem import (
+    ProblemAddTicketModelSerializer,
+    ProblemChangeTicketModelSerializer,
+    ProblemImportTicketModelSerializer,
+    ProblemTriageTicketModelSerializer,
+    ProblemTicketModelSerializer,
+    ProblemTicketViewSerializer,
+)
+
+
 from settings.models.user_settings import UserSettings
 
 

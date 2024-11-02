@@ -172,6 +172,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         "link": "/itim/ticket/incident"
                     },
                     {
+                        "display_name": "Problems",
+                        "name": "problem_ticket",
+                        "link": "/itim/ticket/problem"
+                    },
+                    {
                         "display_name": "Services",
                         "name": "service",
                         "link": "/itim/service"
