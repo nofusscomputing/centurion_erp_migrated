@@ -207,9 +207,7 @@ class TicketModelSerializer(TicketBaseSerializer):
 
             if self.instance.pk is not None:
 
-                if 'organization' in self.get_user_changed_fields:
-
-                    if self.field_edited('organization'):
+                if 'organization' in self.initial_data:
 
                         is_valid = False
 
