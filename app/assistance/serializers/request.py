@@ -23,8 +23,8 @@ class RequestTicketBaseSerializer(
 
 
 class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
     TicketModelSerializer,
+    RequestTicketBaseSerializer,
 ):
 
 

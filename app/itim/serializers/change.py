@@ -24,8 +24,8 @@ class ChangeTicketBaseSerializer(
 
 
 class ChangeTicketModelSerializer(
-    ChangeTicketBaseSerializer,
     TicketModelSerializer,
+    ChangeTicketBaseSerializer,
 ):
 
 
