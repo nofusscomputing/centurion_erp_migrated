@@ -24,8 +24,8 @@ class ChangeTicketBaseSerializer(
 
 
 class ChangeTicketModelSerializer(
-    ChangeTicketBaseSerializer,
     TicketModelSerializer,
+    ChangeTicketBaseSerializer,
 ):
 
 
@@ -36,7 +36,11 @@ class ChangeTicketModelSerializer(
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Change])
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Change],
+        default = Ticket.TicketStatus.All.NEW,
+        required = False,
+    )
 
 
     class Meta( TicketModelSerializer.Meta ):
@@ -66,6 +70,10 @@ class ChangeTicketModelSerializer(
             'organization',
             'project',
             'milestone',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'subscribed_teams',
             'subscribed_users',
             '_urls',
@@ -91,6 +99,11 @@ class ChangeAddTicketModelSerializer(
     Args:
         ChangeTicketModelSerializer (class): Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
 
 
     class Meta(ChangeTicketModelSerializer.Meta):
@@ -135,6 +148,17 @@ class ChangeChangeTicketModelSerializer(
     Args:
         ChangeTicketModelSerializer (class): Change Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
+
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Change],
+        read_only = True,
+    )
+
 
     class Meta(ChangeTicketModelSerializer.Meta):
 
@@ -200,7 +224,6 @@ class ChangeTriageTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
             '_urls',
         ]
 

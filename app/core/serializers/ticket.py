@@ -214,10 +214,23 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                         is_valid = False
 
-                        centurion_exception.ValidationError(
+                        raise centurion_exception.ValidationError(
                             detail = 'cant edit field: organization',
                             code = 'cant_edit_field_organization',
                         )
+
+        elif self.instance is None:
+
+            if 'organization' not in self.initial_data:
+
+                is_valid = False
+
+                raise centurion_exception.ValidationError(
+                    detail = {
+                        'organization': 'this field is required'
+                    },
+                    code = 'required',
+                )
 
 
         return is_valid
@@ -287,6 +300,8 @@ class TicketModelSerializer(TicketBaseSerializer):
                     subscribed_users: list = data['subscribed_users']
 
                 data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
+
+                data['status'] = int(Ticket.TicketStatus.All.NEW)
 
 
         self.validate_field_organization()

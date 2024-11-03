@@ -23,8 +23,8 @@ class RequestTicketBaseSerializer(
 
 
 class RequestTicketModelSerializer(
-    RequestTicketBaseSerializer,
     TicketModelSerializer,
+    RequestTicketBaseSerializer,
 ):
 
 
@@ -35,7 +35,11 @@ class RequestTicketModelSerializer(
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Request])
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Request],
+        default = Ticket.TicketStatus.All.NEW,
+        required = False,
+    )
 
     class Meta( TicketModelSerializer.Meta ):
 
@@ -66,6 +70,10 @@ class RequestTicketModelSerializer(
             'milestone',
             'subscribed_teams',
             'subscribed_users',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             '_urls',
         ]
 
@@ -89,6 +97,11 @@ class RequestAddTicketModelSerializer(
     Args:
         RequestTicketModelSerializer (class): Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
 
 
     class Meta(RequestTicketModelSerializer.Meta):
@@ -133,6 +146,17 @@ class RequestChangeTicketModelSerializer(
     Args:
         RequestTicketModelSerializer (class): Request Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
+
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Request],
+        read_only = True,
+    )
+
 
     class Meta(RequestTicketModelSerializer.Meta):
 
@@ -198,7 +222,6 @@ class RequestTriageTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
             '_urls',
         ]
 

@@ -23,8 +23,8 @@ class ProblemTicketBaseSerializer(
 
 
 class ProblemTicketModelSerializer(
-    ProblemTicketBaseSerializer,
     TicketModelSerializer,
+    ProblemTicketBaseSerializer,
 ):
 
 
@@ -35,7 +35,11 @@ class ProblemTicketModelSerializer(
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Problem])
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Problem],
+        default = Ticket.TicketStatus.All.NEW,
+        required = False,
+    )
 
 
     class Meta( TicketModelSerializer.Meta ):
@@ -65,6 +69,10 @@ class ProblemTicketModelSerializer(
             'organization',
             'project',
             'milestone',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'subscribed_teams',
             'subscribed_users',
             '_urls',
@@ -90,6 +98,11 @@ class ProblemAddTicketModelSerializer(
     Args:
         ProblemTicketModelSerializer (class): Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
 
 
     class Meta(ProblemTicketModelSerializer.Meta):
@@ -134,6 +147,17 @@ class ProblemChangeTicketModelSerializer(
     Args:
         ProblemTicketModelSerializer (class): Problem Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
+
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Problem],
+        read_only = True,
+    )
+
 
     class Meta(ProblemTicketModelSerializer.Meta):
 
@@ -199,7 +223,6 @@ class ProblemTriageTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
             '_urls',
         ]
 

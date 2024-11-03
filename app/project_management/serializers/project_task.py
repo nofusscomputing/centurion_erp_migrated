@@ -24,7 +24,6 @@ class ProjectTaskTicketBaseSerializer(
 
 class ProjectTaskTicketModelSerializer(
     TicketModelSerializer,
-    ProjectTaskTicketBaseSerializer,
 ):
 
 
@@ -35,7 +34,11 @@ class ProjectTaskTicketModelSerializer(
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.ProjectTask])
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.ProjectTask],
+        default = Ticket.TicketStatus.All.NEW,
+        required = False,
+    )
 
 
     class Meta( TicketModelSerializer.Meta ):
@@ -65,6 +68,10 @@ class ProjectTaskTicketModelSerializer(
             'organization',
             'project',
             'milestone',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'subscribed_teams',
             'subscribed_users',
             '_urls',
@@ -90,6 +97,11 @@ class ProjectTaskAddTicketModelSerializer(
     Args:
         ProjectTaskTicketModelSerializer (class): Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
 
 
     class Meta(ProjectTaskTicketModelSerializer.Meta):
@@ -133,6 +145,17 @@ class ProjectTaskChangeTicketModelSerializer(
     Args:
         ProjectTaskTicketModelSerializer (class): ProjectTask Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
+
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.ProjectTask],
+        read_only = True,
+    )
+
 
     class Meta(ProjectTaskTicketModelSerializer.Meta):
 
@@ -198,7 +221,6 @@ class ProjectTaskTriageTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
             '_urls',
         ]
 
