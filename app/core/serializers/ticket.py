@@ -301,6 +301,8 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                 data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
 
+                data['status'] = int(Ticket.TicketStatus.All.NEW)
+
 
         self.validate_field_organization()
 
