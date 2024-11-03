@@ -23,8 +23,8 @@ class ProblemTicketBaseSerializer(
 
 
 class ProblemTicketModelSerializer(
-    ProblemTicketBaseSerializer,
     TicketModelSerializer,
+    ProblemTicketBaseSerializer,
 ):
 
 

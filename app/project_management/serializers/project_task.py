@@ -24,7 +24,6 @@ class ProjectTaskTicketBaseSerializer(
 
 class ProjectTaskTicketModelSerializer(
     TicketModelSerializer,
-    ProjectTaskTicketBaseSerializer,
 ):
 
 
