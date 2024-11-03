@@ -23,8 +23,8 @@ class IncidentTicketBaseSerializer(
 
 
 class IncidentTicketModelSerializer(
-    IncidentTicketBaseSerializer,
     TicketModelSerializer,
+    IncidentTicketBaseSerializer,
 ):
 
     category = serializers.PrimaryKeyRelatedField(
