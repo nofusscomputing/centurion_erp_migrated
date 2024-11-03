@@ -34,7 +34,11 @@ class IncidentTicketModelSerializer(
         required = False
     )
 
-    status = serializers.ChoiceField([(e.value, e.label) for e in Ticket.TicketStatus.Incident])
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Incident],
+        default = Ticket.TicketStatus.All.NEW,
+        required = False,
+    )
 
 
     class Meta( TicketModelSerializer.Meta ):
@@ -64,6 +68,10 @@ class IncidentTicketModelSerializer(
             'organization',
             'project',
             'milestone',
+            'planned_start_date',
+            'planned_finish_date',
+            'real_start_date',
+            'real_finish_date',
             'subscribed_teams',
             'subscribed_users',
             '_urls',
@@ -89,6 +97,11 @@ class IncidentAddTicketModelSerializer(
     Args:
         IncidentTicketModelSerializer (class): Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
 
 
     class Meta(IncidentTicketModelSerializer.Meta):
@@ -133,6 +146,17 @@ class IncidentChangeTicketModelSerializer(
     Args:
         IncidentTicketModelSerializer (class): Incident Model Serializer
     """
+
+
+    category = serializers.PrimaryKeyRelatedField(
+        read_only = True,
+    )
+
+    status = serializers.ChoiceField(
+        [(e.value, e.label) for e in Ticket.TicketStatus.Incident],
+        read_only = True,
+    )
+
 
     class Meta(IncidentTicketModelSerializer.Meta):
 
@@ -198,7 +222,6 @@ class IncidentTriageTicketModelSerializer(
             'real_start_date',
             'real_finish_date',
             'opened_by',
-            'organization',
             '_urls',
         ]
 
