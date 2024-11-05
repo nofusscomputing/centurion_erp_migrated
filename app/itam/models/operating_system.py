@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 from rest_framework.reverse import reverse
 
@@ -7,6 +9,7 @@ from access.models import TenancyObject
 
 from core.mixin.history_save import SaveHistory
 from core.models.manufacturer import Manufacturer
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 
 
@@ -161,6 +164,14 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
     def __str__(self):
 
         return self.name
+
+
+
+@receiver(post_delete, sender=OperatingSystem, dispatch_uid='operating_system_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='operating_system_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM)
+
 
 
 class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
