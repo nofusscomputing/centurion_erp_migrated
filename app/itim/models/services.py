@@ -2,12 +2,16 @@ import re
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import Team, TenancyObject
+
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device
 
@@ -374,3 +378,10 @@ class Service(TenancyObject):
     def __str__(self):
 
         return self.name
+
+
+
+@receiver(post_delete, sender=Service, dispatch_uid='service_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='service_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.SERVICE)

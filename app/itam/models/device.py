@@ -4,6 +4,8 @@ import re
 from datetime import timedelta
 
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
 
 from rest_framework import serializers
@@ -16,6 +18,7 @@ from app.helpers.merge_software import merge_software
 
 from core.classes.icon import Icon
 from core.mixin.history_save import SaveHistory
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
 from itam.models.device_models import DeviceModel
@@ -498,6 +501,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     config.update(service_config)
 
         return config
+
+
+
+@receiver(post_delete, sender=Device, dispatch_uid='device_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='device_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.DEVICE)
+
+
 
 
 class DeviceSoftware(DeviceCommonFields, SaveHistory):
