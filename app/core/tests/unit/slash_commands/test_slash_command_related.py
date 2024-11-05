@@ -1399,3 +1399,322 @@ class RelatedTicketBlockedBySlashCommand(
         )
 
         assert len(list(comment)) == 1
+
+
+
+
+class RelatedTicketRelateSlashCommand(
+    SlashCommands,
+    TestCase,
+):
+    """Related Item test cases.
+
+    Must test the following:
+
+    - Can link an item via ticket
+    - Can link an item via ticket comment
+    - Can link multiple items via ticket (single command, multiple items)
+    - Can link multiple items via ticket comment (single command, multiple items)
+    - Can link multiple items via ticket (multiple commands, single item)
+    - Can link multiple items via ticket comment (multiple commands, single item)
+
+    - Action comment add for each related ticket.
+
+    Args:
+        SlashCommands (class): Test cases common to ALL slash commands.
+    """
+
+
+    slash_command = 'relate'
+
+
+    @classmethod
+    def setUpTestData(self):
+
+
+        organization = Organization.objects.create(name='test_org ' + self.slash_command)
+
+        self.organization = organization
+
+        self.user_two = User.objects.create_user(username="test_user_two", password="password")
+
+
+        self.ticket_two = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket number two',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user_two,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.ticket_three = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket number three',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user_two,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.ticket_four = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket number four',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user_two,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.ticket_five = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket number five',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user_two,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.ticket_six = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket number six',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user_two,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.item_one = '#' + str(self.ticket_two.id)
+        self.item_two = '#' + str(self.ticket_three.id)
+        self.item_three = '#' + str(self.ticket_four.id)
+        self.item_four = '#' + str(self.ticket_five.id)
+        self.item_five = '#' + str(self.ticket_six.id)
+
+        self.command_single_command_single_item = '/' + self.slash_command + ' ' + self.item_one
+        self.command_single_command_multiple_item = '/' + self.slash_command + ' ' + self.item_two + ' ' + self.item_three
+        self.command_multiple_command_single_item = '/' + self.slash_command + ' ' + self.item_four + "\r\n/" + self.slash_command + ' ' + self.item_five
+
+
+        super().setUpTestData()
+
+
+        self.ticket_comments = TicketComment.objects.all()
+
+
+
+
+
+    def test_slash_command_comment_single_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        assert self.item_one not in self.comment_single_command_single_item.body
+
+
+
+    def test_slash_command_ticket_single_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        assert self.item_one not in self.ticket_single_command_single_item.description
+
+
+
+
+
+    def test_slash_command_comment_single_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.comment_single_command_single_item.ticket.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.comment_single_command_single_item.ticket.id) + ' as related to ' + self.item_one
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_single_item.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.ticket_single_command_single_item.id) + ' as related to ' + self.item_one
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_comment_single_command_multiple_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the comment
+        """
+
+        assert (
+            self.item_two not in self.comment_single_command_multiple_item.body
+            and self.item_three not in self.comment_single_command_multiple_item.body
+        )
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_ticket_single_command_multiple_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        assert (
+            self.item_two not in self.ticket_single_command_multiple_item.description
+            and self.item_three not in self.ticket_single_command_multiple_item.description
+        )
+
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_comment_single_command_multiple_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.comment_single_command_single_item.ticket.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.comment_single_command_single_item.ticket.id) + ' as related to ' + self.item_two
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_comment_single_command_multiple_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.comment_single_command_single_item.ticket.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.comment_single_command_single_item.ticket.id) + ' as related to ' + self.item_three
+        )
+
+        assert len(list(comment)) == 1
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_ticket_single_command_multiple_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_multiple_item.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.ticket_single_command_multiple_item.id) + ' as related to ' + self.item_two
+        )
+
+        assert len(list(comment)) == 1
+
+
+    @pytest.mark.skip( reason = 'Feature to be implemented' )
+    def test_slash_command_ticket_single_command_multiple_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_multiple_item.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.ticket_single_command_multiple_item.id) + ' as related to ' + self.item_three
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+
+
+    def test_slash_command_comment_multiple_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (multiple command single item) must be removed from the comment
+        """
+
+        assert (
+            self.item_four not in self.comment_multiple_command_single_item.body
+            and self.item_five not in self.comment_multiple_command_single_item.body
+        )
+
+
+
+    def test_slash_command_ticket_multiple_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (multiple command single item) must be removed from the ticket
+        """
+
+        assert (
+            self.item_four not in self.ticket_multiple_command_single_item.description
+            and self.item_five not in self.ticket_multiple_command_single_item.description
+        )
+
+
+
+    def test_slash_command_comment_multiple_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (multiple command single item) must be removed from the comment
+        """
+
+
+        comment = self.ticket_comments.filter(
+            ticket = self.comment_single_command_single_item.ticket.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.comment_single_command_single_item.ticket.id) + ' as related to ' + self.item_four
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_ticket_multiple_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (multiple command single item) must be removed from the ticket
+        """
+
+
+        comment = self.ticket_comments.filter(
+            ticket = self.comment_single_command_single_item.ticket.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'added #' + str(self.comment_single_command_single_item.ticket.id) + ' as related to ' + self.item_five
+        )
+
+        assert len(list(comment)) == 1
