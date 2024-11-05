@@ -257,6 +257,107 @@ class RelatedItemSlashCommand(
 
         self.ticket_comments = TicketComment.objects.all()
 
+        #
+        # Non existant item
+        #
+
+        self.ticket_item_not_exist = Ticket.objects.create(
+            organization = self.organization,
+            title = 'A ' + self.slash_command + ' ticket for non-existing item',
+            description = 'the ticket body' + '/' + self.slash_command + " $device-9999\r\n",
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.user,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
+
+
+        self.comment_item_not_exist = TicketComment.objects.create(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.COMMENT,
+            body = "random text\r\n" + '/' + self.slash_command + " $device-9999\r\n"
+        )
+
+
+
+
+    def test_slash_command_comment_non_existing_item_no_link_command_in_comment(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, dont sanitize the command
+        from the comment
+        """
+
+        assert '/' + self.slash_command in self.comment_item_not_exist.body
+
+
+
+    def test_slash_command_comment_non_existing_item_no_link_item_in_comment(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, dont sanitize the item
+        from the comment
+        """
+
+        assert '$device-9999' in self.comment_item_not_exist.body
+
+
+    def test_slash_command_comment_non_existing_item_no_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, no action command
+        is to be created
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked $device-9999'
+        )
+
+        assert len(list(comment)) == 0
+
+
+
+    def test_slash_command_ticket_non_existing_item_no_link_command_in_comment(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, dont sanitize the command
+        from the ticket body
+        """
+
+        assert '/' + self.slash_command in self.ticket_item_not_exist.description
+
+
+
+    def test_slash_command_ticket_non_existing_item_no_link_item_in_comment(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, dont sanitize the item
+        from the ticket body
+        """
+
+        assert '$device-9999' in self.ticket_item_not_exist.description
+
+
+    def test_slash_command_ticket_non_existing_item_no_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, for an item that does not exist, no action command
+        is to be created
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_item_not_exist,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked $device-9999'
+        )
+
+        assert len(list(comment)) == 0
+
+
+
+
+
 
 
     def test_slash_command_comment_single_command_single_item_comment_item_removed(self):
