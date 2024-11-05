@@ -255,6 +255,8 @@ class RelatedItemSlashCommand(
 
         self.ticket_linked_items = TicketLinkedItem.objects.all()
 
+        self.ticket_comments = TicketComment.objects.all()
+
 
 
     def test_slash_command_comment_single_command_single_item_comment_item_removed(self):
@@ -283,6 +285,24 @@ class RelatedItemSlashCommand(
 
 
 
+    def test_slash_command_comment_single_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_one
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+
+
 
     def test_slash_command_ticket_single_command_single_item_comment_item_removed(self):
         """Slash command Test Case
@@ -307,6 +327,22 @@ class RelatedItemSlashCommand(
         )
 
         assert len(list(linked_item)) == 1
+
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_single_item.id,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_one
+        )
+
+        assert len(list(comment)) == 1
 
 
 
@@ -339,6 +375,38 @@ class RelatedItemSlashCommand(
         )
 
         assert len(list(linked_item)) == 1
+
+
+
+    def test_slash_command_comment_single_command_single_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_two
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_comment_single_command_single_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_three
+        )
+
+        assert len(list(comment)) == 1
 
 
 
@@ -390,6 +458,40 @@ class RelatedItemSlashCommand(
 
 
 
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_multiple_item,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked' + self.item_two
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_multiple_item,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked' + self.item_three
+        )
+
+        assert len(list(comment)) == 1
+
+
+
     @pytest.mark.skip( reason = 'Feature to be implemented' )
     def test_slash_command_ticket_single_command_multiple_item_linked_item_created_two(self):
         """Slash command Test Case
@@ -434,6 +536,39 @@ class RelatedItemSlashCommand(
         )
 
         assert len(list(linked_item)) == 1
+
+
+
+    def test_slash_command_comment_single_command_single_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_four
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_comment_single_command_single_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_five
+        )
+
+        assert len(list(comment)) == 1
+
 
 
     def test_slash_command_comment_multiple_command_single_item_item_created_two(self):
@@ -494,6 +629,38 @@ class RelatedItemSlashCommand(
         )
 
         assert len(list(linked_item)) == 1
+
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created_one(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_multiple_command_single_item,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_four
+        )
+
+        assert len(list(comment)) == 1
+
+
+
+    def test_slash_command_ticket_single_command_single_item_action_comment_created_two(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_multiple_command_single_item,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = 'linked ' + self.item_five
+        )
+
+        assert len(list(comment)) == 1
 
 
 
