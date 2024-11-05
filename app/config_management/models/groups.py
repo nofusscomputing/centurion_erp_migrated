@@ -1,6 +1,8 @@
 import re
 
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
@@ -11,6 +13,7 @@ from access.models import TenancyObject
 from app.helpers.merge_software import merge_software
 
 from core.mixin.history_save import SaveHistory
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
@@ -343,6 +346,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             return f'{self.parent} > {self.name}'
 
         return self.name
+
+
+
+@receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='config_group_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CONFIG_GROUP)
 
 
 
