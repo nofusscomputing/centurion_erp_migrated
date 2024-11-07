@@ -292,7 +292,6 @@ class Team(Group, TenancyObject):
 
     team_name = models.CharField(
         blank = False,
-        default = '',
         help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
