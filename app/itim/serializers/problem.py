@@ -248,6 +248,9 @@ class ProblemImportTicketModelSerializer(
         ]
 
 
+    is_import: bool = True
+
+
 
 class ProblemTicketViewSerializer(
     TicketViewSerializer,

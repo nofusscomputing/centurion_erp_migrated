@@ -246,6 +246,9 @@ class ProjectTaskImportTicketModelSerializer(
         ]
 
 
+    is_import: bool = True
+
+
 
 class ProjectTaskTicketViewSerializer(
     TicketViewSerializer,
