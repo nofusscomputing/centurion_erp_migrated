@@ -386,7 +386,9 @@ class TeamUsers(SaveHistory):
 
     team = models.ForeignKey(
         Team,
+        blank = False,
         help_text = 'Team user belongs to',
+        null = False,
         on_delete=models.CASCADE,
         related_name="team",
         verbose_name = 'Team'
@@ -394,7 +396,9 @@ class TeamUsers(SaveHistory):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        blank = False,
         help_text = 'User who will be added to the team',
+        null = False,
         on_delete=models.CASCADE,
         verbose_name = 'User'
     )
