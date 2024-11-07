@@ -6,14 +6,12 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-Unit tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
+Unit and functional tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
 User Interface (UI) test are written _if applicable_ to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
 
 !!! note
     As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
-
-In most cases functional tests will not need to be written, however you should confirm this with a maintainer.
 
 Integration tests **will** be required if the development introduces code that interacts with an independent third-party application.
 
