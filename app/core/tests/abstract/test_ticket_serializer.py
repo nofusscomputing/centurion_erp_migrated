@@ -22,6 +22,7 @@ from project_management.models.project_milestone import ProjectMilestone
 class MockView:
 
     _ticket_type_id: Ticket.TicketType = None
+
     action: str = None
 
     kwargs: dict = {}
@@ -236,7 +237,7 @@ class TicketValidationAPI(
             'planned_finish_date': '2024-01-02T02:03:04Z',
             'real_start_date': '2024-01-03T01:02:03Z',
             'real_finish_date': '2024-01-04T01:02:03Z',
-            'opened_by': self.change_user.id,
+            'opened_by': self.add_user.id,
             'organization': self.organization_two.id,
             'project': self.project.id,
             'milestone': self.project_milestone.id,
