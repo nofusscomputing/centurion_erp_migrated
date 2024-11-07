@@ -114,17 +114,10 @@ class TeamModelSerializer(TeamBaseSerializer):
 
         is_valid = False
 
-        try:
+        is_valid = super().is_valid(raise_exception=raise_exception)
 
-            is_valid = super().is_valid(raise_exception=raise_exception)
+        self.validated_data['organization_id'] = int(self._context['view'].kwargs['organization_id'])
 
-            self.validated_data['organization_id'] = int(self._context['view'].kwargs['organization_id'])
-
-        except Exception as unhandled_exception:
-
-            serializers.ParseError( 
-                detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
-            )
 
         return is_valid
 
