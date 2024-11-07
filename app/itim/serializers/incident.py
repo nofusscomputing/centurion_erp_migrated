@@ -247,6 +247,9 @@ class IncidentImportTicketModelSerializer(
         ]
 
 
+    is_import: bool = True
+
+
 
 class IncidentTicketViewSerializer(
     TicketViewSerializer,

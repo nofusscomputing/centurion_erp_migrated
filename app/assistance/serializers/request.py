@@ -21,7 +21,6 @@ class RequestTicketBaseSerializer(
         pass
 
 
-
 class RequestTicketModelSerializer(
     TicketModelSerializer,
     RequestTicketBaseSerializer,
@@ -245,6 +244,9 @@ class RequestImportTicketModelSerializer(
             'ticket_type',
             '_urls',
         ]
+
+
+    is_import: bool = True
 
 
 
