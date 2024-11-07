@@ -1,7 +1,6 @@
 from rest_framework.reverse import reverse
 
 from rest_framework import serializers
-from rest_framework.exceptions import ParseError
 
 from access.models import TeamUsers
 from app.serializers.user import UserBaseSerializer
@@ -97,17 +96,9 @@ class TeamUserModelSerializer(TeamUserBaseSerializer):
 
         is_valid = False
 
-        try:
+        is_valid = super().is_valid(raise_exception=raise_exception)
 
-            is_valid = super().is_valid(raise_exception=raise_exception)
-
-            self.validated_data['team_id'] = int(self._context['view'].kwargs['team_id'])
-
-        except Exception as unhandled_exception:
-
-            ParseError( 
-                detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
-            )
+        self.validated_data['team_id'] = int(self._context['view'].kwargs['team_id'])
 
         return is_valid
 
