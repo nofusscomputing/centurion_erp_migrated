@@ -22,7 +22,7 @@ For this command to process the following conditions must be met:
 """
 
 
-    time_spent: str = r'[\s|\n]\/(?P<command>[spend|spent]+)\s(?P<time>(?P<hours>\d+h)?\s?(?P<minutes>[\d]{1,2}m)?\s?(?P<seconds>\d+[s])?)[\s|\n]?'
+    time_spent: str = r'[\s|\r\n|\n]\/(?P<command>[spend|spent]+) (?P<time>(?P<hours>\d+h)?[ ]?(?P<minutes>[\d]{1,2}m)?[ ]?(?P<seconds>\d+s)?)[\s|\r\n|\n]?'
 
 
     def command_duration(self, match) -> str:
