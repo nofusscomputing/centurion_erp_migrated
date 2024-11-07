@@ -1,29 +1,32 @@
 import pytest
 import unittest
+import requests
+
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import reverse
-from django.test import Client, TestCase
+from django.test import TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 
-from api.tests.abstract.api_permissions_viewset import APIPermissionChange, APIPermissionView
+from api.tests.abstract.api_permissions_viewset import APIPermissions
 
 
-class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionView):
+class OrganizationPermissionsAPI(
+    APIPermissions,
+    TestCase
+):
 
     model = Organization
 
-    model_name = 'organization'
-    app_label = 'access'
-
-    app_namespace = 'API'
+    app_namespace = 'v2'
     
     url_name = '_api_v2_organization'
 
     change_data = {'name': 'device'}
+
+    delete_data = {}
 
     @classmethod
     def setUpTestData(self):
@@ -31,7 +34,7 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
 
         1. Create an organization for user and item
         . create an organization that is different to item
-        2. Create a device
+        2. Create a team
         3. create teams with each permission: view, add, change, delete
         4. create a user per team
         """
@@ -40,15 +43,9 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
 
         self.organization = organization
 
-        different_organization = Organization.objects.create(name='test_different_organization')
-
-
         self.item = organization
 
-        self.url_view_kwargs = {'pk': self.item.id}
-
-        self.url_kwargs = {'pk': self.item.id}
-
+        different_organization = Organization.objects.create(name='test_different_organization')
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -117,8 +114,6 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
         delete_team.permissions.set([delete_permissions])
 
 
-        self.super_user = User.objects.create_user(username="super_user", password="password", is_superuser=True)
-
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
@@ -128,7 +123,15 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
             user = self.view_user
         )
 
-        self.add_user = User.objects.create_user(username="test_user_add", password="password")
+
+        self.url_view_kwargs = { 'pk': self.item.id }
+
+        self.add_data = {
+            'name': 'team_post',
+        }
+
+
+        self.add_user = User.objects.create_user(username="test_user_add", password="password", is_superuser = True)
         teamuser = TeamUsers.objects.create(
             team = add_team,
             user = self.add_user
@@ -166,66 +169,3 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
             team = different_organization_team,
             user = self.different_organization_user
         )
-
-
-    def test_add_is_prohibited_anon_user(self):
-        """ Ensure Organization cant be created 
-
-        Attempt to create organization as anon user
-        """
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
-
-        assert response.status_code == 401
-
-
-    def test_add_is_prohibited_diff_org_user(self):
-        """ Ensure Organization cant be created 
-
-        Attempt to create organization as user with different org permissions.
-        """
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.different_organization_user)
-        response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
-
-        assert response.status_code == 403
-
-
-    def test_add_not_prohibited_super_user(self):
-        """ Ensure Organization can be created
-
-        Attempt to create organization as user who is super user
-        """
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.super_user)
-        response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
-
-        assert response.status_code == 201
-
-
-    def test_add_is_prohibited_user_same_org(self):
-        """ Ensure Organization cant be created 
-
-        Attempt to create organization as user with permission
-        """
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-
-        client.force_login(self.add_user)
-        response = client.post(url, data={'name': 'should not create'}, content_type='application/json')
-
-        assert response.status_code == 403
