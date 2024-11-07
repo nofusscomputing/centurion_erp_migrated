@@ -1,4 +1,5 @@
 import pytest
+import unittest
 
 from django.contrib.auth.models import User
 from django.test import TestCase
@@ -13,16 +14,12 @@ from itam.models.device import Device
 from itam.models.software import Software
 
 
-class SlashCommands:
+class SlashCommandsCommon:
     """Slash Command Test cases
     
     Test cases designed for testing scenarios:
     - Ticket Comment, single command single item
-    - Ticket Comment, single command multiple items
-    - Ticket Comment, multiple command single item
     - Ticket Description, single command single item
-    - Ticket Description, single command multiple items
-    - Ticket Description, multiple command single item
 
     Tests ensure the commands work and that command is removed from the location it
     was used. parent test classes must check:
@@ -138,6 +135,26 @@ class SlashCommands:
 
 
 
+class SlashCommandsMulti(
+    SlashCommandsCommon
+):
+
+    """Slash Command Test cases (Multiple commands)
+    
+    Test cases designed for testing scenarios:
+    - Ticket Comment, single command multiple items
+    - Ticket Comment, multiple command single item
+    - Ticket Description, single command multiple items
+    - Ticket Description, multiple command single item
+
+    Tests ensure the commands work and that command is removed from the location it
+    was used. parent test classes must check:
+
+    - slash commend item does not exist in comment
+    - slash commend item does not exist in ticket body
+    - slash commend added to item/data to the correct location for ticket body
+    - slash commend added to item/data to the correct location for ticket comment
+    """
 
     @pytest.mark.skip( reason = 'Feature to be implemented' )
     def test_slash_command_comment_single_command_multiple_item_comment_command_removed(self):
@@ -183,7 +200,7 @@ class SlashCommands:
 
 
 class RelatedItemSlashCommand(
-    SlashCommands,
+    SlashCommandsMulti,
     TestCase,
 ):
     """Related Item test cases.
@@ -766,7 +783,7 @@ class RelatedItemSlashCommand(
 
 
 class RelatedTicketBlocksSlashCommand(
-    SlashCommands,
+    SlashCommandsMulti,
     TestCase,
 ):
     """Related Item test cases.
@@ -1085,7 +1102,7 @@ class RelatedTicketBlocksSlashCommand(
 
 
 class RelatedTicketBlockedBySlashCommand(
-    SlashCommands,
+    SlashCommandsMulti,
     TestCase,
 ):
     """Related Item test cases.
@@ -1404,7 +1421,7 @@ class RelatedTicketBlockedBySlashCommand(
 
 
 class RelatedTicketRelateSlashCommand(
-    SlashCommands,
+    SlashCommandsMulti,
     TestCase,
 ):
     """Related Item test cases.
@@ -1718,3 +1735,148 @@ class RelatedTicketRelateSlashCommand(
         )
 
         assert len(list(comment)) == 1
+
+
+
+
+
+class SpendSlashCommand(
+    SlashCommandsCommon,
+    TestCase,
+):
+    """Spend slash command test cases
+
+    Must test the following:
+
+    - Can add duration via ticket
+    - Can add duration via ticket comment
+    - Can add duration multiple times via ticket (single command, multiple items)
+    - Can add duration multiple times via ticket comment (single command, multiple items)
+    - Can add duration multiple times via ticket (multiple commands, single item)
+    - Can add duration multiple times via ticket comment (multiple commands, single item)
+
+    Commands with the following formats:
+
+    - 1s
+    - 1m
+    - 1h
+    - 1m 1s
+    - 1m1s
+    - 1h 1m 1s
+    - 1h1m1s
+
+    Args:
+        SlashCommands (class): Test cases common to ALL slash commands.
+    """
+
+
+    slash_command = 'spend'
+
+
+    @classmethod
+    def setUpTestData(self):
+
+
+        organization = Organization.objects.create(name='test_org ' + self.slash_command)
+
+        self.organization = organization
+
+
+        self.item_one = '5m'
+        self.item_two = '5m'
+        self.item_three = '10m'
+        self.item_four = '5m'
+        self.item_five = '10m'
+
+        self.command_single_command_single_item = '/' + self.slash_command + ' ' + self.item_one
+        self.command_single_command_multiple_item = '/' + self.slash_command + ' ' + self.item_two + ' ' + self.item_three
+        self.command_multiple_command_single_item = '/' + self.slash_command + ' ' + self.item_four + "\r\n/" + self.slash_command + ' ' + self.item_five
+
+
+        super().setUpTestData()
+
+
+        self.ticket_comments = TicketComment.objects.all()
+
+
+
+    def test_slash_command_comment_single_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command single item) must be removed from the comment
+        """
+
+        assert self.item_one not in self.comment_single_command_single_item.body
+
+
+
+    def test_slash_command_ticket_single_command_single_item_comment_item_removed(self):
+        """Slash command Test Case
+
+        When slash command made, the command (single command multiple item) must be removed from the ticket
+        """
+
+        assert self.item_one not in self.ticket_single_command_single_item.description
+
+
+
+    def test_slash_command_comment_single_command_single_item_comment_item_action_comment_correct(self):
+        """Slash command Test Case
+
+        Ensure that the duration field was correctly updated
+        """
+
+        assert self.comment_single_command_single_item.duration == 300
+
+
+
+    def test_slash_command_ticket_single_command_single_item_comment_item_action_comment_correct(self):
+        """Slash command Test Case
+
+        Ensure that the duration field was correctly updated
+        """
+
+        comment = self.ticket_comments.filter(
+            ticket = self.ticket_single_command_single_item,
+            comment_type = TicketComment.CommentType.ACTION,
+            body = f'added {self.item_one} of time spent'
+        )
+
+        assert list(comment)[0].duration == 300
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("test_input,expected", [
+    ('1s', 1),
+    ('1m', 60),
+    ('1h', 3600),
+    ('1m 1s', 61),
+    ('1m1s', 61),
+    ('1h 1m 1s', 3661),
+    ('1h1m1s', 3661),
+])
+def test_slash_command_spend_comment_time_format_comment_correct(test_input, expected):
+    """Slash command Test Case
+
+    Ensure that the duration field was correctly updated
+    """
+
+
+    ticket = Ticket.objects.create(
+        organization = Organization.objects.create(name='test_org ' + str(expected)),
+        title = 'single_command_single_item ' + str(expected),
+        description = "the ticket body",
+        ticket_type = Ticket.TicketType.REQUEST,
+        opened_by = User.objects.create_user(username="test_user_add" + str(expected), password="password"),
+        status = int(Ticket.TicketStatus.All.NEW.value)
+    )
+
+
+    comment = TicketComment.objects.create(
+        ticket = ticket,
+        comment_type = TicketComment.CommentType.COMMENT,
+        body = f"random text\r\n /spend {test_input}\r\n"
+    )
+
+    assert comment.duration == expected
+
