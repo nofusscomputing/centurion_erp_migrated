@@ -40,7 +40,17 @@ lint: markdown-mkdocs-lint
 
 test:
 	cd app
-	pytest --cov --cov-report term --cov-report xml:../artifacts/coverage.xml --cov-report html:../artifacts/coverage/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit **/tests/functional
+	pytest --cov --cov-report term --cov-report xml:../artifacts/coverage_unit_functional.xml --cov-report html:../artifacts/coverage/unit_functional/ --junit-xml=../artifacts/unit_functional.JUnit.xml **/tests/unit **/tests/functional
+
+test-functional:
+	cd app
+	pytest --cov --cov-report term --cov-report xml:../artifacts/coverage_functional.xml --cov-report html:../artifacts/coverage/functional/ --junit-xml=../artifacts/functional.JUnit.xml **/tests/functional
+
+
+test-unit:
+	cd app
+	pytest --cov --cov-report term --cov-report xml:../artifacts/coverage_unit.xml --cov-report html:../artifacts/coverage/unit/ --junit-xml=../artifacts/unit.JUnit.xml **/tests/unit
+
 
 
 clean:
