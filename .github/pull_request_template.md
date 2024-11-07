@@ -32,6 +32,8 @@
 
 - [ ] :checkered_flag: Milestone assigned
 
+- [ ] :gear: :test_tube: [Functional Test(s) Written](https://nofusscomputing.com/projects/centurion_erp/development/testing/)
+
 - [ ] :test_tube: [Unit Test(s) Written](https://nofusscomputing.com/projects/centurion_erp/development/testing/)
 
     _ensure test coverage delta is not less than zero_
