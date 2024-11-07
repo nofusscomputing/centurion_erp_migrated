@@ -16,6 +16,9 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 
 ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_coverage.json&style=plastic) ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fdevelopment%2Fbadge_endpoint_unit_test.json)
 
+![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_coverage_functional.json&style=plastic)
+ ![Endpoint Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fnofusscomputing%2F.github%2Fmaster%2Frepositories%2Fnofusscomputing%2Fcenturion_erp%2Fmaster%2Fbadge_endpoint_functional_test.json)
+
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/nofusscomputing/centurion-erp?style=plastic&logo=docker&color=0db7ed) [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/centurion-erp)](https://artifacthub.io/packages/container/centurion-erp/centurion-erp)
 
