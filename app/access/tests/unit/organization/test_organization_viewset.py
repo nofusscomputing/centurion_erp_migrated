@@ -6,7 +6,8 @@ import requests
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.shortcuts import reverse
+from django.test import Client, TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 
@@ -131,7 +132,9 @@ class OrganizationPermissionsAPI(
         }
 
 
-        self.add_user = User.objects.create_user(username="test_user_add", password="password", is_superuser = True)
+        self.super_add_user = User.objects.create_user(username="test_user_add_super", password="password", is_superuser = True)
+
+        self.add_user = User.objects.create_user(username="test_user_add", password="password")
         teamuser = TeamUsers.objects.create(
             team = add_team,
             user = self.add_user
@@ -169,3 +172,28 @@ class OrganizationPermissionsAPI(
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+    def test_add_has_permission(self):
+        """ Check correct permission for add 
+
+        Attempt to add as user with permission
+        """
+
+        client = Client()
+
+        if self.url_kwargs:
+
+            url = reverse( self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs )
+
+        else:
+
+            url = reverse( self.app_namespace + ':' + self.url_name + '-list' )
+
+
+        client.force_login( self.super_add_user )
+
+        response = client.post( url, data = self.add_data )
+
+        assert response.status_code == 201
