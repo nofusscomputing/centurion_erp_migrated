@@ -75,6 +75,8 @@ class TicketBaseSerializer(serializers.ModelSerializer):
             'url',
         ]
 
+    is_import: bool = False
+
 
 class TicketModelSerializer(TicketBaseSerializer):
 
@@ -279,7 +281,21 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                 if hasattr(self._context['view'], 'request'):
 
-                    data['opened_by_id'] = self._context['view'].request.user.id
+                    if self.is_import:
+
+                        if data['opened_by'] is None:
+
+                            raise centurion_exception.ValidationError(
+                                detail = {
+                                    'opened_by': 'Opened by user is required'
+                                },
+                                code = 'required',
+                            )
+
+
+                    else:
+
+                        data['opened_by_id'] = self._context['view'].request.user.id
 
 
             if hasattr(self._context['view'], '_ticket_type_id'):
@@ -299,7 +315,14 @@ class TicketModelSerializer(TicketBaseSerializer):
 
                     subscribed_users: list = data['subscribed_users']
 
-                data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
+                if self.is_import:
+
+                    data['subscribed_users'] = subscribed_users + [ data['opened_by'].id ]
+
+                else:
+
+                    data['subscribed_users'] = subscribed_users + [ data['opened_by_id'] ]
+
 
                 data['status'] = int(Ticket.TicketStatus.All.NEW)
 

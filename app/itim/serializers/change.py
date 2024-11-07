@@ -249,6 +249,9 @@ class ChangeImportTicketModelSerializer(
         ]
 
 
+    is_import: bool = True
+
+
 
 class ChangeTicketViewSerializer(
     TicketViewSerializer,
