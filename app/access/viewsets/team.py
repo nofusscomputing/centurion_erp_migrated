@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from access.serializers.teams import (
     Team,
@@ -15,6 +15,13 @@ from api.viewsets.common import ModelViewSet
     create=extend_schema(
         summary = 'Create a team within this organization',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+        ], 
         responses = {
             200: OpenApiResponse(description='Allready exists', response=TeamViewSerializer),
             201: OpenApiResponse(description='Created', response=TeamViewSerializer),
@@ -25,6 +32,18 @@ from api.viewsets.common import ModelViewSet
     destroy = extend_schema(
         summary = 'Delete a team from this organization',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+        ], 
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -33,6 +52,13 @@ from api.viewsets.common import ModelViewSet
     list = extend_schema(
         summary = 'Fetch all teams from this organization',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+        ], 
         responses = {
             200: OpenApiResponse(description='', response=TeamViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -41,6 +67,18 @@ from api.viewsets.common import ModelViewSet
     retrieve = extend_schema(
         summary = 'Fetch a single team from this organization',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+        ], 
         responses = {
             200: OpenApiResponse(description='', response=TeamViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -50,6 +88,18 @@ from api.viewsets.common import ModelViewSet
     partial_update = extend_schema(
         summary = 'Update a team within this organization',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+        ], 
         responses = {
             200: OpenApiResponse(description='', response=TeamViewSerializer),
             # 201: OpenApiResponse(description='Created', response=OrganizationViewSerializer),

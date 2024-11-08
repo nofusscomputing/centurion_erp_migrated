@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse, PolymorphicProxySerializer
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, PolymorphicProxySerializer
 
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
@@ -46,6 +46,13 @@ from settings.models.user_settings import UserSettings
 Responses from the API are the same for all users when the request returns 
         status `HTTP/20x`.
         """,
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         request = PolymorphicProxySerializer(
             component_name = 'TicketComment',
             serializers=[
@@ -74,6 +81,18 @@ Responses from the API are the same for all users when the request returns
     destroy = extend_schema(
         summary = 'Delete a ticket comment',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -82,6 +101,13 @@ Responses from the API are the same for all users when the request returns
     list = extend_schema(
         summary = 'Fetch all ticket comments',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketCommentViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -90,6 +116,18 @@ Responses from the API are the same for all users when the request returns
     retrieve = extend_schema(
         summary = 'Fetch a single ticket comment',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketCommentViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -99,6 +137,18 @@ Responses from the API are the same for all users when the request returns
     partial_update = extend_schema(
         summary = 'Update a ticket comment',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketCommentViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),

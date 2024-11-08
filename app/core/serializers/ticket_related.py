@@ -15,7 +15,7 @@ class RelatedTicketBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -64,7 +64,7 @@ class RelatedTicketModelSerializer(RelatedTicketBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         request = None
 

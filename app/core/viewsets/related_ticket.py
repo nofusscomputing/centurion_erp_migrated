@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from access.mixin import OrganizationMixin
 
@@ -18,6 +18,13 @@ from core.serializers.ticket_related import (
     destroy = extend_schema(
         summary = 'Delete a related ticket',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -26,6 +33,13 @@ from core.serializers.ticket_related import (
     list = extend_schema(
         summary = 'Fetch all related tickets',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=RelatedTicketViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -34,6 +48,18 @@ from core.serializers.ticket_related import (
     retrieve = extend_schema(
         summary = 'Fetch a related ticket',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=RelatedTicketViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),

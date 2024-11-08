@@ -7,7 +7,7 @@ from core.fields.icon import Icon, IconField
 
 
 
-class BadgeField(serializers.Field):
+class BadgeField(serializers.DictField):
 
     source = ''
 

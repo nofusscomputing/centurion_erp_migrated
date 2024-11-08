@@ -14,7 +14,7 @@ class ProjectStateBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -47,7 +47,7 @@ class ProjectStateModelSerializer(ProjectStateBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         return {
             '_self': reverse(

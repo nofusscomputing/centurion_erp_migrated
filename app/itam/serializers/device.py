@@ -22,7 +22,7 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -52,7 +52,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         request = None
 
@@ -108,7 +108,7 @@ class DeviceModelSerializer(DeviceBaseSerializer):
 
     rendered_config = serializers.JSONField(source='get_configuration', read_only=True)
 
-    def get_rendered_config(self, item):
+    def get_rendered_config(self, item) -> dict:
 
         return item.get_configuration(0)
 

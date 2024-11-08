@@ -33,6 +33,7 @@ class InventoryPermissions(OrganizationPermissionAPI):
 
 
 
+@extend_schema( deprecated = True )
 class Collect(OrganizationPermissionAPI, views.APIView):
 
     queryset = Device.objects.all()

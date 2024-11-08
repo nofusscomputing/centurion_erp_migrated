@@ -12,14 +12,14 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
 
     url = serializers.SerializerMethodField('my_url')
 
-    def my_url(self, item):
+    def my_url(self, item) -> str:
 
         return reverse(
             "v2:_api_v2_software_version-detail",
@@ -54,7 +54,7 @@ class SoftwareVersionModelSerializer(SoftwareVersionBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         return {
             '_self': reverse(

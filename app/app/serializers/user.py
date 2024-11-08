@@ -9,7 +9,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
