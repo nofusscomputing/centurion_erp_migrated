@@ -32,6 +32,10 @@ def process_inventory(self, data, organization: int):
 
         logger.info('Begin Processing Inventory')
 
+        if type(data) is str:
+
+            data = json.loads(data)
+
         data = InventorySerializer(
             data = data
         )
