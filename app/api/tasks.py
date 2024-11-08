@@ -9,7 +9,7 @@ from celery import states
 
 from access.models import Organization
 
-from api.serializers.inventory import Inventory
+from itam.serializers.inventory import InventorySerializer
 
 from itam.models.device import Device, DeviceType, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
@@ -32,8 +32,11 @@ def process_inventory(self, data, organization: int):
 
         logger.info('Begin Processing Inventory')
 
-        data = json.loads(data)
-        data = Inventory(data)
+        data = InventorySerializer(
+            data = data
+        )
+
+        data.is_valid()
 
         organization = Organization.objects.get(id=organization)
 
@@ -42,13 +45,13 @@ def process_inventory(self, data, organization: int):
         device_serial_number = None
         device_uuid = None
 
-        if data.details.serial_number and str(data.details.serial_number).lower() != 'na':
+        if data.validated_data['details']['serial_number'] and str(data.validated_data['details']['serial_number']).lower() != 'na':
 
-            device_serial_number = str(data.details.serial_number)
+            device_serial_number = str(data.validated_data['details']['serial_number'])
 
-        if data.details.uuid and str(data.details.uuid).lower() != 'na':
+        if data.validated_data['details']['uuid'] and str(data.validated_data['details']['uuid']).lower() != 'na':
 
-            device_uuid = str(data.details.uuid)
+            device_uuid = str(data.validated_data['details']['uuid'])
 
 
         if device_serial_number: # Search for device by serial number.
@@ -88,13 +91,13 @@ def process_inventory(self, data, organization: int):
         if not device: # Search for device by Name.
 
             device = Device.objects.filter(
-                name__iexact=str(data.details.name).lower()
+                name__iexact=str(data.validated_data['details']['name']).lower()
             )
 
             if device.exists():
 
                 device = Device.objects.get(
-                    name__iexact=str(data.details.name).lower()
+                    name__iexact=str(data.validated_data['details']['name']).lower()
                 )
 
             else:
@@ -107,7 +110,7 @@ def process_inventory(self, data, organization: int):
         if not device: # Create the device
 
             device = Device.objects.create(
-                name = data.details.name,
+                name = data.validated_data['details']['name'],
                 device_type = None,
                 serial_number = device_serial_number,
                 uuid = device_uuid,
@@ -131,14 +134,14 @@ def process_inventory(self, data, organization: int):
 
             if not device.serial_number and device_serial_number:
 
-                device.serial_number = data.details.serial_number
+                device.serial_number = data.validated_data['details']['serial_number']
 
                 device_edited = True
 
 
-            if str(device.name).lower() != str(data.details.name).lower(): # Update device Name
+            if str(device.name).lower() != str(data.validated_data['details']['name']).lower(): # Update device Name
 
-                device.name = data.details.name
+                device.name = data.validated_data['details']['name']
 
                 device_edited = True
 
@@ -149,14 +152,14 @@ def process_inventory(self, data, organization: int):
 
 
             operating_system = OperatingSystem.objects.filter(
-                name=data.operating_system.name,
+                name = data.validated_data['os']['name'],
                 is_global = True
             )
 
             if operating_system.exists():
 
                 operating_system = OperatingSystem.objects.get(
-                    name=data.operating_system.name,
+                    name = data.validated_data['os']['name'],
                     is_global = True
                 )
 
@@ -170,7 +173,7 @@ def process_inventory(self, data, organization: int):
             if not operating_system:
 
                 operating_system = OperatingSystem.objects.filter(
-                    name=data.operating_system.name,
+                    name = data.validated_data['os']['name'],
                     organization = organization
                 )
 
@@ -178,7 +181,7 @@ def process_inventory(self, data, organization: int):
                 if operating_system.exists():
 
                     operating_system = OperatingSystem.objects.get(
-                        name=data.operating_system.name,
+                        name = data.validated_data['os']['name'],
                         organization = organization
                     )
 
@@ -190,22 +193,22 @@ def process_inventory(self, data, organization: int):
             if not operating_system:
 
                 operating_system = OperatingSystem.objects.create(
-                    name = data.operating_system.name,
+                    name = data.validated_data['os']['name'],
                     organization = organization,
                     is_global = True
                 )
 
 
             operating_system_version = OperatingSystemVersion.objects.filter(
-                name=data.operating_system.version_major,
-                operating_system=operating_system
+                name = data.validated_data['os']['version_major'],
+                operating_system = operating_system
             )
 
             if operating_system_version.exists():
 
                 operating_system_version = OperatingSystemVersion.objects.get(
-                    name=data.operating_system.version_major,
-                    operating_system=operating_system
+                    name = data.validated_data['os']['version_major'],
+                    operating_system = operating_system
                 )
 
             else:
@@ -218,7 +221,7 @@ def process_inventory(self, data, organization: int):
                 operating_system_version = OperatingSystemVersion.objects.create(
                     organization = organization,
                     is_global = True,
-                    name = data.operating_system.version_major,
+                    name = data.validated_data['os']['version_major'],
                     operating_system = operating_system,
                 )
 
@@ -241,8 +244,8 @@ def process_inventory(self, data, organization: int):
 
                 device_operating_system = DeviceOperatingSystem.objects.create(
                     organization = organization,
-                    device=device,
-                    version = data.operating_system.version,
+                    device = device,
+                    version = data.validated_data['os']['version'],
                     operating_system_version = operating_system_version,
                     installdate = timezone.now()
                 )
@@ -261,9 +264,9 @@ def process_inventory(self, data, organization: int):
                 device_operating_system.save()
 
 
-            if device_operating_system.version != data.operating_system.version:
+            if device_operating_system.version != data.validated_data['os']['version']:
 
-                device_operating_system.version = data.operating_system.version
+                device_operating_system.version = data.validated_data['os']['version']
 
                 device_operating_system.save()
 
@@ -287,7 +290,7 @@ def process_inventory(self, data, organization: int):
 
             inventoried_software: list = []
 
-            for inventory in list(data.software):
+            for inventory in list(data.validated_data['software']):
 
                 software = None
                 software_category = None
@@ -295,13 +298,13 @@ def process_inventory(self, data, organization: int):
 
                 device_software = None
 
-                software_category = SoftwareCategory.objects.filter( name = inventory.category )
+                software_category = SoftwareCategory.objects.filter( name = inventory['category'] )
 
 
                 if software_category.exists():
 
                     software_category = SoftwareCategory.objects.get(
-                        name = inventory.category
+                        name = inventory['category']
                     )
 
                 else: # Create Software Category
@@ -309,16 +312,16 @@ def process_inventory(self, data, organization: int):
                     software_category = SoftwareCategory.objects.create(
                         organization = software_category_organization,
                         is_global = True,
-                        name = inventory.category,
+                        name = inventory['category'],
                     )
 
 
-                if software_category.name == inventory.category:
+                if software_category.name == inventory['category']:
 
-                    if Software.objects.filter( name = inventory.name ).exists():
+                    if Software.objects.filter( name = inventory['name'] ).exists():
 
                         software = Software.objects.get(
-                            name = inventory.name
+                            name = inventory['name']
                         )
 
                         if not software.category:
@@ -331,16 +334,16 @@ def process_inventory(self, data, organization: int):
                         software = Software.objects.create(
                             organization = software_organization,
                             is_global = True,
-                            name = inventory.name,
+                            name = inventory['name'],
                             category = software_category,
                         )
 
 
-                    if software.name == inventory.name:
+                    if software.name == inventory['name']:
 
                         pattern = r"^(\d+:)?(?P<semver>\d+\.\d+(\.\d+)?)"
 
-                        semver = re.search(pattern, str(inventory.version), re.DOTALL)
+                        semver = re.search(pattern, str(inventory['version']), re.DOTALL)
 
 
                         if semver:
@@ -348,7 +351,7 @@ def process_inventory(self, data, organization: int):
                             semver = semver['semver']
 
                         else:
-                            semver = inventory.version
+                            semver = inventory['version']
 
 
                         if SoftwareVersion.objects.filter( name = semver, software = software ).exists():

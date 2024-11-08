@@ -33,7 +33,7 @@ DOCS_ROOT = 'https://nofusscomputing.com/projects/centurion_erp/user/'
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True # broker_connection_retry_on_startup
-CELERY_BROKER_URL = 'amqp://guest:guest@172.16.10.102:30712/itsm'
+CELERY_BROKER_URL = 'amqp://admin:admin@127.0.0.1:5672/itsm'
 
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#broker-use-ssl
 # import ssl
