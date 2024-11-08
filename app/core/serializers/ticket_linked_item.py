@@ -16,14 +16,14 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
 
     url = serializers.SerializerMethodField('my_url')
 
-    def my_url(self, item):
+    def my_url(self, item) -> str:
 
         return item.get_url( request = self._context['view'].request )
 
@@ -54,7 +54,7 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         return {
             '_self': item.get_url( request = self._context['view'].request )

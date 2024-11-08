@@ -5,6 +5,20 @@ from rest_framework.authentication import BaseAuthentication, get_authorization_
 
 from api.models.tokens import AuthToken
 
+# scheme.py
+from drf_spectacular.extensions import OpenApiAuthenticationExtension
+
+class TokenScheme(OpenApiAuthenticationExtension):
+    target_class = "api.auth.TokenAuthentication"
+    name = "TokenAuthentication"
+
+    def get_security_definition(self, auto_schema):        
+        return {
+            "type": "apiKey",
+            "in": "header",
+            "name": "Token Authorization",
+            "description": "Token-based authentication with required prefix 'Token'",
+        }
 
 
 class TokenAuthentication(BaseAuthentication):

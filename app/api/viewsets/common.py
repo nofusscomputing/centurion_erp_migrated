@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from access.mixin import OrganizationMixin
 
+from api.auth import TokenScheme
 from api.react_ui_metadata import ReactUIMetadata
 from api.views.mixin import OrganizationPermissionAPI
 

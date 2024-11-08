@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from api.viewsets.common import ModelViewSet
 
@@ -14,6 +14,13 @@ from project_management.serializers.project_milestone import (
     create=extend_schema(
         summary = 'Create a cluster',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             201: OpenApiResponse(description='Device created', response=ProjectMilestoneViewSerializer),
             400: OpenApiResponse(description='Validation failed.'),
@@ -23,6 +30,18 @@ from project_management.serializers.project_milestone import (
     destroy = extend_schema(
         summary = 'Delete a cluster',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -31,6 +50,13 @@ from project_management.serializers.project_milestone import (
     list = extend_schema(
         summary = 'Fetch all clusters',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectMilestoneViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -39,6 +65,18 @@ from project_management.serializers.project_milestone import (
     retrieve = extend_schema(
         summary = 'Fetch a single cluster',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectMilestoneViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -48,6 +86,18 @@ from project_management.serializers.project_milestone import (
     partial_update = extend_schema(
         summary = 'Update a cluster',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectMilestoneViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),

@@ -11,7 +11,7 @@ class TicketCategoryBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -44,7 +44,7 @@ class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         return {
             '_self': reverse("API:_api_v2_ticket_category-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),

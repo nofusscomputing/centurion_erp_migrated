@@ -1,6 +1,7 @@
 from drf_spectacular.utils import (
     extend_schema,
     extend_schema_view,
+    OpenApiParameter,
     OpenApiResponse,
     PolymorphicProxySerializer,
 )
@@ -21,6 +22,13 @@ from core.viewsets.ticket import TicketViewSet
     create=extend_schema(
         summary = 'Create a Project Task',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         request = PolymorphicProxySerializer(
             component_name = 'ProjectTask',
             serializers=[
@@ -40,6 +48,18 @@ from core.viewsets.ticket import TicketViewSet
     destroy = extend_schema(
         summary = 'Delete a Project Task',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -48,6 +68,13 @@ from core.viewsets.ticket import TicketViewSet
     list = extend_schema(
         summary = 'Fetch all Project Task',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectTaskTicketViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -56,6 +83,18 @@ from core.viewsets.ticket import TicketViewSet
     retrieve = extend_schema(
         summary = 'Fetch a Project Task',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectTaskTicketViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -65,6 +104,18 @@ from core.viewsets.ticket import TicketViewSet
     partial_update = extend_schema(
         summary = 'Update a Project Task',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'project_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=ProjectTaskTicketViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),

@@ -11,7 +11,7 @@ class DeviceTypeBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -43,7 +43,7 @@ class DeviceTypeModelSerializer(DeviceTypeBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, obj):
+    def get_url(self, obj) -> dict:
 
         return {
             '_self': reverse("v2:_api_v2_device_type-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})

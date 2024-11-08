@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from access.serializers.team_user import (
     TeamUsers,
@@ -14,6 +14,18 @@ from api.viewsets.common import ModelViewSet
     create=extend_schema(
         summary = 'Create a user within this team',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'team_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             # 200: OpenApiResponse(description='Allready exists', response=TeamUserViewSerializer),
             201: OpenApiResponse(description='Created', response=TeamUserViewSerializer),
@@ -24,6 +36,23 @@ from api.viewsets.common import ModelViewSet
     destroy = extend_schema(
         summary = 'Delete a user from this team',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'team_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -32,6 +61,18 @@ from api.viewsets.common import ModelViewSet
     list = extend_schema(
         summary = 'Fetch all users from this team',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'team_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TeamUserViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -40,6 +81,23 @@ from api.viewsets.common import ModelViewSet
     retrieve = extend_schema(
         summary = 'Fetch a single user from this team',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'team_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TeamUserViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -49,6 +107,23 @@ from api.viewsets.common import ModelViewSet
     partial_update = extend_schema(
         summary = 'Update a user within this team',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'organization_id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'team_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TeamUserViewSerializer),
             # 201: OpenApiResponse(description='Created', response=OrganizationViewSerializer),

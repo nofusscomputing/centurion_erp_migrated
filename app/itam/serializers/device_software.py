@@ -20,7 +20,7 @@ class DeviceSoftwareBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -54,7 +54,7 @@ class DeviceSoftwareModelSerializer(DeviceSoftwareBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, obj):
+    def get_url(self, obj) -> dict:
 
         return {
             '_self': reverse(
