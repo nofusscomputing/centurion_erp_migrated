@@ -225,6 +225,15 @@ class ModelViewSet(
 
 
 
+class ModelCreateViewSet(
+    ModelViewSetBase,
+    viewsets.mixins.CreateModelMixin,
+):
+
+    pass
+
+
+
 class ModelListRetrieveDeleteViewSet(
     viewsets.mixins.ListModelMixin,
     viewsets.mixins.RetrieveModelMixin,

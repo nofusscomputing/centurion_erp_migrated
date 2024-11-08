@@ -26,6 +26,7 @@ class Index(CommonViewSet):
         return Response(
             {
                 "device": reverse('v2:_api_v2_device-list', request=request),
+                "inventory": reverse('v2:_api_v2_inventory-list', request=request),
                 "operating_system": reverse('v2:_api_v2_operating_system-list', request=request),
                 "software": reverse('v2:_api_v2_software-list', request=request)
             }
