@@ -462,7 +462,20 @@ class TicketValidationAPI(
 
 
 
+    def test_assigned_ticket_status_updates(self):
 
+        ticket = Ticket.objects.create(
+            organization=self.organization,
+            title = 'ticket title test status',
+            description = 'some text',
+            opened_by = self.add_user,
+            status = Ticket.TicketStatus.All.NEW,
+            ticket_type = self.ticket_type_enum,
+        )
+
+        ticket.assigned_users.add(self.triage_user.id)
+
+        assert ticket.status ==  Ticket.TicketStatus.All.ASSIGNED
 
 
     def test_serializer_validation_add_valid_ok(self):
