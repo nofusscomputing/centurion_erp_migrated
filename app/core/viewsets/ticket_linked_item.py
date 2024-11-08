@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from core.serializers.ticket_linked_item import (
     TicketLinkedItem,
@@ -15,6 +15,13 @@ from api.viewsets.common import ModelViewSet
     create=extend_schema(
         summary = 'Create a Ticket Linked Item',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             201: OpenApiResponse(description='Created', response=TicketLinkedItemViewSerializer),
             403: OpenApiResponse(description='User is missing add permissions'),
@@ -23,6 +30,18 @@ from api.viewsets.common import ModelViewSet
     destroy = extend_schema(
         summary = 'Delete a Ticket Linked Item',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -31,6 +50,13 @@ from api.viewsets.common import ModelViewSet
     list = extend_schema(
         summary = 'Fetch all Ticket Linked Items',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketLinkedItemViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -39,6 +65,18 @@ from api.viewsets.common import ModelViewSet
     retrieve = extend_schema(
         summary = 'Fetch a single Ticket Linked Item',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketLinkedItemViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -48,6 +86,18 @@ from api.viewsets.common import ModelViewSet
     partial_update = extend_schema(
         summary = 'Update a Ticket Linked Item',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'ticket_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=TicketLinkedItemViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),

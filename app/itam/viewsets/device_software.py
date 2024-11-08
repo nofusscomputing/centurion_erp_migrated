@@ -4,7 +4,7 @@ from rest_framework import filters
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from rest_framework.fields import empty
 from rest_framework import generics, viewsets
@@ -29,6 +29,13 @@ from itam.serializers.device_software import (
     create=extend_schema(
         summary = 'Add device software',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'device_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             201: OpenApiResponse(description='Device created', response=DeviceSoftwareModelSerializer),
             400: OpenApiResponse(description='Validation failed.'),
@@ -38,6 +45,18 @@ from itam.serializers.device_software import (
     destroy = extend_schema(
         summary = 'Delete a device software',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'device_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -46,6 +65,13 @@ from itam.serializers.device_software import (
     list = extend_schema(
         summary = 'Fetch all device software',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'device_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=DeviceSoftwareModelSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -54,6 +80,18 @@ from itam.serializers.device_software import (
     retrieve = extend_schema(
         summary = 'Fetch a single device software',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'device_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=DeviceSoftwareModelSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -63,6 +101,18 @@ from itam.serializers.device_software import (
     partial_update = extend_schema(
         summary = 'Update a device software',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'device_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=DeviceSoftwareModelSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),

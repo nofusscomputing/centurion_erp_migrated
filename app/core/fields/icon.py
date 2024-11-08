@@ -5,7 +5,7 @@ from core.classes.icon import Icon
 
 
 
-class IconField(serializers.Field):
+class IconField(serializers.DictField):
 
     source = ''
 

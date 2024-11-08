@@ -10,7 +10,7 @@ class ContentTypeBaseSerializer(serializers.ModelSerializer):
 
     display_name = serializers.SerializerMethodField('get_display_name')
 
-    def get_display_name(self, item):
+    def get_display_name(self, item) -> str:
 
         return str( item )
 
@@ -43,7 +43,7 @@ class ContentTypeViewSerializer(ContentTypeBaseSerializer):
 
     _urls = serializers.SerializerMethodField('get_url')
 
-    def get_url(self, item):
+    def get_url(self, item) -> dict:
 
         return {
             '_self': reverse("v2:_api_v2_content_type-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),

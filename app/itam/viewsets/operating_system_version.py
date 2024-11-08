@@ -1,4 +1,4 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
+from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from itam.serializers.operating_system_version import (
     OperatingSystemVersion,
@@ -13,6 +13,13 @@ from api.viewsets.common import ModelViewSet
     create=extend_schema(
         summary = 'Create an operating system version',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'operating_system_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='Software allready exists', response=OperatingSystemVersionViewSerializer),
             201: OpenApiResponse(description='Software created', response=OperatingSystemVersionViewSerializer),
@@ -23,6 +30,18 @@ from api.viewsets.common import ModelViewSet
     destroy = extend_schema(
         summary = 'Delete an operating system version',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'operating_system_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             204: OpenApiResponse(description=''),
             403: OpenApiResponse(description='User is missing delete permissions'),
@@ -31,6 +50,13 @@ from api.viewsets.common import ModelViewSet
     list = extend_schema(
         summary = 'Fetch all operating system versions',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'operating_system_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=OperatingSystemVersionViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -39,6 +65,18 @@ from api.viewsets.common import ModelViewSet
     retrieve = extend_schema(
         summary = 'Fetch a single operating system version',
         description='',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'operating_system_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=OperatingSystemVersionViewSerializer),
             403: OpenApiResponse(description='User is missing view permissions'),
@@ -48,6 +86,18 @@ from api.viewsets.common import ModelViewSet
     partial_update = extend_schema(
         summary = 'Update an operating system version',
         description = '',
+        parameters = [
+            OpenApiParameter(
+                name = 'id',
+                location = 'path',
+                type = int
+            ),
+            OpenApiParameter(
+                name = 'operating_system_id',
+                location = 'path',
+                type = int
+            ),
+        ],
         responses = {
             200: OpenApiResponse(description='', response=OperatingSystemVersionViewSerializer),
             403: OpenApiResponse(description='User is missing change permissions'),
