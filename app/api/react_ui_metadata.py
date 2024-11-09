@@ -158,7 +158,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Changes",
-                        "name": "chanage_ticket",
+                        "name": "change",
                         "link": "/itim/ticket/change"
                     },
                     {
@@ -168,12 +168,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     },
                     {
                         "display_name": "Incidents",
-                        "name": "incident_ticket",
+                        "name": "incident",
                         "link": "/itim/ticket/incident"
                     },
                     {
                         "display_name": "Problems",
-                        "name": "problem_ticket",
+                        "name": "problem",
                         "link": "/itim/ticket/problem"
                     },
                     {
@@ -190,7 +190,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Groups",
-                        "name": "config_group",
+                        "name": "group",
                         "link": "/config_management/group"
                     }
                 ]
@@ -213,13 +213,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "System",
-                        "name": "system",
+                        "name": "setting",
                         "icon": "settings",
                         "link": "/settings"
                     },
                     {
                         "display_name": "Task Log",
-                        "name": "celery_task_log",
+                        "name": "celery_log",
                         # "icon": "settings",
                         "link": "/settings/celery_log"
                     }

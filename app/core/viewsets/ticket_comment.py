@@ -211,6 +211,7 @@ class ViewSet(ModelViewSet):
         if (
             'comment_type' not in self.request.data
             and self.action == 'create'
+            and self.request._request.method != 'GET'
         ):
 
             raise  centurion_exceptions.ValidationError(
