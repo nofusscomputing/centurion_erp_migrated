@@ -2060,5 +2060,38 @@ class TicketValidationAPI(
 
 
 
+    @pytest.mark.skip(reason='test to be written')
+    def test_attribute_duration_ticket_value(self):
+        """Attribute value test
+
+        This aattribute calculates the ticket duration from
+        it's comments. must return total time in seconds
+        """
+
+        pass
+
+
+
+    @pytest.mark.skip(reason='test to be written')
+    def test_field_milestone_no_project(self):
+        """Field Value Test
+
+        Ensure that a milestone can't be applied if no project
+        has been selected
+        """
+
+        pass
+
+
+    @pytest.mark.skip(reason='test to be written')
+    def test_field_milestone_different_project(self):
+        """Field Value Test
+
+        Ensure that a milestone from a different project
+        can't be applied
+        """
+
+        pass
+
 
 
