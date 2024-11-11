@@ -46,6 +46,7 @@ class OverRideJSONAPIMetadata(JSONAPIMetadata):
             User: 'Relationship',
             UserBaseSerializer: 'Relationship',
             centurion_field.CharField: 'String',
+            centurion_field.MarkdownField: 'Markdown'
         }
     )
 
