@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from itam.serializers.device import DeviceBaseSerializer
 
 from itim.serializers.cluster_type import ClusterTypeBaseSerializer
@@ -41,7 +43,10 @@ class ClusterBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class ClusterModelSerializer(ClusterBaseSerializer):
+class ClusterModelSerializer(
+    common.CommonModelSerializer,
+    ClusterBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.software import SoftwareCategory
@@ -40,7 +42,10 @@ class SoftwareCategoryBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class SoftwareCategoryModelSerializer(SoftwareCategoryBaseSerializer):
+class SoftwareCategoryModelSerializer(
+    common.CommonModelSerializer,
+    SoftwareCategoryBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

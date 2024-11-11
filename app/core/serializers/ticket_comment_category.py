@@ -5,6 +5,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers import common
+
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 
@@ -39,7 +41,10 @@ class TicketCommentCategoryBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class TicketCommentCategoryModelSerializer(TicketCommentCategoryBaseSerializer):
+class TicketCommentCategoryModelSerializer(
+    common.CommonModelSerializer,
+    TicketCommentCategoryBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

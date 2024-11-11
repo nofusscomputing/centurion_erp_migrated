@@ -5,6 +5,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers import common
+
 from core.models.manufacturer import Manufacturer
 
 
@@ -39,7 +41,10 @@ class ManufacturerBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class ManufacturerModelSerializer(ManufacturerBaseSerializer):
+class ManufacturerModelSerializer(
+    common.CommonModelSerializer,
+    ManufacturerBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

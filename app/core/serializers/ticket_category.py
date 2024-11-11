@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from core.models.ticket.ticket_category import TicketCategory
 
 
@@ -39,7 +41,10 @@ class TicketCategoryBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class TicketCategoryModelSerializer(TicketCategoryBaseSerializer):
+class TicketCategoryModelSerializer(
+    common.CommonModelSerializer,
+    TicketCategoryBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

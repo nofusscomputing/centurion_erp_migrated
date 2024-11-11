@@ -7,6 +7,7 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
 from api.viewsets.common import ModelViewSet
 
 from core.fields.icon import Icon, IconField
@@ -48,7 +49,10 @@ class DeviceBaseSerializer(serializers.ModelSerializer):
             'url',
         ]
 
-class DeviceModelSerializer(DeviceBaseSerializer):
+class DeviceModelSerializer(
+    common.CommonModelSerializer,
+    DeviceBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

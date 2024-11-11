@@ -2,9 +2,9 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
-
-
 from access.serializers.organization import OrganizationBaseSerializer
+
+from api.serializers import common
 
 from core.fields.badge import Badge, BadgeField
 
@@ -49,7 +49,10 @@ class DeviceSoftwareBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class DeviceSoftwareModelSerializer(DeviceSoftwareBaseSerializer):
+class DeviceSoftwareModelSerializer(
+    common.CommonModelSerializer,
+    DeviceSoftwareBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
