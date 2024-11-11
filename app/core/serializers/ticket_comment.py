@@ -11,6 +11,7 @@ from api.exceptions import UnknownTicketType
 from app.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
+from core import fields as centurion_field
 from core.models.ticket.ticket_comment import Ticket, TicketComment
 
 
@@ -103,6 +104,9 @@ class TicketCommentModelSerializer(
             })
 
         return urls
+
+
+    body = centurion_field.MarkdownField( required = False )
 
 
     class Meta:

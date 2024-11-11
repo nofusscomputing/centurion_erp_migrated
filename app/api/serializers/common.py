@@ -1,6 +1,13 @@
+
 from rest_framework import serializers
 
 from core import fields as centurion_field
+
+
+
+class CommonBaseSerializer(serializers.ModelSerializer):
+
+    pass
 
 
 
