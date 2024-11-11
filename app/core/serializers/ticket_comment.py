@@ -106,7 +106,7 @@ class TicketCommentModelSerializer(
         return urls
 
 
-    body = centurion_field.MarkdownField( required = False )
+    body = centurion_field.MarkdownField( required = True )
 
 
     class Meta:
