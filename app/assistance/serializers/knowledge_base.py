@@ -13,6 +13,9 @@ from api.serializers import common
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base_category import KnowledgeBaseCategoryBaseSerializer
 
+from core import fields as centurion_field
+
+
 
 class KnowledgeBaseBaseSerializer(serializers.ModelSerializer):
 
@@ -94,6 +97,11 @@ class KnowledgeBaseModelSerializer(
                 request=self.context['view'].request,
             )
         }
+
+
+    content = centurion_field.MarkdownField( required = False )
+
+    summary = centurion_field.MarkdownField( required = False )
 
 
     class Meta:

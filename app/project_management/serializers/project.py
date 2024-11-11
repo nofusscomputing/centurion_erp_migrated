@@ -10,6 +10,8 @@ from app.serializers.user import UserBaseSerializer
 
 from access.serializers.teams import TeamBaseSerializer
 
+from core import fields as centurion_field
+
 from project_management.models.projects import Project
 from project_management.serializers.project_states import ProjectStateBaseSerializer
 from project_management.serializers.project_type import ProjectTypeBaseSerializer
@@ -75,6 +77,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             ),
         }
 
+    description = centurion_field.MarkdownField( required = False )
 
     class Meta:
 
