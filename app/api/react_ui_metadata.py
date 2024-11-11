@@ -9,6 +9,7 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from app.serializers.user import User, UserBaseSerializer
 
+from core import fields as centurion_field
 from core.fields.badge import BadgeField
 from core.fields.icon import IconField
 
@@ -43,7 +44,8 @@ class OverRideJSONAPIMetadata(JSONAPIMetadata):
             BadgeField: 'Badge',
             IconField: 'Icon',
             User: 'Relationship',
-            UserBaseSerializer: 'Relationship'
+            UserBaseSerializer: 'Relationship',
+            centurion_field.CharField: 'String',
         }
     )
 
@@ -244,6 +246,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         """
         field_info = {}
         serializer = field.parent
+
+        if hasattr(field, 'textarea'):
+
+            if field.textarea:
+
+                field_info["multi_line"] = True
 
         if isinstance(field, serializers.ManyRelatedField):
             field_info["type"] = self.type_lookup[field.child_relation]
