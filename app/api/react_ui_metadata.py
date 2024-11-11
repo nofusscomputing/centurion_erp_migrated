@@ -288,8 +288,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         if (
             # not field_info.get("read_only")
-            not field_info.get("relationship_resource")
-            and hasattr(field, "choices")
+            hasattr(field, "choices")
         ):
             field_info["choices"] = [
                 {
