@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from settings.models.external_link import ExternalLink
 
 
@@ -40,7 +42,10 @@ class ExternalLinkBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ExternalLinkModelSerializer(ExternalLinkBaseSerializer):
+class ExternalLinkModelSerializer(
+    common.CommonModelSerializer,
+    ExternalLinkBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

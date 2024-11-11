@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from itam.models.device import DeviceType
 
 
@@ -38,7 +40,10 @@ class DeviceTypeBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class DeviceTypeModelSerializer(DeviceTypeBaseSerializer):
+class DeviceTypeModelSerializer(
+    common.CommonModelSerializer,
+    DeviceTypeBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

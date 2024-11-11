@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from config_management.models.groups import ConfigGroupSoftware
 from config_management.serializers.config_group import ConfigGroups, ConfigGroupBaseSerializer
 
@@ -55,7 +57,10 @@ class ConfigGroupSoftwareBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ConfigGroupSoftwareModelSerializer(ConfigGroupSoftwareBaseSerializer):
+class ConfigGroupSoftwareModelSerializer(
+    common.CommonModelSerializer,
+    ConfigGroupSoftwareBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

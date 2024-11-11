@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from itim.serializers.cluster import ClusterBaseSerializer
 from itim.serializers.port import PortBaseSerializer
 from itim.models.services import Service
@@ -43,7 +45,10 @@ class ServiceBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class ServiceModelSerializer(ServiceBaseSerializer):
+class ServiceModelSerializer(
+    common.CommonModelSerializer,
+    ServiceBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from assistance.serializers.knowledge_base import KnowledgeBaseBaseSerializer
 
 from project_management.models.project_states import ProjectState
@@ -43,7 +45,10 @@ class ProjectStateBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ProjectStateModelSerializer(ProjectStateBaseSerializer):
+class ProjectStateModelSerializer(
+    common.CommonModelSerializer,
+    ProjectStateBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 
