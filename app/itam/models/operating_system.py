@@ -192,7 +192,7 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         OperatingSystem,
         help_text = 'Operating system this version applies to',
         on_delete = models.CASCADE,
-        verbose_name = 'Operaating System'
+        verbose_name = 'Operating System'
     )
 
     name = models.CharField(
@@ -203,9 +203,40 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
         verbose_name = 'Major Version',
     )
 
-    # model not intended to be viewable on its own
-    # as it's a sub model
-    page_layout: list = []
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'operating_system',
+                        'name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_global',
+                    ]
+                },
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                # {
+                #     "layout": "table",
+                #     "field": "tickets",
+                # }
+            ],
+        },
+
+
+    ]
 
     table_fields: list = [
         'name',
