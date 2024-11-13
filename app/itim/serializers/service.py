@@ -127,7 +127,7 @@ class ServiceModelSerializer(
         if 'view' in self._context:
 
             if 'device_id' in self._context['view'].kwargs:
-                    
+
                 self.Meta.read_only_fields += [ 'cluster', 'device', 'organization', 'is_global' ]
 
         fields = super().get_field_names(declared_fields, info)
