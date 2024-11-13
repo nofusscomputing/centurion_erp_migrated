@@ -271,13 +271,22 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         else:
             field_info["relationship_resource"] = get_related_resource_type(field)
 
+        if hasattr(field, 'autolink'):
+
+            if field.autolink:
+
+                field_info['autolink'] = field.autolink
+
+
         field_info["required"] = getattr(field, "required", False)
+
 
         if hasattr(field, 'style_class'):
 
             field_info["style"]: dict = {
                 'class': field.style_class
             }
+
 
         attrs = [
             "read_only",

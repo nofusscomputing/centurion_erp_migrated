@@ -145,6 +145,8 @@ nav:
 
           - projects/centurion_erp/development/api/tests/notes_permissions.md
 
+      - projects/centurion_erp/development/fields.md
+
       - projects/centurion_erp/development/forms.md
 
       - projects/centurion_erp/development/models.md
