@@ -10,6 +10,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from app.serializers.permission import PermissionBaseSerializer
 
+from core import fields as centurion_field
+
 
 
 class TeamBaseSerializer(serializers.ModelSerializer):
@@ -83,6 +85,8 @@ class TeamModelSerializer(
                 }
             )
         }
+
+    team_name = centurion_field.CharField( autolink = True )
 
 
     class Meta:
