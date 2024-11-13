@@ -137,7 +137,7 @@ class TicketModelSerializer(TicketBaseSerializer):
         return url_dict
 
 
-    description = centurion_field.MarkdownField( required = True )
+    description = centurion_field.MarkdownField( required = True, style_class = 'large' )
 
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
