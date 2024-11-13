@@ -99,9 +99,9 @@ class KnowledgeBaseModelSerializer(
         }
 
 
-    content = centurion_field.MarkdownField( required = False )
+    content = centurion_field.MarkdownField( required = False, style_class = 'large' )
 
-    summary = centurion_field.MarkdownField( required = False )
+    summary = centurion_field.MarkdownField( required = False, style_class = 'large' )
 
 
     class Meta:

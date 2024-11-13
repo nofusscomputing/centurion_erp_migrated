@@ -273,6 +273,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         field_info["required"] = getattr(field, "required", False)
 
+        if hasattr(field, 'style_class'):
+
+            field_info["style"]: dict = {
+                'class': field.style_class
+            }
+
         attrs = [
             "read_only",
             "write_only",

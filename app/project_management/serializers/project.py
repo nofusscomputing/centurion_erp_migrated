@@ -77,7 +77,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             ),
         }
 
-    description = centurion_field.MarkdownField( required = False )
+    description = centurion_field.MarkdownField( required = False, style_class = 'large' )
 
     class Meta:
 
