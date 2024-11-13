@@ -61,7 +61,40 @@ class ProjectMilestone(ProjectCommonFieldsName):
 
     # model not intended to be vieable on its own page
     # as this model is a sub-model.
-    page_layout: dict = []
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'project',
+                        'name',
+                        'start_date',
+                        'finish_date',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'description',
+                        'is_global',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                # {
+                #     "layout": "table",
+                #     "field": "tickets",
+                # }
+            ],
+        },
+    ]
 
 
     table_fields: list = [
