@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 class CharField(serializers.CharField):
 
+    autolink: bool = False
+
     source = ''
 
     label = ''
@@ -11,7 +13,14 @@ class CharField(serializers.CharField):
     textarea: bool
 
 
-    def __init__(self, multiline = False, **kwargs):
+    def __init__(
+        self,
+        autolink = False,
+        multiline = False,
+        **kwargs
+    ):
+
+        self.autolink = autolink
 
         self.textarea = multiline
 
