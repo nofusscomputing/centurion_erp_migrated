@@ -56,6 +56,8 @@ class NoteModelSerializer(NoteBaseSerializer):
 
     def get_url(self, item) -> dict:
 
+        _self: str = ''
+
 
         if 'group_id' in self._kwargs['context']['view'].kwargs:
 
