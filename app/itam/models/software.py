@@ -291,7 +291,40 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
 
     # model does not have it's own page
     # as it's a secondary model. 
-    page_layout: list = []
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'software',
+                        'name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                # {
+                #     "layout": "table",
+                #     "field": "tickets",
+                # }
+            ],
+        },
+
+    ]
 
     table_fields: list = [
         'name',
