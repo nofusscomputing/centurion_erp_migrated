@@ -83,6 +83,10 @@ class ViewSet( ModelViewSet ):
 
             self.queryset = super().get_queryset().filter(parent = self.kwargs['parent_group'])
 
+        elif 'pk' in self.kwargs:
+
+            self.queryset = super().get_queryset().filter( pk = self.kwargs['pk'] )
+
         else:
 
             self.queryset = super().get_queryset().filter( parent = None )

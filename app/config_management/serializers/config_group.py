@@ -118,6 +118,9 @@ class ConfigGroupModelSerializer(
     rendered_config = serializers.JSONField( source = 'render_config', read_only=True )
 
 
+    child_count = serializers.CharField( source = 'count_children', read_only = True )
+
+
     class Meta:
 
         model = ConfigGroups
@@ -127,6 +130,7 @@ class ConfigGroupModelSerializer(
             'display_name',
             'organization',
             'parent',
+            'child_count',
             'name',
             'model_notes',
             'config',
