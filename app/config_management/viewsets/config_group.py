@@ -85,7 +85,7 @@ class ViewSet( ModelViewSet ):
 
         else:
 
-            self.queryset = super().get_queryset()
+            self.queryset = super().get_queryset().filter( parent = None )
         
         return self.queryset
 
