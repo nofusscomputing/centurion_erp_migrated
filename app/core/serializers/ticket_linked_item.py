@@ -85,6 +85,22 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
         ]
 
 
+    def get_field_names(self, declared_fields, info):
+
+        if 'view' in self._context:
+
+            if(
+                'item_class' in self.context['view'].kwargs
+                and 'item_id' in self.context['view'].kwargs
+            ):
+
+                self.Meta.read_only_fields += [ 'item', 'item_type' ]
+
+        fields = super().get_field_names(declared_fields, info)
+
+        return fields
+
+
     def validate(self, data):
 
         ticket = None
@@ -94,6 +110,15 @@ class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
             if 'ticket_id' in self._context['view'].kwargs:
 
                 ticket = Ticket.objects.get(pk = int(self._context['view'].kwargs['ticket_id']) )
+
+            if 'item_class' in self._context['view'].kwargs:
+
+                data['item_type'] = self._context['view'].item_type
+
+
+            if 'item_id' in self._context['view'].kwargs:
+
+                data['item'] = int(self._context['view'].kwargs['item_id'])
 
 
         if (

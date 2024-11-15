@@ -8,8 +8,13 @@ from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers import common
+
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base_category import KnowledgeBaseCategoryBaseSerializer
+
+from core import fields as centurion_field
+
 
 
 class KnowledgeBaseBaseSerializer(serializers.ModelSerializer):
@@ -54,7 +59,10 @@ class KnowledgeBaseBaseSerializer(serializers.ModelSerializer):
 
 
 
-class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
+class KnowledgeBaseModelSerializer(
+    common.CommonModelSerializer,
+    KnowledgeBaseBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -89,6 +97,11 @@ class KnowledgeBaseModelSerializer(KnowledgeBaseBaseSerializer):
                 request=self.context['view'].request,
             )
         }
+
+
+    content = centurion_field.MarkdownField( required = False, style_class = 'large' )
+
+    summary = centurion_field.MarkdownField( required = False, style_class = 'large' )
 
 
     class Meta:

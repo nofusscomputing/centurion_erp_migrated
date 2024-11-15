@@ -135,6 +135,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
+    'app.middleware.timezone.TimezoneMiddleware',
 ]
 
 

@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from access.models import Organization
 
+from api.serializers import common
+
 from app.serializers.user import UserBaseSerializer
 
 
@@ -40,7 +42,10 @@ class OrganizationBaseSerializer(serializers.ModelSerializer):
 
 
 
-class OrganizationModelSerializer(OrganizationBaseSerializer):
+class OrganizationModelSerializer(
+    common.CommonModelSerializer,
+    OrganizationBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

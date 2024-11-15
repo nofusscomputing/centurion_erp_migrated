@@ -9,6 +9,8 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from core import fields as centurion_field
+
 
 
 class TaskResultBaseSerializer(serializers.ModelSerializer):
@@ -56,6 +58,8 @@ class TaskResultModelSerializer(TaskResultBaseSerializer):
                 }
             ),
         }
+
+    task_id = centurion_field.CharField( autolink = True )
 
 
     class Meta:

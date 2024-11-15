@@ -103,7 +103,20 @@ class TicketValidation(
 
 
     @property
-    def get_fields_allowed_by_permission(self):
+    def get_fields_allowed_by_permission(self) -> list(str()):
+        """Obtain Fields that the user can edit
+
+        First obtain the users organization. As this can be found in multiple
+        locations, first check and fetch from the existing ticket. If this is
+        a new ticket, the organization should have been supplied, so use that.
+
+        Check the permission after building the required permission using the
+        ticket type.
+
+
+        Returns:
+            list(str()): Fields the user can edit.
+        """
 
         if hasattr(self, '_fields_allowed_by_permission'):
 
@@ -116,13 +129,13 @@ class TicketValidation(
 
         fields_allowed: list = []
 
+        ticket_organization = None
+
         if self.instance is not None:
 
-            ticket_organization = self.instance.organization
+            if self.instance.pk:
 
-        else:
-
-            ticket_organization = self.validated_data['organization']
+                ticket_organization = self.instance.organization
 
 
         if ticket_organization is None:

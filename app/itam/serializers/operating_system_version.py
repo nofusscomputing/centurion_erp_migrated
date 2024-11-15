@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from core.serializers.manufacturer import ManufacturerBaseSerializer
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
@@ -54,7 +56,10 @@ class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class OperatingSystemVersionModelSerializer(OperatingSystemVersionBaseSerializer):
+class OperatingSystemVersionModelSerializer(
+    common.CommonModelSerializer,
+    OperatingSystemVersionBaseSerializer
+):
 
 
 

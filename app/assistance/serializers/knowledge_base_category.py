@@ -9,6 +9,8 @@ from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers import common
+
 from assistance.models.knowledge_base import KnowledgeBaseCategory
 
 
@@ -55,7 +57,10 @@ class KnowledgeBaseCategoryBaseSerializer(serializers.ModelSerializer):
 
 
 
-class KnowledgeBaseCategoryModelSerializer(KnowledgeBaseCategoryBaseSerializer):
+class KnowledgeBaseCategoryModelSerializer(
+    common.CommonModelSerializer,
+    KnowledgeBaseCategoryBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

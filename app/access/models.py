@@ -237,7 +237,7 @@ class TenancyObject(SaveHistory):
         Organization,
         blank = False,
         help_text = 'Organization this belongs to',
-        null = True,
+        null = False,
         on_delete = models.CASCADE,
         validators = [validatate_organization_exists],
         verbose_name = 'Organization'

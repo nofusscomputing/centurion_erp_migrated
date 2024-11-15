@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from itam.serializers.device import DeviceBaseSerializer
 
 from itim.models.services import Port
@@ -43,7 +45,10 @@ class PortBaseSerializer(serializers.ModelSerializer):
 
 
 
-class PortModelSerializer(PortBaseSerializer):
+class PortModelSerializer(
+    common.CommonModelSerializer,
+    PortBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

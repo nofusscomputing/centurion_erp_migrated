@@ -3,6 +3,9 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from access.models import TeamUsers
+
+from api.serializers import common
+
 from app.serializers.user import UserBaseSerializer
 
 
@@ -49,7 +52,10 @@ class TeamUserBaseSerializer(serializers.ModelSerializer):
 
 
 
-class TeamUserModelSerializer(TeamUserBaseSerializer):
+class TeamUserModelSerializer(
+    common.CommonModelSerializer,
+    TeamUserBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

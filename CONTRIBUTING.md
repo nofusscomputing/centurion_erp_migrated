@@ -68,6 +68,14 @@ Included within the root of the repository is a makefile that can be used during
 > this doc is yet to receive a re-write
 
 
+## Docker Container
+
+within the `deploy/` directory there is a docker compose file. running `docker compose up` from this directory will launch a full stack deployment locally containing Centurion API, User Interface, a worker and a RabbitMQ server. once launched you can navigate to `http://127.0.0.1/` to start browsing the site.
+
+You may need to run migrations if your not mounting your own DB. to do this run `docker exec -ti centurion-erp python manage.py migrate`
+
+
+
 # Old working docs
 
 

@@ -173,9 +173,9 @@ class TicketSerializer(
 
             self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
 
-            is_valid = self.validate_ticket()
-
             self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
+
+            is_valid = self.validate_ticket()
 
             if self.instance is None:
 

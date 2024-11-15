@@ -11,6 +11,7 @@ from api.exceptions import UnknownTicketType
 from app.serializers.user import UserBaseSerializer
 
 from core import exceptions as centurion_exceptions
+from core import fields as centurion_field
 from core.models.ticket.ticket_comment import Ticket, TicketComment
 
 
@@ -105,6 +106,9 @@ class TicketCommentModelSerializer(
         return urls
 
 
+    body = centurion_field.MarkdownField( required = True )
+
+
     class Meta:
 
         model = TicketComment
@@ -174,6 +178,20 @@ class TicketCommentModelSerializer(
 
 
     def __init__(self, instance=None, data=empty, **kwargs):
+
+        if 'view' in kwargs['context']:
+
+            if kwargs['context']['view'].action == 'create':
+
+                if(
+                    'ticket_id' in kwargs['context']['view'].kwargs
+                    and not data['organization']
+                ):
+
+                    data['organization'] = Ticket.objects.get(
+                        pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                    ).organization.id
+
 
         super().__init__(instance=instance, data=data, **kwargs)
 

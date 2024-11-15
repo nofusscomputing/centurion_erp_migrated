@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from config_management.models.groups import ConfigGroups
 
 from itam.serializers.device import DeviceBaseSerializer
@@ -52,7 +54,10 @@ class ConfigGroupBaseSerializer(serializers.ModelSerializer):
 
 
 
-class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
+class ConfigGroupModelSerializer(
+    common.CommonModelSerializer,
+    ConfigGroupBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -113,6 +118,9 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
     rendered_config = serializers.JSONField( source = 'render_config', read_only=True )
 
 
+    child_count = serializers.CharField( source = 'count_children', read_only = True )
+
+
     class Meta:
 
         model = ConfigGroups
@@ -122,6 +130,7 @@ class ConfigGroupModelSerializer(ConfigGroupBaseSerializer):
             'display_name',
             'organization',
             'parent',
+            'child_count',
             'name',
             'model_notes',
             'config',

@@ -9,6 +9,7 @@ from app.serializers.user import UserBaseSerializer
 from api.exceptions import UnknownTicketType
 
 from core import exceptions as centurion_exception
+from core import fields as centurion_field
 from core.models.ticket.ticket import Ticket
 
 from core.fields.badge import Badge, BadgeField
@@ -135,6 +136,8 @@ class TicketModelSerializer(TicketBaseSerializer):
 
         return url_dict
 
+
+    description = centurion_field.MarkdownField( required = True, style_class = 'large' )
 
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 

@@ -9,6 +9,7 @@ from rest_framework_json_api.utils import get_related_resource_type
 
 from app.serializers.user import User, UserBaseSerializer
 
+from core import fields as centurion_field
 from core.fields.badge import BadgeField
 from core.fields.icon import IconField
 
@@ -43,7 +44,9 @@ class OverRideJSONAPIMetadata(JSONAPIMetadata):
             BadgeField: 'Badge',
             IconField: 'Icon',
             User: 'Relationship',
-            UserBaseSerializer: 'Relationship'
+            UserBaseSerializer: 'Relationship',
+            centurion_field.CharField: 'String',
+            centurion_field.MarkdownField: 'Markdown'
         }
     )
 
@@ -59,6 +62,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         metadata["name"] = view.get_view_name()
 
         metadata["description"] = view.get_view_description()
+
+        if 'pk' in view.kwargs:
+
+            if view.kwargs['pk']:
+
+                qs = view.get_queryset()[0]
+
+                if hasattr(qs, 'get_url'):
+
+                    metadata['return_url'] = qs.get_url( request )
 
         metadata["renders"] = [
             renderer.media_type for renderer in view.renderer_classes
@@ -158,7 +171,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Changes",
-                        "name": "chanage_ticket",
+                        "name": "change",
                         "link": "/itim/ticket/change"
                     },
                     {
@@ -168,12 +181,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     },
                     {
                         "display_name": "Incidents",
-                        "name": "incident_ticket",
+                        "name": "incident",
                         "link": "/itim/ticket/incident"
                     },
                     {
                         "display_name": "Problems",
-                        "name": "problem_ticket",
+                        "name": "problem",
                         "link": "/itim/ticket/problem"
                     },
                     {
@@ -190,7 +203,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Groups",
-                        "name": "config_group",
+                        "name": "group",
                         "link": "/config_management/group"
                     }
                 ]
@@ -213,13 +226,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "System",
-                        "name": "system",
+                        "name": "setting",
                         "icon": "settings",
                         "link": "/settings"
                     },
                     {
                         "display_name": "Task Log",
-                        "name": "celery_task_log",
+                        "name": "celery_log",
                         # "icon": "settings",
                         "link": "/settings/celery_log"
                     }
@@ -245,6 +258,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         field_info = {}
         serializer = field.parent
 
+        if hasattr(field, 'textarea'):
+
+            if field.textarea:
+
+                field_info["multi_line"] = True
+
         if isinstance(field, serializers.ManyRelatedField):
             field_info["type"] = self.type_lookup[field.child_relation]
         else:
@@ -262,7 +281,22 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         else:
             field_info["relationship_resource"] = get_related_resource_type(field)
 
+        if hasattr(field, 'autolink'):
+
+            if field.autolink:
+
+                field_info['autolink'] = field.autolink
+
+
         field_info["required"] = getattr(field, "required", False)
+
+
+        if hasattr(field, 'style_class'):
+
+            field_info["style"]: dict = {
+                'class': field.style_class
+            }
+
 
         attrs = [
             "read_only",
@@ -288,8 +322,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         if (
             # not field_info.get("read_only")
-            not field_info.get("relationship_resource")
-            and hasattr(field, "choices")
+            hasattr(field, "choices")
         ):
             field_info["choices"] = [
                 {

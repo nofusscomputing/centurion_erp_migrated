@@ -4,6 +4,8 @@ from rest_framework.reverse import reverse
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from itim.serializers.cluster import ClusterBaseSerializer
 from itim.serializers.port import PortBaseSerializer
 from itim.models.services import Service
@@ -43,7 +45,10 @@ class ServiceBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class ServiceModelSerializer(ServiceBaseSerializer):
+class ServiceModelSerializer(
+    common.CommonModelSerializer,
+    ServiceBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 
@@ -122,7 +127,7 @@ class ServiceModelSerializer(ServiceBaseSerializer):
         if 'view' in self._context:
 
             if 'device_id' in self._context['view'].kwargs:
-                    
+
                 self.Meta.read_only_fields += [ 'cluster', 'device', 'organization', 'is_global' ]
 
         fields = super().get_field_names(declared_fields, info)

@@ -10,12 +10,11 @@ x-app: &centurion
   #   - default
   volumes:
     - ./volumes/data:/data:rw
-    - ./volumes/etc/itsm:/etc/itsm:ro
+    - ../app/db.sqlite3:/data/db.sqlite3:rw
+    - ./volumes/etc/itsm:/etc/itsm
+    - ./settings.tmp.py:/etc/itsm/settings.py:ro
 
 services:
-
-
-  
 
 
 
@@ -40,6 +39,19 @@ services:
     depends_on:
       - centurion
       - rabbitmq
+
+
+
+  centurion-ui:
+    image: ghcr.io/nofusscomputing/centurion-erp-ui:dev
+    restart: always
+    container_name: centurion-ui
+    environment:
+      - API_URL=http://127.0.0.1:8000/api/v2
+    hostname: centurion-ui
+    network_mode: "host"
+    depends_on:
+      - centurion
 
 
 
