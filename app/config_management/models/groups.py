@@ -117,7 +117,6 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
                     "left": [
                         'organization',
                         'name',
-                        'parent',
                         'is_global'
                     ],
                     "right": [
@@ -196,9 +195,8 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     table_fields: list = [
         'name',
-        'parent',
-        'count_children',
-        'organization'
+        'child_count',
+        'organization',
     ]
 
 
