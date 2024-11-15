@@ -63,6 +63,16 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         metadata["description"] = view.get_view_description()
 
+        if 'pk' in view.kwargs:
+
+            if view.kwargs['pk']:
+
+                qs = view.get_queryset()[0]
+
+                if hasattr(qs, 'get_url'):
+
+                    metadata['return_url'] = qs.get_url( request )
+
         metadata["renders"] = [
             renderer.media_type for renderer in view.renderer_classes
         ]
