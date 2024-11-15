@@ -183,9 +183,11 @@ class TicketCommentModelSerializer(
 
             if kwargs['context']['view'].action == 'create':
 
-                data['organization'] = Ticket.objects.get(
-                    pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
-                ).organization.id
+                if 'ticket_id' in kwargs['context']['view'].kwargs:
+
+                    data['organization'] = Ticket.objects.get(
+                        pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                    ).organization.id
 
 
         super().__init__(instance=instance, data=data, **kwargs)

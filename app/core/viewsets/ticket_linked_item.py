@@ -169,6 +169,8 @@ class ViewSet(ModelViewSet):
                 item_type = item_type
             )
 
+            self.item_type = item_type
+
         if 'pk' in self.kwargs:
 
             self.queryset = self.queryset.filter(pk = self.kwargs['pk'])
