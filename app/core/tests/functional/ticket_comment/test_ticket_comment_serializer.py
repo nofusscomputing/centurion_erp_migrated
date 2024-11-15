@@ -278,7 +278,7 @@ class TicketCommentITILTaskAddValidationAPI(
 
         self.serializer_data = {
             'organization': self.organization.id,
-            'ticket': self.ticket,
+            'ticket': self.ticket.id,
             'body': 'comment body',
             'comment_type': int(self.comment_type)
         }
@@ -348,7 +348,7 @@ class TicketCommentITILTaskTriageValidationAPI(
 
         self.serializer_data = {
             'organization': self.organization.id,
-            'ticket': self.ticket,
+            'ticket': self.ticket.id,
             'body': 'comment body',
             'comment_type': int(self.comment_type)
         }
