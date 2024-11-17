@@ -23,14 +23,7 @@ class SoftwareVersionBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return reverse(
-            "v2:_api_v2_software_version-detail",
-            request=self.context['view'].request,
-            kwargs={
-                'software_id': item.software.pk,
-                'pk': item.pk
-            }
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -62,14 +55,7 @@ class SoftwareVersionModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse(
-                "v2:_api_v2_software_version-detail",
-                request=self._context['view'].request,
-                kwargs={
-                    'software_id': item.software.pk,
-                    'pk': item.pk
-                }
-            ),
+            '_self': item.get_url( request = self._context['view'].request ),
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,

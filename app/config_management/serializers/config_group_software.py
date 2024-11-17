@@ -27,14 +27,7 @@ class ConfigGroupSoftwareBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return reverse(
-            "v2:_api_v2_config_group-detail",
-            request=self.context['view'].request,
-            kwargs={
-                'group_id': item.config_group.pk,
-                'pk': item.pk
-            }
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -68,14 +61,7 @@ class ConfigGroupSoftwareModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse(
-                'v2:_api_v2_config_group_software-detail',
-                request = self.context['view'].request,
-                kwargs = {
-                    'group_id': item.config_group.pk,
-                    'pk': item.pk
-                }
-            ),
+            '_self': item.get_url( request = self._context['view'].request ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',
                 request=self.context['view'].request,

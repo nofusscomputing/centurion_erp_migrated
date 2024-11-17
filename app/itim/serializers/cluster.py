@@ -52,16 +52,8 @@ class ClusterModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = None
-
-        if 'view' in self._context:
-
-            if hasattr(self._context['view'], 'request'):
-
-                request = self._context['view'].request
-
         return {
-            '_self': item.get_url( request = request ),
+            '_self': item.get_url( request = self._context['view'].request ),
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,

@@ -56,72 +56,8 @@ class NoteModelSerializer(NoteBaseSerializer):
 
     def get_url(self, item) -> dict:
 
-        _self: str = ''
-
-
-        if 'group_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_config_group_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'group_id': self._kwargs['context']['view'].kwargs['group_id'],
-                    'pk': item.pk
-                }
-            )
-
-        elif 'device_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_device_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'device_id': self._kwargs['context']['view'].kwargs['device_id'],
-                    'pk': item.pk
-                }
-            )
-
-        elif 'operating_system_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_operating_system_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'operating_system_id': self._kwargs['context']['view'].kwargs['operating_system_id'],
-                    'pk': item.pk
-                }
-            )
-
-        elif 'service_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_service_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'service_id': self._kwargs['context']['view'].kwargs['service_id'],
-                    'pk': item.pk
-                }
-            )
-
-        elif 'project_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_project_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'project_id': self._kwargs['context']['view'].kwargs['project_id'],
-                    'pk': item.pk
-                }
-            )
-
-        elif 'software_id' in self._kwargs['context']['view'].kwargs:
-
-            _self = reverse("v2:_api_v2_software_notes-detail", 
-                request=self._context['view'].request,
-                kwargs={
-                    'software_id': self._kwargs['context']['view'].kwargs['software_id'],
-                    'pk': item.pk
-                }
-            )
-
-
         return {
-            '_self': _self,
+            '_self': item.get_url( request = self._context['view'].request ),
         }
 
 

@@ -697,12 +697,20 @@ class Ticket(
 
         ticket_type = str(self.get_ticket_type_display()).lower().replace(' ', '_')
 
+        kwargs = self.get_url_kwargs()
+
+        if ticket_type == 'project_task':
+
+            kwargs.update({
+                'project_id': self.project.id
+            })
+
 
         if request:
 
-            return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", request=request, kwargs = kwargs )
 
-        return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", kwargs = kwargs )
 
 
     @property
@@ -1195,7 +1203,13 @@ class RelatedTickets(TenancyObject):
                 }
             )
 
-        return reverse("v2:_api_v2_ticket_related-detail", kwargs={'pk': self.id})
+        return reverse(
+                "v2:_api_v2_ticket_related-detail",
+                kwargs={
+                    'ticket_id': ticket_id,
+                    'pk': self.id
+                }
+            )
 
 
     def __str__(self):

@@ -52,7 +52,7 @@ class OrganizationModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_v2_organization-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': item.get_url( request = self._context['view'].request ),
             'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 

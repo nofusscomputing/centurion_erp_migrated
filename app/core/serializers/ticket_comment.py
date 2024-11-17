@@ -64,8 +64,6 @@ class TicketCommentModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = self.context.get('request')
-
         if item.ticket:
 
             ticket_type_name = item.ticket.get_ticket_type_display()
@@ -78,14 +76,7 @@ class TicketCommentModelSerializer(
 
 
         urls: dict = {
-            '_self': reverse(
-                    'API:_api_v2_ticket_comment-detail',
-                    request = self._context['view'].request,
-                    kwargs={
-                        'ticket_id': ticket_id,
-                        'pk': item.id
-                    }
-                )
+            '_self': item.get_url( request = self._context['view'].request )
         }
 
         threads = TicketComment.objects.filter(parent = item.id, ticket = ticket_id)

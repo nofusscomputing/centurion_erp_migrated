@@ -30,13 +30,7 @@ class KnowledgeBaseBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return reverse(
-            "v2:_api_v2_knowledge_base-detail",
-            request=self.context['view'].request,
-            kwargs={
-                'pk': item.pk
-            }
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -70,13 +64,7 @@ class KnowledgeBaseModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse(
-                'v2:_api_v2_knowledge_base-detail',
-                request=self.context['view'].request,
-                kwargs={
-                    'pk': item.pk
-                }
-            ),
+            '_self': item.get_url( request = self._context['view'].request ),
             'category': reverse(
                 'v2:_api_v2_knowledge_base_category-list',
                 request=self.context['view'].request,
