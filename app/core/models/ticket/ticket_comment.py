@@ -414,6 +414,19 @@ class TicketComment(
         return query
 
 
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'ticket_id': self.ticket.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
