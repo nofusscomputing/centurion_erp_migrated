@@ -25,7 +25,7 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_ticket_comments-detail", format="html"
+        view_name="API:_api_v2_ticket_comment-detail", format="html"
     )
 
     class Meta:
@@ -79,7 +79,7 @@ class TicketCommentModelSerializer(
 
         urls: dict = {
             '_self': reverse(
-                    'API:_api_v2_ticket_comments-detail',
+                    'API:_api_v2_ticket_comment-detail',
                     request = self._context['view'].request,
                     kwargs={
                         'ticket_id': ticket_id,

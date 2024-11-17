@@ -108,7 +108,7 @@ class TicketModelSerializer(TicketBaseSerializer):
                 request=context['view'].request,
                 kwargs = kwargs
             ),
-            'comments': reverse('v2:_api_v2_ticket_comments-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            'comments': reverse('v2:_api_v2_ticket_comment-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
             'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
