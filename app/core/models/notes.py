@@ -145,3 +145,36 @@ class Notes(NotesCommonFields):
     def __str__(self):
 
         return 'Note ' + str(self.id)
+
+
+    def get_url( self, request = None ) -> str:
+
+        if self.config_group:
+
+            item = 'config_group'
+        
+        elif self.device:
+
+            item = 'device'
+
+        elif self.service:
+
+            item = 'service'
+
+        elif self.software:
+
+            item = 'software'
+
+        elif self.operatingsystem:
+
+            item = 'operating_system'
+
+
+        item = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_{item}_notes-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_{item}_notes-detail", kwargs = self.get_url_kwargs() )
