@@ -513,25 +513,20 @@ class TeamUsers(SaveHistory):
 
     def get_url( self, request = None ) -> str:
 
-        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
-
         url_kwargs: dict = {
+            'organization_id': self.team.organization.id,
+            'team_id': self.team.id,
             'pk': self.id
         }
-
-        if hasattr(self, 'get_url_kwargs'):
-
-            url_kwargs = self.get_url_kwargs()
-
 
         print(f'url kwargs are: {url_kwargs}')
 
 
         if request:
 
-            return reverse(f"v2:_api_v2_{model_name}-detail", request=request, kwargs = { 'pk': self.id } )
+            return reverse(f"v2:_api_v2_organization_team_user-detail", request=request, kwargs = url_kwargs )
 
-        return reverse(f"v2:_api_v2_{model_name}-detail", kwargs = { 'pk': self.id } )
+        return reverse(f"v2:_api_v2_organization_team_user-detail", kwargs = url_kwargs )
 
 
     def save(self, *args, **kwargs):
