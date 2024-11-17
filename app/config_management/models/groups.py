@@ -468,6 +468,14 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     ]
 
 
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'group_id': self.config_group.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
