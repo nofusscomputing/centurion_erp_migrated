@@ -201,6 +201,45 @@ class BaseModel:
 
 
 
+
+
+    def test_attribute_exists_get_url(self):
+        """Test for existance of field in `<model>`
+
+        Attribute `get_url` must be defined in class.
+        """
+
+        assert hasattr(self.item, 'get_url')
+
+
+    def test_attribute_not_empty_get_url(self):
+        """Test field `<model>` is not empty
+
+        Attribute `get_url` must contain values
+        """
+
+        assert self.item.get_url() is not None
+
+
+    def test_attribute_type_get_url(self):
+        """Test field `<model>`type
+
+        Attribute `get_url` must be str
+        """
+
+        assert type(self.item.get_url()) is str
+
+
+    def test_attribute_callable_get_url(self):
+        """Test field `<model>` callable
+
+        Attribute `get_url` must be a function
+        """
+
+        assert callable(self.item.get_url)
+
+
+
 class TenancyModel(
     BaseModel,
     TenancyObjectTestCases,
