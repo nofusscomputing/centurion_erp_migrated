@@ -103,7 +103,7 @@ class TicketCommentAPI(
         self.url_view_kwargs_child = {'ticket_id': self.ticket.id, 'parent_id': self.item.id, 'pk': child_comment.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_ticket_comments-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_ticket_comment-detail', kwargs=self.url_view_kwargs)
         url_child = reverse('v2:_api_v2_ticket_comment_threads-detail', kwargs=self.url_view_kwargs_child)
 
 
