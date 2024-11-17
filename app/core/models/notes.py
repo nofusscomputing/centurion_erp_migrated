@@ -172,9 +172,6 @@ class Notes(NotesCommonFields):
             item = 'operating_system'
 
 
-        item = str(self._meta.verbose_name.lower()).replace(' ', '_')
-
-
         if request:
 
             return reverse(f"v2:_api_v2_{item}_notes-detail", request=request, kwargs = self.get_url_kwargs() )
