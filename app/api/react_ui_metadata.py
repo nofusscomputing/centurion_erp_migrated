@@ -138,7 +138,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Knowledge Base",
                         "name": "knowledge_base",
-                        "icon": "kb",
+                        "icon": "information",
                         "link": "/assistance/knowledge_base"
                     }
                 ]
@@ -204,6 +204,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Groups",
                         "name": "group",
+                        "icon": 'config_management',
                         "link": "/config_management/group"
                     }
                 ]
@@ -211,10 +212,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             {
                 "display_name": "Project Management",
                 "name": "project_management",
+                "icon": 'project',
                 "pages": [
                     {
                         "display_name": "Projects",
                         "name": "project",
+                        "icon": 'kanban',
                         "link": "/project_management/project"
                     }
                 ]
@@ -227,7 +230,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "System",
                         "name": "setting",
-                        "icon": "settings",
+                        "icon": "system",
                         "link": "/settings"
                     },
                     {
