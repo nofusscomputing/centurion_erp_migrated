@@ -52,7 +52,7 @@ class ExternalLinkModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse("v2:_api_v2_external_link-detail", request=self._context['view'].request, kwargs={'pk': item.pk}),
+            '_self': item.get_url( request = self._context['view'].request ),
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,

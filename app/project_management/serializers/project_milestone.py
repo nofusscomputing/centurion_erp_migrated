@@ -25,14 +25,7 @@ class ProjectMilestoneBaseSerializer(serializers.ModelSerializer):
 
         context = self.context.copy()
 
-        return reverse(
-            "v2:_api_v2_project_milestone-detail",
-            request=context['view'].request,
-            kwargs={
-                'project_id': item.project.id,
-                'pk': item.pk
-            }
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -64,14 +57,7 @@ class ProjectMilestoneModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse(
-                "v2:_api_v2_project_milestone-detail",
-                request=self._context['view'].request,
-                kwargs={
-                    'project_id': item.project.id,
-                    'pk': item.pk
-                }
-            ),
+            '_self': item.get_url( request = self._context['view'].request ),
         }
 
 

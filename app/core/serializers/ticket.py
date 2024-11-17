@@ -33,29 +33,7 @@ class TicketBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        context = self.context.copy()
-
-        ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
-
-        if ticket_type == 'project_task':
-
-            kwargs: dict = {
-                'project_id': item.project.id,
-                'pk': item.pk
-            }
-
-        else:
-
-            kwargs: dict = {
-                'pk': item.pk
-            }
-
-
-        return reverse(
-            "v2:_api_v2_ticket_" + ticket_type + "-detail",
-            request=context['view'].request,
-            kwargs = kwargs
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -85,37 +63,18 @@ class TicketModelSerializer(TicketBaseSerializer):
 
     def get_url(self, item) -> dict:
 
-        context = self.context.copy()
-
         ticket_type = str(item.get_ticket_type_display()).lower().replace(' ', '_')
 
-        if ticket_type == 'project_task':
-
-            kwargs: dict = {
-                'project_id': item.project.id,
-                'pk': item.pk
-            }
-
-        else:
-
-            kwargs: dict = {
-                'pk': item.pk
-            }
-
         url_dict: dict = {
-            '_self': reverse(
-                "v2:_api_v2_ticket_" + ticket_type + "-detail",
-                request=context['view'].request,
-                kwargs = kwargs
-            ),
-            'comments': reverse('v2:_api_v2_ticket_comment-list', request=context['view'].request, kwargs={'ticket_id': item.pk}),
-            'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            '_self': item.get_url( request = self._context['view'].request ),
+            'comments': reverse('v2:_api_v2_ticket_comment-list', request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
+            'linked_items': reverse("v2:_api_v2_ticket_linked_item-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
         }
 
         if item.project:
 
             url_dict.update({
-                'project': reverse("v2:_api_v2_project-list", request=context['view'].request, kwargs={}),
+                'project': reverse("v2:_api_v2_project-list", request=self._context['view'].request, kwargs={}),
             })
 
         if item.category:
@@ -123,14 +82,14 @@ class TicketModelSerializer(TicketBaseSerializer):
             url_dict.update({
             'ticketcategory': reverse(
                 'v2:_api_v2_ticket_category-list',
-                request=context['view'].request,
+                request=self._context['view'].request,
                 kwargs={},
             ) + '?' + ticket_type + '=true',
             })
 
 
         url_dict.update({
-            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=context['view'].request, kwargs={'ticket_id': item.pk}),
+            'related_tickets': reverse("v2:_api_v2_ticket_related-list", request=self._context['view'].request, kwargs={'ticket_id': item.pk}),
         })
 
 

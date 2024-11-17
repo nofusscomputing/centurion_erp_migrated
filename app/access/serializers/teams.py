@@ -27,14 +27,7 @@ class TeamBaseSerializer(serializers.ModelSerializer):
 
     def get_url(self, item) -> str:
 
-        return reverse(
-            "v2:_api_v2_organization_team-detail",
-            request=self.context['view'].request,
-            kwargs={
-                'organization_id': item.organization.id,
-                'pk': item.pk
-            }
-        )
+        return item.get_url( request = self.context['view'].request )
 
 
     class Meta:
@@ -68,14 +61,7 @@ class TeamModelSerializer(
     def get_url(self, item) -> dict:
 
         return {
-            '_self': reverse(
-                'v2:_api_v2_organization_team-detail',
-                request=self.context['view'].request,
-                kwargs={
-                    'organization_id': item.organization.id,
-                    'pk': item.pk
-                }
-            ),
+            '_self': item.get_url( request = self._context['view'].request ),
             'users': reverse(
                 'v2:_api_v2_organization_team_user-list',
                 request=self.context['view'].request,
