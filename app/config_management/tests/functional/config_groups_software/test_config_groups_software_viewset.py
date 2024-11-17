@@ -130,7 +130,7 @@ class ConfigGroupSoftwarePermissionsAPI(TestCase, APIPermissions):
             name = 'one'
         )
 
-        self.url_kwargs = { 'group_id': self.config_group.id }
+        self.url_kwargs = { 'config_group_id': self.config_group.id }
 
         self.software = Software.objects.create(
             organization = self.organization,
@@ -164,7 +164,7 @@ class ConfigGroupSoftwarePermissionsAPI(TestCase, APIPermissions):
         )
 
 
-        self.url_view_kwargs = {'group_id': self.config_group.id, 'pk': self.item.id}
+        self.url_view_kwargs = {'config_group_id': self.config_group.id, 'pk': self.item.id}
 
         self.add_data = {
             'organization': self.organization.id,

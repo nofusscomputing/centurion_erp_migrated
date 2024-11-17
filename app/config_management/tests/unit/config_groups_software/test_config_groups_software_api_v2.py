@@ -61,7 +61,7 @@ class ConfigGroupsAPI(
             version = self.software_version
         )
 
-        self.url_view_kwargs = {'group_id': self.config_group.id, 'pk': self.item.id}
+        self.url_view_kwargs = {'config_group_id': self.config_group.id, 'pk': self.item.id}
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,

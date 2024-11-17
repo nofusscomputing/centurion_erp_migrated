@@ -48,8 +48,8 @@ class NotePermissionsAPI(
         )
 
 
-        self.url_kwargs = {'group_id': self.note_item.id}
+        self.url_kwargs = {'config_group_id': self.note_item.id}
 
-        self.url_view_kwargs = {'group_id': self.note_item.id, 'pk': self.item.pk }
+        self.url_view_kwargs = {'config_group_id': self.note_item.id, 'pk': self.item.pk }
 
         self.add_data = {'note': 'a note added', 'organization': self.organization.id}
