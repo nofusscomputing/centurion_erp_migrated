@@ -314,15 +314,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
     ]
 
 
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_device-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_device-detail", kwargs={'pk': self.id})
-
-
     def save(
             self, force_insert=False, force_update=False, using=None, update_fields=None
         ):
@@ -622,6 +613,14 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             text_style = f'badge-text-action-{text.lower()}',
             url = '_self',
         )
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.software.id
+        }
 
 
     @property

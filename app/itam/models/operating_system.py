@@ -246,6 +246,14 @@ class OperatingSystemVersion(OperatingSystemCommonFields, SaveHistory):
     ]
 
 
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'operating_system_id': self.operating_system.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """

@@ -334,6 +334,14 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
     ]
 
 
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'software_id': self.software.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """

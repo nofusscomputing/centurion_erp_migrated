@@ -110,6 +110,14 @@ class ProjectMilestone(ProjectCommonFieldsName):
         return self.name
 
 
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'project_id': self.project.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
