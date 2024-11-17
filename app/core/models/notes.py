@@ -151,29 +151,45 @@ class Notes(NotesCommonFields):
 
     def get_url( self, request = None ) -> str:
 
+        kwargs = self.get_url_kwargs()
+
         if self.config_group:
 
             item = 'config_group'
+
+            item_id = self.config_group.id
         
         elif self.device:
 
             item = 'device'
 
+            item_id = self.device.id
+
         elif self.service:
 
             item = 'service'
+
+            item_id = self.service.id
 
         elif self.software:
 
             item = 'software'
 
+            item_id = self.software.id
+
         elif self.operatingsystem:
 
             item = 'operating_system'
 
+            item_id = self.operatingsystem.id
+
+        kwargs.update({
+            str(item + '_id'): item_id
+        })
+
 
         if request:
 
-            return reverse(f"v2:_api_v2_{item}_notes-detail", request=request, kwargs = self.get_url_kwargs() )
+            return reverse(f"v2:_api_v2_{item}_notes-detail", request=request, kwargs = kwargs )
 
-        return reverse(f"v2:_api_v2_{item}_notes-detail", kwargs = self.get_url_kwargs() )
+        return reverse(f"v2:_api_v2_{item}_notes-detail", kwargs = kwargs )
