@@ -386,6 +386,19 @@ class Team(Group, TenancyObject):
         'created',
     ]
 
+
+    def get_url( self, request = None ) -> str:
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_organization_team-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_organization_team-detail", kwargs = self.get_url_kwargs() )
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
