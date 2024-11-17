@@ -693,6 +693,18 @@ class Ticket(
         return str(duration)
 
 
+    def get_url( self, request = None ) -> str:
+
+        ticket_type = str(self.get_ticket_type_display()).lower().replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", kwargs = self.get_url_kwargs() )
+
+
     @property
     def linked_items(self) -> list(dict()):
         """Fetch items linked to ticket
