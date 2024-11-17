@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import TenancyObject
 
