@@ -118,8 +118,8 @@ router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
 router.register('config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 router.register('config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
 router.register('config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
-router.register('config_management/group/(?P<group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
-router.register('config_management/group/(?P<group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
+router.register('config_management/group/(?P<config_group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
+router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
 
 router.register('core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')

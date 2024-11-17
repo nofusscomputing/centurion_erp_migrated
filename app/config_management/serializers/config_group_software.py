@@ -105,7 +105,7 @@ class ConfigGroupSoftwareModelSerializer(
 
         if 'view' in self._context:
 
-            if 'group_id' in self._context['view'].kwargs:
+            if 'config_group_id' in self._context['view'].kwargs:
 
                 self.Meta.read_only_fields += [ 
                     'organization',
@@ -121,11 +121,11 @@ class ConfigGroupSoftwareModelSerializer(
 
         if 'view' in self._context:
 
-            if 'group_id' in self._context['view'].kwargs:
+            if 'config_group_id' in self._context['view'].kwargs:
 
-                self.validated_data['config_group_id'] = int(self._context['view'].kwargs['group_id'])
+                self.validated_data['config_group_id'] = int(self._context['view'].kwargs['config_group_id'])
 
-                parent_item = ConfigGroups.objects.get(pk = int(self._context['view'].kwargs['group_id']))
+                parent_item = ConfigGroups.objects.get(pk = int(self._context['view'].kwargs['config_group_id']))
 
                 self.validated_data['organization_id'] = parent_item.organization.id
 
