@@ -399,6 +399,19 @@ class Team(Group, TenancyObject):
         return reverse(f"v2:_api_v2_organization_team-detail", kwargs = self.get_url_kwargs() )
 
 
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'organization_id': self.organization.id,
+            'pk': self.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
