@@ -1,6 +1,7 @@
 ## Version 1.4.0
 
 API redesign in preparation for moving the UI out of centurion to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui). This release introduces a **Feature freeze** to the current UI. Only bug fixes will be done for the current UI.
+API v2 is a beta release and is subject to change. On completion of the new UI, API v2 will more likely than not be set as stable.
 
 - A large emphasis is being placed upon API stability. This is being achieved by ensuring the following:
 
