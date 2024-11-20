@@ -66,6 +66,8 @@ class ViewSet( ModelViewSet ):
         'serial_number',
         'organization',
         'uuid',
+        'cluster_device',
+        'cluster_node'
     ]
 
     search_fields = [
