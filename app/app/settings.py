@@ -290,6 +290,9 @@ if API_ENABLED:
         'DESCRIPTION': """This UI exists to server the purpose of being the API documentation.
 
 Centurion ERP's API is versioned, with [v1 Depreciated](/api/swagger) and [v2 as the current](/api/v2/docs).
+
+**Note:** _API v2 is currently in beta phase. AS such is subject to change. When the new UI ius released, API v2 will move to stable._
+
 ## Authentication
 
 Access to the API is restricted and requires authentication. Available authentication methods are:
