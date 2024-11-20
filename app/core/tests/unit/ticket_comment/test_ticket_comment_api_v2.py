@@ -103,7 +103,7 @@ class TicketCommentAPI(
         self.url_view_kwargs_child = {'ticket_id': self.ticket.id, 'parent_id': self.item.id, 'pk': child_comment.id}
 
         client = Client()
-        url = reverse('v2:_api_v2_ticket_comments-detail', kwargs=self.url_view_kwargs)
+        url = reverse('v2:_api_v2_ticket_comment-detail', kwargs=self.url_view_kwargs)
         url_child = reverse('v2:_api_v2_ticket_comment_threads-detail', kwargs=self.url_view_kwargs_child)
 
 
@@ -330,7 +330,64 @@ class TicketCommentAPI(
         category field must be int
         """
 
-        assert type(self.api_data['category']) is int
+        assert type(self.api_data['category']) is dict
+
+
+    def test_api_field_exists_category_id(self):
+        """ Test for existance of API Field
+
+        category.id field must exist
+        """
+
+        assert 'id' in self.api_data['category']
+
+
+    def test_api_field_type_category_id(self):
+        """ Test for type for API Field
+
+        category.id field must be int
+        """
+
+        assert type(self.api_data['category']['id']) is int
+
+
+    def test_api_field_exists_category_display_name(self):
+        """ Test for existance of API Field
+
+        category.display_name field must exist
+        """
+
+        assert 'display_name' in self.api_data['category']
+
+
+    def test_api_field_type_category_display_name(self):
+        """ Test for type for API Field
+
+        category.display_name field must be int
+        """
+
+        assert type(self.api_data['category']['display_name']) is str
+
+
+    def test_api_field_exists_category_url(self):
+        """ Test for existance of API Field
+
+        category.url field must exist
+        """
+
+        assert 'url' in self.api_data['category']
+
+
+    def test_api_field_type_category_url(self):
+        """ Test for type for API Field
+
+        category.url field must be int
+        """
+
+        assert type(self.api_data['category']['url']) is Hyperlink
+
+
+
 
 
 

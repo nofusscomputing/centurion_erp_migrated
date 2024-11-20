@@ -263,6 +263,11 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                 },
                 {
                     "layout": "table",
+                    "name": "Operating System",
+                    "field": "operating_system",
+                },
+                {
+                    "layout": "table",
                     "name": "Dependent Services",
                     "field": "service",
                 },
@@ -312,15 +317,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
             ]
         }
     ]
-
-
-    def get_url( self, request = None ) -> str:
-
-        if request:
-
-            return reverse("v2:_api_v2_device-detail", request=request, kwargs={'pk': self.id})
-
-        return reverse("v2:_api_v2_device-detail", kwargs={'pk': self.id})
 
 
     def save(
@@ -624,6 +620,14 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
         )
 
 
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.software.id
+        }
+
+
     @property
     def parent_object(self):
         """ Fetch the parent object """
@@ -662,8 +666,8 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         help_text = 'Device for the Operating System',
         on_delete = models.CASCADE,
         null = False,
-        verbose_name = 'Device'
-        
+        verbose_name = 'Device',
+        unique = True
     )
 
     operating_system_version = models.ForeignKey(
@@ -709,7 +713,19 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         }
     ]
 
-    table_fields: list = []
+    table_fields: list = [
+        'operating_system_version',
+        'version',
+        'installdate',
+    ]
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.pk
+        }
 
 
     @property

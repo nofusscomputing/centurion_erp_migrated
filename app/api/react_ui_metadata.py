@@ -3,6 +3,7 @@ from django.utils.encoding import force_str
 from rest_framework import serializers
 from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.request import clone_request
+from rest_framework.reverse import reverse
 from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
@@ -73,6 +74,15 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                     metadata['return_url'] = qs.get_url( request )
 
+        elif view.kwargs:
+
+            metadata['return_url'] = reverse('v2:' + view.basename + '-list', request = view.request, kwargs = view.kwargs )
+
+        else:
+
+            metadata['return_url'] = reverse('v2:' + view.basename + '-list', request = view.request )
+
+
         metadata["renders"] = [
             renderer.media_type for renderer in view.renderer_classes
         ]
@@ -132,13 +142,13 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Requests",
                         "name": "request",
-                        "icon": "ticket",
+                        "icon": "ticket_request",
                         "link": "/assistance/ticket/request"
                     },
                     {
                         "display_name": "Knowledge Base",
                         "name": "knowledge_base",
-                        "icon": "kb",
+                        "icon": "information",
                         "link": "/assistance/knowledge_base"
                     }
                 ]
@@ -171,7 +181,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Changes",
-                        "name": "change",
+                        "name": "ticket_change",
                         "link": "/itim/ticket/change"
                     },
                     {
@@ -181,12 +191,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     },
                     {
                         "display_name": "Incidents",
-                        "name": "incident",
+                        "name": "ticket_incident",
                         "link": "/itim/ticket/incident"
                     },
                     {
                         "display_name": "Problems",
-                        "name": "problem",
+                        "name": "ticket_problem",
                         "link": "/itim/ticket/problem"
                     },
                     {
@@ -204,6 +214,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Groups",
                         "name": "group",
+                        "icon": 'config_management',
                         "link": "/config_management/group"
                     }
                 ]
@@ -211,10 +222,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             {
                 "display_name": "Project Management",
                 "name": "project_management",
+                "icon": 'project',
                 "pages": [
                     {
                         "display_name": "Projects",
                         "name": "project",
+                        "icon": 'kanban',
                         "link": "/project_management/project"
                     }
                 ]
@@ -227,7 +240,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "System",
                         "name": "setting",
-                        "icon": "settings",
+                        "icon": "system",
                         "link": "/settings"
                     },
                     {

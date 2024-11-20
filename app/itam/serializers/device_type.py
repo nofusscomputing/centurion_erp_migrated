@@ -51,7 +51,7 @@ class DeviceTypeModelSerializer(
     def get_url(self, obj) -> dict:
 
         return {
-            '_self': reverse("v2:_api_v2_device_type-detail", request=self._context['view'].request, kwargs={'pk': obj.pk})
+            '_self': obj.get_url( request = self._context['view'].request )
         }
 
 

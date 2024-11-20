@@ -36,6 +36,11 @@ class DeviceOperatingSystemHistory(TestCase, HistoryEntry, HistoryEntryChildItem
             organization = self.organization,
         )
 
+        self.item_parent_two = Device.objects.create(
+            name = 'test_item_two_' + self.model._meta.model_name,
+            organization = self.organization,
+        )
+
         self.item_operating_system = OperatingSystem.objects.create(
             name = 'test_item_' + self.model._meta.model_name,
             organization = self.organization,
@@ -94,7 +99,7 @@ class DeviceOperatingSystemHistory(TestCase, HistoryEntry, HistoryEntryChildItem
         self.item_delete = self.model.objects.create(
             operating_system_version = self.item_operating_system_version_delete,
             organization = self.organization,
-            device = self.item_parent,
+            device = self.item_parent_two,
         )
 
         self.deleted_pk = self.item_delete.pk
@@ -111,3 +116,13 @@ class DeviceOperatingSystemHistory(TestCase, HistoryEntry, HistoryEntryChildItem
             item_parent_pk = self.deleted_pk,
             item_parent_class = self.model._meta.model_name,
         )
+
+
+
+    def test_history_entry_item_delete_field_parent_pk(self):
+        """ Ensure history entry field item_pk is the created parents pk """
+
+        history = self.history_delete.__dict__
+
+        assert history['item_parent_pk'] == self.item_parent_two.pk
+        # assert type(history['item_pk']) is int

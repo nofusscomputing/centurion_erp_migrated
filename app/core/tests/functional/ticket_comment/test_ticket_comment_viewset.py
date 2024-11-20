@@ -31,7 +31,7 @@ class TicketCommentPermissionsAPI(
 
     ticket_type_enum = Ticket.TicketType.REQUEST
 
-    url_name = '_api_v2_ticket_comments'
+    url_name = '_api_v2_ticket_comment'
 
 
     @classmethod

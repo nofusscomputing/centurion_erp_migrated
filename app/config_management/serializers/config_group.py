@@ -89,13 +89,13 @@ class ConfigGroupModelSerializer(
                 'v2:_api_v2_config_group_software-list',
                 request=self.context['view'].request,
                 kwargs = {
-                    'group_id': item.pk
+                    'config_group_id': item.pk
                 }
             ),
             'notes': reverse(
                 "v2:_api_v2_config_group_notes-list",
                 request=self._context['view'].request,
-                kwargs={'group_id': item.pk}
+                kwargs={'config_group_id': item.pk}
             ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',

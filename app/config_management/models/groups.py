@@ -148,8 +148,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "slug": "hosts",
             "sections": [
                 {
-                    "layout": "table",
-                    "field": "hosts",
+                    "layout": "single",
+                    "fields": [
+                        "hosts"
+                    ],
                 }
             ]
         },
@@ -466,6 +468,14 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
         'action',
         'version'
     ]
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'config_group_id': self.config_group.id,
+            'pk': self.id
+        }
 
 
     @property

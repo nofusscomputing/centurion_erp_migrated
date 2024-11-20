@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User, Group, Permission
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from .fields import *
 
 from core.middleware.get_request import get_request
@@ -112,6 +114,16 @@ class Organization(SaveHistory):
             "sections": []
         }
     ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_organization-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_organization-detail", kwargs={'pk': self.id})
+
 
 
 class TenancyManager(models.Manager):
@@ -261,7 +273,41 @@ class TenancyObject(SaveHistory):
     def get_organization(self) -> Organization:
         return self.organization
 
-    
+
+    def get_url( self, request = None ) -> str:
+        """Fetch the models URL
+
+        If URL kwargs are required to generate the URL, define a `get_url_kwargs` that returns them.
+
+        Args:
+            request (object, optional): The request object that was made by the end user. Defaults to None.
+
+        Returns:
+            str: Canonical URL of the model if the `request` object was provided. Otherwise the relative URL. 
+        """
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'pk': self.id
+        }
+
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         if self.organization is None:
@@ -338,6 +384,32 @@ class Team(Group, TenancyObject):
         'modified',
         'created',
     ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_organization_team-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_organization_team-detail", kwargs = self.get_url_kwargs() )
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'organization_id': self.organization.id,
+            'pk': self.id
+        }
+
 
     @property
     def parent_object(self):
@@ -437,6 +509,24 @@ class TeamUsers(SaveHistory):
 
     def get_organization(self) -> Organization:
         return self.team.organization
+
+
+    def get_url( self, request = None ) -> str:
+
+        url_kwargs: dict = {
+            'organization_id': self.team.organization.id,
+            'team_id': self.team.id,
+            'pk': self.id
+        }
+
+        print(f'url kwargs are: {url_kwargs}')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_organization_team_user-detail", request=request, kwargs = url_kwargs )
+
+        return reverse(f"v2:_api_v2_organization_team_user-detail", kwargs = url_kwargs )
 
 
     def save(self, *args, **kwargs):

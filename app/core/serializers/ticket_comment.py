@@ -13,6 +13,7 @@ from app.serializers.user import UserBaseSerializer
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
 from core.models.ticket.ticket_comment import Ticket, TicketComment
+from core.serializers.ticket_comment_category import TicketCommentCategoryBaseSerializer
 
 
 
@@ -25,7 +26,7 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
         return str( item )
 
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_v2_ticket_comments-detail", format="html"
+        view_name="API:_api_v2_ticket_comment-detail", format="html"
     )
 
     class Meta:
@@ -64,8 +65,6 @@ class TicketCommentModelSerializer(
 
     def get_url(self, item) -> dict:
 
-        request = self.context.get('request')
-
         if item.ticket:
 
             ticket_type_name = item.ticket.get_ticket_type_display()
@@ -78,14 +77,7 @@ class TicketCommentModelSerializer(
 
 
         urls: dict = {
-            '_self': reverse(
-                    'API:_api_v2_ticket_comments-detail',
-                    request = self._context['view'].request,
-                    kwargs={
-                        'ticket_id': ticket_id,
-                        'pk': item.id
-                    }
-                )
+            '_self': item.get_url( request = self._context['view'].request )
         }
 
         threads = TicketComment.objects.filter(parent = item.id, ticket = ticket_id)
@@ -146,25 +138,31 @@ class TicketCommentModelSerializer(
 
         read_only_fields = [
             'id',
-            'parent',
+
+            #
+            # Commented out as the metadata was not being populated.
+            # ToDo: Unit test to confirm that this serializer is ONLY provided
+            # to the metadata (HTTP/OPTIONS)
+            #
+            # 'parent',
             'external_ref',
             'external_system',
-            'private',
+            # 'private',
             'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
+            # # 'category',
+            # 'template',
+            # 'is_template',
+            # 'source',
+            # 'status',
+            # 'responsible_user',
+            # 'responsible_team',
+            # 'user',
+            # 'planned_start_date',
+            # 'planned_finish_date',
+            # 'real_start_date',
+            # 'real_finish_date',
             'organization',
-            'date_closed',
+            # 'date_closed',
             'created',
             'modified',
             '_urls',
@@ -179,18 +177,20 @@ class TicketCommentModelSerializer(
 
     def __init__(self, instance=None, data=empty, **kwargs):
 
-        if 'view' in kwargs['context']:
+        if data != empty:
 
-            if kwargs['context']['view'].action == 'create':
+            if 'view' in kwargs['context']:
 
-                if(
-                    'ticket_id' in kwargs['context']['view'].kwargs
-                    and not data['organization']
-                ):
+                if kwargs['context']['view'].action == 'create':
 
-                    data['organization'] = Ticket.objects.get(
-                        pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
-                    ).organization.id
+                    if(
+                        'ticket_id' in kwargs['context']['view'].kwargs
+                        and not 'organization' in data
+                    ):
+
+                        data['organization'] = Ticket.objects.get(
+                            pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
+                        ).organization.id
 
 
         super().__init__(instance=instance, data=data, **kwargs)
@@ -656,7 +656,9 @@ class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
 
 class TicketCommentViewSerializer(TicketCommentModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True ) 
+    organization = OrganizationBaseSerializer( many = False )
+
+    category = TicketCommentCategoryBaseSerializer( many = False, read_only = True )
 
     user = UserBaseSerializer()
 

@@ -54,6 +54,7 @@ from itam.viewsets import (
     device_model as device_model_v2,
     device_type as device_type_v2,
     device_software as device_software_v2,
+    device_operating_system,
     inventory,
     operating_system as operating_system_v2,
     operating_system_version as operating_system_version_v2,
@@ -118,12 +119,12 @@ router.register('base/user', user_v2.ViewSet, basename='_api_v2_user')
 router.register('config_management', config_management_v2.Index, basename='_api_v2_config_management_home')
 router.register('config_management/group', config_group_v2.ViewSet, basename='_api_v2_config_group')
 router.register('config_management/group/(?P<parent_group>[0-9]+)/child_group', config_group_v2.ViewSet, basename='_api_v2_config_group_child')
-router.register('config_management/group/(?P<group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
-router.register('config_management/group/(?P<group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
+router.register('config_management/group/(?P<config_group_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_config_group_notes')
+router.register('config_management/group/(?P<config_group_id>[0-9]+)/software', config_group_software_v2.ViewSet, basename='_api_v2_config_group_software')
 
 
 router.register('core/(?P<model_class>.+)/(?P<model_id>[0-9]+)/history', history_v2.ViewSet, basename='_api_v2_model_history')
-router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_comments')
+router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments', ticket_comment.ViewSet, basename='_api_v2_ticket_comment')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/comments/(?P<parent_id>[0-9]+)/threads', ticket_comment.ViewSet, basename='_api_v2_ticket_comment_threads')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/linked_item', ticket_linked_item.ViewSet, basename='_api_v2_ticket_linked_item')
 router.register('core/ticket/(?P<ticket_id>[0-9]+)/related_ticket', related_ticket.ViewSet, basename='_api_v2_ticket_related')
@@ -132,6 +133,7 @@ router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', 
 
 router.register('itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 router.register('itam/device', device_v2.ViewSet, basename='_api_v2_device')
+router.register('itam/device/(?P<device_id>[0-9]+)/operating_system', device_operating_system.ViewSet, basename='_api_v2_device_operating_system')
 router.register('itam/device/(?P<device_id>[0-9]+)/software', device_software_v2.ViewSet, basename='_api_v2_device_software')
 router.register('itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
 router.register('itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')

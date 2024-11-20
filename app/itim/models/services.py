@@ -277,6 +277,16 @@ class Service(TenancyObject):
                     ]
                 },
                 {
+                    "name": "cluster / Device",
+                    "layout": "double",
+                    "left": [
+                        'cluster',
+                    ],
+                    "right": [
+                        'device',
+                    ]
+                },
+                {
                     "layout": "single",
                     "fields": [
                         'config',

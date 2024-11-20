@@ -91,12 +91,14 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
 
 # Application definition
-# CSRF_COOKIE_SECURE = True
-# SECURE_HSTS_SECONDS =    # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECURE_HSTS_SECONDS
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 86400
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True    # Commented out so tests pass
 # SECURE_SSL_HOST =        # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-host
-# SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
 
 
@@ -288,6 +290,9 @@ if API_ENABLED:
         'DESCRIPTION': """This UI exists to server the purpose of being the API documentation.
 
 Centurion ERP's API is versioned, with [v1 Depreciated](/api/swagger) and [v2 as the current](/api/v2/docs).
+
+**Note:** _API v2 is currently in beta phase. AS such is subject to change. When the new UI ius released, API v2 will move to stable._
+
 ## Authentication
 
 Access to the API is restricted and requires authentication. Available authentication methods are:
