@@ -11,6 +11,14 @@ from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
 
 
+class MockView:
+
+    action: str = None
+
+    kwargs: dict = {}
+
+
+
 class DeviceOperatingSystemValidationAPI(
     TestCase,
 ):
@@ -73,32 +81,47 @@ class DeviceOperatingSystemValidationAPI(
         Ensure that an item can be created
         """
 
+        mock_view = MockView()
+
+        mock_view.kwargs = {
+            'device_id': self.valid_data['device']
+        }
+
         serializer = DeviceOperatingSystemModelSerializer(
+            context = {
+                'view': mock_view
+            },
             data = self.valid_data
         )
 
         assert serializer.is_valid(raise_exception = True)
 
 
-    def test_serializer_validation_no_device(self):
+    def test_serializer_validation_no_device_success(self):
         """Serializer Validation Check
 
-        Ensure that if creating and no device is provided a validation exception is thrown
+        Ensure that if creating and no device is provided no validation exception is thrown
+        as the serializer supplies the device from the view kwargs
         """
 
         data = self.valid_data.copy()
 
         del data['device']
 
-        with pytest.raises(ValidationError) as err:
+        mock_view = MockView()
 
-            serializer = DeviceOperatingSystemModelSerializer(
-                data = data
-            )
+        mock_view.kwargs = {
+            'device_id': self.valid_data['device']
+        }
 
-            serializer.is_valid(raise_exception = True)
+        serializer = DeviceOperatingSystemModelSerializer(
+            context = {
+                'view': mock_view
+            },
+            data = data
+        )
 
-        assert err.value.get_codes()['device'][0] == 'required'
+        assert serializer.is_valid(raise_exception = True)
 
 
     def test_serializer_validation_no_operating_system_version(self):
@@ -111,9 +134,18 @@ class DeviceOperatingSystemValidationAPI(
 
         del data['operating_system_version']
 
+        mock_view = MockView()
+
+        mock_view.kwargs = {
+            'device_id': self.valid_data['device']
+        }
+
         with pytest.raises(ValidationError) as err:
 
             serializer = DeviceOperatingSystemModelSerializer(
+                context = {
+                    'view': mock_view
+                },
                 data = data
             )
 
