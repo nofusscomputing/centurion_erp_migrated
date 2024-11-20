@@ -137,33 +137,6 @@ class ViewSet( ModelViewSet ):
 
     view_description = 'Device Operating System'
 
-    # allowed_methods = [
-    #     'GET',
-    #     'PATCH',
-    #     'OPTIONS',
-    #     'HEAD',
-    # ]
-
-    @property
-    def allowed_methods(self):
-        
-        if len(list(self.get_queryset())) == 1:
-
-            return [
-                'GET',
-                'PATCH',
-                'OPTIONS',
-                'HEAD',
-            ]
-
-        return [
-                'GET',
-                'PATCH',
-                'POST',
-                'OPTIONS',
-                'HEAD',
-            ]
-
 
     def get_queryset(self):
 
