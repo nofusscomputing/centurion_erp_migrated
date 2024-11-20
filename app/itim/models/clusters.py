@@ -225,14 +225,14 @@ class Cluster(TenancyObject):
                     ]
                 },
                 {
-                    "layout": "table",
-                    "name": "Nodes",
-                    "field": "nodes",
-                },
-                {
-                    "layout": "table",
-                    "name": "Devices",
-                    "field": "devices",
+                    "layout": "double",
+                    "name": "Nodes / Devices",
+                    "left": [
+                        'nodes',
+                    ],
+                    "right": [
+                        'devices',
+                    ]
                 },
                 {
                     "layout": "table",
