@@ -148,8 +148,10 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
             "slug": "hosts",
             "sections": [
                 {
-                    "layout": "table",
-                    "field": "hosts",
+                    "layout": "single",
+                    "fields": [
+                        "hosts"
+                    ],
                 }
             ]
         },
