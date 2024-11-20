@@ -26,7 +26,7 @@ class OperatingSystemVersionBaseSerializer(serializers.ModelSerializer):
 
     def my_url(self, item) -> str:
 
-        return item.get_url( request = self._context['view'].request )
+        return item.get_url( request = self.context['request'] )
 
 
     class Meta:
