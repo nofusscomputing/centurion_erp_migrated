@@ -13,6 +13,7 @@ from app.serializers.user import UserBaseSerializer
 from core import exceptions as centurion_exceptions
 from core import fields as centurion_field
 from core.models.ticket.ticket_comment import Ticket, TicketComment
+from core.serializers.ticket_comment_category import TicketCommentCategoryBaseSerializer
 
 
 
@@ -137,25 +138,31 @@ class TicketCommentModelSerializer(
 
         read_only_fields = [
             'id',
-            'parent',
+
+            #
+            # Commented out as the metadata was not being populated.
+            # ToDo: Unit test to confirm that this serializer is ONLY provided
+            # to the metadata (HTTP/OPTIONS)
+            #
+            # 'parent',
             'external_ref',
             'external_system',
-            'private',
+            # 'private',
             'duration',
-            'category',
-            'template',
-            'is_template',
-            'source',
-            'status',
-            'responsible_user',
-            'responsible_team',
-            'user',
-            'planned_start_date',
-            'planned_finish_date',
-            'real_start_date',
-            'real_finish_date',
+            # # 'category',
+            # 'template',
+            # 'is_template',
+            # 'source',
+            # 'status',
+            # 'responsible_user',
+            # 'responsible_team',
+            # 'user',
+            # 'planned_start_date',
+            # 'planned_finish_date',
+            # 'real_start_date',
+            # 'real_finish_date',
             'organization',
-            'date_closed',
+            # 'date_closed',
             'created',
             'modified',
             '_urls',
@@ -178,7 +185,7 @@ class TicketCommentModelSerializer(
 
                     if(
                         'ticket_id' in kwargs['context']['view'].kwargs
-                        and not data['organization']
+                        and not 'organization' in data
                     ):
 
                         data['organization'] = Ticket.objects.get(
@@ -649,7 +656,9 @@ class TicketCommentImportModelSerializer(TicketCommentModelSerializer):
 
 class TicketCommentViewSerializer(TicketCommentModelSerializer):
 
-    organization = OrganizationBaseSerializer( many = False, read_only = True ) 
+    organization = OrganizationBaseSerializer( many = False )
+
+    category = TicketCommentCategoryBaseSerializer( many = False, read_only = True )
 
     user = UserBaseSerializer()
 

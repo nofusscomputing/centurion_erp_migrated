@@ -212,6 +212,7 @@ class ViewSet(ModelViewSet):
             'comment_type' not in self.request.data
             and self.action == 'create'
             and self.request._request.method != 'GET'
+            and self.request._request.method != 'OPTIONS'
         ):
 
             raise  centurion_exceptions.ValidationError(
@@ -318,9 +319,10 @@ class ViewSet(ModelViewSet):
         if (
             self.action == 'list'
             or self.action == 'retrieve'
+            # or self.action == 'metadata'
         ):
 
-            return globals()[str(serializer_prefix).replace(' ', '') + 'ViewSerializer']
+            return globals()['TicketCommentViewSerializer']
 
 
         return globals()[str(serializer_prefix).replace(' ', '') + 'ModelSerializer']
