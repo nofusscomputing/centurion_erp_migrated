@@ -142,7 +142,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     {
                         "display_name": "Requests",
                         "name": "request",
-                        "icon": "ticket",
+                        "icon": "ticket_request",
                         "link": "/assistance/ticket/request"
                     },
                     {
@@ -181,7 +181,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                 "pages": [
                     {
                         "display_name": "Changes",
-                        "name": "change",
+                        "name": "ticket_change",
                         "link": "/itim/ticket/change"
                     },
                     {
@@ -191,12 +191,12 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     },
                     {
                         "display_name": "Incidents",
-                        "name": "incident",
+                        "name": "ticket_incident",
                         "link": "/itim/ticket/incident"
                     },
                     {
                         "display_name": "Problems",
-                        "name": "problem",
+                        "name": "ticket_problem",
                         "link": "/itim/ticket/problem"
                     },
                     {
