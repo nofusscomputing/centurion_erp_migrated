@@ -263,6 +263,11 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                 },
                 {
                     "layout": "table",
+                    "name": "Operating System",
+                    "field": "operating_system",
+                },
+                {
+                    "layout": "table",
                     "name": "Dependent Services",
                     "field": "service",
                 },
@@ -708,7 +713,19 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         }
     ]
 
-    table_fields: list = []
+    table_fields: list = [
+        'operating_system_version',
+        'version',
+        'installdate',
+    ]
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.pk
+        }
 
 
     @property

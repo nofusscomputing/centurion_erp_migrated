@@ -54,6 +54,7 @@ from itam.viewsets import (
     device_model as device_model_v2,
     device_type as device_type_v2,
     device_software as device_software_v2,
+    device_operating_system,
     inventory,
     operating_system as operating_system_v2,
     operating_system_version as operating_system_version_v2,
@@ -132,6 +133,7 @@ router.register('core/(?P<item_class>[a-z_]+)/(?P<item_id>[0-9]+)/item_ticket', 
 
 router.register('itam', itam_index_v2.Index, basename='_api_v2_itam_home')
 router.register('itam/device', device_v2.ViewSet, basename='_api_v2_device')
+router.register('itam/device/(?P<device_id>[0-9]+)/operating_system', device_operating_system.ViewSet, basename='_api_v2_device_operating_system')
 router.register('itam/device/(?P<device_id>[0-9]+)/software', device_software_v2.ViewSet, basename='_api_v2_device_software')
 router.register('itam/device/(?P<device_id>[0-9]+)/service', service_device_v2.ViewSet, basename='_api_v2_service_device')
 router.register('itam/device/(?P<device_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_device_notes')
