@@ -23,6 +23,8 @@ class MockView:
 
     _ticket_type_id: Ticket.TicketType = None
 
+    _ticket_type: str = None
+
     action: str = None
 
     kwargs: dict = {}
@@ -255,6 +257,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -307,6 +316,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'partial_update'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -346,6 +362,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -397,6 +420,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'partial_update'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -438,6 +468,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -487,6 +524,13 @@ class TicketValidationAPI(
         mock_view = MockView()
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -515,6 +559,13 @@ class TicketValidationAPI(
 
         mock_view = MockView()
         mock_view.action = 'partial_update'
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.change_user
@@ -552,6 +603,13 @@ class TicketValidationAPI(
 
         mock_view = MockView()
         mock_view.action = 'create'
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.import_user
@@ -584,6 +642,13 @@ class TicketValidationAPI(
 
         mock_view = MockView()
         mock_view.action = 'create'
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -621,6 +686,13 @@ class TicketValidationAPI(
 
         mock_view = MockView()
         mock_view.action = 'create'
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
@@ -658,6 +730,13 @@ class TicketValidationAPI(
 
         mock_view = MockView()
         mock_view.action = 'create'
+        mock_view._ticket_type = self.ticket_type
+
+        if self.ticket_type == 'project_task':
+
+            mock_view.kwargs = {
+                'project_id': self.project.id
+            }
 
         mock_request = MockRequest()
         mock_request.user = self.add_user
