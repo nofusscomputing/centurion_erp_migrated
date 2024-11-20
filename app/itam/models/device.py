@@ -661,8 +661,8 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         help_text = 'Device for the Operating System',
         on_delete = models.CASCADE,
         null = False,
-        verbose_name = 'Device'
-        
+        verbose_name = 'Device',
+        unique = True
     )
 
     operating_system_version = models.ForeignKey(
