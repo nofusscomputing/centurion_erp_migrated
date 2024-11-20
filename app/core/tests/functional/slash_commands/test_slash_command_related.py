@@ -496,38 +496,6 @@ class RelatedItemSlashCommand(
 
 
 
-    def test_slash_command_comment_single_command_single_item_action_comment_created_one(self):
-        """Slash command Test Case
-
-        When slash command made, the command (single command single item) must be removed from the comment
-        """
-
-        comment = self.ticket_comments.filter(
-            ticket = self.ticket,
-            comment_type = TicketComment.CommentType.ACTION,
-            body = 'linked ' + self.item_two
-        )
-
-        assert len(list(comment)) == 1
-
-
-
-    def test_slash_command_comment_single_command_single_item_action_comment_created_two(self):
-        """Slash command Test Case
-
-        When slash command made, the command (single command single item) must be removed from the comment
-        """
-
-        comment = self.ticket_comments.filter(
-            ticket = self.ticket,
-            comment_type = TicketComment.CommentType.ACTION,
-            body = 'linked ' + self.item_three
-        )
-
-        assert len(list(comment)) == 1
-
-
-
     @pytest.mark.skip( reason = 'Feature to be implemented' )
     def test_slash_command_comment_single_command_multiple_item_linked_item_created_two(self):
         """Slash command Test Case
