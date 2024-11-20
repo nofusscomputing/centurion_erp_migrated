@@ -174,7 +174,7 @@ class DeviceOperatingSystemPermissionsAPI(TestCase, APIPermissions):
 
         self.url_view_kwargs = {'device_id': self.device.id, 'pk': self.item.id}
 
-        self.url_kwargs = {'device_id': self.device.id}
+        self.url_kwargs = {'device_id': self.device_two.id}
 
         self.add_data = {
             'organization': self.organization.pk,
