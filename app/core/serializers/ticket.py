@@ -239,6 +239,10 @@ class TicketModelSerializer(TicketBaseSerializer):
 
         if 'view' in self._context:
 
+            if str(self._context['view']._ticket_type).lower().replace(' ', '_') == 'project_task':
+
+                data['project_id'] = int(self._context['view'].kwargs['project_id'])
+
             if self._context['view'].action == 'create':
 
                 if hasattr(self._context['view'], 'request'):
