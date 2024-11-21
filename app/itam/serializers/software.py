@@ -64,6 +64,7 @@ class SoftwareModelSerializer(
                     'model_id': item.pk
                 }
             ),
+            'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
             'notes': reverse("v2:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
             'publisher': reverse("v2:_api_v2_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',
