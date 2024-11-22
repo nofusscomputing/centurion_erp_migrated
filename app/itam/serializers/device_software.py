@@ -10,7 +10,7 @@ from core.fields.badge import Badge, BadgeField
 
 from itam.models.device import Device, DeviceSoftware
 from itam.serializers.device import DeviceBaseSerializer
-from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software import Software, SoftwareBaseSerializer
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
 from itam.serializers.software_version import SoftwareVersionBaseSerializer
 
@@ -100,16 +100,28 @@ class DeviceSoftwareModelSerializer(
             '_urls',
         ]
 
-    def __init__(self, instance=None, data=empty, **kwargs):
 
-        super().__init__(instance=instance, data=data, **kwargs)
+    def get_field_names(self, declared_fields, info):
 
-        if isinstance(self.instance, DeviceSoftware):
-                
-            self.fields.fields['device'].read_only = True
 
-            self.fields.fields['software'].read_only = True
+        if 'view' in self._context:
 
+            if 'device_id' in self._context['view'].kwargs:
+
+                self.Meta.read_only_fields += [
+                    'device'
+                ]
+
+
+            if 'software_id' in self._context['view'].kwargs:
+
+                self.Meta.read_only_fields += [
+                    'software'
+                ]
+
+        fields = super().get_field_names(declared_fields = declared_fields, info = info)
+
+        return fields
 
 
     def is_valid(self, *, raise_exception=False):
@@ -124,6 +136,14 @@ class DeviceSoftwareModelSerializer(
 
                 self.validated_data['device'] = device
                 self.validated_data['organization'] = device.organization
+
+            if 'software_id' in self._context['view'].kwargs:
+
+                software = Software.objects.get(id=self._context['view'].kwargs['software_id'])
+
+                self.validated_data['software'] = software
+                self.validated_data['organization'] = self.validated_data['device'].organization
+
 
         return is_valid
 
