@@ -65,7 +65,7 @@ class DeviceOperatingSystemModelSerializer(
             if self.context['view'].kwargs.get('device_id'):
 
                 return {
-                    '_selfb': obj.get_url( request = self._context['view'].request )
+                    '_self': obj.get_url( request = self._context['view'].request )
                 }
 
             elif self.context['view'].kwargs.get('operating_system_id'):
