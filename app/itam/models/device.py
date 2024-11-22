@@ -624,7 +624,7 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
 
         return {
             'device_id': self.device.id,
-            'pk': self.software.id
+            'pk': self.id
         }
 
 
@@ -714,6 +714,7 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
     ]
 
     table_fields: list = [
+        'device',
         'operating_system_version',
         'version',
         'installdate',
