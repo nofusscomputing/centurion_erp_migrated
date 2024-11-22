@@ -6,11 +6,12 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 
+from core import exceptions as centurion_exception
 from core.fields.badge import Badge, BadgeField
 
 from itam.models.device import Device, DeviceSoftware
 from itam.serializers.device import DeviceBaseSerializer
-from itam.serializers.software import SoftwareBaseSerializer
+from itam.serializers.software import Software, SoftwareBaseSerializer
 from itam.serializers.software_category import SoftwareCategoryBaseSerializer
 from itam.serializers.software_version import SoftwareVersionBaseSerializer
 
@@ -59,14 +60,32 @@ class DeviceSoftwareModelSerializer(
 
     def get_url(self, obj) -> dict:
 
-        return {
-            '_self': obj.get_url( request = self._context['view'].request )
-        }
+         if 'view' in self._context:
+
+            if 'software_id' in self._context['view'].kwargs:
+
+                return {
+                    '_self': reverse("v2:_api_v2_software_installs-detail", request = self._context['view'].request, kwargs = {
+                        'software_id': obj.software.pk,
+                        'pk': obj.pk
+                    } )
+                }
+
+            elif 'device_id' in self._context['view'].kwargs:
+
+                return {
+                    '_self': obj.get_url( request = self._context['view'].request )
+                }
+
 
 
     action_badge = BadgeField(label='Action')
 
     category = SoftwareCategoryBaseSerializer(many=False, read_only=True, source='software.category')
+
+    device = serializers.PrimaryKeyRelatedField(write_only = True, required = False, queryset=Device.objects.all() )
+
+    software = serializers.PrimaryKeyRelatedField(write_only = True, required = False, queryset=Software.objects.all() )
 
 
     class Meta:
@@ -100,21 +119,9 @@ class DeviceSoftwareModelSerializer(
             '_urls',
         ]
 
-    def __init__(self, instance=None, data=empty, **kwargs):
 
-        super().__init__(instance=instance, data=data, **kwargs)
+    def validate(self, data):
 
-        if isinstance(self.instance, DeviceSoftware):
-                
-            self.fields.fields['device'].read_only = True
-
-            self.fields.fields['software'].read_only = True
-
-
-
-    def is_valid(self, *, raise_exception=False):
-
-        is_valid = super().is_valid(raise_exception=raise_exception)
 
         if 'view' in self._context:
 
@@ -122,10 +129,46 @@ class DeviceSoftwareModelSerializer(
 
                 device = Device.objects.get(id=self._context['view'].kwargs['device_id'])
 
-                self.validated_data['device'] = device
-                self.validated_data['organization'] = device.organization
+                data['device'] = device
+                data['organization'] = device.organization
 
-        return is_valid
+            if 'software_id' in self._context['view'].kwargs:
+
+                software = Software.objects.get(id=int(self._context['view'].kwargs['software_id']))
+
+                data['software'] = software
+
+                if 'device' in data:
+
+                    data['organization'] = data['device'].organization
+
+
+        if(
+            not data.get('device')
+            and not getattr(self.instance, 'device', None)
+        ):
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'device': 'This field is required'
+                },
+                code =  'required'
+            )
+
+
+        if(
+            not data.get('software')
+            and not getattr(self.instance, 'software', None)
+        ):
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'software': 'This field is required',
+                },
+                code =  'required'
+            )
+
+        return data
 
 
 

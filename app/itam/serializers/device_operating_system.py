@@ -6,11 +6,12 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from api.serializers import common
 
+from core import exceptions as centurion_exception
 from core.fields.badge import Badge, BadgeField
 
 from itam.models.device import Device, DeviceOperatingSystem
 from itam.serializers.device import DeviceBaseSerializer
-from itam.serializers.operating_system_version import OperatingSystemVersionBaseSerializer
+from itam.serializers.operating_system_version import OperatingSystem, OperatingSystemVersionBaseSerializer
 
 
 
@@ -59,9 +60,22 @@ class DeviceOperatingSystemModelSerializer(
 
     def get_url(self, obj) -> dict:
 
-        return {
-            '_self': obj.get_url( request = self._context['view'].request )
-        }
+        if self._context.get('view', None):
+
+            if self.context['view'].kwargs.get('device_id'):
+
+                return {
+                    '_self': obj.get_url( request = self._context['view'].request )
+                }
+
+            elif self.context['view'].kwargs.get('operating_system_id'):
+
+                return {
+                    '_self': reverse("v2:_api_v2_operating_system_installs-detail", request = self._context['view'].request, kwargs = {
+                        'operating_system_id': obj.operating_system_version.operating_system.pk,
+                        'pk': obj.pk
+                    } )
+                }
 
 
 
@@ -93,11 +107,51 @@ class DeviceOperatingSystemModelSerializer(
 
     def validate(self, data):
 
-        device = Device.objects.get(id=self._context['view'].kwargs['device_id'])
+        if self._context['view'].kwargs.get('device_id', None):
 
-        data['device_id'] = device.id
+            device = Device.objects.get(id = (self._context['view'].kwargs['device_id']))
 
-        data['organization'] = device.organization
+            data['device'] = device
+
+            # data['organization'] = device.organization
+
+
+        if (
+            not data.get('device', None)
+            and not getattr(self.instance, 'device', None)
+        ):
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'device': 'this field is required'
+                },
+                code = 'required'
+            )
+
+
+        # if self._context['view'].kwargs.get('operating_system_id', None):
+
+        #     operating_system = OperatingSystem.objects.get(id = int(self._context['view'].kwargs['operating_system_id']))
+
+        #     data['operating_system'] = operating_system
+
+        
+        data['organization'] = data['device'].organization
+
+
+
+        if (
+            not data.get('operating_system_version', None)
+            and not getattr(self.instance, 'operating_system_version', None)
+        ):
+
+            raise centurion_exception.ValidationError(
+                detail = {
+                    'operating_system': 'this field is required'
+                },
+                code = 'required'
+            )
+
 
         validate = super().validate(data)
 

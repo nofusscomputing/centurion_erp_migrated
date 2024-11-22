@@ -144,7 +144,13 @@ class ViewSet( ModelViewSet ):
 
         queryset = super().get_queryset()
 
-        queryset = queryset.filter(device_id=self.kwargs['device_id'])
+        if 'software_id' in self.kwargs:
+
+            queryset = queryset.filter(software_id=self.kwargs['software_id'])
+
+        elif 'device_id' in self.kwargs:
+
+            queryset = queryset.filter(device_id=self.kwargs['device_id'])
 
         self.queryset = queryset
 
@@ -162,3 +168,21 @@ class ViewSet( ModelViewSet ):
 
 
         return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
+
+
+    @property
+    def table_fields(self):
+
+        table_fields: list = self.model.table_fields
+
+        if 'software_id' in self.kwargs:
+
+            table_fields: list = [
+            "device",
+            "organization",
+            "action_badge",
+            "installedversion",
+            "installed",
+            ]
+
+        return table_fields
