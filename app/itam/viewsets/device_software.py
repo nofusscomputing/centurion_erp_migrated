@@ -148,7 +148,7 @@ class ViewSet( ModelViewSet ):
 
             queryset = queryset.filter(software_id=self.kwargs['software_id'])
 
-        else:
+        elif 'device_id' in self.kwargs:
 
             queryset = queryset.filter(device_id=self.kwargs['device_id'])
 
