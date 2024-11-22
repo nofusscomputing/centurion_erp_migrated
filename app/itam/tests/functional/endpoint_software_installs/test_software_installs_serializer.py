@@ -19,7 +19,7 @@ class MockView:
 
 
 
-class DeviceInstallsValidationAPI(
+class SoftwareInstallsValidationAPI(
     TestCase,
 ):
 
@@ -69,11 +69,10 @@ class DeviceInstallsValidationAPI(
 
         self.valid_data: dict = {
             'organization': self.organization.pk,
-            'software': self.software.pk,
+            # 'software': self.software.pk,
             'version': self.software_version.pk,
             'device': self.device.pk
         }
-
 
 
     def test_serializer_validation_create(self):
@@ -86,7 +85,7 @@ class DeviceInstallsValidationAPI(
         mock_view = MockView()
 
         mock_view.kwargs = {
-            'device_id': self.valid_data['device']
+            'software_id': self.software.pk
         }
 
         data = self.valid_data.copy()
@@ -100,36 +99,10 @@ class DeviceInstallsValidationAPI(
         )
 
         assert serializer.is_valid(raise_exception = True)
+
 
 
     def test_serializer_validation_no_device(self):
-        """Serializer Validation Check
-
-        Ensure that if creating and no device is provided no validation error
-        occurs as the serializer provides the device from the view.
-        """
-
-        mock_view = MockView()
-
-        mock_view.kwargs = {
-            'device_id': self.valid_data['device']
-        }
-
-        data = self.valid_data.copy()
-
-        del data['device']
-
-        serializer = DeviceSoftwareModelSerializer(
-            context = {
-                'view': mock_view
-            },
-            data = data
-        )
-
-        assert serializer.is_valid(raise_exception = True)
-
-
-    def test_serializer_validation_no_software(self):
         """Serializer Validation Check
 
         Ensure that if creating and no device is provided a validation exception is thrown
@@ -138,22 +111,50 @@ class DeviceInstallsValidationAPI(
         mock_view = MockView()
 
         mock_view.kwargs = {
-            'device_id': self.valid_data['device']
+            'software_id': self.software.pk
         }
 
         data = self.valid_data.copy()
 
-        del data['software']
+        del data['device']
 
         with pytest.raises(ValidationError) as err:
 
             serializer = DeviceSoftwareModelSerializer(
                 context = {
-                    'view': mock_view
+                'view': mock_view
                 },
                 data = data
             )
 
             serializer.is_valid(raise_exception = True)
 
-        assert err.value.get_codes()['software'][0] == 'required'
+        assert err.value.get_codes()['device'][0] == 'required'
+
+
+
+    def test_serializer_validation_no_software(self):
+        """Serializer Validation Check
+
+        Ensure that if creating and no software is provided no validation error
+        occurs as the serializer provides the device from the view.
+        """
+
+        mock_view = MockView()
+
+        mock_view.kwargs = {
+            'software_id': self.software.pk
+        }
+
+        data = self.valid_data.copy()
+
+        # del data['software']
+
+        serializer = DeviceSoftwareModelSerializer(
+            context = {
+                'view': mock_view
+            },
+            data = data
+        )
+
+        assert serializer.is_valid(raise_exception = True)
