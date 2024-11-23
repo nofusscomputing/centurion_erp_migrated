@@ -11,12 +11,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from core.models.manufacturer import Manufacturer
 
 
 
-class ManufacturerPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = Manufacturer
 
@@ -179,3 +180,23 @@ class ManufacturerPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ManufacturerPermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class ManufacturerViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase
+):
+
+    pass

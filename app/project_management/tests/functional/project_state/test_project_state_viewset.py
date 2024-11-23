@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from project_management.models.project_states import ProjectState
 
 
 
-class ProjectStatePermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = ProjectState
 
@@ -171,3 +172,15 @@ class ProjectStatePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ProjectStatePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class ProjectStateViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

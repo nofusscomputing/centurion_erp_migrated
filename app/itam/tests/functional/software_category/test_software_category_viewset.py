@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.software import SoftwareCategory
 
 
 
-class SoftwareCategoryPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = SoftwareCategory
 
@@ -171,3 +172,15 @@ class SoftwareCategoryPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class SoftwareCategoryPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class SoftwareCategoryViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

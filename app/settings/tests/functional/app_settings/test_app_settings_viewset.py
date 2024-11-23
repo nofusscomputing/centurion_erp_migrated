@@ -12,17 +12,16 @@ from api.tests.abstract.api_permissions_viewset import (
     APIPermissionChange,
     APIPermissionView
 )
+from api.tests.abstract.api_serializer_viewset import (
+    SerializerChange,
+    SerializerView,
+)
 
 from settings.models.app_settings import AppSettings
 
 
 
-class AppSettingsPermissionsAPI(
-    TestCase,
-    # APIPermissions
-    APIPermissionChange,
-    APIPermissionView
-):
+class ViewSetBase:
 
     model = AppSettings
 
@@ -186,6 +185,15 @@ class AppSettingsPermissionsAPI(
 
 
 
+class AppSettingsPermissionsAPI(
+    ViewSetBase,
+    APIPermissionChange,
+    APIPermissionView,
+    TestCase,
+):
+
+
+
     def test_add_create_not_allowed(self):
         """ Check correct permission for add 
 
@@ -214,3 +222,14 @@ class AppSettingsPermissionsAPI(
         response = client.delete(url, data=self.delete_data)
 
         assert response.status_code == 405
+
+
+
+class AppSettingsViewSet(
+    ViewSetBase,
+    SerializerChange,
+    SerializerView,
+    TestCase,
+):
+
+    pass

@@ -7,6 +7,7 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.device import Device
 
@@ -14,7 +15,7 @@ from itim.models.services import Service, Port
 
 
 
-class ServicePermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = Service
 
@@ -191,3 +192,15 @@ class ServicePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ServicePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class ServiceViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

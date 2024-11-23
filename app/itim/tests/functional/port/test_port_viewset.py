@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itim.models.services import Port
 
 
 
-class PortPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = Port
 
@@ -173,3 +174,15 @@ class PortPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class PortPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class PortViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

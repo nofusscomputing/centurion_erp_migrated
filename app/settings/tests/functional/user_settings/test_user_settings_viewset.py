@@ -12,15 +12,17 @@ from api.tests.abstract.api_permissions_viewset import (
     APIPermissionChange,
     APIPermissionView
 )
+from api.tests.abstract.api_serializer_viewset import (
+    SerializerChange,
+    SerializerView,
+)
+
 
 from settings.models.user_settings import UserSettings
 
 
-class UserSettingsPermissionsAPI(
-    TestCase,
-    APIPermissionChange,
-    APIPermissionView
-):
+
+class ViewSetBase:
 
     model = UserSettings
 
@@ -184,6 +186,14 @@ class UserSettingsPermissionsAPI(
 
 
 
+class UserSettingsPermissionsAPI(
+    ViewSetBase,
+    APIPermissionChange,
+    APIPermissionView,
+    TestCase,
+):
+
+
     def test_add_create_not_allowed(self):
         """ Check correct permission for add 
 
@@ -237,3 +247,14 @@ class UserSettingsPermissionsAPI(
         response = client.patch(url, data={'different_organization': self.different_organization.id}, content_type='application/json')
 
         assert response.status_code == 200
+
+
+
+class UserSettingsViewSet(
+    ViewSetBase,
+    SerializerChange,
+    SerializerView,
+    TestCase,
+):
+
+    pass
