@@ -32,7 +32,14 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
 - Index Viewsets must be tested against tests `from api.tests.abstract.viewsets import ViewSetCommon`
 
-- Model VieSets must be tested against tests `from api.tests.abstract.viewsets import ViewSetModel`
+- Model VieSets must be tested against the following tests:
+
+    - _Unit Test Cases_ `from api.tests.abstract.viewsets import ViewSetModel`
+
+    - _Functional test cases_ `from api.tests.abstract.api_serializer_viewset import SerializersTestCases`
+
+    - _Functional test cases_ `from api.tests.abstract.api_permissions_viewset import APIPermission`
+
 
 
 ## Permissions
