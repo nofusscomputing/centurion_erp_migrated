@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 
@@ -12,7 +13,7 @@ from itam.models.device import Device
 
 
 
-class DevicePermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = Device
 
@@ -171,3 +172,23 @@ class DevicePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class DevicePermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase
+):
+
+    pass
+
+
+
+class DeviceViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase
+):
+
+    pass

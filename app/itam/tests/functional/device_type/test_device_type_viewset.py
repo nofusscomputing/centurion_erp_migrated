@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.device import DeviceType
 
 
 
-class DeviceTypePermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = DeviceType
 
@@ -171,3 +172,23 @@ class DeviceTypePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class DeviceTypePermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class DeviceTypeViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase,
+):
+
+    pass

@@ -11,12 +11,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from core.models.ticket.ticket_category import TicketCategory
 
 
 
-class TicketCategoryPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = TicketCategory
 
@@ -175,3 +176,23 @@ class TicketCategoryPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class TicketCategoryPermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class TicketCategoryViewSet(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass

@@ -11,12 +11,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
 
 
-class TicketCommentCategoryPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = TicketCommentCategory
 
@@ -175,3 +176,23 @@ class TicketCommentCategoryPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class TicketCommentCategoryPermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class TicketCommentCategoryViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase
+):
+
+    pass

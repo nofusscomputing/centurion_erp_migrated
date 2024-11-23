@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.operating_system import OperatingSystem
 
 
 
-class OperatingSystemPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = OperatingSystem
 
@@ -171,3 +172,23 @@ class OperatingSystemPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class OperatingSystemPermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class OperatingSystemViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase,
+):
+
+    pass

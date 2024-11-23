@@ -8,12 +8,13 @@ from django.test import Client, TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from project_management.models.projects import Project
 
 
 
-class ProjectPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = Project
 
@@ -206,6 +207,9 @@ class ProjectPermissionsAPI(TestCase, APIPermissions):
 
 
 
+class ProjectPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+
     def test_add_has_permission_no_import_fields(self):
         """ Check correct permission for add 
 
@@ -257,3 +261,9 @@ class ProjectPermissionsAPI(TestCase, APIPermissions):
             and response.data['external_ref'] == 1
             and response.data['external_system'] == int(Project.Ticket_ExternalSystem.CUSTOM_1)
         )
+
+
+
+class ProjectViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

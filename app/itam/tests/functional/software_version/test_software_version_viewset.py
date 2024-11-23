@@ -7,12 +7,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from itam.models.software import Software, SoftwareVersion
 
 
 
-class SoftwareVersionPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = SoftwareVersion
 
@@ -177,3 +178,15 @@ class SoftwareVersionPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class SoftwareVersionPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class SoftwareVersionViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass

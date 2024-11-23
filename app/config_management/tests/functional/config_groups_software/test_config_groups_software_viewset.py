@@ -11,12 +11,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from config_management.models.groups import ConfigGroups, ConfigGroupSoftware, Software, SoftwareVersion
 
 
 
-class ConfigGroupSoftwarePermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = ConfigGroupSoftware
 
@@ -212,3 +213,23 @@ class ConfigGroupSoftwarePermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ConfigGroupSoftwarePermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase,
+):
+
+    pass
+
+
+
+class ConfigGroupSoftwareViewSet(
+    ViewSetBase,
+    SerializersTestCases,
+    TestCase
+):
+
+    pass

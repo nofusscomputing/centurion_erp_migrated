@@ -11,12 +11,13 @@ from django.test import TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from settings.models.external_link import ExternalLink
 
 
 
-class ExternalLinkPermissionsAPI(TestCase, APIPermissions):
+class ViewSetBase:
 
     model = ExternalLink
 
@@ -180,3 +181,15 @@ class ExternalLinkPermissionsAPI(TestCase, APIPermissions):
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+
+class ExternalLinkPermissionsAPI(ViewSetBase, APIPermissions, TestCase):
+
+    pass
+
+
+
+class ExternalLinkViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass
