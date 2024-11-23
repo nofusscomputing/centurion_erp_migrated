@@ -2,6 +2,7 @@ import importlib
 import pytest
 import unittest
 
+from django.db.models import fields
 
 from access.models import TenancyObject
 from access.tests.abstract.tenancy_object import TenancyObject as TenancyObjectTestCases
@@ -58,6 +59,48 @@ class BaseModel:
         """
 
         assert type(self.model._meta.original_attrs['ordering']) is list
+
+
+    @pytest.mark.skip( reason = 'see test __doc__' )
+
+    def test_model_fields_parameter_mandatory_has_no_default(self):
+        """Test Field called with Parameter
+
+        ## Test skipped
+
+        fields dont have enough info to determine if mandatory, so this item can't be 
+        tested.
+
+        Some fields can be set as `null=false` with `blank=false` however `default=<value>`
+        ensures it's populated with a desired default.
+
+        If a field is set as null=false, there must not be a default parameter
+        """
+
+        fields_have_test_value: bool = True
+
+        fields_to_skip_checking: list = [
+            'created',
+            'is_global',
+            'modified'
+        ]
+
+        for field in self.model._meta.fields:
+
+            if field.attname not in fields_to_skip_checking:
+
+                print(f'Checking field {field.attname} to see if mandatory')
+
+                if not getattr(field, 'null', True) and not getattr(field, 'blank', True):
+
+                    if getattr(field, 'default', fields.NOT_PROVIDED) != fields.NOT_PROVIDED:
+
+                        print(f'    Failure on field {field.attname}')
+
+                        fields_have_test_value = False
+
+
+        assert fields_have_test_value
 
 
 
