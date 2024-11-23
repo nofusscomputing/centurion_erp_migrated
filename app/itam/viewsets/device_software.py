@@ -19,7 +19,8 @@ from api.viewsets.common import ModelViewSet
 from itam.serializers.device_software import (
     DeviceSoftware,
     DeviceSoftwareModelSerializer,
-    DeviceSoftwareViewSerializer
+    DeviceSoftwareViewSerializer,
+    SoftwareInstallsModelSerializer,
 )
 
 
@@ -167,7 +168,13 @@ class ViewSet( ModelViewSet ):
             return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ViewSerializer']
 
 
-        return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
+        if 'software_id' in self.kwargs:
+
+            return globals()['SoftwareInstallsModelSerializer']
+
+        else:
+
+            return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
 
 
     @property
