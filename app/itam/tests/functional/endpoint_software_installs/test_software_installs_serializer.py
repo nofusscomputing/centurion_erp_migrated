@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
-from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer
+from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer, SoftwareInstallsModelSerializer
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
 
 
@@ -91,7 +91,7 @@ class SoftwareInstallsValidationAPI(
         data = self.valid_data.copy()
 
 
-        serializer = DeviceSoftwareModelSerializer(
+        serializer = SoftwareInstallsModelSerializer(
             context = {
                 'view': mock_view
             },
@@ -120,7 +120,7 @@ class SoftwareInstallsValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = DeviceSoftwareModelSerializer(
+            serializer = SoftwareInstallsModelSerializer(
                 context = {
                 'view': mock_view
                 },
@@ -150,7 +150,7 @@ class SoftwareInstallsValidationAPI(
 
         # del data['software']
 
-        serializer = DeviceSoftwareModelSerializer(
+        serializer = SoftwareInstallsModelSerializer(
             context = {
                 'view': mock_view
             },

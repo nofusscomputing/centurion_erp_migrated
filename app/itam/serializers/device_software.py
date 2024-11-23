@@ -83,10 +83,6 @@ class DeviceSoftwareModelSerializer(
 
     category = SoftwareCategoryBaseSerializer(many=False, read_only=True, source='software.category')
 
-    device = serializers.PrimaryKeyRelatedField(write_only = True, required = False, queryset=Device.objects.all() )
-
-    software = serializers.PrimaryKeyRelatedField(write_only = True, required = False, queryset=Software.objects.all() )
-
 
     class Meta:
 
@@ -111,6 +107,7 @@ class DeviceSoftwareModelSerializer(
         read_only_fields = [
             'id',
             'category',
+            'device',
             'installed',
             'installedversion',
             'organization',
@@ -169,6 +166,29 @@ class DeviceSoftwareModelSerializer(
             )
 
         return data
+
+
+
+
+class SoftwareInstallsModelSerializer(
+    DeviceSoftwareModelSerializer
+):
+
+
+    class Meta( DeviceSoftwareModelSerializer.Meta ):
+
+        read_only_fields = [
+            'id',
+            'category',
+            'software',
+            'installed',
+            'installedversion',
+            'organization',
+            'created',
+            'modified',
+            '_urls',
+
+        ]
 
 
 
