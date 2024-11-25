@@ -11,6 +11,11 @@ from api.tests.abstract.api_permissions_viewset import (
     APIPermissionDelete,
     APIPermissionView
 )
+from api.tests.abstract.api_serializer_viewset import (
+    SerializerAdd,
+    SerializerDelete,
+    SerializerView
+)
 
 from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 
@@ -18,11 +23,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class BaseTicketLinkedItemPermissionsAPI(
-    APIPermissionAdd,
-    APIPermissionDelete,
-    APIPermissionView,
-):
+class ViewSetBase:
     """ Test Cases common to ALL ticket types """
 
     model = TicketLinkedItem
@@ -232,8 +233,37 @@ class BaseTicketLinkedItemPermissionsAPI(
 
 
 
-class BaseItemTicketPermissionsAPI(
-    BaseTicketLinkedItemPermissionsAPI,
+
+
+
+
+
+
+
+class ViewSetBasePermissionsAPI(
+    ViewSetBase,
+    APIPermissionAdd,
+    APIPermissionDelete,
+    APIPermissionView,
+):
+
+    pass
+
+
+
+class ViewSetBaseSerializer(
+    ViewSetBase,
+    SerializerAdd,
+    SerializerDelete,
+    SerializerView,
+):
+
+    pass
+
+
+
+class BaseItemTicket(
+    # ViewSetBasePermissionsAPI,
 ):
     """ Test Cases common to ALL ticket types """
 
@@ -266,6 +296,13 @@ class BaseItemTicketPermissionsAPI(
 
 
 
+class BaseItemTicketPermissionsAPI(
+    BaseItemTicket,
+    ViewSetBasePermissionsAPI,
+):
+
+
+
     def test_add_has_permission(self):
         """ Check correct permission for add 
 
@@ -289,11 +326,16 @@ class BaseItemTicketPermissionsAPI(
 
 
 
-
-class ItemClusterTicketPermissionsAPI(
-    BaseItemTicketPermissionsAPI,
-    TestCase
+class BaseItemTicketSerializer(
+    BaseItemTicket,
+    ViewSetBaseSerializer,
 ):
+
+    pass
+
+
+
+class ItemCluster:
     """ Test Cases common to ALL ticket types """
 
 
@@ -325,10 +367,27 @@ class ItemClusterTicketPermissionsAPI(
 
 
 
-class ItemConfigGroupsTicketPermissionsAPI(
+class ItemClusterTicketPermissionsAPI(
+    ItemCluster,
     BaseItemTicketPermissionsAPI,
     TestCase
 ):
+
+    pass
+
+
+
+class ItemClusterTicketSerializer(
+    ItemCluster,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemConfigGroups:
     """ Test Cases common to ALL ticket types """
 
 
@@ -360,10 +419,27 @@ class ItemConfigGroupsTicketPermissionsAPI(
 
 
 
-class ItemDeviceTicketPermissionsAPI(
+class ItemConfigGroupsTicketPermissionsAPI(
+    ItemConfigGroups,
     BaseItemTicketPermissionsAPI,
     TestCase
 ):
+
+    pass
+
+
+
+class ItemConfigGroupsTicketSerializer(
+    ItemConfigGroups,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemDeviceTicket:
     """ Test Cases common to ALL ticket types """
 
 
@@ -393,10 +469,28 @@ class ItemDeviceTicketPermissionsAPI(
         super().setUpTestData()
 
 
-class ItemOperatingSystemTicketPermissionsAPI(
+
+class ItemDeviceTicketPermissionsAPI(
+    ItemDeviceTicket,
     BaseItemTicketPermissionsAPI,
     TestCase
 ):
+
+    pass
+
+
+
+class ItemDeviceTicketSerializer(
+    ItemDeviceTicket,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemOperatingSystem:
     """ Test Cases common to ALL ticket types """
 
 
@@ -428,10 +522,27 @@ class ItemOperatingSystemTicketPermissionsAPI(
 
 
 
-class ItemServiceTicketPermissionsAPI(
+class ItemOperatingSystemTicketPermissionsAPI(
+    ItemOperatingSystem,
     BaseItemTicketPermissionsAPI,
     TestCase
 ):
+
+    pass
+
+
+
+class ItemOperatingSystemSerializer(
+    ItemOperatingSystem,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemService:
     """ Test Cases common to ALL ticket types """
 
 
@@ -463,10 +574,27 @@ class ItemServiceTicketPermissionsAPI(
 
 
 
-class ItemSoftwareTicketPermissionsAPI(
+class ItemServiceTicketPermissionsAPI(
+    ItemService,
     BaseItemTicketPermissionsAPI,
     TestCase
 ):
+
+    pass
+
+
+
+class ItemServiceTicketSerializer(
+    ItemService,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemSoftware:
     """ Test Cases common to ALL ticket types """
 
 
@@ -497,3 +625,21 @@ class ItemSoftwareTicketPermissionsAPI(
         super().setUpTestData()
 
 
+
+class ItemSoftwareTicketPermissionsAPI(
+    ItemSoftware,
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemSoftwareTicketSerializer(
+    ItemSoftware,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
