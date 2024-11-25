@@ -6,6 +6,7 @@ from django.test import Client
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
 from core.models.ticket.ticket import Ticket
 
@@ -15,9 +16,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class TicketViewSetPermissionsAPI(
-    APIPermissions
-):
+class TicketViewSetBase:
     """ Test Cases common to ALL ticket types """
 
     model = Ticket
@@ -282,6 +281,8 @@ class TicketViewSetPermissionsAPI(
 
 
 
+class TicketViewSetPermissionsAPI( TicketViewSetBase, APIPermissions ):
+
 
     def test_add_triage_user_denied(self):
         """ Check correct permission for add
@@ -400,3 +401,85 @@ class TicketViewSetPermissionsAPI(
         response = client.delete(url, data=self.delete_data)
 
         assert response.status_code == 403
+
+
+
+class TicketViewSet( TicketViewSetBase, SerializersTestCases ):
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        super().setUpTestData()
+
+
+        if self.ticket_type == 'change':
+
+            ticket_type_prefix = 'Change'
+
+        elif self.ticket_type == 'incident':
+
+            ticket_type_prefix = 'Incident'
+
+        elif self.ticket_type == 'problem':
+
+            ticket_type_prefix = 'Problem'
+
+        elif self.ticket_type == 'project_task':
+
+            ticket_type_prefix = 'ProjectTask'
+
+        elif self.ticket_type == 'request':
+
+            ticket_type_prefix = 'Request'
+
+
+        self.ticket_type_prefix = ticket_type_prefix
+
+
+
+    def test_add_has_permission_import_user(self):
+        """ Check correct permission for add 
+
+        Attempt to add as import user who should have permission
+        """
+
+        client = Client()
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        data = self.add_data.copy()
+
+        data.update({
+            'opened_by': self.import_user.id
+        })
+
+
+        client.force_login(self.import_user)
+        response = client.post(url, data=data)
+
+        assert str(response.renderer_context['view'].get_serializer().__class__.__name__) == str(self.ticket_type_prefix + 'ImportTicketModelSerializer')
+
+
+
+    def test_change_has_permission_triage_user(self):
+        """ Check correct permission for change
+
+        Make change with triage user who has change permission
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
+
+
+        client.force_login(self.triage_user)
+        response = client.patch(url, data=self.change_data, content_type='application/json')
+
+        assert str(response.renderer_context['view'].get_serializer().__class__.__name__) == str(self.ticket_type_prefix + 'TriageTicketModelSerializer')
+
