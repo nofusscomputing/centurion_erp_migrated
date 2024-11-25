@@ -91,8 +91,10 @@ class TicketCommentCategoryModelSerializer(
         if 'view' in self._context:
 
             if(
-                self._context['view'].action == 'partial_update'
-                or self._context['view'].action == 'update'
+                (
+                    self._context['view'].action == 'partial_update'
+                    or self._context['view'].action == 'update'
+                ) and getattr(self.instance, 'pk', None)
             ):
 
                 self.fields['parent'].queryset = self.fields['parent'].queryset.exclude(
