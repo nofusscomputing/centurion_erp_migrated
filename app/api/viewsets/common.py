@@ -1,7 +1,9 @@
 from django.utils.safestring import mark_safe
 
 from rest_framework import viewsets
+from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from access.mixin import OrganizationMixin
 
@@ -230,7 +232,41 @@ class ModelViewSet(
     viewsets.ModelViewSet,
 ):
 
-    pass
+    def retrieve(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().retrieve(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+           if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
 
 
 
@@ -239,7 +275,41 @@ class ModelCreateViewSet(
     viewsets.mixins.CreateModelMixin,
 ):
 
-    pass
+    def create(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().create(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
 
 
 
@@ -252,7 +322,115 @@ class ModelListRetrieveDeleteViewSet(
 ):
     """ Use for models that you wish to delete and view ONLY!"""
 
-    pass
+    def list(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().list(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
+
+
+    def retrieve(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().retrieve(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+           if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
+
+
+    def destroy(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().destroy(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
 
 
 
@@ -264,7 +442,80 @@ class ModelRetrieveUpdateViewSet(
 ):
     """ Use for models that you wish to update and view ONLY!"""
 
-    pass
+
+    def partial_update(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().partial_update(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
+
+
+    def update(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().update(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
+
 
 
 
@@ -276,3 +527,76 @@ class ReadOnlyModelViewSet(
     permission_classes = [
         IsAuthenticated,
     ]
+
+
+    def retrieve(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().retrieve(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
+
+    def list(self, request, *args, **kwargs):
+        """Sainty override
+
+        This function overrides the function of the same name
+        in the parent class for the purpose of ensuring a 
+        non-api exception will not have the API return a HTTP
+        500 error.
+
+        This function is a sanity check that if it triggers,
+        (an exception occured), the user will be presented with
+        a stack trace that they will hopefully report as a bug.
+
+        HTTP status set to HTTP/501 so it's distinguishable from
+        a HTTP/500 which is generally a random error that has not
+        been planned for. i.e. uncaught exception
+        """
+
+        response = None
+
+        try:
+
+            response = super().list(request = request, *args, **kwargs)
+
+        except Exception as e:
+
+            if not isinstance(e, APIException):
+
+                response = Response(
+                    data = {
+                        'server_error': str(e)
+                    },
+                    status = 501
+                )
+
+        return response
