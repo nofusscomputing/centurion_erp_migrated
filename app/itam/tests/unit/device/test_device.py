@@ -13,7 +13,7 @@ from app.tests.abstract.models import TenancyModel
 from itam.models.device import Device
 
 
-class Device(
+class DeviceModel(
     TestCase,
     TenancyModel,
 ):
