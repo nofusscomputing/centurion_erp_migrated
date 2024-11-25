@@ -243,12 +243,13 @@ class TicketViewSet(ModelViewSet):
         if (
             self.action == 'create'
             or self.action == 'list'
+            or self.action == 'partial_update'
+            or self.action == 'update'
         ):
 
 
             if (
-                self.action == 'create'
-                or self.action == 'list'
+                self.action == 'list'
             ):
 
                 user_settings = UserSettings.objects.get(
@@ -258,7 +259,7 @@ class TicketViewSet(ModelViewSet):
                 organization = user_settings.default_organization.id
 
 
-            if (
+            elif (
                 self.action == 'create'
             ):
 
@@ -267,6 +268,18 @@ class TicketViewSet(ModelViewSet):
                     if 'organization' in self.request.data:
 
                         organization = int(self.request.data['organization'])
+
+            elif (
+                (
+                    self.action == 'partial_update'
+                    or self.action == 'partial_update'
+                ) 
+                and self.kwargs.get('pk', None)
+            ):
+
+                organization = self.model.objects.get(
+                    pk = int(self.kwargs['pk'])
+                ).organization.pk
 
 
             if (    # Must be first as the priority to pickup
