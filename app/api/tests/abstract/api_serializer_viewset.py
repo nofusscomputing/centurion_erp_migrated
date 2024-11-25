@@ -145,7 +145,7 @@ class SerializerDelete:
 
 
         client.force_login(self.delete_user)
-        response = client.delete(url, data=self.delete_data)
+        response = client.delete(url)
 
         assert str(response.renderer_context['view'].get_serializer().__class__.__name__).endswith('ModelSerializer')
 
