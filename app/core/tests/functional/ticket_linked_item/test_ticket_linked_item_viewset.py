@@ -232,55 +232,6 @@ class BaseTicketLinkedItemPermissionsAPI(
 
 
 
-class TicketLinkedItemPermissionsAPI(
-    BaseTicketLinkedItemPermissionsAPI,
-    TestCase
-):
-    """ Test Cases common to ALL ticket types """
-
-    model = TicketLinkedItem
-
-    app_namespace = 'v2'
-    
-    delete_data = {}
-
-    ticket_type: str = 'request'
-
-    ticket_type_enum = Ticket.TicketType.REQUEST
-
-    url_name = '_api_v2_ticket_linked_item'
-
-    item_class: str = 'device'
-
-    item_type =  TicketLinkedItem.Modules.DEVICE
-
-
-    @classmethod
-    def setUpTestData(self):
-
-        from itam.models.device import Device
-
-        self.CreateOrg()
-
-        self.linked_item = Device.objects.create(
-            organization = self.organization,
-            name = 'one',
-        )
-
-
-        self.linked_item_two = Device.objects.create(
-            organization = self.organization,
-            name = 'two',
-        )
-
-        super().setUpTestData()
-
-        self.url_kwargs = {'ticket_id': self.ticket.id}
-
-        self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
-
-
-
 class BaseItemTicketPermissionsAPI(
     BaseTicketLinkedItemPermissionsAPI,
 ):
