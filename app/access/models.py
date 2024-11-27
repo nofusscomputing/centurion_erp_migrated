@@ -126,9 +126,10 @@ class TenancyManager(models.Manager):
                         user_organizations += [ team_user.team.organization.id ]
 
 
-                if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
+                # if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
+                if len(user_organizations) > 0 and not user.is_superuser:
 
-                    if self.model.is_global:
+                    if getattr(self.model, 'is_global', False) is True:
 
                         return super().get_queryset().filter(
                             models.Q(organization__in=user_organizations)
