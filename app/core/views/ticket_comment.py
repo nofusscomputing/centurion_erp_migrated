@@ -1,3 +1,5 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.urls import reverse
 from django.views import generic
 
@@ -30,11 +32,17 @@ class Add(AddView):
 
         if self.request.user.is_authenticated:
 
-            ticket = Ticket.objects.get(pk=int(self.kwargs['ticket_id']))
+            try:
 
-            if ticket.opened_by.id == self.request.user.id:
+                ticket = Ticket.objects.get(pk=int(self.kwargs['ticket_id']))
 
-                return []
+                if ticket.opened_by.id == self.request.user.id:
+
+                    return []
+            
+            except ObjectDoesNotExist:
+
+                pass
 
         return [
             str('core.add_ticketcomment'),
@@ -104,12 +112,18 @@ class Change(ChangeView):
 
     def get_dynamic_permissions(self):
 
-        if (
-            self.request.user.is_authenticated and
-            self.get_object().user.id == self.request.user.id
-        ):
+        try:
 
-            return []
+            if (
+                self.request.user.is_authenticated and
+                self.get_object().user.id == self.request.user.id
+            ):
+
+                return []
+
+        except Http404:    # Although the model not found, permissions must return HTTP/403 for authenticated user
+
+            pass
 
         return [
             str('core.change_ticketcomment'),
