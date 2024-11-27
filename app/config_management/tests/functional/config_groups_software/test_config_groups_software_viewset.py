@@ -46,6 +46,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
 
 
@@ -131,6 +133,11 @@ class ViewSetBase:
             name = 'one'
         )
 
+        self.config_group_b = ConfigGroups.objects.create(
+            organization = self.different_organization,
+            name = 'two'
+        )
+
         self.url_kwargs = { 'config_group_id': self.config_group.id }
 
         self.software = Software.objects.create(
@@ -160,6 +167,13 @@ class ViewSetBase:
         self.item = self.model.objects.create(
             organization = self.organization,
             config_group = self.config_group,
+            software = self.software,
+            version = self.software_version
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization = self.different_organization,
+            config_group = self.config_group_b,
             software = self.software,
             version = self.software_version
         )

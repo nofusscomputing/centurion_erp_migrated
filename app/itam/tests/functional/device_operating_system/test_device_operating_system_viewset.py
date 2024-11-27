@@ -43,6 +43,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -164,12 +166,24 @@ class ViewSetBase:
             name = 'device-two'
         )
 
+        self.device_three = Device.objects.create(
+            organization=different_organization,
+            name = 'device-three'
+        )
+
 
         self.item = self.model.objects.create(
             organization=self.organization,
             version = '1',
             operating_system_version = self.operating_system_version,
             device = self.device
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization=different_organization,
+            version = '1',
+            operating_system_version = self.operating_system_version,
+            device = self.device_three
         )
 
 

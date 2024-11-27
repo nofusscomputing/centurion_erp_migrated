@@ -247,6 +247,8 @@ class TicketViewSet(ModelViewSet):
             or self.action == 'update'
         ):
 
+            organization = None
+
 
             if (
                 self.action == 'list'

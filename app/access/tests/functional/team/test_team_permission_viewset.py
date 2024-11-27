@@ -44,10 +44,17 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         self.item = self.model.objects.create(
             organization=organization,
             name = 'teamone'
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization=different_organization,
+            name = 'teamtwo'
         )
 
 

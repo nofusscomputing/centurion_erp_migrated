@@ -224,6 +224,14 @@ class AppSettingsPermissionsAPI(
         assert response.status_code == 405
 
 
+    def test_returned_results_only_user_orgs(self):
+        """Test not required
+
+        this test is not required as this model is not a tenancy model
+        """
+
+        pass
+
 
 class AppSettingsViewSet(
     ViewSetBase,

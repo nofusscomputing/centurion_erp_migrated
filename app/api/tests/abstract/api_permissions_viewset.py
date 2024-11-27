@@ -85,6 +85,50 @@ class APIPermissionView:
 
 
 
+    def test_returned_results_only_user_orgs(self):
+        """Returned results check
+
+        Ensure that a query to the viewset endpoint does not return
+        items that are not part of the users organizations.
+        """
+
+
+        # Ensure the other org item exists, without test not able to function
+        print('Check that the different organization item has been defined')
+        assert hasattr(self, 'other_org_item')
+
+        # ensure that the variables for the two orgs are different orgs
+        print('checking that the different and user oganizations are different')
+        assert self.different_organization.id != self.organization.id
+
+
+        client = Client()
+
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        client.force_login(self.view_user)
+        response = client.get(url)
+
+        contains_different_org: bool = False
+
+        for item in response.data['results']:
+
+            if int(item['organization']['id']) != self.organization.id:
+
+                contains_different_org = True
+
+        assert not contains_different_org
+
+
+
+
 class APIPermissionAdd:
 
 
@@ -211,7 +255,6 @@ class APIPermissionAdd:
         response = client.post(url, data=self.add_data)
 
         assert response.status_code == 201
-
 
 
 class APIPermissionChange:

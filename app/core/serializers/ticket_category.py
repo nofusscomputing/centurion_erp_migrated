@@ -83,7 +83,7 @@ class TicketCategoryModelSerializer(
             ):
 
                 self.fields['parent'].queryset = self.fields['parent'].queryset.exclude(
-                    id=self.instance.pk
+                    id = int(self._context['view'].kwargs['pk'])
                 )
 
 

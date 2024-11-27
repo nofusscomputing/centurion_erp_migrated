@@ -121,6 +121,8 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
         - Licence Management _[see #4](https://github.com/nofusscomputing/centurion_erp/issues/4)_
 
+        - Certificate Management
+
     - IT Infrastructure Management (ITIM) _[see #61](https://github.com/nofusscomputing/centurion_erp/issues/61)_
 
         - Database Management _[see #72](https://github.com/nofusscomputing/centurion_erp/issues/72)_
@@ -135,9 +137,15 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
             - Software _[see #3](https://github.com/nofusscomputing/centurion_erp/issues/3)_
 
+    - IT Operations
+
+        - Service level management _[see #396](https://github.com/nofusscomputing/centurion_erp/issues/396)_
+
     - Order Management _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_
 
         - Supplier Management _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_
+
+    - Service Catalog _[see #1384](https://github.com/nofusscomputing/centurion_erp/issues/384)_
 
 
 - **Planned Integrations:**

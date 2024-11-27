@@ -47,6 +47,13 @@ class ServiceNotePermissionsAPI(
             service = self.note_item
         )
 
+        self.other_org_item = Notes.objects.create(
+            organization = self.different_organization,
+            note = 'b note',
+            usercreated = self.view_user,
+            service = self.note_item
+        )
+
 
         self.url_kwargs = {'service_id': self.note_item.id}
 

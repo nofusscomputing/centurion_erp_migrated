@@ -42,6 +42,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -123,6 +125,11 @@ class ViewSetBase:
         self.item = self.model.objects.create(
             organization = self.organization,
             name = 'one-add'
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization = self.different_organization,
+            name = 'two-add'
         )
 
 

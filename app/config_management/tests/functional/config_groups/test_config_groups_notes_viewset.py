@@ -47,6 +47,13 @@ class NotePermissionsAPI(
             config_group = self.note_item
         )
 
+        self.other_org_item = Notes.objects.create(
+            organization = self.different_organization,
+            note = 'b note',
+            usercreated = self.view_user,
+            config_group = self.note_item
+        )
+
 
         self.url_kwargs = {'config_group_id': self.note_item.id}
 

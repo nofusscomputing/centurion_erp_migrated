@@ -44,6 +44,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -137,6 +139,13 @@ class ViewSetBase:
             name = 'os name',
             device = device,
             config_key_variable = 'value'
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization=different_organization,
+            name = 'os name b',
+            device = device,
+            config_key_variable = 'values'
         )
 
         self.item.port.set([ port ])

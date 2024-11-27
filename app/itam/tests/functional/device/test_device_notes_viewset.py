@@ -40,11 +40,23 @@ class DeviceNotePermissionsAPI(
             name = 'history-device'
         )
 
+        self.note_item_b = Device.objects.create(
+            organization = self.different_organization,
+            name = 'history-device-b'
+        )
+
         self.item = Notes.objects.create(
             organization = self.organization,
             note = 'a note',
             usercreated = self.view_user,
             device = self.note_item
+        )
+
+        self.other_org_item = Notes.objects.create(
+            organization = self.different_organization,
+            note = 'b note',
+            usercreated = self.view_user,
+            device = self.note_item_b
         )
 
 
