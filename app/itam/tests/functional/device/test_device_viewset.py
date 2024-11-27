@@ -2,7 +2,8 @@ import pytest
 
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.shortcuts import reverse
+from django.test import Client, TestCase
 
 from access.models import Organization, Team, TeamUsers, Permission
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
@@ -41,6 +42,8 @@ class ViewSetBase:
         self.organization = organization
 
         different_organization = Organization.objects.create(name='test_different_organization')
+
+        self.different_organization = different_organization
 
 
         view_permissions = Permission.objects.get(
@@ -125,6 +128,11 @@ class ViewSetBase:
             name = 'one-add'
         )
 
+        self.other_org_item = self.model.objects.create(
+            organization = different_organization,
+            name = 'other_item'
+        )
+
 
         self.url_view_kwargs = {'pk': self.item.id}
 
@@ -182,7 +190,6 @@ class DevicePermissionsAPI(
 ):
 
     pass
-
 
 
 class DeviceViewSet(

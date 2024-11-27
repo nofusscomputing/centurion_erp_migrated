@@ -43,6 +43,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -113,6 +115,11 @@ class ViewSetBase:
             name = 'device'
         )
 
+        self.device_b = Device.objects.create(
+            organization=different_organization,
+            name = 'device-b'
+        )
+
 
         self.item = self.model.objects.create(
             organization=self.organization,
@@ -121,6 +128,15 @@ class ViewSetBase:
             device = self.device
         )
 
+        self.other_org_item = self.model.objects.create(
+            organization=different_organization,
+            version = '2',
+            operating_system_version = self.operating_system_version,
+            device = self.device_b
+        )
+
+
+        self.url_kwargs = {'operating_system_id': self.operating_system_version.operating_system.pk}
 
         self.url_view_kwargs = {'operating_system_id': self.operating_system_version.operating_system.pk, 'pk': self.item.id}
 

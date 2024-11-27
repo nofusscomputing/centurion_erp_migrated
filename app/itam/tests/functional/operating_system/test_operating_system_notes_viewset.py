@@ -40,11 +40,23 @@ class OperatingSystemNotePermissionsAPI(
             name = 'history-device'
         )
 
+        self.note_item_b = OperatingSystem.objects.create(
+            organization = self.organization,
+            name = 'history-device-b'
+        )
+
         self.item = Notes.objects.create(
             organization = self.organization,
             note = 'a note',
             usercreated = self.view_user,
             operatingsystem = self.note_item
+        )
+
+        self.other_org_item = Notes.objects.create(
+            organization = self.different_organization,
+            note = 'b note',
+            usercreated = self.view_user,
+            operatingsystem = self.note_item_b
         )
 
 
