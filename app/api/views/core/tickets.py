@@ -72,7 +72,10 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
         return super().get_permission_required()
 
 
-    queryset = Ticket.objects.all()
+    # queryset = Ticket.objects.all()
+    queryset = None
+
+    model = Ticket
 
 
     def get_serializer(self, *args, **kwargs):
@@ -114,32 +117,48 @@ class View(OrganizationMixin, viewsets.ModelViewSet):
 
         if self._ticket_type == 'change':
 
-            ticket_type = self.queryset.model.TicketType.CHANGE.value
+            ticket_type = self.model.TicketType.CHANGE.value
 
         elif self._ticket_type == 'incident':
 
-            ticket_type = self.queryset.model.TicketType.INCIDENT.value
+            ticket_type = self.model.TicketType.INCIDENT.value
 
         elif self._ticket_type == 'problem':
 
-            ticket_type = self.queryset.model.TicketType.PROBLEM.value
+            ticket_type = self.model.TicketType.PROBLEM.value
 
         elif self._ticket_type == 'request':
 
-            ticket_type = self.queryset.model.TicketType.REQUEST.value
+            ticket_type = self.model.TicketType.REQUEST.value
 
         elif self._ticket_type == 'project_task':
 
-            ticket_type = self.queryset.model.TicketType.REQUEST.value
+            ticket_type = self.model.TicketType.REQUEST.value
 
-            return self.queryset.filter(
-                project = self.kwargs['project_id']
-            )
+            # return self.queryset.filter(
+            #     project = self.kwargs['project_id']
+            # )
 
         else:
 
             raise ValueError('Unknown ticket type. kwarg `ticket_type` must be set')
 
-        return self.queryset.filter(
-            ticket_type = ticket_type
-        )
+
+        if not self.queryset:
+
+            queryset = Ticket.objects.all()
+
+            queryset = queryset.filter(
+                ticket_type = ticket_type
+            )
+
+            if self._ticket_type == 'project_task':
+
+                queryset = queryset.filter(
+                    project = self.kwargs['project_id']
+                )
+
+            self.queryset = queryset
+
+
+        return self.queryset

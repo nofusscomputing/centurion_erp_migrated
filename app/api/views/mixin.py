@@ -1,4 +1,4 @@
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.forms import ValidationError
 
 from rest_framework import exceptions
@@ -35,7 +35,14 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             view.http_method_not_allowed(request._request)
 
-        if hasattr(view, 'queryset'):
+        if hasattr(view, 'get_queryset'):
+
+            queryset  = view.get_queryset()
+
+            self.obj = queryset.model
+
+        elif hasattr(view, 'queryset'):
+
             if view.queryset.model._meta:
                 self.obj = view.queryset.model
 
@@ -91,7 +98,13 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
             if object_organization is None and 'pk' in view.kwargs:
 
-                self.obj = view.queryset.get(pk=view.kwargs['pk'])
+                try:
+
+                    self.obj = view.queryset.get(pk=view.kwargs['pk'])    # Here
+
+                except ObjectDoesNotExist:
+
+                    return False
 
 
         if obj:
@@ -115,7 +128,13 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                 if object_organization is None:
 
-                    self.obj = view.queryset.get()
+                    try:
+
+                        self.obj = view.queryset.get()
+
+                    except ObjectDoesNotExist:
+
+                        return False
 
 
         if hasattr(self, 'obj') and object_organization is None and 'pk' in view.kwargs:
