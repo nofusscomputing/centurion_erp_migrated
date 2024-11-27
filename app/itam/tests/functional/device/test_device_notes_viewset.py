@@ -36,12 +36,12 @@ class DeviceNotePermissionsAPI(
 
 
         self.note_item = Device.objects.create(
-            organization = self.different_organization,
+            organization = self.organization,
             name = 'history-device'
         )
 
         self.note_item_b = Device.objects.create(
-            organization = self.organization,
+            organization = self.different_organization,
             name = 'history-device-b'
         )
 
