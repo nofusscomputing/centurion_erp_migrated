@@ -228,3 +228,13 @@ class TicketCommentPermissionsAPI(
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+    def test_returned_results_only_user_orgs(self):
+        """Test not required
+
+        this test is not required as a ticket comment obtains it's
+        organization from the ticket.
+        """
+
+        pass

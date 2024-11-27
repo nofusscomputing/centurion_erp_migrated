@@ -520,3 +520,14 @@ class TaskResultPermissionsAPI(
         response = client.get(url)
 
         assert response.status_code == 200
+
+
+    def test_returned_results_only_user_orgs(self):
+        """Test not required
+
+        this test is not required as a task result
+        is not a tenancy object that a user has any CRUD
+        op to.
+        """
+
+        pass
