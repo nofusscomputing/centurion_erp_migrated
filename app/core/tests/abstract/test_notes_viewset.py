@@ -45,6 +45,8 @@ class NoteViewSetCommon(
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + Notes._meta.model_name,
