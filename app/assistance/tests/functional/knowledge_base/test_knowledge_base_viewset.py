@@ -46,6 +46,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
 
         self.url_kwargs = {}
@@ -122,6 +124,7 @@ class ViewSetBase:
 
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
+        self.view_user_b = User.objects.create_user(username="test_user_view_b", password="password")
         teamuser = TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
@@ -133,6 +136,13 @@ class ViewSetBase:
             title = 'one',
             content = 'some text for body',
             target_user = self.view_user
+        )
+
+        self.other_org_item = self.model.objects.create(
+            organization = self.different_organization,
+            title = 'two',
+            content = 'some text for body',
+            target_user = self.view_user_b
         )
 
 
