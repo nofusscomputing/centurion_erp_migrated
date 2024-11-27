@@ -198,7 +198,7 @@ class TicketCategoryPermissionsAPI(
 
 class TicketCategoryViewSet(
     ViewSetBase,
-    APIPermissions,
+    SerializersTestCases,
     TestCase,
 ):
 
