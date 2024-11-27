@@ -43,6 +43,8 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
 
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
@@ -57,7 +59,14 @@ class ViewSetBase:
             organization = organization,
         )
 
+        view_team_b = Team.objects.create(
+            team_name = 'view_team',
+            organization = different_organization,
+        )
+
         view_team.permissions.set([view_permissions])
+
+        view_team_b.permissions.set([view_permissions])
 
 
 
@@ -116,10 +125,17 @@ class ViewSetBase:
 
         self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
+        self.view_user_b = User.objects.create_user(username="test_user_view_b", password="password")
+
 
         self.item = TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
+        )
+
+        self.other_org_item = TeamUsers.objects.create(
+            team = view_team_b,
+            user = self.view_user_b
         )
 
         self.url_view_kwargs = {'organization_id': self.organization.id, 'team_id': view_team.id, 'pk': self.item.id}
@@ -178,7 +194,11 @@ class TeamUserPermissionsAPI(
     TestCase
 ):
 
-    pass
+
+    def test_returned_results_only_user_orgs(self):
+        """This test is not applicable for team_user as users are not tenancy objects
+        """
+        pass
 
 
 

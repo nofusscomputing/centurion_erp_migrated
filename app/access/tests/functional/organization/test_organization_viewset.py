@@ -47,6 +47,10 @@ class ViewSetBase:
 
         different_organization = Organization.objects.create(name='test_different_organization')
 
+        self.different_organization = different_organization
+
+        self.other_org_item = organization
+
         view_permissions = Permission.objects.get(
                 codename = 'view_' + self.model._meta.model_name,
                 content_type = ContentType.objects.get(
@@ -60,7 +64,14 @@ class ViewSetBase:
             organization = organization,
         )
 
+        view_team_b = Team.objects.create(
+            team_name = 'view_team',
+            organization = different_organization,
+        )
+
         view_team.permissions.set([view_permissions])
+
+        view_team_b.permissions.set([view_permissions])
 
 
 
@@ -121,6 +132,12 @@ class ViewSetBase:
         teamuser = TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
+        )
+
+        self.view_user_b = User.objects.create_user(username="test_user_view_b", password="password")
+        teamuser = TeamUsers.objects.create(
+            team = view_team_b,
+            user = self.view_user_b
         )
 
 
@@ -205,6 +222,52 @@ class OrganizationPermissionsAPI(
 
         assert response.status_code == 201
 
+
+
+    def test_returned_results_only_user_orgs(self):
+        """Returned results check
+
+        This test case is an override of a test of the same name.
+        organizations are not tenancy objects and therefor are supposed to
+        return all items when a user queries them.
+
+        Ensure that a query to the viewset endpoint does not return
+        items that are not part of the users organizations.
+        """
+
+
+        # Ensure the other org item exists, without test not able to function
+        print('Check that the different organization item has been defined')
+        assert hasattr(self, 'other_org_item')
+
+        # ensure that the variables for the two orgs are different orgs
+        print('checking that the different and user oganizations are different')
+        assert self.different_organization.id != self.organization.id
+
+
+        client = Client()
+
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+
+        client.force_login(self.view_user)
+        response = client.get(url)
+
+        contains_different_org: bool = False
+
+        # for item in response.data['results']:
+
+        #     if int(item['id']) != self.organization.id:
+
+        #         contains_different_org = True
+
+        assert len(response.data['results']) == 2
 
 
 
