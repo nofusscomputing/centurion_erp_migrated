@@ -1,3 +1,13 @@
+## 1.3.1 (2024-11-27)
+
+### Fixes
+
+- **core**: Ensure user cant view tickets in orgs they are not part of
+
+### Tests
+
+- **access**: Add dummy functional test for CI to complete
+
 ## 1.3.0 (2024-10-31)
 
 ### feat
