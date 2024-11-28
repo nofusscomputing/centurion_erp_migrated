@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from api.serializers.config import ParentGroupSerializer
 
-from config_management.models.groups import ConfigGroupHosts
+from config_management.models.groups import ConfigGroups
 
 from itam.models.device import Device
 
@@ -12,15 +12,13 @@ from itam.models.device import Device
 
 class DeviceConfigGroupsSerializer(serializers.ModelSerializer):
 
-    name = serializers.CharField(source='group.name', read_only=True)
-
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:_api_config_group", format="html"
+        view_name="v1:_api_config_group", format="html"
     )
 
     class Meta:
 
-        model = ConfigGroupHosts
+        model = ConfigGroups
 
         fields = [
             'id',
@@ -38,17 +36,17 @@ class DeviceConfigGroupsSerializer(serializers.ModelSerializer):
 class DeviceSerializer(serializers.ModelSerializer):
     
     url = serializers.HyperlinkedIdentityField(
-        view_name="API:device-detail", format="html"
+        view_name="v1:device-detail", format="html"
     )
 
     config = serializers.SerializerMethodField('get_device_config')
 
-    groups = DeviceConfigGroupsSerializer(source='configgrouphosts_set', many=True, read_only=True)
+    groups = DeviceConfigGroupsSerializer(source='configgroups_set', many=True, read_only=True)
 
     def get_device_config(self, device):
 
         request = self.context.get('request')
-        return request.build_absolute_uri(reverse('API:_api_device_config', args=[device.slug]))
+        return request.build_absolute_uri(reverse('v1:_api_device_config', args=[device.slug]))
 
 
     class Meta:

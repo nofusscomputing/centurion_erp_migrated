@@ -1,8 +1,11 @@
-import json
 import re
 
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
+
+from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import TenancyObject
@@ -10,6 +13,7 @@ from access.models import TenancyObject
 from app.helpers.merge_software import merge_software
 
 from core.mixin.history_save import SaveHistory
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device, DeviceSoftware
 from itam.models.software import Software, SoftwareVersion
@@ -22,9 +26,11 @@ class GroupsCommonFields(TenancyObject, models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Group',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -38,6 +44,12 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
+        verbose_name = 'Config Group'
+
         verbose_name_plural = 'Config Groups'
 
 
@@ -48,36 +60,146 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
     def validate_config_keys_not_reserved(self):
 
-        value: dict = self
+        if self is not None:
 
-        for invalid_key in ConfigGroups.reserved_config_keys:
+            value: dict = self
 
-            if invalid_key in value.keys():
-                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+            for invalid_key in ConfigGroups.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
 
 
     parent = models.ForeignKey(
         'self',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Parent of this Group',
         null = True,
-        blank= True
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Parent Group'
     )
 
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this Group',
         max_length = 50,
         unique = False,
+        verbose_name = 'Name'
     )
 
 
     config = models.JSONField(
         blank = True,
         default = None,
+        help_text = 'Configuration for this Group',
         null = True,
-        validators=[ validate_config_keys_not_reserved ]
+        validators=[ validate_config_keys_not_reserved ],
+        verbose_name = 'Configuration'
     )
+
+    hosts = models.ManyToManyField(
+        to = Device,
+        blank = True,
+        help_text = 'Hosts that are part of this group',
+        verbose_name = 'Hosts'
+    )
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'is_global'
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified'
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Child Groups",
+            "slug": "child_groups",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "child_groups",
+                }
+            ]
+        },
+        {
+            "name": "Hosts",
+            "slug": "hosts",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "hosts"
+                    ],
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "group_software",
+                }
+            ]
+        },
+        {
+            "name": "Configuration",
+            "slug": "configuration",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config"
+                    ],
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'child_count',
+        'organization',
+    ]
 
 
     def config_keys_ansible_variable(self, value: dict):
@@ -121,6 +243,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return count
 
 
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_config_group-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_config_group-detail", kwargs={'pk': self.id})
 
 
     @property
@@ -130,13 +259,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
         return self.parent
 
 
-    def render_config(self) -> str:
+    def render_config(self):
 
         config: dict = dict()
 
         if self.parent:
 
-            config.update(json.loads(ConfigGroups.objects.get(id=self.parent.id).render_config()))
+            config.update(ConfigGroups.objects.get(id=self.parent.id).render_config())
 
         if self.config:
 
@@ -179,7 +308,7 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
             config['software'] = merge_software(config['software'], software_actions['software'])
 
-        return json.dumps(config)
+        return config
 
 
 
@@ -220,6 +349,13 @@ class ConfigGroups(GroupsCommonFields, SaveHistory):
 
 
 
+@receiver(post_delete, sender=ConfigGroups, dispatch_uid='config_group_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='config_group_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CONFIG_GROUP)
+
+
+
 class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
 
 
@@ -236,18 +372,22 @@ class ConfigGroupHosts(GroupsCommonFields, SaveHistory):
 
     host = models.ForeignKey(
         Device,
+        blank= False,
+        help_text = 'Host that will be apart of this config group',
         on_delete=models.CASCADE,
         null = False,
-        blank= False,
-        validators = [ validate_host_no_parent_group ]
+        validators = [ validate_host_no_parent_group ],
+        verbose_name = 'Host',
     )
 
 
     group = models.ForeignKey(
         ConfigGroups,
+        blank= False,
+        help_text = 'Group that this host is part of',
         on_delete=models.CASCADE,
         null = False,
-        blank= False
+        verbose_name = 'Group',
     )
 
 
@@ -265,46 +405,77 @@ class ConfigGroupSoftware(GroupsCommonFields, SaveHistory):
     """ A way to configure software to install/remove per config group """
 
     class Meta:
+
         ordering = [
             '-action',
             'software'
         ]
+
+        verbose_name = 'Config Group Software'
 
         verbose_name_plural = 'Config Group Softwares'
 
 
     config_group = models.ForeignKey(
         ConfigGroups,
-        on_delete=models.CASCADE,
+        blank= False,
         default = None,
+        help_text = 'Config group this softwre will be linked to',
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
+        verbose_name = 'Config Group'
     )
 
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
         default = None,
+        help_text = 'Software to add to this config Group',
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
+        verbose_name = 'Software'
     )
 
-    action = models.CharField(
-        max_length=1,
+
+    action = models.IntegerField(
+        blank = True,
         choices=DeviceSoftware.Actions,
         default=None,
+        help_text = 'ACtion to perform with this software',
         null=True,
-        blank = True,
+        verbose_name = 'Action'
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Software Version for this config group',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        verbose_name = 'Verrsion',
     )
+
+    # This model is not intended to be viewable on it's own page
+    # as it's a sub model for config groups
+    page_layout: dict = []
+
+
+    table_fields: list = [
+        'software',
+        'category',
+        'action',
+        'version'
+    ]
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'config_group_id': self.config_group.id,
+            'pk': self.id
+        }
 
 
     @property

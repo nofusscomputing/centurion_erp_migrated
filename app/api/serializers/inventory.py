@@ -1,5 +1,8 @@
-from django.core.exceptions import ValidationError
 from django.utils.html import escape
+
+from rest_framework.exceptions import ValidationError
+
+
 
 class Inventory:
     """ Inventory Object

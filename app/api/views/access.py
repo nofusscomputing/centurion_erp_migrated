@@ -12,7 +12,7 @@ from access.models import Organization, Team
 from api.serializers.access import OrganizationSerializer, OrganizationListSerializer, TeamSerializer, TeamPermissionSerializer
 from api.views.mixin import OrganizationPermissionAPI
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Fetch Organizations",
@@ -34,7 +34,7 @@ class OrganizationList(generics.ListAPIView):
         return "Organizations"
 
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Get An Organization",
@@ -61,7 +61,7 @@ class OrganizationDetail(generics.RetrieveUpdateAPIView):
         return "Organization"
 
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     post=extend_schema(
         summary = "Create a Team",
@@ -97,7 +97,7 @@ class TeamList(generics.ListCreateAPIView):
         return "Organization Teams"
 
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Fetch a Team",
@@ -149,7 +149,7 @@ class TeamDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'group_ptr_id'
 
 
-
+@extend_schema(deprecated=True)
 @extend_schema_view(
     get=extend_schema(
         summary = "Fetch a teams permissions",

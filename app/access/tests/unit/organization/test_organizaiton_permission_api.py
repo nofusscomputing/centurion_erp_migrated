@@ -20,7 +20,7 @@ class OrganizationPermissionsAPI(TestCase, APIPermissionChange, APIPermissionVie
     model_name = 'organization'
     app_label = 'access'
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_organization'
 

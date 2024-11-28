@@ -2,7 +2,10 @@ import pytest
 import unittest
 import requests
 
+from django.contrib.auth.models import User
 from django.test import TestCase
+
+from access.models import Organization
 
 from app.tests.abstract.models import TenancyModel
 
@@ -24,68 +27,30 @@ class TicketModel(
     """
 
 
-    @pytest.mark.skip(reason='test to be written')
-    def test_attribute_duration_ticket_value(self):
-        """Attribute value test
+    @classmethod
+    def setUpTestData(self):
+        """Setup Test
 
-        This aattribute calculates the ticket duration from
-        it's comments. must return total time in seconds
+        1. Create an organization for user and item
+        . create an organization that is different to item
+        2. Create a device
+        3. create teams with each permission: view, add, change, delete
+        4. create a user per team
         """
 
-        pass
+        organization = Organization.objects.create(name='test_org')
+
+        self.organization = organization
+
+        self.add_user = User.objects.create_user(username="test_user_add", password="password")
 
 
-    @pytest.mark.skip(reason='test to be written')
-    def test_ticket_create_add_opened_by_as_watcher_ui(self):
-        """New ticket action from UI
-
-        When a new ticket is created, the 'opened_by' user must be added
-        as a subscribed user.
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason='test to be written')
-    def test_ticket_create_add_opened_by_as_watcher_api(self):
-        """New ticket action from API
-
-        When a new ticket is created, the 'opened_by' user must be added
-        as a subscribed user.
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason='test to be written')
-    def test_field_milestone_no_project(self):
-        """Field Value Test
-
-        Ensure that a milestone can't be applied if no project
-        has been selected
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason='test to be written')
-    def test_field_milestone_has_project(self):
-        """Field Value Test
-
-        Ensure that a milestone can be applied if a project
-        has been selected
-        """
-
-        pass
-
-
-    @pytest.mark.skip(reason='test to be written')
-    def test_field_milestone_different_project(self):
-        """Field Value Test
-
-        Ensure that a milestone from a different project
-        can't be applied
-        """
-
-        pass
+        self.item = self.model.objects.create(
+            organization=organization,
+            title = 'A ticket',
+            description = 'the ticket body',
+            ticket_type = Ticket.TicketType.REQUEST,
+            opened_by = self.add_user,
+            status = int(Ticket.TicketStatus.All.NEW.value)
+        )
 

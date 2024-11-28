@@ -6,18 +6,48 @@ template: project.html
 about: https://gitlab.com/nofusscomputing/infrastructure/configuration-management/centurion_erp
 ---
 
-Unit tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
+Unit and functional tests are written to aid in application stability and to assist in preventing regression bugs. As part of development the developer working on a Merge/Pull request is to ensure that tests are written. Failing to do so will more likely than not ensure that your Merge/Pull request is not merged.
 
 User Interface (UI) test are written _if applicable_ to test the user interface to ensure that it functions as it should. Changes to the UI will need to be tested.
 
-In most cases functional tests will not need to be written, however you should confirm this with a maintainer.
+!!! note
+    As of release v1.3, the UI has moved to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui) with the current Django UI feature locked and depreciated.
 
 Integration tests **will** be required if the development introduces code that interacts with an independent third-party application.
 
 
+## Available Test classes
+
+To aid in development we have written test classes that you can inherit from for your test classes
+
+- API Permission Checks
+
+    _These test cases ensure that only a user with the correct permissions can perform an action against a Model within Centurion_
+
+    - `api.tests.abstract.api_permissions_viewset.APIPermissionAdd` _Add permission checks_
+
+    - `api.tests.abstract.api_permissions_viewset.APIPermissionChange` _Change permission check_
+
+    - `api.tests.abstract.api_permissions_viewset.APIPermissionDelete` _Delete permission check_
+
+    - `api.tests.abstract.api_permissions_viewset.APIPermissionView` _View permission check_
+
+    - `api.tests.abstract.api_permissions_viewset.APIPermissions` _Add, Change, Delete and View permission checks_
+
+- API Field Checks
+
+    _These test cases ensure that all of the specified fields are rendered as part of an API response_
+
+    - `api.tests.abstract.api_fields.APICommonFields` _Fields that should be part of ALL API responses_
+
+    - `api.tests.abstract.api_fields.APIModelFields` _Fields that should be part of ALL model API Responses. Includes `APICommonFields` test cases_
+
+    - `api.tests.abstract.api_fields.APITenancyObject` _Fields that should be part of ALL Tenancy Object model API Responses. Includes `APICommonFields` and `APIModelFields` test cases_
+
+
 ## Writing Tests
 
-We use class based tests. Each class will require a `setUpTestData` method for test setup. To furhter assist in the writing of tests, we have written the test cases for common items as an abstract class. You are advised to review the [test cases](./api/tests/index.md) and if it's applicable to the item you have added, than add the test case class to be inherited by your test class.
+We use class based tests. Each class will require a `setUpTestData` method for test setup. To furhter assist in the writing of tests, we have written the test cases for common items as an abstract class. You are advised to inherit from our test classes _(see above)_ as a starting point and extend from there.
 
 Naming of test classes is in `CamelCase` in format `<Model Name><what's being tested>` for example the class name for device model history entry tests would be `DeviceHistory`.
 
@@ -30,7 +60,6 @@ Example of a model history test class.
 ``` py
 
 import pytest
-import unittest
 import requests
 
 from django.test import TestCase, Client
@@ -76,28 +105,26 @@ example file system structure showing the layout of the tests directory for a mo
 │   └── unit
 │       ├── __init__.py
 │       └── <model name>
+│           ├── test_<model name>.py
 │           ├── test_<model name>_api.py
-│           ├── test_<model name>_permission_api.py
-│           ├── test_<model name>_permission.py
 │           ├── test_<model name>_core_history.py
 │           ├── test_<model name>_history_permission.py
-│           ├── test_<model name>.py
-│           └── test_<model name>_views.py
+│           ├── test_<model name>_permission_api.py
+│           ├── test_<model name>_permission.py
+│           ├── test_<model name>_serializer.py
+│           └── test_<model name>_viewsets.py
 
 ```
 
 Tests are broken up into the type the test is (sub-directory to test), and they are `unit`, `functional`, `UI` and `integration`. These sub-directories each contain a sub-directory for each model they are testing.
 
-
 Items to test include, and are not limited to:
 
 - CRUD permissions admin site
 
-- CRUD permissions api site - [ModelPermissions (API)](./api/tests/model_permissions_api.md)
+- CRUD permissions api site
 
-- CRUD permissions main site - [ModelPermissions](./api/tests/model_permissions.md)
-
-- can only access organization object - [ModelPermissions](./api/tests/model_permissions.md), [ModelPermissions (API)](./api/tests/model_permissions_api.md)
+- can only access organization object
 
 - can access global object (still to require model CRUD permission)
 
@@ -129,7 +156,9 @@ Items to test include, and are not limited to:
 
 - API Fields
 
-    _Field exists, Type is checked_
+    _Field(s) exists, Type is checked_
+
+- Serializer Validations
 
 
 ## Running Tests

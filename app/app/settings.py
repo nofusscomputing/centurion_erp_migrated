@@ -33,7 +33,7 @@ DOCS_ROOT = 'https://nofusscomputing.com/projects/centurion_erp/user/'
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True # broker_connection_retry_on_startup
-CELERY_BROKER_URL = 'amqp://guest:guest@172.16.10.102:30712/itsm'
+CELERY_BROKER_URL = 'amqp://admin:admin@127.0.0.1:5672/itsm'
 
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#broker-use-ssl
 # import ssl
@@ -91,17 +91,21 @@ TRUSTED_ORIGINS = []             # list of trusted domains for CSRF
 
 
 # Application definition
-# CSRF_COOKIE_SECURE = True
-# SECURE_HSTS_SECONDS =    # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECURE_HSTS_SECONDS
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 86400
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-# SECURE_SSL_REDIRECT = True
+# SECURE_SSL_REDIRECT = True    # Commented out so tests pass
 # SECURE_SSL_HOST =        # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-host
-# SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 # USE_X_FORWARDED_HOST = True # ToDo: https://docs.djangoproject.com/en/dev/ref/settings/#use-x-forwarded-host
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'corsheaders',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -124,14 +128,16 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
+    'app.middleware.timezone.TimezoneMiddleware',
 ]
 
 
@@ -188,7 +194,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "http://127.0.0.1:3000"
 LOGOUT_REDIRECT_URL = "login"
 
 LOGIN_URL = '/account/login'
@@ -263,21 +269,29 @@ if API_ENABLED:
             'rest_framework.filters.SearchFilter',
             'rest_framework_json_api.django_filters.DjangoFilterBackend',
             'rest_framework_json_api.filters.OrderingFilter',
-            'rest_framework_json_api.django_filters.DjangoFilterBackend',
-            'rest_framework.filters.SearchFilter',
         ),
-        'SEARCH_PARAM': 'filter[search]',
+        # 'SEARCH_PARAM': 'filter[search]',
         # 'TEST_REQUEST_RENDERER_CLASSES': (
         #     'rest_framework_json_api.renderers.JSONRenderer',
         # ),
         # 'TEST_REQUEST_DEFAULT_FORMAT': 'vnd.api+json'
         'TEST_REQUEST_DEFAULT_FORMAT': 'json',
         'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+        'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+        'DEFAULT_VERSION': 'v1',
+        'ALLOWED_VERSIONS': [
+            'v1',
+            'v2'
+        ]
     }
 
     SPECTACULAR_SETTINGS = {
-        'TITLE': 'ITSM API',
-        'DESCRIPTION': """This UI is intended to serve as the API documentation.
+        'TITLE': 'Centurion ERP API',
+        'DESCRIPTION': """This UI exists to server the purpose of being the API documentation.
+
+Centurion ERP's API is versioned, with [v1 Depreciated](/api/swagger) and [v2 as the current](/api/v2/docs).
+
+**Note:** _API v2 is currently in beta phase. AS such is subject to change. When the new UI ius released, API v2 will move to stable._
 
 ## Authentication
 
@@ -307,11 +321,16 @@ curl:
     ```
 
         """,
-        'VERSION': '1.0.0',
+        'VERSION': '',
+        'SCHEMA_PATH_PREFIX': '/api/v2/|/api/',
         'SERVE_INCLUDE_SCHEMA': False,
-
         'SWAGGER_UI_DIST': 'SIDECAR',
         'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+        "SWAGGER_UI_SETTINGS": '''{
+            filter: true,
+            defaultModelsExpandDepth: -1,
+            deepLinking: true,
+        }''',
         'REDOC_DIST': 'SIDECAR',
         'PREPROCESSING_HOOKS': [
             'drf_spectacular.hooks.preprocess_exclude_path_format'

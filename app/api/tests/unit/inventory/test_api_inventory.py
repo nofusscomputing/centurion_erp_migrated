@@ -160,7 +160,7 @@ class InventoryAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -182,7 +182,7 @@ class InventoryAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -201,7 +201,7 @@ class InventoryAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -220,7 +220,7 @@ class InventoryAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -239,7 +239,7 @@ class InventoryAPI(TestCase):
         """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -395,7 +395,7 @@ class InventoryAPI(TestCase):
         """ Successful inventory upload returns 200 for existing device"""
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         client.force_login(self.add_user)
         response = client.post(url, data=self.inventory, content_type='application/json')
@@ -409,7 +409,7 @@ class InventoryAPI(TestCase):
         """ Incorrectly formated inventory upload returns 400 """
 
         client = Client()
-        url = reverse('API:_api_device_inventory')
+        url = reverse('v1:_api_device_inventory')
 
         mod_inventory = self.inventory.copy()
 

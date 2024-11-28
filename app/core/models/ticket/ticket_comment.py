@@ -17,21 +17,21 @@ class TicketComment(
     TenancyObject,
 ):
 
-
     save_model_history: bool = False
 
     class Meta:
 
         ordering = [
+            'created',
             'ticket',
             'parent_id'
         ]
 
         unique_together = ('external_system', 'external_ref',)
 
-        verbose_name = "Comment"
+        verbose_name = "Ticket Comment"
 
-        verbose_name_plural = "Comments"
+        verbose_name_plural = "Ticket Comments"
 
 
 
@@ -303,6 +303,15 @@ class TicketComment(
         verbose_name = 'Real Finish Date',
     )
 
+    # this model is not intended to be viewable on its
+    # own page due to being a sub model
+    page_layout: list = []
+
+
+    # this model is not intended to be viewable via
+    # a table as it's a sub-model
+    table_fields: list = []
+
 
     common_fields: list(str()) = [
         'body',
@@ -403,6 +412,19 @@ class TicketComment(
                 )
         
         return query
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'ticket_id': self.ticket.id,
+            'pk': self.id
+        }
 
 
     @property

@@ -16,9 +16,9 @@ class KnowledgeBaseCategory(TenancyObject):
             'name',
         ]
 
-        verbose_name = "Category"
+        verbose_name = "Knowledge Base Category"
 
-        verbose_name_plural = "Categorys"
+        verbose_name_plural = "Knowledge Base Categories"
 
 
     parent_category = models.ForeignKey(
@@ -39,10 +39,6 @@ class KnowledgeBaseCategory(TenancyObject):
         unique = False,
         verbose_name = 'Title',
     )
-
-
-    slug = AutoSlugField()
-
 
     target_team = models.ManyToManyField(
         Team,
@@ -70,6 +66,43 @@ class KnowledgeBaseCategory(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'parent_category',
+                        'name',
+                        'target_user',
+                        'target_team',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'name',
+        'parent_category',
+        'is_global',
+        'organization',
+    ]
+
+
     def __str__(self):
 
         return self.name
@@ -85,18 +118,20 @@ class KnowledgeBase(TenancyObject):
             'title',
         ]
 
-        verbose_name = "Article"
+        verbose_name = "Knowledge Base"
 
-        verbose_name_plural = "Articles"
+        verbose_name_plural = "Knowledge Base Articles"
 
 
     model_notes = None
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this KB article',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
 
@@ -212,6 +247,61 @@ class KnowledgeBase(TenancyObject):
 
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'title',
+                        'category',
+                        'responsible_user',
+                        'responsible_teams',
+                        'is_global',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'release_date',
+                        'expiry_date',
+                        'target_user',
+                        'target_team',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'summary',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'content',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'title',
+        'category',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def __str__(self):

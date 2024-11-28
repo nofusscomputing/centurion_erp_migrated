@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User, Group, Permission
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from .fields import *
 
 from core.middleware.get_request import get_request
@@ -12,6 +14,7 @@ from core.mixin.history_save import SaveHistory
 class Organization(SaveHistory):
 
     class Meta:
+        verbose_name = "Organization"
         verbose_name_plural = "Organizations"
         ordering = ['name']
 
@@ -23,28 +26,34 @@ class Organization(SaveHistory):
         super().save(*args, **kwargs)
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this Organization',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
     manager = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,
         blank = False,
+        help_text = 'Manager for this organization',
         null = True,
-        help_text = 'Organization Manager'
+        on_delete=models.SET_NULL,
+        verbose_name = 'Manager'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
+        help_text = 'Tid bits of information',
         null= True,
         verbose_name = 'Notes',
     )
@@ -61,6 +70,59 @@ class Organization(SaveHistory):
 
     def __str__(self):
         return self.name
+
+    table_fields: list = [
+        'nbsp',
+        'name',
+        'created',
+        'modified',
+        'nbsp'
+    ]
+
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'name',
+                        'manager',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Teams",
+            "slug": "teams",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "teams"
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        }
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_organization-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_organization-detail", kwargs={'pk': self.id})
 
 
 
@@ -176,30 +238,77 @@ class TenancyObject(SaveHistory):
             raise ValidationError('You must provide an organization')
 
 
+    id = models.AutoField(
+        blank=False,
+        help_text = 'ID of the item',
+        primary_key=True,
+        unique=True,
+        verbose_name = 'ID'
+    )
+
     organization = models.ForeignKey(
         Organization,
-        on_delete=models.CASCADE,
         blank = False,
-        null = True,
+        help_text = 'Organization this belongs to',
+        null = False,
+        on_delete = models.CASCADE,
         validators = [validatate_organization_exists],
+        verbose_name = 'Organization'
     )
 
     is_global = models.BooleanField(
+        blank = False,
         default = False,
-        blank = False
+        help_text = 'Is this a global object?',
+        verbose_name = 'Global Object'
     )
 
     model_notes = models.TextField(
         blank = True,
         default = None,
-        null= True,
+        help_text = 'Tid bits of information',
+        null = True,
         verbose_name = 'Notes',
     )
 
     def get_organization(self) -> Organization:
         return self.organization
 
-    
+
+    def get_url( self, request = None ) -> str:
+        """Fetch the models URL
+
+        If URL kwargs are required to generate the URL, define a `get_url_kwargs` that returns them.
+
+        Args:
+            request (object, optional): The request object that was made by the end user. Defaults to None.
+
+        Returns:
+            str: Canonical URL of the model if the `request` object was provided. Otherwise the relative URL. 
+        """
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_{model_name}-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_{model_name}-detail", kwargs = self.get_url_kwargs() )
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'pk': self.id
+        }
+
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
         if self.organization is None:
@@ -211,10 +320,14 @@ class TenancyObject(SaveHistory):
 
 
 class Team(Group, TenancyObject):
+
     class Meta:
-        # proxy = True
+
+        ordering = [ 'team_name' ]
+
+        verbose_name = 'Team'
+
         verbose_name_plural = "Teams"
-        ordering = ['team_name']
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -225,16 +338,78 @@ class Team(Group, TenancyObject):
 
 
     team_name = models.CharField(
-        verbose_name = 'Name',
         blank = False,
+        help_text = 'Name to give this team',
         max_length = 50,
         unique = False,
-        default = ''
+        verbose_name = 'Name',
     )
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'team_name',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Users",
+                    "field": "user",
+                },
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+    table_fields: list = [
+        'team_name',
+        'modified',
+        'created',
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_organization_team-detail", request=request, kwargs = self.get_url_kwargs() )
+
+        return reverse(f"v2:_api_v2_organization_team-detail", kwargs = self.get_url_kwargs() )
+
+
+    def get_url_kwargs(self) -> dict:
+        """Fetch the URL kwargs
+
+        Returns:
+            dict: kwargs required for generating the URL with `reverse`
+        """
+
+        return {
+            'organization_id': self.organization.id,
+            'pk': self.id
+        }
 
 
     @property
@@ -266,35 +441,55 @@ class Team(Group, TenancyObject):
 class TeamUsers(SaveHistory):
 
     class Meta:
-        # proxy = True
-        verbose_name_plural = "Team Users"
+
         ordering = ['user']
 
+        verbose_name = "Team User"
+
+        verbose_name_plural = "Team Users"
+
+
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this Team User',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     team = models.ForeignKey(
         Team,
+        blank = False,
+        help_text = 'Team user belongs to',
+        null = False,
+        on_delete=models.CASCADE,
         related_name="team",
-        on_delete=models.CASCADE)
+        verbose_name = 'Team'
+    )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE
+        blank = False,
+        help_text = 'User who will be added to the team',
+        null = False,
+        on_delete=models.CASCADE,
+        verbose_name = 'User'
     )
 
     manager = models.BooleanField(
-        verbose_name='manager',
+        blank=True,
         default=False,
-        blank=True
+        help_text = 'Is this user to be a manager of this team',
+        verbose_name='manager',
     )
 
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+    page_layout: list = []
+
+    table_fields: list = []
 
 
     def delete(self, using=None, keep_parents=False):
@@ -315,6 +510,24 @@ class TeamUsers(SaveHistory):
 
     def get_organization(self) -> Organization:
         return self.team.organization
+
+
+    def get_url( self, request = None ) -> str:
+
+        url_kwargs: dict = {
+            'organization_id': self.team.organization.id,
+            'team_id': self.team.id,
+            'pk': self.id
+        }
+
+        print(f'url kwargs are: {url_kwargs}')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_organization_team_user-detail", request=request, kwargs = url_kwargs )
+
+        return reverse(f"v2:_api_v2_organization_team_user-detail", kwargs = url_kwargs )
 
 
     def save(self, *args, **kwargs):

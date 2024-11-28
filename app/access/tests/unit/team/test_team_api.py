@@ -21,7 +21,7 @@ class TeamAPI(TestCase):
 
     model = Team
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_team'
 

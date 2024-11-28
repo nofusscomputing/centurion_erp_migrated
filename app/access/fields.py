@@ -11,11 +11,19 @@ class AutoCreatedField(models.DateTimeField):
 
     """
 
+    help_text = 'Date and time of creation'
+
+    verbose_name = 'Created'
+
     def __init__(self, *args, **kwargs):
 
         kwargs.setdefault("editable", False)
 
         kwargs.setdefault("default", now)
+
+        kwargs.setdefault("help_text", self.help_text)
+
+        kwargs.setdefault("verbose_name", self.verbose_name)
 
         super().__init__(*args, **kwargs)
 
@@ -27,6 +35,18 @@ class AutoLastModifiedField(AutoCreatedField):
     By default, sets editable=False and default=datetime.now.
 
     """
+
+    help_text = 'Date and time of last modification'
+
+    verbose_name = 'Modified'
+
+    def __init__(self, *args, **kwargs):
+
+        kwargs.setdefault("help_text", self.help_text)
+
+        kwargs.setdefault("verbose_name", self.verbose_name)
+
+        super().__init__(*args, **kwargs)
 
     def pre_save(self, model_instance, add):
 
@@ -44,6 +64,20 @@ class AutoSlugField(models.SlugField):
     By default, sets editable=False and default=datetime.now.
 
     """
+
+    help_text = 'slug for this field'
+
+    verbose_name = 'Slug'
+
+
+    def __init__(self, *args, **kwargs):
+
+        kwargs.setdefault("help_text", self.help_text)
+
+        kwargs.setdefault("verbose_name", self.verbose_name)
+
+        super().__init__(*args, **kwargs)
+
 
     def pre_save(self, model_instance, add):
 

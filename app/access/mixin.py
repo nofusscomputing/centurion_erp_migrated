@@ -48,7 +48,7 @@ class OrganizationMixin():
 
         if hasattr(self, '_object_organization'):
 
-            return self._object_organization
+            return int(self._object_organization)
 
         try:
 
@@ -124,9 +124,13 @@ class OrganizationMixin():
 
         is_member = False
 
-        if organization in self.user_organizations():
+        if organization is None:
 
-            return True
+            return False
+
+        if int(organization) in self.user_organizations():
+
+            is_member = True
 
         return is_member
 
@@ -135,6 +139,10 @@ class OrganizationMixin():
         """
         Override of 'PermissionRequiredMixin' method so that this mixin can obtain the required permission.
         """
+
+        if not hasattr(self, 'permission_required'):
+
+                return []
 
         if self.permission_required is None:
             raise ImproperlyConfigured(
@@ -215,6 +223,11 @@ class OrganizationMixin():
         if not organization:
 
             organization = self.object_organization()
+
+        else:
+
+            organization = int(organization)
+
 
         if self.is_member(organization) or organization == 0:
 

@@ -13,9 +13,8 @@ from itam.models.device import Device
 
 from settings.models.user_settings import UserSettings
 
-from config_management.forms.group_hosts import ConfigGroupHostsForm
 from config_management.forms.group.group import ConfigGroupForm, DetailForm
-from config_management.models.groups import ConfigGroups, ConfigGroupHosts, ConfigGroupSoftware
+from config_management.models.groups import ConfigGroups, ConfigGroupSoftware
 
 
 
@@ -156,9 +155,8 @@ class View(ChangeView):
 
         context['child_groups'] = ConfigGroups.objects.filter(parent=self.kwargs['pk'])
 
-        context['config'] = json.dumps(json.loads(self.object.render_config()), indent=4, sort_keys=True)
+        context['config'] = json.dumps(self.object.render_config(), indent=4, sort_keys=True)
 
-        context['config_group_hosts'] = ConfigGroupHosts.objects.filter(group_id = self.kwargs['pk']).order_by('-host')
 
         context['tickets'] = TicketLinkedItem.objects.filter(
             item = int(self.kwargs['pk']),
@@ -245,83 +243,3 @@ class Delete(DeleteView):
     def get_success_url(self, **kwargs):
 
         return reverse('Config Management:Groups')
-
-
-
-class GroupHostAdd(AddView):
-
-    model = ConfigGroupHosts
-
-    parent_model = ConfigGroups
-
-    permission_required = [
-        'config_management.add_configgrouphosts',
-    ]
-
-    template_name = 'form.html.j2'
-
-    form_class = ConfigGroupHostsForm
-
-
-    def form_valid(self, form):
-
-        form.instance.group_id = self.kwargs['pk']
-
-        form.instance.organization = self.parent_model.objects.get(pk=form.instance.group_id).organization
-
-        return super().form_valid(form)
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['content_title'] = 'Add Host to Group'
-
-        return context
-
-
-    def get_form(self, form_class=None):
-
-        form_class = super().get_form(form_class=None)
-
-        group = ConfigGroups.objects.get(pk=self.kwargs['pk'])
-
-        exsting_group_hosts = ConfigGroupHosts.objects.filter(group=group)
-
-        form_class.fields["host"].queryset = form_class.fields["host"].queryset.filter(
-        ).exclude(
-            id__in=exsting_group_hosts.values_list('host', flat=True)
-        )
-
-
-        return form_class
-
-
-    def get_success_url(self, **kwargs):
-
-        return reverse('Config Management:_group_view', args=[self.kwargs['pk'],])
-
-
-
-class GroupHostDelete(DeleteView):
-
-    model = ConfigGroupHosts
-
-    permission_required = [
-        'config_management.delete_configgrouphosts',
-    ]
-
-    template_name = 'form.html.j2'
-
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['content_title'] = 'Delete ' + self.object.host.name
-
-        return context
-
-
-    def get_success_url(self, **kwargs):
-
-        return reverse('Config Management:_group_view', args=[self.kwargs['group_id'],])

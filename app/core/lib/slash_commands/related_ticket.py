@@ -1,6 +1,7 @@
 import re
 
 
+
 class CommandRelatedTicket:
     # This summary is used for the user documentation
     """Add to the current ticket a relationship to another ticket. Supports all ticket 
@@ -41,14 +42,12 @@ For this command to process the following conditions must be met:
             None: On successfully processing the command
         """
 
-        a = 'a'
-
         command = match.group('command')
         ticket_id:int =  str(match.group('ticket'))
 
         if ticket_id is not None:
 
-            from core.models.ticket.ticket import RelatedTickets
+            from core.serializers.ticket_related import RelatedTickets, RelatedTicketModelSerializer
 
             if command == 'relate':
 
@@ -75,19 +74,29 @@ For this command to process the following conditions must be met:
 
                 to_ticket = self.__class__.objects.get(pk = ticket_id)
 
-            elif str(self._meta.verbose_name).lower() == 'comment':
+            elif str(self._meta.verbose_name).lower() == 'ticket comment':
 
                 from_ticket = self.ticket
 
                 to_ticket = self.ticket.__class__.objects.get(pk = ticket_id)
 
 
-            RelatedTickets.objects.create(
-                from_ticket_id = from_ticket,
-                how_related = how_related,
-                to_ticket_id = to_ticket,
-                organization = self.organization
+            item = RelatedTicketModelSerializer(
+                data = {
+                    'from_ticket_id': from_ticket.id,
+                    'how_related': int(how_related),
+                    'to_ticket_id': to_ticket.id,
+                    'organization': from_ticket.organization.id
+                }
             )
+
+            if item.is_valid( raise_exception = False ):
+
+                item.save()
+
+            else:
+
+                return str(match.string[match.start():match.end()])
 
         else:
 

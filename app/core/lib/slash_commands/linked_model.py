@@ -1,6 +1,7 @@
 import re
 
 
+
 class CommandLinkedModel:
     # This summary is used for the user documentation
     """Link an item to the current ticket. Supports all ticket 
@@ -121,7 +122,7 @@ For this command to process the following conditions must be met:
 
                 ticket = self
 
-            elif str(self._meta.verbose_name).lower() == 'comment':
+            elif str(self._meta.verbose_name).lower() == 'ticket comment':
 
                 ticket = self.ticket
 
@@ -132,14 +133,24 @@ For this command to process the following conditions must be met:
                     pk = model_id
                 )
 
-                TicketLinkedItem.objects.create(
-                    organization = self.organization,
-                    ticket = ticket,
-                    item_type = item_type,
-                    item = item.id
+                from core.serializers.ticket_linked_item import TicketLinkedItemModelSerializer
+
+                serializer = TicketLinkedItemModelSerializer(
+                    data = {
+                        'organization': ticket.organization,
+                        'ticket': ticket.id,
+                        'item_type': item_type,
+                        'item': item.id
+                    }
                 )
 
-                return None
+                if serializer.is_valid():
+
+                    serializer.save()
+
+                    return None
+
+                return str(match.string[match.start():match.end()])
 
         except Exception as e:
 

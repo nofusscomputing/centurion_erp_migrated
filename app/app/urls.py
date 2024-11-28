@@ -66,12 +66,22 @@ if settings.SSO_ENABLED:
 
 
 if settings.API_ENABLED:
+
     urlpatterns += [
 
-        path("api/", include("api.urls")),
-        path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+        path("api/", include("api.urls", namespace = 'v1')),
+        path('api/schema/', SpectacularAPIView.as_view(api_version='v1'), name='schema'),
         path('api/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+        path("api/v2/", include("api.urls_v2", namespace = 'v2')),
+
     ]
+
+
+    urlpatterns += [
+        path('api/v2/auth/', include('rest_framework.urls')),
+    ]
+
 
 
 if settings.DEBUG:

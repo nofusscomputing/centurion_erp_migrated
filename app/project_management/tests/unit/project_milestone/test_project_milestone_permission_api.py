@@ -20,7 +20,7 @@ class ProjectMilestonePermissionsAPI(TestCase, APIPermissions):
 
     model = ProjectMilestone
 
-    app_namespace = 'API'
+    app_namespace = 'v1'
     
     url_name = '_api_project_milestone-detail'
 
