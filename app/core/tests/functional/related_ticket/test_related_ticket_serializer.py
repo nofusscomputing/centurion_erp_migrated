@@ -137,3 +137,75 @@ class RelatedTicketsValidationAPI(
             serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['to_ticket_id'][0] == 'duplicate_entry'
+
+
+
+    def test_serializer_validation_add_blocked_by_self(self):
+        """Serializer Validation Check
+
+        Ensure that if adding itself as blocked by a validation
+        error is thrown
+        """
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = RelatedTicketModelSerializer(
+                data={
+                    'organization': self.organization.id,
+                    'from_ticket_id': self.ticket_two.id,
+                    'to_ticket_id': self.ticket_two.id,
+                    'how_related': RelatedTickets.Related.BLOCKED_BY
+                }
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['to_ticket_id'][0] == 'self_not_related'
+
+
+
+    def test_serializer_validation_add_blocks_self(self):
+        """Serializer Validation Check
+
+        Ensure that if adding itself as blocks a validation
+        error is thrown
+        """
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = RelatedTicketModelSerializer(
+                data={
+                    'organization': self.organization.id,
+                    'from_ticket_id': self.ticket_two.id,
+                    'to_ticket_id': self.ticket_two.id,
+                    'how_related': RelatedTickets.Related.BLOCKS
+                }
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['to_ticket_id'][0] == 'self_not_related'
+
+
+
+    def test_serializer_validation_add_related_self(self):
+        """Serializer Validation Check
+
+        Ensure that if adding itself as related a validation
+        error is thrown
+        """
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = RelatedTicketModelSerializer(
+                data={
+                    'organization': self.organization.id,
+                    'from_ticket_id': self.ticket_two.id,
+                    'to_ticket_id': self.ticket_two.id,
+                    'how_related': RelatedTickets.Related.RELATED
+                }
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['to_ticket_id'][0] == 'self_not_related'
