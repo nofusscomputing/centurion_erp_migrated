@@ -127,6 +127,16 @@ class RelatedTicketModelSerializer(RelatedTicketBaseSerializer):
                 code = 'duplicate_entry'
             )
 
+
+        if attrs['to_ticket_id'].id == attrs['from_ticket_id'].id:
+
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'to_ticket_id': f"Ticket can not be assigned to itself as related"
+                },
+                code = 'self_not_related'
+            )
+
         return attrs
 
 
