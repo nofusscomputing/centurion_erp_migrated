@@ -315,8 +315,6 @@ class Project(ProjectCommonFieldsName):
 
         all_tickets = Ticket.objects.filter(
             project = self.id,
-        ).exclude(
-            status__in = ticket_status_closed
         )
 
         closed_tickets = Ticket.objects.filter(
