@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from .ticket_enum_values import TicketValues
 
 from access.models import TenancyObject
@@ -65,6 +67,35 @@ class TicketLinkedItem(TenancyObject):
         null = False,
         verbose_name = 'Item ID',
     )
+
+    table_fields: list = [
+        'ticket',
+        'status_badge',
+        'created'
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse(
+                "v2:_api_v2_ticket_linked_item-detail",
+                request=request,
+                kwargs={
+                    'ticket_id': self.ticket.id,
+                    'pk': self.id
+                }
+            )
+
+        return reverse(
+            "v2:_api_v2_ticket_linked_item-detail",
+            kwargs={
+                'ticket_id': self.ticket.id,
+                'pk': self.id
+            }
+        )
+
 
     def __str__(self) -> str:
 

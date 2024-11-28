@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models import Q, signals, Sum
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from .ticket_enum_values import TicketValues
 
 from access.fields import AutoCreatedField, AutoLastModifiedField
@@ -559,6 +561,18 @@ class Ticket(
 
     # ?? date_edit date of last edit
 
+    # this model uses a custom page layout
+    page_layout: list = []
+
+    table_fields: list = [
+        'id',
+        'title',
+        'status_badge',
+        'opened_by',
+        'organization',
+        'created'
+    ]
+
     def __str__(self):
 
         return self.title
@@ -679,6 +693,26 @@ class Ticket(
         return str(duration)
 
 
+    def get_url( self, request = None ) -> str:
+
+        ticket_type = str(self.get_ticket_type_display()).lower().replace(' ', '_')
+
+        kwargs = self.get_url_kwargs()
+
+        if ticket_type == 'project_task':
+
+            kwargs.update({
+                'project_id': self.project.id
+            })
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", request=request, kwargs = kwargs )
+
+        return reverse(f"v2:_api_v2_ticket_{ticket_type}-detail", kwargs = kwargs )
+
+
     @property
     def linked_items(self) -> list(dict()):
         """Fetch items linked to ticket
@@ -690,15 +724,17 @@ class Ticket(
 
         linked_items: list = []
 
-        from core.models.ticket.ticket_linked_items import TicketLinkedItem
+        if self.pk:
 
-        items = TicketLinkedItem.objects.filter(
-            ticket = self
-        )
+            from core.models.ticket.ticket_linked_items import TicketLinkedItem
 
-        if len(items) > 0:
+            items = TicketLinkedItem.objects.filter(
+                ticket = self
+            )
 
-            linked_items = items
+            if len(items) > 0:
+
+                linked_items = items
 
         return linked_items
 
@@ -869,6 +905,29 @@ class Ticket(
 
         signals.m2m_changed.connect(self.action_comment_ticket_users, Ticket.subscribed_users.through)
         signals.m2m_changed.connect(self.action_comment_ticket_teams, Ticket.subscribed_teams.through)
+
+
+
+    @property
+    def status_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.status:
+
+            text:str = str(self.get_status_display())
+            style:str = text.replace('(', '')
+            style = style.replace(')', '')
+            style = style.replace(' ', '_')
+
+        return Badge(
+            icon_name = f'ticket_status_{style.lower()}',
+            icon_style = f'ticket-status-icon ticket-status-icon-{style.lower()}',
+            text = text,
+            text_style = f'ticket-status-text badge-text-ticket_status-{style.lower()}',
+        )
 
 
     def ticketassigned(self, instance) -> bool:
@@ -1066,6 +1125,11 @@ class RelatedTickets(TenancyObject):
             'id'
         ]
 
+        verbose_name = 'Related Ticket'
+
+        verbose_name_plural = 'Related Tickets'
+
+
     class Related(models.IntegerChoices):
         RELATED = '1', 'Related'
 
@@ -1111,6 +1175,48 @@ class RelatedTickets(TenancyObject):
         related_name = 'to_ticket_id',
         verbose_name = 'Related Ticket',
     )
+
+    table_fields: list = [
+        'id',
+        'title',
+        'status_badge',
+        'opened_by',
+        'organization',
+        'created'
+    ]
+
+
+    def get_url( self, ticket_id, request = None ) -> str:
+
+        if not ticket_id:
+
+            return ''
+
+        if request:
+
+            return reverse(
+                "v2:_api_v2_ticket_related-detail",
+                request = request,
+                kwargs={
+                    'ticket_id': ticket_id,
+                    'pk': self.id
+                }
+            )
+
+        return reverse(
+                "v2:_api_v2_ticket_related-detail",
+                kwargs={
+                    'ticket_id': ticket_id,
+                    'pk': self.id
+                }
+            )
+
+
+    def __str__(self):
+
+        # return '#' + str( self.id )
+
+        return '#'
 
 
     @property

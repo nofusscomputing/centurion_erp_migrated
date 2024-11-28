@@ -2,26 +2,78 @@
 # docker exec -ti centurion-erp python manage.py createsuperuser
 version: "3.2"
 
+x-app: &centurion
+  image: centurion-erp:dev
+  restart: always
+  network_mode: "host"
+  # networks:
+  #   - default
+  volumes:
+    - ./volumes/data:/data:rw
+    - ../app/db.sqlite3:/data/db.sqlite3:rw
+    - ./volumes/etc/itsm:/etc/itsm
+    - ./settings.tmp.py:/etc/itsm/settings.py:ro
+
 services:
 
-  centurion-erp:
-    image: centurion-erp:dev
+
+
+  centurion:
+    <<: *centurion
+    container_name: centurion-erp
     build:
       context: ../.
       dockerfile: dockerfile
-    container_name: centurion-erp
     hostname: centurion-erp
-    ports:
-      - "8002:8000"
-    volumes:
-      - ./volumes/data:/data:rw
-      - ./volumes/etc/itsm:/etc/itsm:ro
+    # ports:
+    #   - "8002:8000"
+
+
+
+  worker:
+    <<: *centurion
+    container_name: centurion-worker
+    environment:
+      - IS_WORKER=true
+    hostname: centurion-worker
+    depends_on:
+      - centurion
+      - rabbitmq
+
+
+
+  centurion-ui:
+    image: ghcr.io/nofusscomputing/centurion-erp-ui:dev
     restart: always
-    networks:
-      - default
-      - mariadb
+    container_name: centurion-ui
+    environment:
+      - API_URL=http://127.0.0.1:8000/api/v2
+    hostname: centurion-ui
+    network_mode: "host"
+    depends_on:
+      - centurion
 
 
-networks:
-  mariadb:
-    external: true
+
+  rabbitmq:
+    image: rabbitmq:4.0.3-management-alpine
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+      - RABBITMQ_DEFAULT_VHOST=itsm
+    # ports:
+    #   - "5672:5672"
+    #   - "15672:15672"
+    depends_on:
+      - centurion
+    network_mode: "host"
+    # networks:
+    #   - default
+
+
+
+# networks:
+#   default:
+#     driver: bridge
+#     external: true

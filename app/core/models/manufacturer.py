@@ -14,14 +14,16 @@ class ManufacturerCommonFields(models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of manufacturer',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
 
-    modified = AutoCreatedField()
+    modified = AutoLastModifiedField()
 
 
 
@@ -34,17 +36,56 @@ class Manufacturer(TenancyObject, ManufacturerCommonFields, SaveHistory):
             'name'
         ]
 
+        verbose_name = 'Manufacturer'
+
         verbose_name_plural = 'Manufacturers'
 
 
     name = models.CharField(
         blank = False,
+        help_text = 'Name of this manufacturer',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
 
     slug = AutoSlugField()
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def clean(self):

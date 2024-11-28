@@ -1,6 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework import generics, viewsets
 
 from access.mixin import OrganizationMixin
@@ -11,7 +13,7 @@ from api.views.mixin import OrganizationPermissionAPI
 from itam.models.software import Software
 
 
-
+@extend_schema(deprecated = True)
 class SoftwareViewSet(OrganizationMixin, viewsets.ModelViewSet):
 
     permission_classes = [

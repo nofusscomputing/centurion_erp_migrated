@@ -1,9 +1,15 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
+
+from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import Team, TenancyObject
+
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device
 
@@ -24,9 +30,11 @@ class ClusterType(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster type',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     name = models.CharField(
@@ -54,6 +62,58 @@ class ClusterType(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
     def __str__(self):
 
         return self.name
@@ -75,9 +135,11 @@ class Cluster(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID for this cluster',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     parent_cluster = models.ForeignKey(
@@ -86,7 +148,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Parent Cluster for this cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Parent Cluster',
     )
 
@@ -96,7 +158,7 @@ class Cluster(TenancyObject):
         default = None,
         help_text = 'Type of Cluster',
         null = True,
-        on_delete = models.CASCADE,
+        on_delete = models.SET_DEFAULT,
         verbose_name = 'Cluster Type',
     )
 
@@ -141,6 +203,99 @@ class Cluster(TenancyObject):
     modified = AutoLastModifiedField()
 
 
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'parent_cluster',
+                        'cluster_type',
+                        'name',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'resources',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "layout": "double",
+                    "name": "Nodes / Devices",
+                    "left": [
+                        'nodes',
+                    ],
+                    "right": [
+                        'devices',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'parent_cluster',
+        'cluster_type',
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_cluster-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_cluster-detail", kwargs={'pk': self.id})
+
+
     @property
     def rendered_config(self):
 
@@ -178,3 +333,10 @@ class Cluster(TenancyObject):
     def __str__(self):
 
         return self.name
+
+
+
+@receiver(post_delete, sender=Cluster, dispatch_uid='cluster_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='cluster_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.CLUSTER)

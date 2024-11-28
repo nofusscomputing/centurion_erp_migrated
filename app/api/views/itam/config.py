@@ -1,11 +1,14 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
+from drf_spectacular.utils import extend_schema
+
 from itam.models.device import Device
 
 from rest_framework import views
 from rest_framework.response import Response
 
 
+@extend_schema( deprecated = True )
 class View(views.APIView):
 
     def get(self, request, slug):

@@ -12,9 +12,11 @@ class AppSettingsCommonFields(models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'Id of this setting',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     slug = None
@@ -38,44 +40,60 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         ValidationError: When software set as global and no organization has been specified 
     """
 
+    class Meta:
+
+        ordering = [
+            'owner_organization'
+        ]
+
+        verbose_name = 'App Settings'
+
+        verbose_name_plural = 'App Settings'
+
+
     owner_organization = models.ForeignKey(
         Organization,
-        on_delete=models.CASCADE,
         blank= True,
+        help_text = 'Organization the settings belong to',
         default = None,
         null = True,
-        help_text = 'Organization the settings belong to',
+        on_delete=models.SET_DEFAULT,
         related_name = 'owner_organization'
     )
 
     device_model_is_global = models.BooleanField (
-        verbose_name = 'All Device Models are global',
         blank= False,
+        help_text = 'Should Device Models be global',
         default = False,
+        verbose_name = 'Global Device Models',
     )
 
     device_type_is_global = models.BooleanField (
-        verbose_name = 'All Device Types is global',
         blank= False,
+        help_text = 'Should Device Types be global',
         default = False,
+        verbose_name = 'Global Device Types',
     )
 
     manufacturer_is_global = models.BooleanField (
-        verbose_name = 'All Manufacturer / Publishers are global',
         blank= False,
+        help_text = 'Should Manufacturers / Publishers be global',
         default = False,
+        verbose_name = 'Global Manufacturers / Publishers',
     )
 
     software_is_global = models.BooleanField (
-        verbose_name = 'All Software is global',
         blank= False,
         default = False,
+        help_text = 'Should Software be global',
+        verbose_name = 'Global Software',
     )
 
     software_categories_is_global = models.BooleanField (
-        verbose_name = 'All Software Categories are global',
         blank= False,
         default = False,
+        help_text = 'Should Software be global',
+        verbose_name = 'Global Software Categories',
     )
 
     global_organization = models.ForeignKey(
@@ -83,10 +101,42 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
         on_delete=models.SET_DEFAULT,
         blank= True,
         default = None,
-        null = True,
         help_text = 'Organization global items will be created in',
-        related_name = 'global_organization'
+        null = True,
+        related_name = 'global_organization',
+        verbose_name = 'Global Organization'
     )
+
+    table_fields: list = []
+
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'global_organization',
+                    ],
+                    "right": [
+                        'device_model_is_global',
+                        'device_type_is_global',
+                        'manufacturer_is_global',
+                        'software_is_global',
+                        'software_categories_is_global',
+
+                    ]
+                }
+            ]
+        }
+    ]
+
+
+    def get_organization(self):
+
+        return self.global_organization
+
 
     def clean(self):
         from django.core.exceptions import ValidationError

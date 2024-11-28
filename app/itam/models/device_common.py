@@ -10,9 +10,11 @@ class DeviceCommonFields(TenancyObject, models.Model):
         abstract = True
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this item',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     created = AutoCreatedField()
@@ -28,8 +30,10 @@ class DeviceCommonFieldsName(DeviceCommonFields):
 
     name = models.CharField(
         blank = False,
+        help_text = 'The items name',
         max_length = 50,
         unique = True,
+        verbose_name = 'Name'
     )
 
     slug = AutoSlugField()

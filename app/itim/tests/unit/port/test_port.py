@@ -40,3 +40,11 @@ class PortModel(
             organization = self.organization,
             number = 2,
         )
+
+    @pytest.mark.skip(reason = 'to be written')
+    def test_field_entry_invalid_port_to_high(self):
+        """Test Model Field
+
+        Ensure that a validation error is thrown and that is displays to the user
+        """
+        pass

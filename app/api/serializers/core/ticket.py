@@ -5,6 +5,7 @@ from rest_framework.fields import empty
 
 from api.serializers.core.ticket_comment import TicketCommentSerializer
 
+from core import exceptions as centurion_exception
 from core.forms.validate_ticket import TicketValidation
 from core.models.ticket.ticket import Ticket
 
@@ -54,7 +55,7 @@ class TicketSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:' + view_name + '-detail',
+                'v1:' + view_name + '-detail',
                 kwargs = kwargs
             )
         )
@@ -100,7 +101,7 @@ class TicketSerializer(
 
         return request.build_absolute_uri(
             reverse(
-                'API:' + view_name + '-list',
+                'v1:' + view_name + '-list',
                 kwargs = kwargs
             )
         )
@@ -172,9 +173,9 @@ class TicketSerializer(
 
             self._ticket_type = str(self.fields['ticket_type'].choices[self._context['view']._ticket_type_value]).lower().replace(' ', '_')
 
-            is_valid = self.validate_ticket()
-
             self.validated_data['ticket_type'] = int(self._context['view']._ticket_type_value)
+
+            is_valid = self.validate_ticket()
 
             if self.instance is None:
 
@@ -188,7 +189,7 @@ class TicketSerializer(
         
         except Exception as unhandled_exception:
 
-            serializers.ParseError( 
+            centurion_exception.ParseError( 
                 detail=f"Server encountered an error during validation, Traceback: {unhandled_exception.with_traceback}"
             )
 

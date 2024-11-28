@@ -4,14 +4,21 @@ import re
 from datetime import timedelta
 
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
+
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import TenancyObject
 
 from app.helpers.merge_software import merge_software
 
+from core.classes.icon import Icon
 from core.mixin.history_save import SaveHistory
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device_common import DeviceCommonFields, DeviceCommonFieldsName
 from itam.models.device_models import DeviceModel
@@ -27,7 +34,49 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'name'
+        ]
+
+        verbose_name = 'Device Type'
+
         verbose_name_plural = 'Device Types'
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def clean(self):
@@ -50,6 +99,13 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
 
     class Meta:
+
+        ordering = [
+            'name',
+            'organization'
+        ]
+
+        verbose_name = 'Device'
 
         verbose_name_plural = 'Devices'
 
@@ -74,7 +130,10 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self)):
 
-            raise ValidationError(f'UUID must be formated to match regex {str(pattern)}')
+            raise serializers.ValidationError(
+                f'UUID must be formated to match regex {str(pattern)}',
+                code = 'invalid_uuid'
+            )
 
 
     def validate_hostname_format(self):
@@ -83,73 +142,79 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         if not re.match(pattern, str(self).lower()):
 
-            raise ValidationError(
+            raise serializers.ValidationError(
                 '''[RFC1035 2.3.1] A hostname must start with a letter, end with a letter or digit,
-                and have as interior characters only letters, digits, and hyphen.'''
+                and have as interior characters only letters, digits, and hyphen.''',
+                code = 'invalid_hostname'
             )
 
 
     name = models.CharField(
         blank = False,
+        help_text = 'Hostname of this device',
         max_length = 50,
         unique = True,
-        validators = [ validate_hostname_format ]
+        validators = [ validate_hostname_format ],
+        verbose_name = 'Name'
     )
 
     serial_number = models.CharField(
-        verbose_name = 'Serial Number',
-        max_length = 50,
-        default = None,
-        null = True,
         blank = True,
-        unique = True,
+        default = None,
         help_text = 'Serial number of the device.',
+        max_length = 50,
+        null = True,
+        unique = True,
+        verbose_name = 'Serial Number',
         
     )
 
     uuid = models.CharField(
-        verbose_name = 'UUID',
-        max_length = 50,
-        default = None,
-        null = True,
         blank = True,
-        unique = True,
+        default = None,
         help_text = 'System GUID/UUID.',
-        validators = [ validate_uuid_format ]
+        max_length = 50,
+        null = True,
+        unique = True,
+        validators = [ validate_uuid_format ],
+        verbose_name = 'UUID'
     )
 
     device_model = models.ForeignKey(
         DeviceModel,
-        on_delete=models.CASCADE,
-        default = None,
-        null = True,
         blank= True,
+        default = None,
         help_text = 'Model of the device.',
+        null = True,
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Model'
     )
 
     device_type = models.ForeignKey(
         DeviceType,
-        on_delete=models.CASCADE,
-        default = None,
-        null = True,
         blank= True,
+        default = None,
         help_text = 'Type of device.',
+        null = True,
+        on_delete=models.SET_DEFAULT,
+        verbose_name = 'Type'
     )
 
 
     config = models.JSONField(
         blank = True,
         default = None,
+        help_text = 'Configuration for this device',
         null = True,
         validators=[ validate_config_keys_not_reserved ],
         verbose_name = 'Host Configuration',
-        help_text = 'Configuration for this device'
     )
 
     inventorydate = models.DateTimeField(
-        verbose_name = 'Last Inventory Date',
-        null = True,
         blank = True,
+        help_text = 'Date and time of the last inventory',
+        null = True,
+        verbose_name = 'Last Inventory Date',
     )
 
     is_virtual = models.BooleanField(
@@ -159,6 +224,99 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         null = False,
         verbose_name = 'Is Virtual',
     )
+
+    table_fields: list = [
+        'status_icon',
+        "name",
+        "device_model",
+        "device_type",
+        "organization",
+        "created",
+        "modified",
+        "model",
+        "nbsp"
+    ]
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'device_type',
+                        'device_model',
+                        'name',
+                        'serial_number',
+                        'uuid',
+                        'inventorydate',
+                        'created',
+                        'modified',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'is_virtual',
+                        'is_global',
+                    ]
+                },
+                {
+                    "layout": "table",
+                    "name": "Operating System",
+                    "field": "operating_system",
+                },
+                {
+                    "layout": "table",
+                    "name": "Dependent Services",
+                    "field": "service",
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Software",
+            "slug": "software",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "software",
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "tickets",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ],
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+        {
+            "name": "Config Management",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        }
+    ]
 
 
     def save(
@@ -208,6 +366,23 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         return self.name
 
+
+
+    @property
+    def status_icon(self) -> list([Icon]):
+
+        icons: list(Icon) = []
+
+        icons += [
+            Icon(
+                name = f'device_status_{self.status.lower()}',
+                style = f'icon-device-status-{self.status.lower()}'
+            )
+        ]
+
+        return icons
+
+
     @property
     def status(self) -> str:
         """ Fetch Device status
@@ -226,26 +401,27 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
         one = (now() - check_date).days
 
+        status: str = 'UNK'
+
         if (now() - check_date).days >= 0 and (now() - check_date).days <= 1:
 
-            return 'OK'
+            status = 'OK'
 
         elif (now() - check_date).days >= 2 and (now() - check_date).days < 3:
 
-            return 'WARN'
+            status = 'WARN'
 
         elif (now() - check_date).days >= 3:
 
-            return 'BAD'
+            status = 'BAD'
 
-        else:
-
-            return 'UNK'
+        return status
 
 
-    def get_configuration(self, id):
+    @property
+    def get_configuration(self):
 
-        softwares = DeviceSoftware.objects.filter(device=id)
+        softwares = DeviceSoftware.objects.filter(device=self.id)
 
         config = {
             "software": []
@@ -323,6 +499,15 @@ class Device(DeviceCommonFieldsName, SaveHistory):
         return config
 
 
+
+@receiver(post_delete, sender=Device, dispatch_uid='device_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='device_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.DEVICE)
+
+
+
+
 class DeviceSoftware(DeviceCommonFields, SaveHistory):
     """ A way for the device owner to configure software to install/remove """
 
@@ -332,60 +517,115 @@ class DeviceSoftware(DeviceCommonFields, SaveHistory):
             'software'
         ]
 
+        verbose_name = 'Device Software'
+
         verbose_name_plural = 'Device Softwares'
 
 
 
-    class Actions(models.TextChoices):
-        INSTALL = '1', 'Install'
-        REMOVE = '0', 'Remove'
+    class Actions(models.IntegerChoices):
+        INSTALL = 1, 'Install'
+        REMOVE = 0, 'Remove'
 
 
     device = models.ForeignKey(
         Device,
+        blank= False,
+        help_text = 'Device this software is on',
         on_delete=models.CASCADE,
         null = False,
-        blank= False
+        verbose_name = 'Device'
     )
 
     software = models.ForeignKey(
         Software,
-        on_delete=models.CASCADE,
+        blank= False,
+        help_text = 'Software Name',
         null = False,
-        blank= False
+        on_delete=models.CASCADE,
+        verbose_name = 'Software'
     )
 
-    action = models.CharField(
-        max_length=1,
+    action = models.IntegerField(
+        blank = True,
         choices=Actions,
         default=None,
+        help_text = 'Action to perform',
         null=True,
-        blank = True,
+        verbose_name = 'Action',
     )
 
     version = models.ForeignKey(
         SoftwareVersion,
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Version to install',
+        on_delete=models.CASCADE,
         null = True,
-        blank= True
+        verbose_name = 'Desired Version'
     )
 
 
     installedversion = models.ForeignKey(
         SoftwareVersion,
-        related_name = 'installedversion',
-        on_delete=models.CASCADE,
+        blank= True,
         default = None,
+        help_text = 'Version that is installed',
         null = True,
-        blank= True
+        on_delete=models.CASCADE,
+        related_name = 'installedversion',
+        verbose_name = 'Installed Version'
     )
 
     installed = models.DateTimeField(
-        verbose_name = 'Install Date',
+        blank = True,
+        help_text = 'Date detected as installed',
         null = True,
-        blank = True
+        verbose_name = 'Date Installed'
     )
+
+
+    page_layout: list = []
+
+
+    table_fields: list = [
+        "nbsp",
+        "software",
+        "category",
+        "action_badge",
+        "version",
+        "installedversion",
+        "installed",
+        "nbsp"
+    ]
+
+
+    @property
+    def action_badge(self):
+
+        from core.classes.badge import Badge
+
+        text:str = 'Add'
+
+        if self.action:
+
+            text = self.get_action_display()
+
+        return Badge(
+            icon_name = f'action_{text.lower()}',
+            icon_style = f'badge-icon-action-{text.lower()}',
+            text = text,
+            text_style = f'badge-text-action-{text.lower()}',
+            url = '_self',
+        )
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.id
+        }
 
 
     @property
@@ -411,39 +651,82 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
 
     class Meta:
 
+        ordering = [
+            'device',
+        ]
+
+        verbose_name = 'Device Operating System'
+
         verbose_name_plural = 'Device Operating Systems'
 
 
     device = models.ForeignKey(
         Device,
+        blank = False,
+        help_text = 'Device for the Operating System',
         on_delete = models.CASCADE,
         null = False,
-        blank = False,
-        
+        verbose_name = 'Device',
+        unique = True
     )
 
     operating_system_version = models.ForeignKey(
         OperatingSystemVersion,
-        verbose_name = 'Operating System/Version',
-        on_delete = models.CASCADE,
+        blank = False,
+        help_text = 'Operating system version',
         null = False,
-        blank = False
+        on_delete = models.CASCADE,
+        verbose_name = 'Operating System/Version',
         
     )
 
     version = models.CharField(
-        verbose_name = 'Installed Version',
+        blank = False,
+        help_text = 'Version detected as installed',
         max_length = 15,
         null = False,
-        blank = False,
+        verbose_name = 'Installed Version',
     )
 
     installdate = models.DateTimeField(
-        verbose_name = 'Install Date',
-        null = True,
         blank = True,
         default = None,
+        help_text = 'Date and time detected as installed',
+        null = True,
+        verbose_name = 'Install Date',
     )
+
+    page_layout: list = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        'operating_system_version',
+                        'version',
+                        'installdate'
+                    ],
+                }
+            ]
+        }
+    ]
+
+    table_fields: list = [
+        'device',
+        'operating_system_version',
+        'version',
+        'installdate',
+    ]
+
+
+    def get_url_kwargs(self) -> dict:
+
+        return {
+            'device_id': self.device.id,
+            'pk': self.pk
+        }
 
 
     @property

@@ -1,5 +1,7 @@
 from django.utils.safestring import mark_safe
 
+from drf_spectacular.utils import extend_schema
+
 from rest_framework import generics, permissions, routers, views
 # from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
@@ -7,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 
-
+@extend_schema(deprecated=True)
 class Index(views.APIView):
 
     permission_classes = [
@@ -29,7 +31,7 @@ class Index(views.APIView):
     def get(self, request, *args, **kwargs):
 
         body: dict = {
-            'requests': reverse('API:_api_assistance_request-list', request=request)
+            'requests': reverse('v1:_api_assistance_request-list', request=request)
         }
 
         return Response(body)

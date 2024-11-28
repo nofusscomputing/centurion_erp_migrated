@@ -64,14 +64,9 @@ router.register('settings/ticket_comment_categories', ticket_comment_categories.
 router.register('software', software.SoftwareViewSet, basename='software')
 
 
-
 urlpatterns = [
 
     path("assistance", assistance.index.Index.as_view(), name="_api_assistance"),
-
-    #
-    # Sof Old Paths to be refactored
-    #
 
     path("config/<slug:slug>/", itam_config.View.as_view(), name="_api_device_config"),
 

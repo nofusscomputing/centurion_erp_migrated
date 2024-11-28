@@ -2,10 +2,16 @@ import re
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 from django.forms import ValidationError
+
+from rest_framework.reverse import reverse
 
 from access.fields import *
 from access.models import Team, TenancyObject
+
+from core.signal.ticket_linked_item_delete import TicketLinkedItem, deleted_model
 
 from itam.models.device import Device
 
@@ -23,9 +29,9 @@ class Port(TenancyObject):
             'protocol',
         ]
 
-        verbose_name = "Protocol"
+        verbose_name = "Port"
 
-        verbose_name_plural = "Protocols"
+        verbose_name_plural = "Ports"
 
 
     class Protocol(models.TextChoices):
@@ -40,9 +46,11 @@ class Port(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'ID of this port',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     number = models.IntegerField(
@@ -65,7 +73,6 @@ class Port(TenancyObject):
     protocol = models.CharField(
         blank = False,
         choices=Protocol.choices,
-        default = Protocol.TCP,
         help_text = 'Layer 4 Network Protocol',
         max_length = 3,
         verbose_name = 'Protocol',
@@ -74,6 +81,53 @@ class Port(TenancyObject):
     created = AutoCreatedField()
 
     modified = AutoLastModifiedField()
+
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'display_name',
+                        'description',
+                        'is_global',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+            ]
+        },
+        {
+            "name": "Services",
+            "slug": "services",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "services",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'display_name',
+        'organization',
+        'created',
+        'modified'
+    ]
 
 
     def __str__(self):
@@ -109,9 +163,11 @@ class Service(TenancyObject):
 
 
     id = models.AutoField(
+        blank=False,
+        help_text = 'Id for this Service',
         primary_key=True,
         unique=True,
-        blank=False
+        verbose_name = 'ID'
     )
 
     is_template = models.BooleanField(
@@ -199,26 +255,125 @@ class Service(TenancyObject):
 
     modified = AutoLastModifiedField()
 
+
+    page_layout: dict = [
+        {
+            "name": "Details",
+            "slug": "details",
+            "sections": [
+                {
+                    "layout": "double",
+                    "left": [
+                        'organization',
+                        'name',
+                        'config_key_variable',
+                        'template',
+                        'is_template',
+                    ],
+                    "right": [
+                        'model_notes',
+                        'created',
+                        'modified',
+                    ]
+                },
+                {
+                    "name": "cluster / Device",
+                    "layout": "double",
+                    "left": [
+                        'cluster',
+                    ],
+                    "right": [
+                        'device',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'config',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'dependent_service'
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "name": "Ports",
+                    "fields": [
+                        'port'
+                    ],
+                }
+            ]
+        },
+        {
+            "name": "Rendered Config",
+            "slug": "config_management",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        "rendered_config",
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Tickets",
+            "slug": "ticket",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "tickets",
+                }
+            ]
+        },
+        {
+            "name": "Notes",
+            "slug": "notes",
+            "sections": []
+        },
+    ]
+
+
+    table_fields: list = [
+        'name',
+        'deployed_to'
+        'organization',
+        'created',
+        'modified'
+    ]
+
+
+    def get_url( self, request = None ) -> str:
+
+        if request:
+
+            return reverse("v2:_api_v2_service-detail", request=request, kwargs={'pk': self.id})
+
+        return reverse("v2:_api_v2_service-detail", kwargs={'pk': self.id})
+
+
     @property
     def config_variables(self):
 
-        if self.is_template:
+        config: dict = {}
 
-            return self.config
 
         if self.template:
 
-            template_config: dict = Service.objects.get(id=self.template.id).config
+            if self.template.config:
 
-            template_config.update(self.config)
+                config.update(self.template.config)
 
-            return template_config
 
-        else:
+        if self.config:
 
-            return self.config
+            config.update(self.config)
 
-        return None
+        return config
+
 
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
@@ -233,3 +388,10 @@ class Service(TenancyObject):
     def __str__(self):
 
         return self.name
+
+
+
+@receiver(post_delete, sender=Service, dispatch_uid='service_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='service_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.SERVICE)
