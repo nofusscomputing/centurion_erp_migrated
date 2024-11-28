@@ -1,3 +1,614 @@
+## 1.4.0 (2024-11-28)
+
+### feat
+
+- **project_management**: add project completed field
+- **api**: Implement Sanity error handling for uncaught exceptions
+- **itam**: Split device software serializer to include seperate software installs serializer
+- **itam**: Add Operating System Installs API v2 endpoint
+- **itam**: based off of the request kwaargs, adjust device serializer fields accordingly
+- **itam**: Add Software installs endpoint
+- **itim**: add cluster and device to Services in new UI
+- **config_management**: add hosts to new UI
+- **api**: add ticket icons
+- **itim**: Add nodes and devices to detail view
+- **api**: return_url to default to list view
+- **base**: move setting `SECURE_SSL_REDIRECT = True` to etc/settings
+- **base**: use senisible settings for SSL
+- **itam**: Add device operating system API v2 endpoint
+- **api**: Add return URL to metadata if model has attribute `get_url`
+- **config_management**: Add field child group count to table fields for groups
+- **itam**: Add `page_layout` to SoftwareVersion model
+- **itam**: Add `page_layout` to OperatingSystemVersion model
+- **project_management**: Add `page_layout` to Milestone model
+- **settings**: Add `page_layout` to AppSettings model
+- **access**: render team_name field as anchor
+- **api**: Support setting char field as an anchor field using .urls._self
+- **api**: Added abilty to specify a css class for markdown field
+- Add timezone support
+- **api**: Add a Common Model serializer to be inherited by all model serializers
+- **core**: new field type markdown
+- **core**: new field type char
+- **core**: add RElated Items choices to metadata
+- **itam**: Add Inventory API v2 endpoint
+- **api**: Depreciate API V1 endpoint /api/config
+- **core**: New signal for cleaning linked ticket items when the item is deleted
+- **core**: Show milestone using base serializer for all ticket types
+- **core**: Show project using base serializer for all ticket types
+- **core**: Add Parse error to exceptions
+- **core**: Ticket serializer to ensure user who opens ticket is subscribed to it
+- **core**: Ticket serializer to validate milestone
+- **core**: Ticket serializer to validate organization
+- **itim**: Add Project Task API v2 endpoint
+- **itim**: Add Problem Ticket API v2 endpoint
+- **itim**: Add Incident Ticket API v2 endpoint
+- **itim**: Add Change Ticket API v2 endpoint
+- **api**: Depreciate v1 API Endpoint Assistance
+- **api**: Depreciate v1 API Endpoint Request Ticket
+- **api**: Depreciate v1 API Endpoint Assistance
+- **api**: Depreciate v1 API Endpoint Ticket Comments
+- **api**: Depreciate v1 API Endpoint Ticket Comment Categories
+- **api**: Depreciate v1 API Endpoint Ticket Categories
+- **core**: Ensure Related Tickets validate against duplicate entries
+- **core**: Add MethodNot Allowed to Centurion exceptions
+- **core**: Determine serializer from action and user permissions for Ticket Comments
+- **core**: Add custom exception class
+- **core**: Ensure ticket comment Serializer validates for existance of comment_type and ticket id
+- **core**: Ensure ticket comment Serializer is picked based off of comment_type
+- **core**: Ensure that ticket linked item validates if ticket supplied
+- **core**: Ensure that ticket comment category cant assign self as parent
+- **core**: Ensure that ticket category cant assign self as parent
+- **core**: Add Ticket Comment Category API v2 endpoint
+- **core**: Add Item Ticket API v2 endpoint
+- **core**: Add Related Ticket API v2 endpoint
+- **core**: Add Ticket Linked Item API v2 endpoint
+- **core**: Add url function to Ticket Linked Items model
+- **itim**: Add url function to Service model
+- **itim**: Add url function to Cluster model
+- **itam**: Add url function to Software model
+- **itam**: Add url function to Operating System model
+- **itam**: Add url function to Device model
+- **config_management**: Add url function to Config Groups model
+- **core**: Add Ticket Comment API v2 endpoint
+- **core**: Add Ticket Category API v2 endpoint
+- **assistance**: Add Request Ticket API v2 endpoint
+- **api**: Custom exception UnknownTicketType
+- **core**: Add Base Ticket Serializer and ViewSet
+- **api**: Setup API to be correctly versioned
+- **settings**: Add get_organization function to app settings model
+- **settings**: Add Celery Task Logs API v2 endpoint
+- **api**: Added ability to specify table fields within the viewset.
+- **settings**: Add User Settings API v2 endpoint
+- **settings**: Add App Settings API v2 endpoint
+- **project_management**: Add remaining Project base serializers for API v2
+- **project_management**: Project Validation for API v2
+- **project_management**: Add Project Type API v2 endpoint
+- **project_management**: Add Project State API v2 endpoint
+- **project_management**: Add Project Milestone API v2 endpoint
+- **project_management**: Add Project API v2 endpoint
+- **itim**: Port Serializer Validations
+- **itim**: Service Serializer Validations
+- **itim**: Ensure cluster cant assign itself as parent on api v2 endpoint
+- **itim**: Add Port API v2 endpoint
+- **itim**: Add Cluster API v2 endpoint
+- **itim**: Add Cluster Type API v2 endpoint
+- **itim**: Add Service API v2 endpoint
+- **itam**: Depreciate API v1 Software Endpoint
+- **core**: Add Operating System Version API v2 endpoint
+- **core**: Add Operating System API v2 endpoint
+- **core**: Add External Link API v2 endpoint
+- **itam**: Add Device Software API v2 endpoint
+- **itam**: Add Device API v2 endpoint
+- **itam**: Add Device Type API v2 endpoint
+- **itam**: Add Software Version API v2 endpoint
+- **itam**: Depreciate API v1 device endpoint
+- **itam**: Add Software API v2 endpoint
+- **itam**: Add Device Model API v2 endpoint
+- **itam**: Add Device API v2 endpoint
+- **itim**: Add Service Notes API v2 endpoint
+- **core**: Add Software Notes API v2 endpoint
+- **core**: Add Manufacturer API v2 endpoint
+- **itim**: Add Service base serializer
+- **itam**: Add operating system Base Serializer
+- **config_management**: Add Notes API v2 endpoint
+- **config_management**: Add History API v2 endpoint
+- **config_management**: Depreciate API v1 config endpoint
+- **config_management**: Add config groups to config api endpoint
+- **config_management**: Add Device Base Serializer
+- **itam**: Add Software Version Base Serializer
+- **itam**: Add Software Base Serializer
+- **config_management**: Add Config Group Software API v2 endpoint
+- **config_management**: Add Config Group API v2 endpoint
+- **assistance**: Ensure Knowledge Base Category cant assign self as parent category
+- **assistance**: Knowledge Base Serializer Validation method added
+- **assistance**: Add Knowledge Base Category API v2 endpoint
+- **assistance**: Add Knowledge Base API v2 endpoint
+- **api**: Depreciate API v1 permission endpoint
+- **access**: Add Team Users API endpoint
+- **access**: Depreciate Team API v1 endpoint
+- **access**: Depreciate Organization API v1 endpoint
+- **access**: Add Organization API endpoint
+- **base**: Add Team API endpoint
+- **base**: Add Permission API endpoint
+- **base**: Add Content Type API endpoint
+- **api**: Add Read Only abstract ViewSet
+- **base**: Add user API endpoint
+- **api**: add v2 endpoint
+- **project_management**: Add attribute table_fields to Project Type model
+- **project_management**: Add attribute page_layout to Project Type model
+- **project_management**: Add attribute table_fields to Project State model
+- **project_management**: Add attribute page_layout to Project State model
+- **project_management**: Add attribute page_layout to Project Milestone model
+- **project_management**: Add attribute table_fields to Project Milestone model
+- **project_management**: Add attribute table_fields to Project model
+- **project_management**: Add attribute page_layout to Project model
+- **itim**: Add attribute table_fields to Service model
+- **itim**: Add attribute page_layout to Service model
+- **itim**: Add attribute table_fields to Service Port model
+- **itim**: Add attribute page_layout to Service Port model
+- **itim**: Add attribute table_fields to Cluster Type model
+- **itim**: Add attribute page_layout to Cluster Type model
+- **itim**: Add attribute table_field to Cluster model
+- **itim**: Add attribute page_layout to Cluster model
+- **itam**: Add attribute table_field to Software Category model
+- **itam**: Add attribute table_fields to Software model
+- **itam**: Add attribute page_layout to Software model
+- **itam**: Add attribute table_fields to Operating System Version model
+- **itam**: Add attribute page_layout to Operating System Version model
+- **itam**: Add attribute table_field to Operating System model
+- **itam**: Add attribute page_layout to Operating System model
+- **itam**: Add attribute table_fields to "Device Type" model
+- **itam**: Add attribute page_layout to "Device Type" model
+- **itam**: Add attribute page_layout to "Device Software" model
+- **itam**: Add attribute table_fields to "Device Software" model
+- **itam**: Add attribute page_layout to "Device Software" model
+- **core**: Add attribute table_fields to Ticket Comment Category model
+- **core**: Add attribute page_layout to Ticket Comment Category model
+- **core**: Add attribute page_layout to Ticket comment model
+- **core**: Add attribute table_fields to Ticket Category model
+- **core**: Add attribute page_layout to Ticket Category model
+- **core**: Add attribute page_layout to Ticket model
+- **core**: Add attribute page_layout to Notes model
+- **core**: Add attribute table_fields to Manufacturer model
+- **core**: Add attribute page_layout to Manufacturer model
+- **access**: Add attribute table_fields to Config Group Software model
+- **access**: Add attribute page_layout to Config Group Software model
+- **access**: Add attribute table_fields to Config Groups model
+- **access**: Add attribute page_layout to Config Groups model
+- **access**: Add attribute table_fields to KB model
+- **access**: Add attribute page_layout to KB model
+- **access**: Add attribute table_fields to KB Category model
+- **access**: Add attribute page_layout to KB Category model
+- **access**: Add attribute table_fields to Team model
+- **access**: Add attribute page_layout to Team model
+- **core**: Add `table_fields` to Ticket Model
+- **itam**: Add v2 endpoint ITAM
+- **base**: Add User Serializer
+- **settings**: Add v2 endpoint Settings
+- **project_management**: Add v2 endpoint Project Management
+- **itim**: Add v2 endpoint ITIM
+- **config_management**: Add v2 endpoint Config Management
+- **assistance**: Add v2 endpoint Assistance
+- **access**: Add v2 endpoint Access
+- **itim**: Add `table_fields` to Service Model
+- **core**: Add `table_fields` to Device Software Model
+- **core**: Add `table_fields` to Notes Model
+- **core**: Add `table_fields` to History Model
+- **itam**: Add `table_fields` and `page_layout` to Device Model
+- **itam**: Add `table_fields` and `page_layout` to Device Model
+- **core**: Add `table_fields` to Ticket Linked Item
+- **core**: Add `table_fields` to Ticket Comment
+- **core**: Add `table_fields` to Ticket
+- **core**: Add attribute `staatus_badge` to ticket model
+- **access**: Add `table_fields` and `page_layout` to Organization
+- **api**: Add React UI metadata class
+- **api**: Add API v2 Endpoint
+- **api**: add API login template to use current login form
+- **api**: Update API template to use name Centurion
+- **itam**: Add category property to device software model
+- **itam**: Add action badge property to device software model
+- **itam**: Add status badge property to device model
+- **core**: Add a icon serializer field.
+- **core**: Add a badge serializer field.
+- **api**: Add common ViewSet class for inheritence
+- Add dependency django-cors-headers
+
+### Fixes
+
+- **project_management**: Correct All tickets query for calculating project completion
+- **core**: Prevent a ticket from being related to itself
+- **core**: when fetching ticket serializer set org=None
+- **core**: use the view pk to filter self out for ticket category update
+- **core**: Ensure for update of ticket the correct serializer is selected
+- **core**: dont exclude self for ticket comment category if not exists
+- **itam**: Add Operating System API v2 field typo
+- **core**: Enusure project_task serializer sets the project_id
+- **itam**: device os serializer not to show org and device
+- **core**: ticket comment to use model serializer for meta
+- **core**: add kwargs to notes
+- **core**: correct get_url function notes
+- **core**: add missing dep to notes
+- **access**: correct team users get_url
+- **access**: correct team get_url requires kwargs
+- **core**: correct notes get_url
+- **access**: correct team get_url
+- **core**: ticket model url requires kwargs
+- **core**: ticket comment model url requires kwargs
+- **core**: dont attempt to fetch org for ticket comment if no data supplied
+- **core**: Always set the organization to the ticket org when adding a ticket comment when org not specified.
+- **api**: Ensure queryset filters to actual item if pk is defined
+- **core**: Automagic fetch data for fields and only require ticket id to link item to ticket
+- **core**: Always set the organization to the ticket org when adding a ticket comment.
+- **config_management**: show parent groups only on index
+- **core**: Set notes _self url to empty val then attempt to sset
+- **core**: Ensure API v1 Ticket sets the ticket type prior to validation
+- **core**: Dont attempt to use ticket instance organization if it's a new ticket being created
+- **access**: Ensure organization is a mandatory field
+- **core**: Ensure ticket and comment bodies are set to required
+- **core**: correct navigation metadata
+- **task**: Ensure if inventory RX is a string, serialize it
+- **access**: Team User serializer not to capture exceptions
+- **access**: Team User team and user fields required when creating, don't use default value.
+- **access**: Team name required when creating, don't use default value.
+- **access**: Dont capture exceptions within team serializer
+- **core**: Ensure import user can set field `opened_by` when importing tickets
+- **core**: Correct duration slash command regex
+- **core**: When an item that may be linked to a ticket is deleted, remove the ticket link
+- **core**: Related ticket slash command requires model to be imported
+- **core**: correct missing or incomplete ticket model fields
+- **core**: When creating a ticket, by default give it a status of new
+- **core**: Ensure that when creating a ticket an organization is specified
+- **core**: Correct Ticket read-only fields
+- **core**: Correct inheritence order for ticket serializers
+- **core**: Ensure Organization can be set when creating a ticket
+- **core**: Ensure that when fetching ticket permission, spaces are replaced with '_'
+- **core**: Ticket serializer org validator to access correct data
+- **core**: Add project URL to all Ticket Types
+- **core**: Add Ticket Category URL to all Ticket Types
+- **core**: When obtaining ticket type use it's enum value
+- **core**: Ensure triage and import permissions are catered for Tickets
+- **core**: Ensure Ticket Linked Item slash command works for ticket comments
+- **core**: Only use Import Serializer on Ticket Comment Create if user has perms
+- **core**: Ensure related ticket slash command works for ticket comments
+- **api**: Ensure `METHOD_NOT_ALLOWED` exception is thrown
+- **core**: Correct serializer item field to be for view serializer ONLY
+- **config_management**: Correct ticket url in group serializer
+- **core**: Add missing ticket comment category url
+- **core**: Add missing permissions function to ticket viewset
+- **core**: Ensure that when checking linked ticket class name, spaces are replaced
+- **core**: Ensure item tickets class can have underscore in name
+- Dont attempt to access request within serializers when no context is present
+- **core**: Add Ticket Category API v2 endpoint to urls
+- **core**: Correct ticket comment model name
+- **api**: Ensure read-only fields have choices added to metadata
+- **api**: Correct inheritance order for ModelViewSet
+- **settings**: Populate user_settings Meta
+- **settings**: Populate app_settings Meta
+- **project_management**: For Project use a separate Import Serializer
+- **project_management**: use the post data dict for fetching edit organisation
+- **project_management**: use the post data or existing object for fetching edit organisation
+- **project_management**: Dont use init to adjust read_only_fields for project
+- **project_management**: if user not hav org specified dont attempt to access
+- **project_management**: for project serializer (api v1) ensure org is id
+- **itim**: Ensure service config from template is not gathered if not defined
+- **itim**: Ensure params passed to super when validating cluster
+- **itim**: Correct Device Service API v2 endpoint
+- **itam**: Don't attempt to include manufacturer in name for Device Model if not defined
+- **itam**: Ensure software version model has page_layout field
+- **core**: notes field must be mandatory
+- **core**: Add missing attributes name to history model
+- **config_management**: ensure validation uses software.id for config group software serializer
+- **config_management**: Config Groups Serializer Validation checks
+- **assistance**: Correct Knowledge Base Category serializer Validation
+- **itam**: Correct inventory validation response data
+- **itam**: Correct inventory api upload to use API exceptions instead of django base
+- **assistance**: Add missing fields `display_name` and `model_notes` to Knowledge Base Category serializer
+- **assistance**: correct KB category serializer validation
+- **assistance**: Correct Knowledge Base serialaizer Validation
+- **api**: on permission check error, return authorized=false
+- **access**: Add missing parameters to Team User fields
+- **api**: Add missing organization url routes
+- **access**: ensure org id is an integer during permission checks
+- **access**: if permission_required attribute doesn't exist during permission check, return empty list
+- Ensure all Model fields are created with attributes `help_text` and `verbose_name`
+- **api**: correct logic for permission check to use either queryset or get_queryset
+- **settings**: Add attribute table_fields to External Links model
+- **settings**: Add attribute page_layout to External Links model
+- **settings**: Add missing attribute Meta.verbose_name to External Links model
+- **settingns**: Add missing attribute Meta.ordering to External Links model
+- **itam**: Add missing attribute Meta.verbose_name to Software Category model
+- **itam**: Add missing attribute Meta.ordering to Software Category model
+- **itam**: Add missing attribute Meta.verbose_name to Software model
+- **itam**: Add missing attribute Meta.ordering to Software model
+- **itam**: Add missing attribute Meta.verbose_name to Operating System Version model
+- **itam**: Add missing attribute Meta.ordering to Operating System Version model
+- **itam**: Add missing attribute Meta.verbose_name to Operating System model
+- **itam**: Add missing attribute Meta.ordering to Operating System model
+- **itam**: Add missing attribute Meta.verbose_name to "Device Type" model
+- **itam**: Add missing attribute Meta.ordering to "Device Software" model
+- **itam**: Add missing attribute Meta.verbose_name to "Device Software" model
+- **itam**: Add missing attribute Meta.verbose_name to "Device Software" model
+- **itam**: Add missing attribute Meta.ordering to "Device Software" model
+- **itama**: Add missing attribute Meta.verbose_name to "Device Model" model
+- **core**: Add missing attribute Meta.verbose_name to Notes model
+- **core**: Add missing attribute Meta.verbose_name to Manufacturer model
+- **access**: Add missing attribute Meta.verbos_name to Config Group Software model
+- **access**: Add missing attribute Meta.verbos_name to Config Groups model
+- **access**: Add missing attribute Meta.ordering Config Groups model
+- **access**: Add missing meta field verbose_name to Team model
+- **api**: during permission checking if request is HTTP/Options and user is authenticated, allow access
+- **api**: during permission checking dont attempt to access view obj if it doesn't exist
+- **itam**: Add missing model.Meta attributes ordering and verbose_name
+
+### Refactoring
+
+- **itam**: update device software serializer validator
+- **itam**: update device software serializer validator
+- **itam**: ensure device is unique for device os model
+- ensure filed organization is required
+- **config_management**: config_group ref to use full model name
+- update serializers to use model `get_url` function
+- **core**: ticket comment url name updated to match model name
+- Add function `get_url` to tenancy models
+- **api**: set fields that are for markdown to use the markdown field
+- **task**: Adjust inventory to use API v2 serializer
+- **core**: Move ticket validation from is_valid -> validate method
+- **core**: Ensure Ticket Linked Serializer works for Item Tickets
+- **core**: Ticket Linked Item slash command to use serializer
+- **core**: Related ticket slash command to use serializer
+- **core**: Ticket Comments to use a single API Endpoint
+- **core**: Adjust action choices to be integer
+- **config_management**: Adjust rendered config str -> dict
+- **itam**: Software Action field changed char -> integer
+- **itam**: rename dir viewset -> viewsets
+- **config_management**: move config_group_hosts to related table
+- update model fields
+- **config_management**: update serializer dir name
+- **access**: add name to modified field
+- **api**: Adjust viewset common so that page_layout is available for base
+- **assistance**: Correct viewset dir name to viwsets
+- **itam**: Cleanup Device Software model field names.
+- **core**: Change history fields after and before to be JSON fields
+- **api**: Split common ViewSet class into index/model classes
+- **itam**: remove requirement to specify the pk when fetching config
+
+### Tests
+
+- **project_management**: Ensure that project field completed exists when API v2 is rendere
+- **core**: Ensure a ticket cant be related to itself
+- **itam**: correct test setup for device note viewset
+- **settings**: Ensure items returned are from users orgs only for API v2 endpoints
+- **project_management**: Ensure items returned are from users orgs only for API v2 endpoints
+- **itim**: Correct test case for ticket category returned serializer checks
+- **core**: Correct test case for ticket category returned serializer checks
+- **core**: Ensure items returned are from users orgs only for API v2 endpoints
+- **config_management**: Ensure items returned are from users orgs only for API v2 endpoints
+- **assistance**: Ensure items returned are from users orgs only for API v2 endpoints
+- **access**: Ensure items returned are from users orgs only for API v2 endpoints
+- **itam**: Ensure items returned are from users orgs only for API v2 endpoints
+- Test Case for viewsets that confirms returned results from user orgs only
+- **itam**: update device model test name Device -> DeviceModel
+- **Core**: Ticket linked items API V2 Serializer returned checks
+- **Core**: Remove duplicate test for ticket linked items
+- **assistance**: Project Taask ticket Viewset Serializer checks
+- **assistance**: Problem ticket Viewset Serializer checks
+- **assistance**: Incident ticket Viewset Serializer checks
+- **assistance**: Change ticket Viewset Serializer checks
+- **assistance**: Request ticket Viewset Serializer checks
+- **core**: Ticket Test Cases for Viewset Serializer returned
+- during delete operation dont include data
+- Add ViewSet Returned Serializer Checks to a majority of models
+- Test Cases to confirm the correct serializer is returned from ViewSet
+- Added skipped test for checking model mandatory values.
+- **itam**: Operating System Installs API v2 Field checks
+- **itam**: Software Installs API v2 Permission checks
+- **itam**: Operating_system Installs API v2 Validation checks
+- **itam**: Software Installs API v2 Permission checks
+- **itam**: Software Installs API v2 Validation checks
+- **itam**: Software Installs API v2 Field checks
+- **core**: Ticket serializer checks corrected to use project_id within mock view
+- **core**: Ticket comment serializer checks corrected to use mock view
+- **core**: Ticket comment category field checks corrected
+- **itam**: Update Device Operating System history checks to cater for unique device constratint
+- **itam**: Device Operating System API field checks checks
+- **itim**: Device Operating System API v2 ViewSet permission checks
+- **itam**: Device Operating System Serializer Validation checks
+- **core**: remove duplicate functional slash commands
+- model get_url function checks
+- **core**: move unit tests that check functionality to func test for ticket
+- **itam**: Inventory API v2 Serializer Checks
+- **core**: Ensure that when ticket is assigned it's status is updated to assigned
+- **settings**: External Link API ViewSet permission checks
+- **access**: External Link API v2 Serializer Checks
+- **functional**: Move request ticket checks from unit
+- **functional**: Move functional test cases to relevant functional test dir
+- **access**: Organization API v2 Serializer Checks, only super user can create
+- **access**: Team User API v2 Serializer Checks
+- **access**: Team API v2 Serializer Checks
+- **access**: Organization API v2 Serializer Checks
+- **project_management**: Organization API v2 ViewSet permission checks
+- **core**: Ensure test setup correctly for ticket checks
+- **core**: Spend Slash command Checks.
+- **core**: Relate Slash command Checks.
+- **core**: Ensure that an item that may be linked to a ticket, when its deleted, the ticket link is removed
+- **core**: Ensure a non-existing item cant be Linked to a Ticket.
+- **core**: Action command Related Item Ticket Slash command checks.
+- **core**: Blocked by Slash command Checks.
+- **core**: Blocks Slash command Checks.
+- **core**: Related Item Ticket Slash command checks.
+- **project_management**: Project Task API v2 Serializer Checks
+- **itim**: Incident Ticket API v2 Serializer Checks
+- **itim**: Problem Ticket API v2 Serializer Checks
+- **itim**: Change Ticket API v2 Serializer Checks
+- **core**: Request Ticket API v2 Serializer Checks
+- **core**: Common Ticket Test Cases for API v2 serializers
+- **project_management**: Project Task API field checks
+- **itim**: Problem Ticket API field checks
+- **itim**: Incident Ticket API field checks
+- **itim**: Change Ticket API field checks
+- **assistance**: Update request field checks to cater for project and milestone as dicts
+- **project_management**: Ensure ticket assigned project for all API v2 ViewSet permission checks
+- **project_management**: PRoject_task API v2 ViewSet permission checks
+- **itim**: Problem Ticket API v2 ViewSet permission checks
+- **itim**: Incident Ticket API v2 ViewSet permission checks
+- **itim**: Change Ticket API v2 ViewSet permission checks
+- **core**: fix broken tests from 8b701785b3489db567f5ae08c58e28ae76529881 changes
+- **core**: Item Ticket API v2 Serializer checks
+- **core**: Item Linked Ticket API v2 ViewSet permission checks
+- **core**: Related Ticket API v2 Serializer checks
+- **core**: Related Ticket API v2 ViewSet permission checks
+- **core**: Ticket Comment API v2 Serializer checks
+- **core**: Ticket Linked Item API v2 Serializer checks
+- **core**: Ticket Comment Category API v2 Serializer checks
+- **core**: Ticket Category API v2 Serializer checks
+- **itim**: Ticket Linked Item API field checks
+- **itim**: Service Ticket URL API field checks
+- **itim**: Cluster Ticket URL API field checks
+- **itam**: Software Ticket URL API field checks
+- **itam**: Operating System Ticket URL API field checks
+- **itam**: Device Ticket URL API field checks
+- **config_management**: Group Ticket URL API field checks
+- **core**: Ticket Comment API v2 ViewSet permission checks
+- **core**: Ticket Comment Category API v2 ViewSet permission checks
+- **core**: Ticket Category API v2 ViewSet permission checks
+- **assistance**: Request Ticket API v2 ViewSet permission checks
+- **core**: Ticket Common API v2 ViewSet permission checks
+- **core**: Ticket Comment Category API field checks
+- **core**: Related Tickets API field checks
+- **itim**: Service Linked Tickets API field checks
+- **itim**: Cluster Linked Tickets API field checks
+- **itam**: Software Linked Tickets API field checks
+- **itam**: Operating System Linked Tickets API field checks
+- **itam**: device Linked Tickets API field checks
+- **core**: Config Group Linked Tickets API field checks
+- **core**: Linked Ticket Common API field checks
+- **core**: Ticket Linked Items API field checks
+- **core**: Ticket Comment API field checks
+- **core**: Ticket Category API field checks
+- **assistance**: Request Ticket API field checks
+- **core**: Ticket Common API field checks
+- **settings**: Celery Log API v2 ViewSet permission checks
+- **settings**: Celery Log API field checks
+- **settings**: User Settings API v2 ViewSet permission checks
+- **settings**: User Settings API field checks
+- **settings**: App Settings API v2 ViewSet permission checks
+- **settings**: App Settings API field checks
+- **project_management**: Project API v2 ViewSet permission checks for import user
+- **project_management**: Project Serializer Validation clean up
+- **project_management**: Project Type API v2 ViewSet permission checks
+- **project_management**: Project Type Serializer Validation checks
+- **project_management**: Project Type API field checks
+- **project_management**: Project State API v2 ViewSet permission checks
+- **project_management**: Project state Serializer Validation checks
+- **project_management**: Project state API field checks
+- **project_management**: Project Milestone API v2 ViewSet permission checks
+- **project_management**: Project milestone Serializer Validation checks
+- **project_management**: add trace output to Project serializer
+- **project_management**: Project Milestone API field checks
+- **project_management**: Project API v2 ViewSet permission checks
+- **project_management**: Project Serializer Validation checks
+- **project_management**: Project API field checks
+- **itim**: Port API v2 ViewSet permission checks
+- **itim**: Port API field checks
+- **itim**: Service API v2 ViewSet permission checks
+- **itim**: Service Serializer Validation checks
+- **itim**: Service API field checks
+- **itim**: Cluster Type API v2 ViewSet permission checks
+- **itim**: Cluster Type Serializer Validation checks
+- **itam**: Cluster Type API field checks
+- **itim**: Cluster API ViewSet permission checks
+- **itim**: Cluster Serializer Validation checks
+- **itam**: Cluster API field checks
+- **itam**: remove Device Ticket API field checks
+- **itam**: Device Service API field checks
+- **itam**: Device Software API ViewSet permission checks
+- **itam**: Device Software Serializer Validation checks
+- **itam**: Device Software API field checks
+- **itam**: Device Model API ViewSet permission checks
+- **itam**: Device Model Serializer Validation checks
+- **itam**: Device Model API field checks
+- **itam**: Device Type API ViewSet permission checks
+- **itam**: Device Type Serializer Validation checks
+- **itam**: Device Type API field checks
+- **itam**: Software Version Tenancy Model Checks
+- **itam**: Software Version API ViewSet permission checks
+- **itam**: Software Version Serializer Validation checks
+- **itam**: Software Version API field checks
+- **itam**: Software Category Version API ViewSet permission checks
+- **itam**: Software Category Serializer Validation checks
+- **itam**: Software Category Version API field checks
+- **itam**: Operating System Version API ViewSet permission checks
+- **itam**: Operating System Version Serializer Validation checks
+- **itam**: Operating System Version API field checks
+- **itam**: Software API ViewSet permission checks
+- **itam**: Software Serializer Validation checks
+- **itam**: Software API field checks
+- **itam**: Operating System Serializer Validation checks
+- **itam**: Operating_system API ViewSet permission checks
+- **itam**: Operating System API field checks
+- **itam**: Device API field checks
+- **itam**: Device Serializer Validation checks
+- **core**: Device API ViewSet permission checks
+- enure correct type checks for url
+- **core**: Manufacturer API ViewSet permission checks
+- **core**: Manufacturer Serializer Validation checks
+- **assistance**: Manufacturer API field checks
+- **assistance**: Notes API field checks
+- **core**: Notes Serializer Validation checks
+- **itim**: Service Note API ViewSet permission checks
+- **itam**: Softwaare Note API ViewSet permission checks
+- **itam**: Operating System Note API ViewSet permission checks
+- **config_management**: Device Note API ViewSet permission checks
+- Adjust tests to cater for action choices now being an integer
+- **config_management**: Config Groups Note API ViewSet permission checks
+- **config_management**: History API ViewSet permission checks
+- **config_management**: Config Groups Software API ViewSet permission checks
+- **config_management**: Config Groups Software Serializer Validation checks
+- **config_management**: Config Groups Software Serializer Validation checks
+- **config_management**: Config Groups Serializer Validation checks
+- **config_management**: Config Groups API ViewSet permission checks
+- **assistance**: Config Group API field checks
+- **assistance**: Knowledge Base Category Serializer Validation checks
+- **assistance**: ensure is_valid raises exceptions for Knowledge Base Serializer Validation checks
+- **assistance**: Knowledge Base Serializer Validation checks
+- **assistance**: Knowledge Base Category API field checks
+- **assistance**: Knowledge Base API field checks
+- **access**: correct organization permission checks to have HTTP/403 not HTTP/405
+- **assistance**: Knowledge Base Category API ViewSet permission checks
+- **assistance**: Knowledge Base API ViewSet permission checks
+- **base**: User API ViewSet permission checks
+- **base**: Permission API ViewSet permission checks
+- **base**: Content Type API ViewSet permission checks
+- **access**: Add missing test cases to Team Users Model
+- **access**: Team Users API v2 field checks
+- **access**: Team User API ViewSet permission checks
+- **access**: Team API v2 field checks
+- **api**: API Response Field checks Abstract Class added
+- **access**: Organization API v2 field checks
+- **access**: Team API ViewSet permission checks
+- **access**: Organization API ViewSet permission checks
+- **api**: API Permission ViewSet Abstract Class added
+- **access**: Team custom tests to ensure that during model field creation, attribute verbose_name is defined and not empty
+- **itim**: port placeholder test for invalid port number
+- use correct logic when testin field parameters as not being empty or none
+- Ensure that during model field creation, attribute verbose_name is defined and not empty
+- Ensure that during model field creation, attribute help_text is defined and not empty
+- **api**: Ensure models have `Meta.ordering` set and not empty
+- **api**: viewset documentation attr check
+- **api**: fix index import to correct viewset
+- **itam**: Add index viewset checks
+- **Settings**: Add index viewset checks
+- **project_management**: Add index viewset checks
+- **itim**: Add index viewset checks
+- **config_management**: Add index viewset checks
+- **assistance**: Add index viewset checks
+- **access**: Add index viewset checks
+- **api**: Add API v2 Endpoint
+- **api**: ViewSet checks
+- Ensure Models have attribute `page_layout`
+- Ensure Models have attribute `table_fields`
+- Ensure Models have meta attribute `verbose_name`
+
 ## 1.3.1 (2024-11-27)
 
 ### Fixes
