@@ -65,6 +65,70 @@ This section details the additional items that may need to be done when adding a
     It's a good idea to create the initial model class, then create and add the model tests for that class. This way you can run the tests to ensure that the requirements are met. Of Note, the tests may not cover ALL of the requirements section, due diligence will need to be exercised.
 
 
+## page_layout Attribute
+
+Within the model attributes, `page_layout` is required. This attribute is what the UI uses to render the page. simply put, it's the layout of the page. Currently this layout is for a models details page only.
+
+The `page_layout` attribute is a python list that is broken down into dictionaries for the page tabs, which then contain the page sections. Breakdown of the page layout is as follows:
+
+- `Tab` These are the tabs at the top of a models details page. A tab contains sections.
+
+- `Section` The page is broken down horizontially into sections. A section contains columns or a table.
+
+- `Column` Vertical breakdown of a section. A column contains fields.
+
+- `Table` A table is a layout for a section. The table renders a sub-model as part of the existing models information.
+
+Example of ALL available options for the `page_layout` attribute.
+
+``` python
+
+page_layout: list = [
+    {    # Detail Tab.
+        "name": "Details",    # Tab name.
+        "slug": "details",    # HTML id field.
+        "sections": [    # Page Sections.
+            {    # double column section.
+                "layout": "double",
+                "left": [    # Left column. This list is a list of fields that match the serializer fields.
+                    'organization',
+                    'name',
+                    'is_global',
+                ],
+                "right": [    # right column. This list is a list of fields that match the serializer fields.
+                    'model_notes',
+                    'created',
+                    'modified',
+                ]
+            },
+            {    # Table Section.
+                "layout": "table",
+                "name": "Dependent Services",    # Heading for the section.
+                "field": "service",    # field name within the `_urls` dict of the api query. which is where the data will be fetched from.
+            },
+            {    # single column section.
+                "layout": "single",
+                "fields": [    # This list is a list of fields that match the serializer fields.
+                    'config',
+                ]
+            }
+        ]
+    },
+    {    # Notes Tab.
+        "name": "Notes",
+        "slug": "notes",
+        "sections": []    # The notes tab is a special case that requires no sections to be defined.
+    },
+] 
+
+```
+
+
+## table_fields Attributes
+
+The `table_fields` attribute within a model is what the UI List View or section table uses as the fields to add to the table. The `table_fields` attribute is a python list of strings that are the field names as are defined within the serializer.
+
+
 ## History
 
 Currently the adding of history to a model is a manual process. edit the file located at `core.views.history` and within `View.get_object` add the model to the `switch` statement.

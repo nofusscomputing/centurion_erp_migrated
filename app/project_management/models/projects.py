@@ -200,7 +200,7 @@ class Project(ProjectCommonFieldsName):
                         'priority',
                         'project_type',
                         'state',
-                        'percent_completed',
+                        'completed',
                     ],
                     "right": [
                         'planned_start_date',
@@ -315,8 +315,6 @@ class Project(ProjectCommonFieldsName):
 
         all_tickets = Ticket.objects.filter(
             project = self.id,
-        ).exclude(
-            status__in = ticket_status_closed
         )
 
         closed_tickets = Ticket.objects.filter(
