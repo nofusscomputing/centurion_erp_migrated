@@ -200,7 +200,7 @@ class Project(ProjectCommonFieldsName):
                         'priority',
                         'project_type',
                         'state',
-                        'percent_completed',
+                        'completed',
                     ],
                     "right": [
                         'planned_start_date',

@@ -78,6 +78,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
         }
 
     description = centurion_field.MarkdownField( required = False, style_class = 'large' )
+    completed = serializers.CharField( source = 'percent_completed', read_only = True )
 
     class Meta:
 
@@ -93,6 +94,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
             'description',
             'priority',
             'state',
+            'completed',
             'project_type',
             'code',
             'planned_start_date',
@@ -111,6 +113,7 @@ class ProjectModelSerializer(ProjectBaseSerializer):
 
         read_only_fields = [
             'id',
+            'completed',
             'display_name',
             'external_ref',
             'external_system',
@@ -129,6 +132,7 @@ class ProjectImportSerializer(ProjectModelSerializer):
 
         read_only_fields = [
             'id',
+            'completed',
             'display_name',
             'created',
             'modified',
