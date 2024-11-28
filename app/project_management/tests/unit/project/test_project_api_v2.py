@@ -116,6 +116,29 @@ class ProjectAPI(
 
 
 
+    def test_api_field_exists_completed(self):
+        """ Test for existance of API Field
+
+        This test is a custom test of a test case with the same name.
+        this model does not have a model_notes_field
+
+        model_notes field must exist
+        """
+
+        assert 'completed' in self.api_data
+
+
+
+    def test_api_field_type_completed(self):
+        """ Test for type for API Field
+
+        description field must be str
+        """
+
+        assert type(self.api_data['completed']) is str
+
+
+
     def test_api_field_exists_model_notes(self):
         """ Test for existance of API Field
 
