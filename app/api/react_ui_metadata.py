@@ -64,23 +64,31 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         metadata["description"] = view.get_view_description()
 
-        if 'pk' in view.kwargs:
+        metadata['urls']: dict = {}
 
-            if view.kwargs['pk']:
+        url_self = None
 
-                qs = view.get_queryset()[0]
 
-                if hasattr(qs, 'get_url'):
+        if view.kwargs.get('pk', None) is not None:
 
-                    metadata['return_url'] = qs.get_url( request )
+            qs = view.get_queryset()[0]
+
+            if hasattr(qs, 'get_url'):
+
+                url_self = qs.get_url( request )
+
 
         elif view.kwargs:
 
-            metadata['return_url'] = reverse('v2:' + view.basename + '-list', request = view.request, kwargs = view.kwargs )
+            url_self = reverse('v2:' + view.basename + '-list', request = view.request, kwargs = view.kwargs )
 
         else:
 
-            metadata['return_url'] = reverse('v2:' + view.basename + '-list', request = view.request )
+            url_self = reverse('v2:' + view.basename + '-list', request = view.request )
+
+        if url_self:
+
+            metadata['urls'].update({'self': url_self})
 
 
         metadata["renders"] = [
