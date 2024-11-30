@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.encoding import force_str
 
 from rest_framework import serializers
@@ -137,6 +138,32 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             if hasattr(view, 'page_layout'):
 
                 metadata['layout'] = view.get_page_layout()
+
+
+        build_repo: str = None
+
+        if settings.BUILD_REPO:
+
+            build_repo = settings.BUILD_REPO
+
+        build_sha: str = None
+
+        if settings.BUILD_SHA:
+
+            build_sha = settings.BUILD_SHA
+
+        build_version: str = 'development'
+
+        if settings.BUILD_VERSION:
+
+            build_version = settings.BUILD_VERSION
+
+
+        metadata['version']: dict = {
+            'project_url': build_repo,
+            'sha': build_sha,
+            'version': build_version,
+        }
 
 
         metadata['navigation'] = [
