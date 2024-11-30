@@ -369,7 +369,7 @@ class Team(Group, TenancyObject):
                 {
                     "layout": "table",
                     "name": "Users",
-                    "field": "user",
+                    "field": "users",
                 },
             ]
         },
