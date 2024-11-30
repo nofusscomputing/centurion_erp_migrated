@@ -90,6 +90,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             metadata['urls'].update({'self': url_self})
 
+        if view.get_back_url():
+
+            metadata['urls'].update({'back': view.get_back_url()})
+
         if view.get_return_url():
 
             metadata['urls'].update({'return_url': view.get_return_url()})
