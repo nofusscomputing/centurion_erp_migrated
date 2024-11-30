@@ -1,3 +1,9 @@
+## 1.4.1 (2024-11-30)
+
+### Fixes
+
+- **itam**: When validating device config, only do so if there is config defined
+
 ## 1.4.0 (2024-11-28)
 
 ### feat
