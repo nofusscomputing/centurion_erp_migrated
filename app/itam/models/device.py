@@ -116,12 +116,14 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     def validate_config_keys_not_reserved(self):
 
-        value: dict = self
+        if self:
 
-        for invalid_key in Device.reserved_config_keys:
+            value: dict = self
 
-            if invalid_key in value.keys():
-                raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
+            for invalid_key in Device.reserved_config_keys:
+
+                if invalid_key in value.keys():
+                    raise ValidationError(f'json key "{invalid_key}" is a reserved configuration key')
 
 
     def validate_uuid_format(self):
