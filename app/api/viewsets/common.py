@@ -115,6 +115,26 @@ class CommonViewSet(
         return self.page_layout
 
 
+    def get_return_url(self) -> str:
+        """Metadata return URL
+
+        This URL is an optional URL that if required the view must
+        override this method. If the URL for a cancel operation
+        is not the models URL, then this method is used to return
+        the URL that will be used.
+
+        Defining this URL will predominatly be for sub-models. It's
+        recommended that the `reverse` function
+        (rest_framework.reverse.reverse) be used with a `request`
+        object.
+
+        Returns:
+            str: Full url in format `<protocol>://<doman name>.<tld>/api/<API version>/<model url>`
+        """
+
+        return None
+
+
     def get_table_fields(self):
 
         if len(self.table_fields) < 1:

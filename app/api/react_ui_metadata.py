@@ -90,6 +90,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             metadata['urls'].update({'self': url_self})
 
+        if view.get_return_url():
+
+            metadata['urls'].update({'return_url': view.get_return_url()})
+
 
         metadata["renders"] = [
             renderer.media_type for renderer in view.renderer_classes
