@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from api.viewsets.common import ModelViewSet
@@ -46,9 +48,10 @@ class ViewSet(ModelViewSet):
         queryset = super().get_queryset()
 
         self.queryset = queryset.filter(
-            item_parent_class = self.kwargs['model_class'],
-            item_parent_pk = self.kwargs['model_id']
-        ).order_by('-created')
+            Q(item_pk = self.kwargs['model_id'], item_class = self.kwargs['model_class'])
+            |
+            Q(item_parent_pk = self.kwargs['model_id'], item_parent_class = self.kwargs['model_class'])
+        )
 
         return self.queryset
 
