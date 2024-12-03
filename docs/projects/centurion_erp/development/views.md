@@ -40,6 +40,8 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
     - _Functional test cases_ `from api.tests.abstract.api_permissions_viewset import APIPermission`
 
+- View Added to Navigation
+
 
 ## Permissions
 
@@ -64,6 +66,72 @@ def get_dynamic_permissions(self):
     return super().get_permission_required()
 
 ```
+
+
+## Navigation
+
+Although Centurion ERP is a Rest API application, there is a UI. The UI uses data from Centurion's API to render the view that the end user sees. One of those items is the navigation structure.
+
+Location of the navigation is in `app/api/react_ui_metadata.py` under the attribute `_nav`.
+
+
+### Menu Entry
+
+When adding a view, that is also meant to be seen by the end user, a navigation entry must be added to the correct navgation menu. The entry is a python dictionary and has the following format.
+
+``` pyhton
+
+{
+    '<app name>.<permission name>': {
+        "display_name": "<menu entry name>",
+        "name": "<html id>",
+        "icon": "<menu entry icon>",
+        "link": "<relative url.>"
+    }
+}
+
+```
+
+- `app name` _Optional_ is the centurion application name the model belongs to. This entry should only be supplied if the application name for the entry does not match the application for the [navigation menu](#menu).
+
+- `permission name` is the centurion permission required for this menu entry to be rendered for the end user.
+
+- `display_name` Menu entry name that the end user will see
+
+- `name` This is used as part of the html rendering of the page. **must be unique** across ALL menu entries
+
+- `icon` _Optional_ if specified, this is the name of the icon that the UI will place next to the menu entry. If this is not specified, the name key is used as the icon name.
+
+- `link` the relative URL for the entry. this will be the relative URL of the API after the API's version number. _i.e. `/api/v2/assistance/ticket/request` would become `/assistance/ticket/request`_
+
+
+### Menu
+
+The navigation menu is obtained by the UI as part of the metadata. The structure of the menu is a python dictionary in the following format:
+
+``` python
+
+ {
+        '<app name>': {
+            "display_name": "<Menu entry>",
+            "name": "<menu id>",
+            "pages": {
+                '<menu entries>'
+            }
+        }
+ }
+
+```
+
+- `app name` the centurion application name the menu belongs to.
+
+- `display_name` Menu name that the end user will see
+
+- `name` This is used as part of the html rendering of the page. **must be unique** across ALL menu entries
+
+- `pages` [Menu entry](#menu-entry) dictionaries.
+
+Upon the UI requesting the navigation menu, the users permission are obtained, and if they have the permission for the menu entry within **any** organization, they will be presented with the menu that has a menu entries.
 
 
 ## Pre v1.3 Docs

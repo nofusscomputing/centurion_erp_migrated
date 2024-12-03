@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.utils.encoding import force_str
 
+from django.contrib.auth.models import ContentType, Permission
+
 from rest_framework import serializers
 from rest_framework_json_api.metadata import JSONAPIMetadata
 from rest_framework.request import clone_request
@@ -166,136 +168,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
         }
 
 
-        metadata['navigation'] = [
-            {
-                "display_name": "Access",
-                "name": "access",
-                "pages": [
-                    {
-                        "display_name": "Organization",
-                        "name": "organization",
-                        "link": "/access/organization"
-                    }
-                ]
-            },
-            {
-                "display_name": "Assistance",
-                "name": "assistance",
-                "pages": [
-                    {
-                        "display_name": "Requests",
-                        "name": "request",
-                        "icon": "ticket_request",
-                        "link": "/assistance/ticket/request"
-                    },
-                    {
-                        "display_name": "Knowledge Base",
-                        "name": "knowledge_base",
-                        "icon": "information",
-                        "link": "/assistance/knowledge_base"
-                    }
-                ]
-            },
-            {
-                "display_name": "ITAM",
-                "name": "itam",
-                "pages": [
-                    {
-                        "display_name": "Devices",
-                        "name": "device",
-                        "icon": "device",
-                        "link": "/itam/device"
-                    },
-                    {
-                        "display_name": "Operating System",
-                        "name": "operating_system",
-                        "link": "/itam/operating_system"
-                    },
-                    {
-                        "display_name": "Software",
-                        "name": "software",
-                        "link": "/itam/software"
-                    }
-                ]
-            },
-            {
-                "display_name": "ITIM",
-                "name": "itim",
-                "pages": [
-                    {
-                        "display_name": "Changes",
-                        "name": "ticket_change",
-                        "link": "/itim/ticket/change"
-                    },
-                    {
-                        "display_name": "Clusters",
-                        "name": "cluster",
-                        "link": "/itim/cluster"
-                    },
-                    {
-                        "display_name": "Incidents",
-                        "name": "ticket_incident",
-                        "link": "/itim/ticket/incident"
-                    },
-                    {
-                        "display_name": "Problems",
-                        "name": "ticket_problem",
-                        "link": "/itim/ticket/problem"
-                    },
-                    {
-                        "display_name": "Services",
-                        "name": "service",
-                        "link": "/itim/service"
-                    },
-                ]
-            },
-            {
-                "display_name": "Config Management",
-                "name": "config_management",
-                "icon": "ansible",
-                "pages": [
-                    {
-                        "display_name": "Groups",
-                        "name": "group",
-                        "icon": 'config_management',
-                        "link": "/config_management/group"
-                    }
-                ]
-            },
-            {
-                "display_name": "Project Management",
-                "name": "project_management",
-                "icon": 'project',
-                "pages": [
-                    {
-                        "display_name": "Projects",
-                        "name": "project",
-                        "icon": 'kanban',
-                        "link": "/project_management/project"
-                    }
-                ]
-            },
-
-            {
-                "display_name": "Settings",
-                "name": "settings",
-                "pages": [
-                    {
-                        "display_name": "System",
-                        "name": "setting",
-                        "icon": "system",
-                        "link": "/settings"
-                    },
-                    {
-                        "display_name": "Task Log",
-                        "name": "celery_log",
-                        # "icon": "settings",
-                        "link": "/settings/celery_log"
-                    }
-                ]
-            }
-        ]
-
+        metadata['navigation'] = self.get_navigation(request.user)
 
         return metadata
 
@@ -377,7 +250,6 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             field_info["children"] = self.get_serializer_info(field)
 
         if (
-            # not field_info.get("read_only")
             hasattr(field, "choices")
         ):
             field_info["choices"] = [
@@ -397,3 +269,205 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             )
 
         return field_info
+
+
+    _nav = {
+        'access': {
+            "display_name": "Access",
+            "name": "access",
+            "pages": {
+                'view_organization': {
+                    "display_name": "Organization",
+                    "name": "organization",
+                    "link": "/access/organization"
+                }
+            }
+        },
+        'assistance': {
+            "display_name": "Assistance",
+            "name": "assistance",
+            "pages": {
+                'core.view_ticket_request': {
+                    "display_name": "Requests",
+                    "name": "request",
+                    "icon": "ticket_request",
+                    "link": "/assistance/ticket/request"
+                },
+                'view_knowledgebase': {
+                    "display_name": "Knowledge Base",
+                    "name": "knowledge_base",
+                    "icon": "information",
+                    "link": "/assistance/knowledge_base"
+                }
+            }
+        },
+        'itam': {
+            "display_name": "ITAM",
+            "name": "itam",
+            "pages": {
+                'view_device': {
+                    "display_name": "Devices",
+                    "name": "device",
+                    "icon": "device",
+                    "link": "/itam/device"
+                },
+                'view_operatingsystem': {
+                    "display_name": "Operating System",
+                    "name": "operating_system",
+                    "link": "/itam/operating_system"
+                },
+                'view_software': {
+                    "display_name": "Software",
+                    "name": "software",
+                    "link": "/itam/software"
+                }
+            }
+        },
+        'itim': {
+            "display_name": "ITIM",
+            "name": "itim",
+            "pages": {
+                'core.view_ticket_change': {
+                    "display_name": "Changes",
+                    "name": "ticket_change",
+                    "link": "/itim/ticket/change"
+                },
+                'view_cluster': {
+                    "display_name": "Clusters",
+                    "name": "cluster",
+                    "link": "/itim/cluster"
+                },
+                'core.view_ticket_incident': {
+                    "display_name": "Incidents",
+                    "name": "ticket_incident",
+                    "link": "/itim/ticket/incident"
+                },
+                'core.view_ticket_problem': {
+                    "display_name": "Problems",
+                    "name": "ticket_problem",
+                    "link": "/itim/ticket/problem"
+                },
+                'core.view_service': {
+                    "display_name": "Services",
+                    "name": "service",
+                    "link": "/itim/service"
+                },
+            }
+        },
+        'config_management': {
+            "display_name": "Config Management",
+            "name": "config_management",
+            "icon": "ansible",
+            "pages": {
+                'view_configgroups': {
+                    "display_name": "Groups",
+                    "name": "group",
+                    "icon": 'config_management',
+                    "link": "/config_management/group"
+                }
+            }
+        },
+        'project_management': {
+            "display_name": "Project Management",
+            "name": "project_management",
+            "icon": 'project',
+            "pages": {
+                'view_project': {
+                    "display_name": "Projects",
+                    "name": "project",
+                    "icon": 'kanban',
+                    "link": "/project_management/project"
+                }
+            }
+        },
+
+        'settings': {
+            "display_name": "Settings",
+            "name": "settings",
+            "pages": {
+                'view_settings': {
+                    "display_name": "System",
+                    "name": "setting",
+                    "icon": "system",
+                    "link": "/settings"
+                },
+                'django_celery_results.view_taskresult': {
+                    "display_name": "Task Log",
+                    "name": "celery_log",
+                    # "icon": "settings",
+                    "link": "/settings/celery_log"
+                }
+            }
+        }
+    }
+
+
+    def get_navigation(self, user) -> list(dict()):
+        """Render the navigation menu
+
+        Check the users permissions agains `_nav`. if they have the permission, add the
+        menu entry to the navigation to be rendered,
+
+        **No** Menu is to be rendered that contains no menu entries.
+
+        Args:
+            user (User): User object from the request.
+
+        Returns:
+            list(dict()): Rendered navigation menu in the format the UI requires it to be.
+        """
+
+        nav: list = []
+
+        processed_permissions: dict = {}
+
+        for group in user.groups.all():
+
+            for permission in group.permissions.all():
+
+                if str(permission.codename).startswith('view_'):
+
+
+                    if not processed_permissions.get(permission.content_type.app_label, None):
+
+                        processed_permissions.update({permission.content_type.app_label: {}})
+
+                    if permission.codename not in processed_permissions[permission.content_type.app_label]:
+
+                        processed_permissions[permission.content_type.app_label].update({str(permission.codename): '_'})
+
+
+        for app, entry in self._nav.items():
+
+            new_menu_entry: dict = {}
+
+            new_pages: list = []
+
+            if processed_permissions.get(app, None):
+
+                for permission, page in entry['pages'].items():
+
+                    if '.' in permission:
+
+                        app_permission = str(permission).split('.')
+
+                        if processed_permissions[app_permission[0]].get(app_permission[1], None):
+
+                            new_pages += [ page ]
+
+                    else:
+
+                        if processed_permissions[app].get(permission, None):
+
+                            new_pages += [ page ]
+
+
+                if len(new_pages) > 0:
+
+                    new_menu_entry = entry.copy()
+
+                    new_menu_entry.update({ 'pages': new_pages })
+
+                    nav += [ new_menu_entry ]
+
+        return nav
