@@ -28,7 +28,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -50,7 +50,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -72,7 +72,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -94,7 +94,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -116,7 +116,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -138,7 +138,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
@@ -169,7 +169,7 @@ class MetadataAttributesFunctional:
         client = Client()
         client.force_login(self.view_user)
 
-        if self.url_kwargs:
+        if getattr(self, 'url_kwargs', None):
 
             url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
 
