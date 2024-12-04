@@ -18,6 +18,8 @@ class MetadataAttributesFunctional:
 
     url_name: str = None
 
+    viewset_type: str = 'list'
+
 
     def test_method_options_request_list_ok(self):
         """Test HTTP/Options Method
@@ -30,11 +32,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -52,11 +54,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -74,11 +76,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -96,11 +98,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -118,11 +120,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -140,11 +142,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
@@ -171,11 +173,11 @@ class MetadataAttributesFunctional:
 
         if getattr(self, 'url_kwargs', None):
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
 
         else:
 
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
 
         response = client.options( url, content_type='application/json' )
 
