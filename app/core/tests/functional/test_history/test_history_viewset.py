@@ -12,6 +12,7 @@ from django.test import Client, TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissionView
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from core.models.history import History
 
@@ -19,7 +20,7 @@ from itam.models.device import Device
 
 
 
-class HistoryPermissionsAPI(APIPermissionView, TestCase):
+class ViewSetBase:
 
     model = History
 
@@ -218,6 +219,15 @@ class HistoryPermissionsAPI(APIPermissionView, TestCase):
             user = self.different_organization_user
         )
 
+
+
+class HistoryPermissionsAPI(
+    ViewSetBase,
+    APIPermissionView,
+    TestCase
+):
+
+
     def test_view_list_has_permission(self):
         """ Check correct permission for view
 
@@ -326,3 +336,12 @@ class HistoryPermissionsAPI(APIPermissionView, TestCase):
 
         pass
 
+
+
+class HistoryMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase
+):
+
+    pass

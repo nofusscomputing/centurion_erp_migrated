@@ -251,17 +251,6 @@ class TicketViewSet(ModelViewSet):
 
 
             if (
-                self.action == 'list'
-            ):
-
-                user_settings = UserSettings.objects.get(
-                    user = self.request.user
-                )
-
-                organization = user_settings.default_organization.id
-
-
-            elif (
                 self.action == 'create'
             ):
 

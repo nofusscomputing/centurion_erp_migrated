@@ -8,6 +8,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from itam.models.software import Software
 
@@ -191,3 +192,16 @@ class SoftwarePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
 class SoftwareViewSet(ViewSetBase, SerializersTestCases, TestCase):
 
     pass
+
+
+
+class SoftwareMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional,
+    TestCase
+):
+
+    menu_id = 'itam'
+
+    menu_entry_id = 'software'
