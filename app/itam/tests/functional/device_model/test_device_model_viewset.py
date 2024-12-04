@@ -8,6 +8,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from itam.models.device import DeviceModel
 
@@ -195,6 +196,16 @@ class DeviceModelPermissionsAPI(
 class DeviceModelViewSet(
     ViewSetBase,
     SerializersTestCases,
+    TestCase
+):
+
+    pass
+
+
+
+class DeviceModelMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
     TestCase
 ):
 
