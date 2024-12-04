@@ -40,6 +40,10 @@ Views are used with Centurion ERP to Fetch the data for rendering.
 
     - _Functional test cases_ `from api.tests.abstract.api_permissions_viewset import APIPermission`
 
+    - _Functional test cases_ (Only required if model has an API endpoint)_`from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional`
+
+    - _Functional test cases_ _(Only required if model has nav menu entry)_`from api.tests.abstract.test_metadata_functional import MetaDataNavigationEntriesFunctional`
+
 - View Added to Navigation
 
 
