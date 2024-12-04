@@ -75,7 +75,7 @@ class TeamModelSerializer(
 
     team_name = centurion_field.CharField( autolink = True )
 
-    permissions = serializers.PrimaryKeyRelatedField(many = True, queryset=permission_queryset())
+    permissions = serializers.PrimaryKeyRelatedField(many = True, queryset=permission_queryset(), required = False)
 
     class Meta:
 
