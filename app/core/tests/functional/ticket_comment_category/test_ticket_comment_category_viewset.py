@@ -12,6 +12,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from core.models.ticket.ticket_comment_category import TicketCommentCategory
 
@@ -199,6 +200,16 @@ class TicketCommentCategoryPermissionsAPI(
 class TicketCommentCategoryViewSet(
     ViewSetBase,
     SerializersTestCases,
+    TestCase
+):
+
+    pass
+
+
+
+class TicketCommentCategoryMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
     TestCase
 ):
 
