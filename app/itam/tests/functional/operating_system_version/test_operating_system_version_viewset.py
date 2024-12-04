@@ -8,6 +8,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 
@@ -203,5 +204,15 @@ class OperatingSystemVersionPermissionsAPI(ViewSetBase, APIPermissions, TestCase
 
 
 class OperatingSystemVersionViewSetBase(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass
+
+
+
+class OperatingSystemVersionMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase
+):
 
     pass
