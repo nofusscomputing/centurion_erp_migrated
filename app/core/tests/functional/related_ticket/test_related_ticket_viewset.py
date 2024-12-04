@@ -15,16 +15,13 @@ from api.tests.abstract.api_permissions_viewset import (
     APIPermissionDelete,
     APIPermissionView,
 )
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from core.models.ticket.ticket import Ticket, RelatedTickets
 
 
 
-class RelatedTicketsPermissionsAPI(
-    APIPermissionDelete,
-    APIPermissionView,
-    TestCase,
-):
+class ViewSetBase:
 
     model = RelatedTickets
 
@@ -209,6 +206,13 @@ class RelatedTicketsPermissionsAPI(
 
 
 
+class RelatedTicketsPermissionsAPI(
+    ViewSetBase,
+    APIPermissionDelete,
+    APIPermissionView,
+    TestCase,
+):
+
     def test_add_has_permission_post_not_allowed(self):
         """ Check correct permission for add 
 
@@ -273,3 +277,13 @@ class RelatedTicketsPermissionsAPI(
         """
 
         pass
+
+
+
+class RelatedTicketsMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase
+):
+
+    pass
