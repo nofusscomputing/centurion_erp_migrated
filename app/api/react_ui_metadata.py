@@ -347,7 +347,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                     "name": "ticket_problem",
                     "link": "/itim/ticket/problem"
                 },
-                'core.view_service': {
+                'view_service': {
                     "display_name": "Services",
                     "name": "service",
                     "link": "/itim/service"
@@ -443,31 +443,35 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             new_pages: list = []
 
-            if processed_permissions.get(app, None):
+            # if processed_permissions.get(app, None):    # doesn't cater for `.` in perm
 
-                for permission, page in entry['pages'].items():
+            for permission, page in entry['pages'].items():
 
-                    if '.' in permission:
+                if '.' in permission:
 
-                        app_permission = str(permission).split('.')
+                    app_permission = str(permission).split('.')
+
+                    if processed_permissions.get(app_permission[0], None):
 
                         if processed_permissions[app_permission[0]].get(app_permission[1], None):
 
                             new_pages += [ page ]
 
-                    else:
+                else:
+
+                    if processed_permissions.get(app, None):
 
                         if processed_permissions[app].get(permission, None):
 
                             new_pages += [ page ]
 
 
-                if len(new_pages) > 0:
+            if len(new_pages) > 0:
 
-                    new_menu_entry = entry.copy()
+                new_menu_entry = entry.copy()
 
-                    new_menu_entry.update({ 'pages': new_pages })
+                new_menu_entry.update({ 'pages': new_pages })
 
-                    nav += [ new_menu_entry ]
+                nav += [ new_menu_entry ]
 
         return nav
