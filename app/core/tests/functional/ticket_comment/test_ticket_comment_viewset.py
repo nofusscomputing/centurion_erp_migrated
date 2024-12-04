@@ -6,6 +6,7 @@ from django.test import Client, TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from core.models.ticket.ticket_comment import Ticket, TicketComment
 
@@ -13,10 +14,7 @@ from settings.models.user_settings import UserSettings
 
 
 
-class TicketCommentPermissionsAPI(
-    APIPermissions,
-    TestCase
-):
+class ViewSetBase:
     """ Test Cases common to ALL ticket types """
 
     model = TicketComment
@@ -230,6 +228,11 @@ class TicketCommentPermissionsAPI(
         )
 
 
+class TicketCommentPermissionsAPI(
+    ViewSetBase,
+    APIPermissions,
+    TestCase
+):
     def test_returned_results_only_user_orgs(self):
         """Test not required
 
@@ -238,3 +241,13 @@ class TicketCommentPermissionsAPI(
         """
 
         pass
+
+
+
+class TicketCommentMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase
+):
+
+    pass
