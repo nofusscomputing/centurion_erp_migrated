@@ -12,7 +12,10 @@ from django.test import Client, TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissionView
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctionalEndpoint,
+)
 
 from core.models.history import History
 
@@ -340,8 +343,57 @@ class HistoryPermissionsAPI(
 
 class HistoryMetadata(
     ViewSetBase,
-    MetadataAttributesFunctional,
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalBase,
     TestCase
 ):
 
-    pass
+
+
+
+    def test_method_options_request_detail_data_has_key_urls_self(self):
+        """Test HTTP/Options Method
+
+        This is a custom test of a test with the same name.
+        history view has no detail view, due to using a custom
+        view "history",
+
+        Ensure the request data returned has key `urls.self`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-list',
+                kwargs=self.url_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert 'urls' in response.data
+
+
+    def test_method_options_request_detail_data_key_urls_self_is_str(self):
+        """Test HTTP/Options Method
+
+        This is a custom test of a test with the same name.
+        history view has no detail view, due to using a custom
+        view "history",
+
+        Ensure the request data key `urls.self` is a string
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-list',
+                kwargs=self.url_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data['urls']['self']) is str

@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import Organization
 
@@ -136,6 +138,20 @@ class AppSettings(AppSettingsCommonFields, SaveHistory):
     def get_organization(self):
 
         return self.global_organization
+
+
+
+    def get_url( self, request = None ) -> str:
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_app_settings-detail", request=request, kwargs = { 'pk': self.pk } )
+
+        return reverse(f"v2:_api_v2_app_settings-detail", kwargs = { 'pk': self.pk } )
+
 
 
     def clean(self):

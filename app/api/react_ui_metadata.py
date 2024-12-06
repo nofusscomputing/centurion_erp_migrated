@@ -78,7 +78,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             if hasattr(qs, 'get_url'):
 
-                url_self = qs.get_url( request )
+                url_self = qs.get_url( request=request )
 
 
         elif view.kwargs:

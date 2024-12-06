@@ -1,5 +1,7 @@
 import zoneinfo
 
+from rest_framework.reverse import reverse
+
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
@@ -84,6 +86,20 @@ class UserSettings(UserSettingsCommonFields):
     def get_organization(self):
 
         return self.default_organization
+
+
+
+    def get_url( self, request = None ) -> str:
+
+        model_name = str(self._meta.verbose_name.lower()).replace(' ', '_')
+
+
+        if request:
+
+            return reverse(f"v2:_api_v2_user_settings-detail", request=request, kwargs = { 'pk': self.pk } )
+
+        return reverse(f"v2:_api_v2_user_settings-detail", kwargs = { 'pk': self.pk } )
+
 
 
     @receiver(post_save, sender=User)

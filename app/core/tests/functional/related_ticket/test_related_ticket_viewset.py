@@ -15,7 +15,9 @@ from api.tests.abstract.api_permissions_viewset import (
     APIPermissionDelete,
     APIPermissionView,
 )
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase
+)
 
 from core.models.ticket.ticket import Ticket, RelatedTickets
 
@@ -282,7 +284,7 @@ class RelatedTicketsPermissionsAPI(
 
 class RelatedTicketsMetadata(
     ViewSetBase,
-    MetadataAttributesFunctional,
+    MetadataAttributesFunctionalBase,
     TestCase
 ):
 
