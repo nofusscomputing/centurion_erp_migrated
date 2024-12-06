@@ -12,7 +12,10 @@ from django.test import Client, TestCase
 from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissionView
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctionalEndpoint,
+)
 
 from core.models.history import History
 
@@ -340,7 +343,8 @@ class HistoryPermissionsAPI(
 
 class HistoryMetadata(
     ViewSetBase,
-    MetadataAttributesFunctional,
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalBase,
     TestCase
 ):
 
