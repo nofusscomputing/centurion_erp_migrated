@@ -5,7 +5,7 @@ from rest_framework.reverse import reverse
 
 
 
-class MetadataAttributesFunctional:
+class MetadataAttributesFunctionalBase:
     """ Functional Tests for API, HTTP/Options Method
     
     These tests ensure that **ALL** serializers include the metaclass that adds the required
@@ -87,6 +87,171 @@ class MetadataAttributesFunctional:
         assert type(response.data) is dict
 
 
+    def test_method_options_request_detail_ok(self):
+        """Test HTTP/Options Method
+
+        Ensure the request returns `OK`.
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        if getattr(self, 'url_kwargs', None):
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
+
+        response = client.options( url, content_type='application/json' )
+
+        assert response.status_code == 200
+
+
+    def test_method_options_request_detail_data_returned(self):
+        """Test HTTP/Options Method
+
+        Ensure the request returns data.
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert response.data is not None
+
+
+    def test_method_options_request_detail_data_type(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned is of type `dict`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data) is dict
+
+
+
+    def test_method_options_request_detail_data_has_key_urls(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned has key `urls`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert 'urls' in response.data
+
+
+    def test_method_options_request_detail_data_key_urls_is_dict(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `urls` is dict
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data['urls']) is dict
+
+
+
+    def test_method_options_request_detail_data_has_key_urls_self(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned has key `urls.self`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert 'urls' in response.data
+
+
+    def test_method_options_request_detail_data_key_urls_self_is_str(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `urls.self` is a string
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data['urls']['self']) is str
+
+
+    @pytest.mark.skip(reason='to be written')
+    def test_method_options_no_field_is_generic(self):
+        """Test HTTP/Options Method
+
+        Fields are used for the UI to setup inputs correctly.
+
+        Ensure all fields at path `.actions.<METHOD>.<name>.type` do not have `GenericField` as the value.
+        """
+
+        pass
+
+
+
+class MetadataAttributesFunctionalTable:
+    """Test cases for Metadata
+    
+    These test cases are for models that are expected to
+    be rendered in a table.
+    """
+
+
     def test_method_options_request_list_data_has_key_table_fields(self):
         """Test HTTP/Options Method
 
@@ -162,66 +327,13 @@ class MetadataAttributesFunctional:
         assert all_string
 
 
-    def test_method_options_request_detail_ok(self):
-        """Test HTTP/Options Method
 
-        Ensure the request returns `OK`.
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        if getattr(self, 'url_kwargs', None):
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type, kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-' + self.viewset_type)
-
-        response = client.options( url, content_type='application/json' )
-
-        assert response.status_code == 200
-
-
-    def test_method_options_request_detail_data_returned(self):
-        """Test HTTP/Options Method
-
-        Ensure the request returns data.
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert response.data is not None
-
-
-    def test_method_options_request_detail_data_type(self):
-        """Test HTTP/Options Method
-
-        Ensure the request data returned is of type `dict`
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert type(response.data) is dict
+class MetadataAttributesFunctionalEndpoint:
+    """Test cases for Metadata
+    
+    These test cases are for models that will have an
+    endpoint. i.e. A Detail view
+    """
 
 
     def test_method_options_request_detail_data_has_key_page_layout(self):
@@ -410,97 +522,13 @@ class MetadataAttributesFunctional:
 
 
 
-    def test_method_options_request_detail_data_has_key_urls(self):
-        """Test HTTP/Options Method
+class MetadataAttributesFunctional(
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalTable,
+    MetadataAttributesFunctionalBase,
+):
 
-        Ensure the request data returned has key `urls`
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert 'urls' in response.data
-
-
-    def test_method_options_request_detail_data_key_urls_is_dict(self):
-        """Test HTTP/Options Method
-
-        Ensure the request data key `urls` is dict
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert type(response.data['urls']) is dict
-
-
-
-    def test_method_options_request_detail_data_has_key_urls_self(self):
-        """Test HTTP/Options Method
-
-        Ensure the request data returned has key `urls.self`
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert 'urls' in response.data
-
-
-    def test_method_options_request_detail_data_key_urls_self_is_str(self):
-        """Test HTTP/Options Method
-
-        Ensure the request data key `urls.self` is a string
-        """
-
-        client = Client()
-        client.force_login(self.view_user)
-
-        response = client.options(
-            reverse(
-                self.app_namespace + ':' + self.url_name + '-detail',
-                kwargs=self.url_view_kwargs
-            ),
-            content_type='application/json'
-        )
-
-        assert type(response.data['urls']['self']) is str
-
-
-    @pytest.mark.skip(reason='to be written')
-    def test_method_options_no_field_is_generic(self):
-        """Test HTTP/Options Method
-
-        Fields are used for the UI to setup inputs correctly.
-
-        Ensure all fields at path `.actions.<METHOD>.<name>.type` do not have `GenericField` as the value.
-        """
-
-        pass
+    pass
 
 
 
@@ -857,3 +885,5 @@ class MetaDataNavigationEntriesFunctional:
                 no_empty_menu_found = False
 
         assert no_empty_menu_found
+
+
