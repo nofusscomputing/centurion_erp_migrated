@@ -16,7 +16,10 @@ from api.tests.abstract.api_serializer_viewset import (
     SerializerChange,
     SerializerView,
 )
-from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctionalEndpoint
+)
 
 from settings.models.app_settings import AppSettings
 
@@ -247,7 +250,8 @@ class AppSettingsViewSet(
 
 class AppSettingsMetadata(
     ViewSetBase,
-    MetadataAttributesFunctional,
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalBase,
     TestCase
 ):
 
