@@ -660,7 +660,7 @@ class DeviceOperatingSystem(DeviceCommonFields, SaveHistory):
         verbose_name_plural = 'Device Operating Systems'
 
 
-    device = models.ForeignKey(
+    device = models.OneToOneField(
         Device,
         blank = False,
         help_text = 'Device for the Operating System',
