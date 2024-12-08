@@ -385,7 +385,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             "display_name": "Settings",
             "name": "settings",
             "pages": {
-                'view_settings': {
+                'all_settings': {
                     "display_name": "System",
                     "name": "setting",
                     "icon": "system",
@@ -436,6 +436,19 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                         processed_permissions[permission.content_type.app_label].update({str(permission.codename): '_'})
 
+        view_settings: list = [
+            'assistance.view_knowledgebasecategory',
+            'core.view_manufacturer',
+            'core.view_ticketcategory',
+            'core.view_ticketcommentcategory',
+            'itam.view_devicemodel',
+            'itam.view_devicetype',
+            'itam.view_softwarecategory',
+            'itim.view_clustertype',
+            'project_management.view_projectstate',
+            'project_management.view_projecttype',
+            'settings.view_appsettings',
+        ]
 
         for app, entry in self._nav.items():
 
@@ -447,7 +460,22 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             for permission, page in entry['pages'].items():
 
-                if '.' in permission:
+                if permission == 'all_settings':
+
+                    for setting_permission in view_settings:
+
+                        app_permission = str(setting_permission).split('.')
+
+                        if processed_permissions.get(app_permission[0], None):
+
+                            if processed_permissions[app_permission[0]].get(app_permission[1], None):
+
+                                new_pages += [ page ]
+
+                                break
+
+
+                elif '.' in permission:
 
                     app_permission = str(permission).split('.')
 
