@@ -30,6 +30,10 @@ class NavigationMenu(
                 {
                     'content_model': 'knowledgebase',
                     'permission_model': 'knowledgebase'
+                },
+                {
+                    'content_model': 'knowledgebasecategory',
+                    'permission_model': 'knowledgebasecategory'
                 }
             ],
             'config_management': [
@@ -39,6 +43,10 @@ class NavigationMenu(
                 }
             ],
             'core': [
+                {
+                    'content_model': 'manufacturer',
+                    'permission_model': 'manufacturer'
+                },
                 {
                     'content_model': 'ticket',
                     'permission_model': 'ticket_change'
@@ -54,6 +62,14 @@ class NavigationMenu(
                 {
                     'content_model': 'ticket',
                     'permission_model': 'ticket_request'
+                },
+                {
+                    'content_model': 'ticketcategory',
+                    'permission_model': 'ticketcategory'
+                },
+                {
+                    'content_model': 'ticketcommentcategory',
+                    'permission_model': 'ticketcommentcategory'
                 }
             ],
             'django_celery_results': [
@@ -68,18 +84,34 @@ class NavigationMenu(
                     'permission_model': 'device'
                 },
                 {
+                    'content_model': 'devicemodel',
+                    'permission_model': 'devicemodel'
+                },
+                {
+                    'content_model': 'devicetype',
+                    'permission_model': 'devicetype'
+                },
+                {
                     'content_model': 'operatingsystem',
                     'permission_model': 'operatingsystem'
                 },
                 {
                     'content_model': 'software',
                     'permission_model': 'software'
+                },
+                {
+                    'content_model': 'softwarecategory',
+                    'permission_model': 'softwarecategory'
                 }
             ],
             'itim': [
                 {
                     'content_model': 'cluster',
                     'permission_model': 'cluster'
+                },
+                {
+                    'content_model': 'clustertype',
+                    'permission_model': 'clustertype'
                 },
                 {
                     'content_model': 'service',
@@ -90,8 +122,22 @@ class NavigationMenu(
                 {
                     'content_model': 'project',
                     'permission_model': 'project'
+                },
+                {
+                    'content_model': 'projectstate',
+                    'permission_model': 'projectstate'
+                },
+                {
+                    'content_model': 'projecttype',
+                    'permission_model': 'projecttype'
                 }
             ],
+            'settings': [
+                {
+                    'content_model': 'appsettings',
+                    'permission_model': 'appsettings'
+                }
+            ]
         }
 
 
@@ -884,6 +930,619 @@ class NavigationMenu(
         """
 
         nav_menu = self.metadata.get_navigation(self.project_management_project)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+
+
+
+
+
+
+
+
+    def test_navigation_menu_visible_settings_appsettings_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.settings_appsettings)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_settings_appsettings_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.settings_appsettings)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_itim_clustertype_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itim_clustertype)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_itim_clustertype_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itim_clustertype)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_itam_devicemodel_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_devicemodel)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_itam_devicemodel_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_devicemodel)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_itam_devicetype_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_devicetype)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_itam_devicetype_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_devicetype)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_assistance_knowledgebasecategory_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.assistance_knowledgebasecategory)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_assistance_knowledgebasecategory_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.assistance_knowledgebasecategory)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_core_manufacturer_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_manufacturer)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_core_manufacturer_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_manufacturer)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_project_management_projectstate_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.project_management_projectstate)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_project_management_projectstate_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.project_management_projectstate)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_project_management_projecttype_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.project_management_projecttype)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_project_management_projecttype_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.project_management_projecttype)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_itam_softwarecategory_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_softwarecategory)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_itam_softwarecategory_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.itam_softwarecategory)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_core_ticketcategory_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_ticketcategory)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_core_ticketcategory_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_ticketcategory)
+
+        pages_found: int = 0
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                pages_found += 1
+
+
+        assert pages_found == 1
+
+
+
+    def test_navigation_menu_visible_core_ticketcommentcategory_exist(self):
+        """Navigation Menu Check
+
+        Ensure that if the user has the permission, the navigation menu and
+        page is available for the user
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_ticketcommentcategory)
+
+        menu_name = 'settings'
+
+        page_name = 'setting'
+
+        menu_page_exists: bool = False
+
+
+        for menu in nav_menu:
+
+            for page in menu['pages']:
+
+                if(
+                    menu['name'] == menu_name
+                    and page['name'] == page_name
+                ):
+
+                    menu_page_exists = True
+
+
+        assert menu_page_exists
+
+
+
+    def test_navigation_menu_visible_core_ticketcommentcategory_no_additional_exist(self):
+        """Navigation Menu Check
+
+        Ensure that only the navigation menu and entry is the only one displayed
+        for the user who has the desired permission
+        """
+
+        nav_menu = self.metadata.get_navigation(self.core_ticketcommentcategory)
 
         pages_found: int = 0
 
