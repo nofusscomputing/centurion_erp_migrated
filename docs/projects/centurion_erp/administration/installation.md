@@ -22,11 +22,13 @@ Basic installation steps are as follows:
 
 1. Deploy a RabbitMQ Server
 
-1. Deploy a Web container for Centurion ERP
+1. Deploy a API container for Centurion ERP
+
+1. Deploy a UI container for Centurion ERP
 
 1. Deploy a Worker container for Centurion ERP
 
-1. Add settings file to path `/etc/itsm/settings.py` for both Centurion ERP containers.
+1. Add settings file to path `/etc/itsm/settings.py` for both API and worker Centurion ERP containers.
 
 1. Run migrations
 
@@ -42,12 +44,20 @@ As Centurion ERP is uses the Django Framework, Theoretically Every Django suppor
 
 ### RabbitMQ Server
 
-Centurion ERP uses RabbitMQ as for its worker queue. As tasks are created when using Centurion ERP, they are added to the RabbitMQ server for the background worker to pickup. When the background worker picks up the task, it does it's business, clears the task from the RabbitMQ server and saves the [results](../user/core/index.md#background-worker) within the Database.
+Centurion ERP uses RabbitMQ for its worker queue. As tasks are created when using Centurion ERP, they are added to the RabbitMQ server for the background worker to pickup. When the background worker picks up the task, it does it's business, clears the task from the RabbitMQ server and saves the [results](../user/core/index.md#background-worker) within the Database.
 
 
-### Web Container
+### API Container
 
-The [web container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is the guts of Centurion ERP. It provides the interface and endpoints for interacting with Centurion ERP. This container is scalable with the only additional requirement being that a load-balancer be placed in front of all web containers for traffic routing. If deploying to Kubernetes the service load-balancer is sufficient and setting the deployment `replicas` to the number of desired containers is the simplest method to scale.
+The [API container](https://hub.docker.com/r/nofusscomputing/centurion-erp) is the guts of Centurion ERP. It provides the endpoints for interacting with Centurion ERP. This container is scalable with the only additional requirement being that a load-balancer be placed in front of all web containers for traffic routing. If deploying to Kubernetes the service load-balancer is sufficient and setting the deployment `replicas` to the number of desired containers is the simplest method to scale.
+
+
+### UI Container
+
+!!! info
+    Currently we are still developing the UI. As such it's still considered beta. This will remain until the new UI has [feature parity](https://github.com/nofusscomputing/centurion_erp_ui/issues/18) with the current django UI.
+
+The [UI container](https://hub.docker.com/r/nofusscomputing/centurion-erp-ui) is the user interface for Centurion. The user interface uses the react framework so as to take advantage of the UI running locally on the users machine. This reduces the bandwidth requirements for using Centurion to be approximatly the data they request and not the page as well.
 
 
 ### Background Worker Container
@@ -59,7 +69,7 @@ Configuration for the worker resides in directory `/etc/itsm/` within the contai
 
 ### Settings file
 
-The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. SQLLite and MariaDB/MySQL are supported.
+The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported.
 
 ``` py title="settings.py"
 
