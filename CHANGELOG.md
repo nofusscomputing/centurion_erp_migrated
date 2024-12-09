@@ -1,3 +1,95 @@
+## 1.5.0 (2024-12-09)
+
+### feat
+
+- **python**: update django 5.1.2 -> 5.1.4
+- **api**: If global organization defined, filter from ALL organization fields
+- **api**: Add nav menu permission checks for settings
+- **api**: When fething an items url dueing metadata creation, used named parameters
+- **access**: Modify Admin User panel by removing perms and adding teams
+- **access**: filter permissions available
+- **api**: Filter navigation menu by user permissions
+- **api**: Add API version details to the metadata
+- **access**: add `back` and `return_url` urls to team user metadata
+- **access**: add `back` and `return_url` urls to team metadata
+- **api**: Add `back` url to metadata
+- **api**: Add `return_url` to metadata
+
+### Fixes
+
+- **settings**: Add missing `get_url` function to user_settings model
+- **settings**: Add missing `get_url` function to app_settings model
+- **core**: correctr the required parameters for related ticket serializer when fetching own url
+- **core**: Remove requirement that ticket be specified for related tickets `get_url`
+- **access**: Add missing `table_fields` attribute to team users model
+- **api**: during metadata navigation permission checks, cater for non-existant keys
+- **core**: Remove superfluous check from ticket viewset
+- **access**: Team permissions is not a required field
+- **core**: History query must also be for self, not just children
+- **access**: correct team users table to correct data key
+
+### Refactoring
+
+- **access**: Settings must be an available permissions when setting team permissions
+- **itam**: set deviceoperatingsystem model, device field to be type `onetoone`
+- **assistance**: make content the first tab for kb articles
+- **api**: move metadata url_return -> urls.self
+
+### Tests
+
+- **api**: Nav menu permission checks for settings
+- **api**: Nav menu permission checks
+- **core**: Correct `url.self`checks to use list view
+- **core**: Dont test History for table view
+- **settings**: Dont test user settings for table view
+- **steeings**: Dont test app settings for table view
+- **core**: Dont test related ticket for table or detail view
+- **api**: Refactor test so that endpoints not expected to have an endpoint or be rendered in a table wont be tested for it.
+- **settings**: API Metadata checks for user settings
+- **settings**: API Metadata checks for external links
+- **settings**: API Metadata checks for app settings
+- **project_management**: API Metadata checks for project type
+- **project_management**: API Metadata checks for project task
+- **project_management**: API Metadata checks for project state
+- **project_management**: API Metadata checks for project milestone
+- **project_management**: API Metadata checks for project
+- **itim**: API Metadata checks for problem ticket
+- **itim**: API Metadata checks for incident ticket
+- **itim**: API Metadata checks for change ticket
+- **itim**: API Metadata checks for service
+- **itim**: API Metadata checks for port
+- **itim**: API Metadata checks for cluster type
+- **itim**: API Metadata checks for cluster
+- **itam**: API Metadata checks for software version
+- **itam**: API Metadata checks for software category
+- **itam**: API Metadata checks for software
+- **itam**: API Metadata checks for operating system version
+- **itam**: API Metadata checks for operating system
+- **itam**: API Metadata checks for software
+- **itam**: API Metadata checks for operating system
+- **itam**: API Metadata checks for device type
+- **itam**: API Metadata checks for device OS
+- **itam**: API Metadata checks for device model
+- **itam**: API Metadata checks for device
+- **core**: API Metadata checks for ticket comment category
+- **core**: API Metadata checks for ticket comment
+- **core**: API Metadata checks for ticket category
+- **core**: API Metadata checks for history
+- **core**: API Metadata checks for related tickets
+- **core**: API Metadata checks for manufacturers
+- **config_management**: API Metadata checks for config group software
+- **config_management**: API Metadata checks for config groups
+- **access**: API Metadata checks for request ticket
+- **access**: API Metadata checks for kb category
+- **access**: API Metadata checks for kb
+- **api**: correct metadata testcases
+- **access**: API Metadata checks for organization
+- **api**: API Metadata test cases for navigation menu rendering
+- **api**: correct logic for test class attribute fetching
+- **access**: API Metadata checks for Team User model
+- **access**: API Metadata checks for Team model
+- **api**: API Metadata functional Test Cases
+
 ## 1.4.1 (2024-11-30)
 
 ### Fixes
