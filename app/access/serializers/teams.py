@@ -6,9 +6,10 @@ from access.models import Team
 
 from api.serializers import common
 
+from access.functions.permissions import permission_queryset
 from access.serializers.organization import OrganizationBaseSerializer
 
-from app.serializers.permission import PermissionBaseSerializer
+from app.serializers.permission import Permission, PermissionBaseSerializer
 
 from core import fields as centurion_field
 
@@ -74,6 +75,7 @@ class TeamModelSerializer(
 
     team_name = centurion_field.CharField( autolink = True )
 
+    permissions = serializers.PrimaryKeyRelatedField(many = True, queryset=permission_queryset(), required = False)
 
     class Meta:
 

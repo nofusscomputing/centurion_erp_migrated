@@ -16,6 +16,10 @@ from api.tests.abstract.api_serializer_viewset import (
     SerializerChange,
     SerializerView,
 )
+from api.tests.abstract.test_metadata_functional import (
+    MetadataAttributesFunctionalBase,
+    MetadataAttributesFunctionalEndpoint
+)
 
 from settings.models.app_settings import AppSettings
 
@@ -241,3 +245,22 @@ class AppSettingsViewSet(
 ):
 
     pass
+
+
+
+class AppSettingsMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctionalEndpoint,
+    MetadataAttributesFunctionalBase,
+    TestCase
+):
+
+    viewset_type = 'detail'
+
+    @classmethod
+    def setUpTestData(self):
+
+        super().setUpTestData()
+
+        self.url_kwargs = self.url_view_kwargs
+

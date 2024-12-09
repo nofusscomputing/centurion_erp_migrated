@@ -23,8 +23,6 @@ def permission_queryset():
         'chordcounter',
         'comment',
         'groupresult',
-        'organization'
-        'settings',
         'usersettings',
     ]
 

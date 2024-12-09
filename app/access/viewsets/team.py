@@ -1,5 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
+from access.models import Organization
+
 from access.serializers.teams import (
     Team,
     TeamModelSerializer,
@@ -124,6 +126,24 @@ class ViewSet( ModelViewSet ):
 
     view_description = 'Teams belonging to a single organization'
 
+
+    def get_back_url(self) -> str:
+
+        if(
+            getattr(self, '_back_url', None) is None
+        ):
+
+            return_model = Organization.objects.get(
+                pk = self.kwargs['organization_id']
+            )
+
+            self._back_url = str(
+                return_model.get_url( self.request )
+            )
+
+        return self._back_url
+
+
     def get_queryset(self):
 
         queryset = super().get_queryset()
@@ -146,3 +166,21 @@ class ViewSet( ModelViewSet ):
 
         return globals()[str( self.model._meta.verbose_name) + 'ModelSerializer']
 
+
+    def get_return_url(self) -> str:
+
+        if getattr(self, '_get_return_url', None):
+
+            return self._get_return_url
+
+        if self.kwargs.get('pk', None) is None:
+
+            return_model = Organization.objects.get(
+                pk = self.kwargs['organization_id']
+            )
+
+            self._get_return_url = return_model.get_url( self.request )
+
+            return self._get_return_url
+
+        return None

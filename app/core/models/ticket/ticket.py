@@ -1186,11 +1186,7 @@ class RelatedTickets(TenancyObject):
     ]
 
 
-    def get_url( self, ticket_id, request = None ) -> str:
-
-        if not ticket_id:
-
-            return ''
+    def get_url( self, request = None ) -> str:
 
         if request:
 
@@ -1198,7 +1194,7 @@ class RelatedTickets(TenancyObject):
                 "v2:_api_v2_ticket_related-detail",
                 request = request,
                 kwargs={
-                    'ticket_id': ticket_id,
+                    'ticket_id': self.from_ticket_id.id,
                     'pk': self.id
                 }
             )
@@ -1206,7 +1202,7 @@ class RelatedTickets(TenancyObject):
         return reverse(
                 "v2:_api_v2_ticket_related-detail",
                 kwargs={
-                    'ticket_id': ticket_id,
+                    'ticket_id': self.from_ticket_id.id,
                     'pk': self.id
                 }
             )

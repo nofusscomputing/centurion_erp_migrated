@@ -369,7 +369,7 @@ class Team(Group, TenancyObject):
                 {
                     "layout": "table",
                     "name": "Users",
-                    "field": "user",
+                    "field": "users",
                 },
             ]
         },
@@ -489,7 +489,10 @@ class TeamUsers(SaveHistory):
 
     page_layout: list = []
 
-    table_fields: list = []
+    table_fields: list = [
+        'user',
+        'manager'
+    ]
 
 
     def delete(self, using=None, keep_parents=False):

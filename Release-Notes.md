@@ -1,3 +1,11 @@
+## Version 1.5.0
+
+- When v1.4.0 was release the migrations were not merged. As part of the work conducted on this release the v1.4 migrations have been squashed. This should not have any effect on any system that when they updated to v1.4, they ran the migrations and they **completed successfully**. Upgrading from <1.4.0 to this release should also have no difficulties as the migrations required still exist. There are less of them, however with more work per migration.
+
+!!! Note
+    If you require the previously squashed migrations for what ever reason. Clone the repo and go to commit 17f47040d6737905a1769eee5c45d9d15339fdbf, which is the commit prior to the squashing which is commit ca2da06d2cd393cabb7e172ad47dfb2dd922d952.
+
+
 ## Version 1.4.0
 
 API redesign in preparation for moving the UI out of centurion to it's [own project](https://github.com/nofusscomputing/centurion_erp_ui). This release introduces a **Feature freeze** to the current UI. Only bug fixes will be done for the current UI.

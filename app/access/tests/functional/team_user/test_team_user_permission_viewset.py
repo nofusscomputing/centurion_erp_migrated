@@ -6,10 +6,13 @@ import requests
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.contenttypes.models import ContentType
-from django.test import TestCase
+from django.test import Client, TestCase
+
+from rest_framework.reverse import reverse
 
 from access.models import Organization, Team, TeamUsers, Permission
 
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
 
@@ -209,3 +212,98 @@ class TeamUserViewSet(
 ):
 
     pass
+
+
+
+class TeamUserMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase,
+
+):
+
+
+
+    def test_method_options_request_detail_data_has_key_urls_back(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned has key `urls.back`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert 'back' in response.data['urls']
+
+
+    def test_method_options_request_detail_data_key_urls_back_is_str(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `urls.back` is str
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data['urls']['back']) is str
+
+
+
+    def test_method_options_request_list_data_has_key_urls_return_url(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned has key `urls.return_url`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+        response = client.options( url, content_type='application/json' )
+
+        assert 'return_url' in response.data['urls']
+
+
+    def test_method_options_request_list_data_key_urls_return_url_is_str(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `urls.return_url` is str
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        if self.url_kwargs:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
+
+        else:
+
+            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
+
+        response = client.options( url, content_type='application/json' )
+
+        assert type(response.data['urls']['return_url']) is str
