@@ -108,6 +108,8 @@ When adding a view, that is also meant to be seen by the end user, a navigation 
 
 - `link` the relative URL for the entry. this will be the relative URL of the API after the API's version number. _i.e. `/api/v2/assistance/ticket/request` would become `/assistance/ticket/request`_
 
+Testing of the navigation is via `api.tests.unit.test_navigation_menu.py` If the item has a navigation menu entry the `setUpTestData` will need to be updated, along with test cases for the entry.
+
 
 ### Menu
 

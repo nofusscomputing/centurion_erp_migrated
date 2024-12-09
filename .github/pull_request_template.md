@@ -20,6 +20,9 @@
 
 <!-- dont remove tasks below strike through including the checkbox by enclosing in double tidle '~~' -->
 
+ - [ ] **Feature Release ONLY** :red_square: Squash migration files :red_square: 
+    _Multiple migration files created as part of this release are to be sqauashed into a few files as possible so as to limit the number of migrations_ 
+
 - [ ] :firecracker: Contains breaking-change Any Breaking change(s)?
 
     _Breaking Change must also be notated in the commit that introduces it and in [Conventional Commit Format](https://www.conventionalcommits.org/en/v1.0.0/)._
