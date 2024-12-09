@@ -1,4 +1,4 @@
-## Next Release
+## Version 1.5.0
 
 - When v1.4.0 was release the migrations were not merged. As part of the work conducted on this release the v1.4 migrations have been squashed. This should not have any effect on any system that when they updated to v1.4, they ran the migrations and they **completed successfully**. Upgrading from <1.4.0 to this release should also have no difficulties as the migrations required still exist. There are less of them, however with more work per migration.
 
