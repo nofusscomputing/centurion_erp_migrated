@@ -81,7 +81,7 @@ class RelatedTicketModelSerializer(RelatedTicketBaseSerializer):
                 ticket_id = int(self._kwargs['context']['view'].kwargs['ticket_id'])
 
         return {
-            '_self': item.get_url( ticket_id = ticket_id, request = request ),
+            '_self': item.get_url( request = request ),
         }
 
 

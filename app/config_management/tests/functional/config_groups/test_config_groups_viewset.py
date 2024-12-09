@@ -12,6 +12,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
 
 from config_management.models.groups import ConfigGroups
 
@@ -207,3 +208,16 @@ class ConfigGroupsViewSet(
 ):
 
     pass
+
+
+
+class ConfigGroupsMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional,
+    TestCase
+):
+
+    menu_id = 'config_management'
+
+    menu_entry_id = 'group'

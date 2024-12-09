@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional, MetaDataNavigationEntriesFunctional
+
 from core.tests.abstract.test_ticket_viewset import Ticket, TicketViewSetBase, TicketViewSetPermissionsAPI, TicketViewSet
 
 
@@ -29,3 +31,16 @@ class TicketRequestViewSet(
 ):
 
     pass
+
+
+
+class TicketRequestMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    MetaDataNavigationEntriesFunctional,
+    TestCase
+):
+
+    menu_id = 'assistance'
+
+    menu_entry_id = 'request'

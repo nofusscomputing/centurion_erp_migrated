@@ -4,9 +4,9 @@ from rest_framework import serializers
 
 from access.models import Organization
 
-from api.serializers import common
-
 from app.serializers.user import UserBaseSerializer
+
+from core import fields as centurion_field
 
 
 
@@ -43,7 +43,6 @@ class OrganizationBaseSerializer(serializers.ModelSerializer):
 
 
 class OrganizationModelSerializer(
-    common.CommonModelSerializer,
     OrganizationBaseSerializer
 ):
 
@@ -56,6 +55,7 @@ class OrganizationModelSerializer(
             'teams': reverse("v2:_api_v2_organization_team-list", request=self._context['view'].request, kwargs={'organization_id': item.pk}),
         }
 
+    model_notes = centurion_field.MarkdownField( required = False )
 
     class Meta:
 

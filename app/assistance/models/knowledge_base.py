@@ -251,6 +251,24 @@ class KnowledgeBase(TenancyObject):
 
     page_layout: dict = [
         {
+            "name": "Content",
+            "slug": "content",
+            "sections": [
+                {
+                    "layout": "single",
+                    "fields": [
+                        'summary',
+                    ]
+                },
+                {
+                    "layout": "single",
+                    "fields": [
+                        'content',
+                    ]
+                }
+            ]
+        },
+        {
             "name": "Details",
             "slug": "details",
             "sections": [

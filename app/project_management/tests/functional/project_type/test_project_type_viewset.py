@@ -8,6 +8,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from api.tests.abstract.api_permissions_viewset import APIPermissions
 from api.tests.abstract.api_serializer_viewset import SerializersTestCases
+from api.tests.abstract.test_metadata_functional import MetadataAttributesFunctional
 
 from project_management.models.project_types import ProjectType
 
@@ -189,5 +190,15 @@ class ProjectTypePermissionsAPI(ViewSetBase, APIPermissions, TestCase):
 
 
 class ProjectTypeViewSet(ViewSetBase, SerializersTestCases, TestCase):
+
+    pass
+
+
+
+class ProjectTypeMetadata(
+    ViewSetBase,
+    MetadataAttributesFunctional,
+    TestCase
+):
 
     pass
