@@ -14,7 +14,9 @@ Deployment of Centurion ERP is recommended to be behind a reverse proxy. This is
     `docker pull nofusscomputing/centurion-erp:latest`.
 
 
-## Installation
+## Deploying Centurion
+
+Centurion ERP is a container base application. You can deploy it with any container engine, like Docker and Kubernetes. Although its design is for kubernetes, you dont require a cluster to deploy it. With K3s you can deploy a [single node (single machine) with Kubernetes](../../ansible/collection/kubernetes/index.md) and deploy Centurion ERP upon it. This option provides the opportunity to quickly extend the size of the cluster should you require it.
 
 Basic installation steps are as follows:
 
@@ -28,6 +30,8 @@ Basic installation steps are as follows:
 
 1. Deploy a Worker container for Centurion ERP
 
+1. Deploy a reverse proxy _(Nginx / Apache, or any other proxy capable of being a HTTPS reverse proxy)_
+
 1. Add settings file to path `/etc/itsm/settings.py` for both API and worker Centurion ERP containers.
 
 1. Run migrations
@@ -35,6 +39,42 @@ Basic installation steps are as follows:
     - Docker `docker exec -ti <container name or id> -- python manage.py migrate`
 
     - Kubernetes `kubectl exec -ti -n <namespace> deploy/<deployment-name> -- python manage.py migrate`
+
+Deploying Centurion ERP is intended to be done behind a reverse proxy that conducts the TLS termination. This is by design and due to the following reasons:
+
+- gunicorn has been setup to serve Centurion ERP via a websocket within the API container. The local Nginx installation proxies directly to this.
+
+- Proxy headers have been setup to pass on the required information to gunicorn so that Centurion ERP functions correctly.
+
+- The API container does not serve HTTP/443 (TLS), only HTTP/80 (insecure http).
+
+- No sanitization of HTTP headers is done. The headers passed to the API container are considered and expected to be trusted.
+
+With the above in mind there your reverse proxy must be setup with the following:
+
+- required headers set by proxy are: `X-Forwarded-For`, `X-Forwarded-Proto` and `X-Real-IP`.
+
+- your proxy sanitizes any additional `X-Forwarded-*` headers
+
+- Proxy setup to serve Centurion URL over HTTPS (TLS)
+
+!!! danger "Proxy Headers"
+    Failing to sanitize proxy headers, especially `X-Forwarded-For`, `X-Forwarded-Proto` and `X-Real-IP` has the potential for your deployment to be compromised. As the setup of the reverse proxy is outside of the scope of this documentation, you should refer to the documentation of the proxy you are implementing.
+
+
+## Centurion Components
+
+Centurion ERP is not a monolithic application. ALL components have been broken into smaller modules so they can be scaled to meet demands as required. The components that make up a Centurion ERP deploymnent are:
+
+- Database server
+
+- RabbitMQ Server
+
+- API
+
+- Worker
+
+- UI
 
 
 ### Database Server
@@ -67,7 +107,7 @@ The [Background Worker container](https://hub.docker.com/r/nofusscomputing/centu
 Configuration for the worker resides in directory `/etc/itsm/` within the container. see below for the `CELERY_` configuration.
 
 
-### Settings file
+## Settings file
 
 The settings file is a python file `.py` and must remain a valid python file for the application to work. Settings for the application are stored within a docker volume at path `/etc/itsm/`, with the settings living in `.py` files. A database is also required for the application to store it's settings. PostgreSQL is supported.
 
@@ -78,7 +118,7 @@ The settings file is a python file `.py` and must remain a valid python file for
 ```
 
 
-### Migrations
+## Migrations
 
 Migrations serve the purpose of setting up the database. On initial deployment of Centurion ERP migrations must be run as must they be on any upgrade.
 
