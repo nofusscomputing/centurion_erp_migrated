@@ -6,6 +6,7 @@ from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers.common import OrganizationField
 from api.exceptions import UnknownTicketType
 
 from core import exceptions as centurion_exception
@@ -101,6 +102,8 @@ class TicketModelSerializer(TicketBaseSerializer):
     duration = serializers.IntegerField(source='duration_ticket', read_only=True)
 
     status_badge = BadgeField(label='Status')
+
+    organization = OrganizationField( required = True, write_only = True )
 
 
     class Meta:
