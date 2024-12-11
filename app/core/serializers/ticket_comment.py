@@ -276,6 +276,28 @@ class TicketCommentModelSerializer(
 
 
 
+class TicketCommentAddModelSerializer(
+    TicketCommentModelSerializer,
+):
+    """Dummy Serializer
+
+    This serializer exists so that the DRF API Browser functions.
+    """
+
+    pass
+
+class TicketCommentChangeModelSerializer(
+    TicketCommentModelSerializer,
+):
+    """Dummy Serializer
+
+    This serializer exists so that the DRF API Browser functions.
+    """
+
+    pass
+
+
+
 class TicketCommentITILModelSerializer(TicketCommentModelSerializer):
     """ITIL Comment Model Base
 
