@@ -257,6 +257,10 @@ class TicketCommentModelSerializer(
                             pk = int(self.validated_data['ticket_id'])
                         ).organization
 
+                    if 'parent_id' in self._kwargs['context']['view'].kwargs:
+
+                        self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
+
                 else:
 
                     raise centurion_exceptions.ValidationError(
