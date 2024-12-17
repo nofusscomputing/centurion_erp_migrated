@@ -26,4 +26,8 @@ DATABASES = {
 #
 # CELERY_BROKER_URL = 'amqp://<username>:<password>@<host>:<port>/[<message host>]'  # 'amqp://' is the connection protocol
 
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 SECURE_SSL_REDIRECT = True
+
+USE_X_FORWARDED_HOST = True 
