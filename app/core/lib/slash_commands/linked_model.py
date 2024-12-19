@@ -45,6 +45,9 @@ For this command to process the following conditions must be met:
         Slash command usage within a ticket description will add an action comment with the
         time spent. For a ticket comment, it's duration field is set to the duration valuee calculated.
 
+        Adding a new item to be linked also requires that you update the `__str__` function within
+        `core.models.ticket.ticket_linked_item.TicketLinkedItem`
+
         Args:
             match (re.Match): Named group matches
 
@@ -88,6 +91,14 @@ For this command to process the following conditions must be met:
                 model = Device
 
                 item_type = TicketLinkedItem.Modules.DEVICE
+
+            elif model_type == 'kb':
+
+                from assistance.models.knowledge_base import KnowledgeBase
+
+                model = KnowledgeBase
+
+                item_type = TicketLinkedItem.Modules.KB
 
             elif  model_type == 'operating_system':
 

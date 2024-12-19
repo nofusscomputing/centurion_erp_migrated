@@ -32,6 +32,8 @@ class TicketLinkedItem(TenancyObject):
         SERVICE          = 5, 'Service'
         SOFTWARE         = 6, 'Software'
 
+        KB               = 7, 'Knowledge Base Article'
+
     is_global = None
 
     model_notes = None
@@ -112,6 +114,10 @@ class TicketLinkedItem(TenancyObject):
         elif self.item_type == TicketLinkedItem.Modules.DEVICE:
 
             item_type = 'device'
+
+        elif self.item_type == TicketLinkedItem.Modules.KB:
+
+            item_type = 'kb'
 
         elif self.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
