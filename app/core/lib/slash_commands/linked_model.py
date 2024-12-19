@@ -51,8 +51,13 @@ For this command to process the following conditions must be met:
         Slash command usage within a ticket description will add an action comment with the
         time spent. For a ticket comment, it's duration field is set to the duration valuee calculated.
 
-        Adding a new item to be linked also requires that you update the `__str__` function within
-        `core.models.ticket.ticket_linked_item.TicketLinkedItem`
+        ## Adding New Item
+
+        Adding a new item to be linked also requires that you update:
+        
+        - `__str__` function within `core.models.ticket.ticket_linked_item.TicketLinkedItem`
+
+        - `get_item` function within `app.core.serializar.ticket_linked_item.TicketLinkedItemViewSerializer`
 
         Args:
             match (re.Match): Named group matches
