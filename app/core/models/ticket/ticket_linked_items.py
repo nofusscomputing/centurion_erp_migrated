@@ -33,6 +33,7 @@ class TicketLinkedItem(TenancyObject):
         SOFTWARE         = 6, 'Software'
 
         KB               = 7, 'Knowledge Base Article'
+        ORGANIZATION     = 8, 'Organization'
 
     is_global = None
 
@@ -122,6 +123,10 @@ class TicketLinkedItem(TenancyObject):
         elif self.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
             item_type = 'operating_system'
+
+        elif self.item_type == TicketLinkedItem.Modules.ORGANIZATION:
+
+            item_type = 'organization'
 
         elif self.item_type == TicketLinkedItem.Modules.SERVICE:
 

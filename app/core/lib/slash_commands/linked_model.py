@@ -108,6 +108,14 @@ For this command to process the following conditions must be met:
 
                 item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
 
+            elif  model_type == 'organization':
+
+                from access.models import Organization
+
+                model = Organization
+
+                item_type = TicketLinkedItem.Modules.ORGANIZATION
+
             elif model_type == 'service':
 
                 from itim.models.services import Service
