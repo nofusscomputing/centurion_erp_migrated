@@ -132,6 +132,14 @@ For this command to process the following conditions must be met:
 
                 item_type = TicketLinkedItem.Modules.SOFTWARE
 
+            elif model_type == 'team':
+
+                from access.models import Team
+
+                model = Team
+
+                item_type = TicketLinkedItem.Modules.TEAM
+
             else:
 
                 return str(match.string[match.start():match.end()])

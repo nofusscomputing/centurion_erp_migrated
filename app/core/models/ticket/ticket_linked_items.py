@@ -34,6 +34,7 @@ class TicketLinkedItem(TenancyObject):
 
         KB               = 7, 'Knowledge Base Article'
         ORGANIZATION     = 8, 'Organization'
+        TEAM             = 9, 'Team'
 
     is_global = None
 
@@ -135,6 +136,10 @@ class TicketLinkedItem(TenancyObject):
         elif self.item_type == TicketLinkedItem.Modules.SOFTWARE:
 
             item_type = 'software'
+
+        elif self.item_type == TicketLinkedItem.Modules.TEAM:
+
+            item_type = 'team'
 
         if item_type:
 
