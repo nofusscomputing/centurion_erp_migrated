@@ -6,6 +6,7 @@ from rest_framework.fields import empty
 from access.serializers.organization import Organization, OrganizationBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
+from api.serializers import common
 from api.exceptions import UnknownTicketType
 
 from app.serializers.user import UserBaseSerializer
@@ -50,6 +51,7 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
 
 class TicketCommentModelSerializer(
+    common.CommonModelSerializer,
     TicketCommentBaseSerializer,
 ):
     """Base class for Ticket Comment Model
