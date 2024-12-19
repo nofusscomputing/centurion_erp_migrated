@@ -22,11 +22,17 @@ Available model types for linking are as follows:
 
 - device
 
+- kb
+
 - operating_system
+
+- organization
 
 - service
 
 - software
+
+- team
 
 For this command to process the following conditions must be met:
 
