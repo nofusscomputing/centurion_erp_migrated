@@ -263,6 +263,17 @@ class TicketCommentModelSerializer(
 
                         self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
 
+                        comment = self.Meta.model.objects.filter( id = self.validated_data['parent_id'] )
+
+                        if list(comment)[0].parent_id:
+
+                            raise centurion_exceptions.ValidationError(
+                                detail = {
+                                    'parent': 'Replying to a discussion reply is not possible'
+                                },
+                                code = 'single_discussion_replies_only'
+                            )
+
                 else:
 
                     raise centurion_exceptions.ValidationError(
