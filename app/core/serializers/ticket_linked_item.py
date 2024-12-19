@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from assistance.serializers.request import TicketBaseSerializer
 
 from core.fields.badge import BadgeField
@@ -49,7 +51,10 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
+class TicketLinkedItemModelSerializer(
+    common.CommonModelSerializer,
+    TicketLinkedItemBaseSerializer,
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
