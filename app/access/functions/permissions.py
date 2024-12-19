@@ -15,6 +15,7 @@ def permission_queryset():
         'django_celery_results',
         'itam',
         'itim',
+        'project_management',
         'settings',
     ]
 
