@@ -52,6 +52,8 @@ All models must meet the following requirements:
 
 - Attribute `table_fields` is defined with the fields to display by default for viewing the model within a table.
 
+- `clean()` method within a model is **only** used to ensure that the data entered into the DB is valid and/or to ensure application wide changes/validation is conducted prior to saving model.
+
 
 ## Checklist
 
