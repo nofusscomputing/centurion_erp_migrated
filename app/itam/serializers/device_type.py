@@ -57,7 +57,7 @@ class DeviceTypeModelSerializer(
                 request=self._context['view'].request,
                 kwargs={
                     'model': self.Meta.model._meta.model_name,
-                    'model_pk': item.pk
+                    'model_pk': obj.pk
                 }
             ),
         }
