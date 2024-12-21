@@ -321,6 +321,8 @@ class TenancyObject(SaveHistory):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
+        self.clean()
+
         if self.organization is None:
 
             raise ValidationError('Organization not defined')

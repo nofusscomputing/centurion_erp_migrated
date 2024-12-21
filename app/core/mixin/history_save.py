@@ -172,8 +172,6 @@ class SaveHistory(models.Model):
         is the data that was saved to the DB.
         """
 
-        self.clean()
-
         before = {}
 
         try:
