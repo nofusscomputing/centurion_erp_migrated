@@ -54,6 +54,8 @@ All models must meet the following requirements:
 
 - `clean()` method within a model is **only** used to ensure that the data entered into the DB is valid and/or to ensure application wide changes/validation is conducted prior to saving model.
 
+- Tenancy models must have the ability to have a [knowledge base article](#knowledge-base-article-linking) linked to it.
+
 
 ## Checklist
 
@@ -146,6 +148,50 @@ The following Unit test cases exists for models:
 
 !!! info
     If you add a feature you will have to write the test cases for that feature if they are not covered by existing test cases.
+
+
+## Knowledge Base Article linking
+
+All Tenancy Models must have the ability to be able to have a knowledge base article linked to it. To do so the following must be done:
+
+- Add to the serializer as part of dictionary `_urls` key `knowledge_base` that resolves to the article url.
+
+    ``` python
+
+    def get_url(self, obj) -> dict:
+
+        return {
+            '_self': ...,
+            'knowledge_base': reverse(
+                "v2:_api_v2_model_kb-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model': self.Meta.model._meta.model_name,
+                    'model_pk': item.pk
+                }
+            ),
+        }
+
+    ```
+
+- Add to the models `page_layout` attirubute a tab called `Knowledge Base`
+
+    ``` python
+
+    page_layout: dict = [
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+    ]
+
+    ```
 
 
 ## Docs to clean up
