@@ -225,7 +225,13 @@ class ModelKnowledgeBaseArticlePermissionsAPI(
     TestCase,
 ):
 
-    pass
+
+    @pytest.mark.skip( reason = 'not required' )
+    def test_delete_permission_change_denied(self):
+        """This model does not have a change user"""
+
+        pass
+
 
 
 class ModelKnowledgeBaseArticleViewSet(
