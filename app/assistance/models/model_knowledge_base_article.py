@@ -4,6 +4,8 @@ from django.apps import apps
 from django.db import models
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from access.fields import *
 from access.models import TenancyObject
 
@@ -103,6 +105,7 @@ class ModelKnowledgeBaseArticle(TenancyObject):
         choices = all_models,
         help_text = 'Model type to link to article article',
         max_length = 50,
+        null = False,
         unique = False,
         verbose_name = 'Model Type',
     )
@@ -111,6 +114,7 @@ class ModelKnowledgeBaseArticle(TenancyObject):
     model_pk = models.IntegerField(
         blank = False,
         help_text = 'PK of the model the article is linked to',
+        null = False,
         unique = False,
         verbose_name = 'Model Primary Key'
     )
@@ -150,3 +154,8 @@ class ModelKnowledgeBaseArticle(TenancyObject):
 
                     self.organization = item.organization
 
+
+    def get_url( self, request = None ):
+        """ Function not required nor-used"""
+
+        return None
