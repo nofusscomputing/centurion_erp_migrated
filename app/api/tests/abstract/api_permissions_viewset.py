@@ -370,6 +370,22 @@ class APIPermissionChange:
         assert response.status_code == 200
 
 
+    def test_delete_permission_change_denied(self):
+        """ Check correct permission for delete
+
+        Attempt to delete as user with change permission only
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
+
+
+        client.force_login(self.change_user)
+        response = client.delete(url, data=self.delete_data)
+
+        assert response.status_code == 403
+
+
 
 class APIPermissionDelete:
 
@@ -463,22 +479,6 @@ class APIPermissionDelete:
 
 
         client.force_login(self.add_user)
-        response = client.delete(url, data=self.delete_data)
-
-        assert response.status_code == 403
-
-
-    def test_delete_permission_change_denied(self):
-        """ Check correct permission for delete
-
-        Attempt to delete as user with change permission only
-        """
-
-        client = Client()
-        url = reverse(self.app_namespace + ':' + self.url_name + '-detail', kwargs=self.url_view_kwargs)
-
-
-        client.force_login(self.change_user)
         response = client.delete(url, data=self.delete_data)
 
         assert response.status_code == 403
