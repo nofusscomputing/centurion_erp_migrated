@@ -115,6 +115,16 @@ class Port(TenancyObject):
             ]
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Notes",
             "slug": "notes",
             "sections": []
@@ -316,6 +326,16 @@ class Service(TenancyObject):
                     "fields": [
                         "rendered_config",
                     ]
+                }
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
                 }
             ]
         },
