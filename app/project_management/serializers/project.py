@@ -66,6 +66,14 @@ class ProjectModelSerializer(ProjectBaseSerializer):
                     'model_id': item.pk
                 }
             ),
+            'knowledge_base': reverse(
+                "v2:_api_v2_model_kb-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model': self.Meta.model._meta.model_name,
+                    'model_pk': item.pk
+                }
+            ),
             'milestone': reverse("v2:_api_v2_project_milestone-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'notes': reverse("v2:_api_v2_project_notes-list", request=self._context['view'].request, kwargs={'project_id': item.pk}),
             'tickets': reverse(
