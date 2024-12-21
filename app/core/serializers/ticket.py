@@ -6,6 +6,7 @@ from access.serializers.teams import TeamBaseSerializer
 
 from app.serializers.user import UserBaseSerializer
 
+from api.serializers import common
 from api.serializers.common import OrganizationField
 from api.exceptions import UnknownTicketType
 
@@ -58,7 +59,10 @@ class TicketBaseSerializer(serializers.ModelSerializer):
     is_import: bool = False
 
 
-class TicketModelSerializer(TicketBaseSerializer):
+class TicketModelSerializer(
+    common.CommonModelSerializer,
+    TicketBaseSerializer
+):
 
     _urls = serializers.SerializerMethodField('get_url')
 

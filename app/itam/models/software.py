@@ -78,6 +78,16 @@ class SoftwareCategory(SoftwareCommonFields, SaveHistory):
             ]
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Notes",
             "slug": "notes",
             "sections": []
@@ -199,6 +209,16 @@ class Software(SoftwareCommonFields, SaveHistory):
             ],
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Tickets",
             "slug": "tickets",
             "sections": [
@@ -311,6 +331,16 @@ class SoftwareVersion(SoftwareCommonFields, SaveHistory):
                         'is_global',
                     ]
                 },
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
             ]
         },
         {

@@ -49,7 +49,9 @@ class TicketLinkedItemBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class TicketLinkedItemModelSerializer(TicketLinkedItemBaseSerializer):
+class TicketLinkedItemModelSerializer(
+    TicketLinkedItemBaseSerializer,
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
@@ -184,6 +186,14 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
 
             model = Device
 
+        elif item.item_type == TicketLinkedItem.Modules.KB:
+
+            from assistance.serializers.knowledge_base import KnowledgeBase, KnowledgeBaseBaseSerializer
+
+            base_serializer = KnowledgeBaseBaseSerializer
+
+            model = KnowledgeBase
+
         elif item.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
             from itam.serializers.operating_system import OperatingSystem, OperatingSystemBaseSerializer
@@ -191,6 +201,14 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
             base_serializer = OperatingSystemBaseSerializer
 
             model = OperatingSystem
+
+        elif item.item_type == TicketLinkedItem.Modules.ORGANIZATION:
+
+            from access.serializers.organization import Organization, OrganizationBaseSerializer
+
+            base_serializer = OrganizationBaseSerializer
+
+            model = Organization
 
         elif item.item_type == TicketLinkedItem.Modules.SERVICE:
 
@@ -207,6 +225,14 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
             base_serializer = SoftwareBaseSerializer
 
             model = Software
+
+        elif item.item_type == TicketLinkedItem.Modules.TEAM:
+
+            from access.serializers.teams import Team, TeamBaseSerializer
+
+            base_serializer = TeamBaseSerializer
+
+            model = Team
 
         
         if not base_serializer:

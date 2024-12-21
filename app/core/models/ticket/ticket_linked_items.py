@@ -32,6 +32,10 @@ class TicketLinkedItem(TenancyObject):
         SERVICE          = 5, 'Service'
         SOFTWARE         = 6, 'Software'
 
+        KB               = 7, 'Knowledge Base Article'
+        ORGANIZATION     = 8, 'Organization'
+        TEAM             = 9, 'Team'
+
     is_global = None
 
     model_notes = None
@@ -113,9 +117,17 @@ class TicketLinkedItem(TenancyObject):
 
             item_type = 'device'
 
+        elif self.item_type == TicketLinkedItem.Modules.KB:
+
+            item_type = 'kb'
+
         elif self.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
             item_type = 'operating_system'
+
+        elif self.item_type == TicketLinkedItem.Modules.ORGANIZATION:
+
+            item_type = 'organization'
 
         elif self.item_type == TicketLinkedItem.Modules.SERVICE:
 
@@ -124,6 +136,10 @@ class TicketLinkedItem(TenancyObject):
         elif self.item_type == TicketLinkedItem.Modules.SOFTWARE:
 
             item_type = 'software'
+
+        elif self.item_type == TicketLinkedItem.Modules.TEAM:
+
+            item_type = 'team'
 
         if item_type:
 

@@ -291,18 +291,6 @@ class KnowledgeBase(TenancyObject):
                         'target_user',
                         'target_team',
                     ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'summary',
-                    ]
-                },
-                {
-                    "layout": "single",
-                    "fields": [
-                        'content',
-                    ]
                 }
             ]
         },

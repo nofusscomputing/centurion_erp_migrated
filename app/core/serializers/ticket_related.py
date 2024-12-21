@@ -4,6 +4,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from core.serializers.ticket import Ticket, TicketBaseSerializer
 
 from core import exceptions as centurion_exceptions
@@ -59,7 +61,10 @@ class RelatedTicketBaseSerializer(serializers.ModelSerializer):
         ]
 
 
-class RelatedTicketModelSerializer(RelatedTicketBaseSerializer):
+class RelatedTicketModelSerializer(
+    common.CommonModelSerializer,
+    RelatedTicketBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')
