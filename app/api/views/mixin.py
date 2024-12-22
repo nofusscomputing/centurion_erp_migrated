@@ -87,19 +87,31 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                 if 'organization' in request.data:
 
+                    print(f'serializer, callable {callable(getattr(view, "get_serializer_class"))},')
 
-                    if getattr(view, 'get_serializer_class', None):
+                    serializer = None
+
+                    try:    # Method throws exception if not overridden
 
                         serializer = view.get_serializer_class()
 
-                    elif getattr(view, 'get_serializer', None):
+                    except Exception as e:
+
+                        serializer = None
+
+                    try:    # Method throws exception if not overridden
 
                         serializer = view.get_serializer()
+
+                    except Exception as e:
+
+                        serializer = None
 
 
                     if 'organization' not in getattr(serializer.Meta, 'read_only_fields', []):
 
                         if not request.data['organization']:
+                            print('not request.data[organization]')
                             raise centurion_exceptions.ValidationError('you must provide an organization')
 
                         object_organization = int(request.data['organization'])
@@ -122,6 +134,8 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                 action = 'view'
 
             if hasattr(self, 'obj'):
+                
+                print('permission')
 
                 permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
 
@@ -223,6 +237,9 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
             raise centurion_exceptions.MethodNotAllowed( str(method).upper() )
 
         except Exception as e:
+
+
+            print(f'Exception: {e}')
 
             return False
 
