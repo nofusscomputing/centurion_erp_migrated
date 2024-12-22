@@ -166,7 +166,6 @@ class ViewSetBase:
         self.url_view_kwargs = {'ticket_id': self.ticket.id, 'pk': self.item.id}
 
         self.add_data = {
-            'organization': self.organization.id,
             'body': 'comment body',
             'ticket': self.ticket.id,
             'comment_type': int(TicketComment.CommentType.COMMENT)
