@@ -1,5 +1,11 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
+from api.views.mixin import OrganizationPermissionAPI
+
+from api.viewsets.common import ModelViewSet
+
+from config_management.models.groups import ConfigGroups
+
 from core.serializers.ticket_linked_item import (
     Ticket,
     TicketLinkedItem,
@@ -7,9 +13,13 @@ from core.serializers.ticket_linked_item import (
     TicketLinkedItemViewSerializer
 )
 
-from api.views.mixin import OrganizationPermissionAPI
+from itam.models.device import Device
+from itam.models.operating_system import OperatingSystem
+from itam.models.software import Software
 
-from api.viewsets.common import ModelViewSet
+from itim.models.clusters import Cluster
+from itim.models.services import Service
+
 
 
 @extend_schema_view(
@@ -116,10 +126,6 @@ class ViewSet(ModelViewSet):
 
     model = TicketLinkedItem
 
-    parent_model = Ticket
-
-    parent_model_pk_kwarg = 'ticket_id'
-
     def get_serializer_class(self):
 
         if (
@@ -139,9 +145,15 @@ class ViewSet(ModelViewSet):
 
             self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
+            self.parent_model = Ticket
+
+            self.parent_model_pk_kwarg = 'ticket_id'
+
         elif 'item_id' in self.kwargs:
 
             item_type: int = None
+
+            self.parent_model_pk_kwarg = 'item_id'
 
             for choice in list(map(lambda c: c.name, TicketLinkedItem.Modules)):
 
@@ -149,25 +161,37 @@ class ViewSet(ModelViewSet):
 
                     item_type = getattr(TicketLinkedItem.Modules, 'CLUSTER').value
 
+                    self.parent_model = Cluster
+
                 elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower().replace(' ', '_') == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').value
+
+                    self.parent_model = ConfigGroups
 
                 elif str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
 
+                    self.parent_model = Device
+
                 elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower().replace(' ', '_') == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
+
+                    self.parent_model = OperatingSystem
 
                 elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'SERVICE').value
 
+                    self.parent_model = Service
+
                 elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE').label).lower() == self.kwargs['item_class']:
 
                     item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
+
+                    self.parent_model = Software
 
             self.queryset = TicketLinkedItem.objects.filter(
                 item=int(self.kwargs['item_id']),
