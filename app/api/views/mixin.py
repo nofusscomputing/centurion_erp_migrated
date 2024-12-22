@@ -136,6 +136,13 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                         return False
 
 
+                if object_organization is None and view.parent_model is not None:
+
+                    parent_model = view.parent_model.objects.get(pk=view.kwargs[view.parent_model_pk_kwarg])
+
+                    object_organization = parent_model.organization.id
+
+
             if obj:
 
                 if obj.get_organization():
