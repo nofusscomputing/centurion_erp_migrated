@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from core.serializers.ticket_linked_item import (
+    Ticket,
     TicketLinkedItem,
     TicketLinkedItemModelSerializer,
     TicketLinkedItemViewSerializer
@@ -114,6 +115,10 @@ class ViewSet(ModelViewSet):
     search_fields = []
 
     model = TicketLinkedItem
+
+    parent_model = Ticket
+
+    parent_model_pk_kwarg = 'ticket_id'
 
     def get_serializer_class(self):
 
