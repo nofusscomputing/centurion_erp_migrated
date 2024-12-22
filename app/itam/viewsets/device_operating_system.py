@@ -17,9 +17,11 @@ from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
 from itam.serializers.device_operating_system import (
+    Device,
     DeviceOperatingSystem,
     DeviceOperatingSystemModelSerializer,
     DeviceOperatingSystemViewSerializer,
+    OperatingSystem,
 )
 
 
@@ -160,9 +162,18 @@ class ViewSet( ModelViewSet ):
 
             queryset = queryset.filter(device_id=self.kwargs['device_id'])
 
+            self.parent_model = Device
+
+            self.parent_model_pk_kwarg = 'device_id'
+
+
         elif self.kwargs.get('operating_system_id', None):
 
             queryset = queryset.filter(operating_system_version__operating_system_id=self.kwargs['operating_system_id'])
+
+            self.parent_model = OperatingSystem
+
+            self.parent_model_pk_kwarg = 'operating_system_id'
 
 
         self.queryset = queryset
