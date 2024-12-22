@@ -177,6 +177,10 @@ class ViewSet(ModelViewSet):
 
     model = TicketComment
 
+    parent_model = Ticket
+
+    parent_model_pk_kwarg = 'ticket_id'
+
 
     def get_queryset(self):
 
