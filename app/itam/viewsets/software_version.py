@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from itam.serializers.software_version import (
+    Software,
     SoftwareVersion,
     SoftwareVersionModelSerializer,
     SoftwareVersionViewSerializer
@@ -117,6 +118,10 @@ class ViewSet( ModelViewSet ):
     ]
 
     model = SoftwareVersion
+
+    parent_model = Software
+
+    parent_model_pk_kwarg = 'software_id'
 
     documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
 

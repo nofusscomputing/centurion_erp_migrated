@@ -17,9 +17,11 @@ from api.views.mixin import OrganizationPermissionAPI
 from api.viewsets.common import ModelViewSet
 
 from itam.serializers.device_software import (
+    Device,
     DeviceSoftware,
     DeviceSoftwareModelSerializer,
     DeviceSoftwareViewSerializer,
+    Software,
     SoftwareInstallsModelSerializer,
 )
 
@@ -149,9 +151,17 @@ class ViewSet( ModelViewSet ):
 
             queryset = queryset.filter(software_id=self.kwargs['software_id'])
 
+            self.parent_model = Software
+
+            self.parent_model_pk_kwarg = 'software_id'
+
         elif 'device_id' in self.kwargs:
 
             queryset = queryset.filter(device_id=self.kwargs['device_id'])
+
+            self.parent_model = Device
+
+            self.parent_model_pk_kwarg = 'device_id'
 
         self.queryset = queryset
 

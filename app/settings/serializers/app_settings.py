@@ -73,13 +73,14 @@ class AppSettingsModelSerializer(AppSettingsBaseSerializer):
         #     '_urls',
         # ]
 
-        # read_only_fields = [
-        #     'id',
-        #     'display_name',
-        #     'created',
-        #     'modified',
-        #     '_urls',
-        # ]
+        read_only_fields = [
+            'id',
+            'display_name',
+            'owner_organization',
+            'created',
+            'modified',
+            '_urls',
+        ]
 
 
 class AppSettingsViewSerializer(AppSettingsModelSerializer):
