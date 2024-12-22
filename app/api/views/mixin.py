@@ -87,7 +87,15 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                 if 'organization' in request.data:
 
-                    serializer = view.get_serializer_class()
+
+                    if getattr(view, 'get_serializer_class', None):
+
+                        serializer = view.get_serializer_class()
+
+                    elif getattr(view, 'get_serializer', None):
+
+                        serializer = view.get_serializer()
+
 
                     if 'organization' not in getattr(serializer.Meta, 'read_only_fields', []):
 
@@ -95,6 +103,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                             raise centurion_exceptions.ValidationError('you must provide an organization')
 
                         object_organization = int(request.data['organization'])
+
 
             elif method == 'patch':
 
