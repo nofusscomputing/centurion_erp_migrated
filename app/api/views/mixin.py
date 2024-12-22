@@ -89,7 +89,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                     serializer = view.get_serializer_class()
 
-                    if 'organization' not in serializer.Meta.read_only_fields:
+                    if 'organization' not in getattr(serializer.Meta, 'read_only_fields', []):
 
                         if not request.data['organization']:
                             raise centurion_exceptions.ValidationError('you must provide an organization')
@@ -141,7 +141,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                         return False
 
 
-                if object_organization is None and view.parent_model is not None:
+                if object_organization is None and getattr(view, 'parent_model', None):
 
                     parent_model = view.parent_model.objects.get(pk=view.kwargs[view.parent_model_pk_kwarg])
 
