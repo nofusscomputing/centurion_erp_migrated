@@ -8,6 +8,14 @@ from core.serializers.notes import (
 
 from api.viewsets.common import ModelViewSet
 
+from config_management.models.groups import ConfigGroups
+
+from itam.models.device import Device
+from itam.models.operating_system import OperatingSystem
+from itam.models.software import Software
+
+from itim.models.services import Service
+
 
 
 @extend_schema_view(
@@ -73,21 +81,41 @@ class ViewSet(ModelViewSet):
 
             self.queryset = queryset.filter(device_id=self.kwargs['device_id']).order_by('-created')
 
-        elif 'group_id' in self.kwargs:
+            self.parent_model = Device
 
-            self.queryset = queryset.filter(config_group_id=self.kwargs['group_id']).order_by('-created')
+            self.parent_model_pk_kwarg = 'device_id'
+
+        elif 'config_group_id' in self.kwargs:
+
+            self.queryset = queryset.filter(config_group_id=self.kwargs['config_group_id']).order_by('-created')
+
+            self.parent_model = ConfigGroups
+
+            self.parent_model_pk_kwarg = 'config_group_id'
 
         elif 'operating_system_id' in self.kwargs:
 
             self.queryset = queryset.filter(operatingsystem_id=self.kwargs['operating_system_id']).order_by('-created')
 
+            self.parent_model = OperatingSystem
+
+            self.parent_model_pk_kwarg = 'operating_system_id'
+
         elif 'service_id' in self.kwargs:
 
             self.queryset = queryset.filter(service_id=self.kwargs['service_id']).order_by('-created')
 
+            self.parent_model = Service
+
+            self.parent_model_pk_kwarg = 'service_id'
+
         elif 'software_id' in self.kwargs:
 
             self.queryset = queryset.filter(software_id=self.kwargs['software_id']).order_by('-created')
+
+            self.parent_model = Software
+
+            self.parent_model_pk_kwarg = 'software_id'
 
         else:
 
