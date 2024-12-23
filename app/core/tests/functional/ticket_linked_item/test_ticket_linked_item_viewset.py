@@ -550,6 +550,26 @@ class ItemKBTicketPermissionsAPI(
     pass
 
 
+
+class ItemKBTicketSerializer(
+    ItemKBTicket,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
 class ItemOperatingSystem:
     """ Test Cases common to ALL ticket types """
 
