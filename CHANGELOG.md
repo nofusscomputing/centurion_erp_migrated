@@ -1,3 +1,99 @@
+## 1.6.0 (2024-12-23)
+
+### feat
+
+- **access**: Check if organization field is read-only during permission check
+- **access**: Ability to specify parent model for permission to do
+- **information_management**: add cluster type kb article linking
+- **information_management**: Ability to link Knowledge Base article to a Software
+- **information_management**: Ability to link Knowledge Base article to a Software
+- **information_management**: Ability to link Knowledge Base article to a Software Category
+- **information_management**: Ability to link Knowledge Base article to a Operating System Version
+- **information_management**: Ability to link Knowledge Base article to a Operating System
+- **information_management**: Ability to link Knowledge Base article to a Device
+- **information_management**: Ability to link Knowledge Base article to a Device Type
+- **information_management**: Ability to link Knowledge Base article to a Device Model
+- **information_management**: Ability to link Knowledge Base article to an External Link
+- **information_management**: Ability to link Knowledge Base article to a Project
+- **information_management**: Ability to link Knowledge Base article to a Project Type
+- **information_management**: Ability to link Knowledge Base article to a Project State
+- **information_management**: Ability to link Knowledge Base article to a Project Milestone
+- **information_management**: Ability to link Knowledge Base article to a Service
+- **information_management**: Ability to link Knowledge Base article to a Port
+- **information_management**: Ability to link Knowledge Base article to a Cluster Type
+- **information_management**: Ability to link Knowledge Base article to a Cluster
+- **information_management**: Ability to link Knowledge Base article to a Ticket Category
+- **information_management**: Ability to link Knowledge Base article to a Manufacturer
+- **information_management**: Ability to link Knowledge Base article to a Config Group
+- **information_management**: Ability to link Knowledge Base article to a Team
+- **information_management**: Ability to link Knowledge Base article to an Organization
+- **information_management**: Add API v2 Endpoint for model KB articles
+- **information_management**: Add method `get_url` to model kb article
+- **information_management**: DB Model for linking KB articles to models
+- **assistanace**: remove kb article content from details tab
+- **core**: call models `clean` method prior to saving model to DB
+- **api**: during permission checking, if model is an organization and the user is a manager allow access to the organization.
+- **api**: If user is organization manager of any org, show organization within navigation
+- **core**: Link Team to ticket
+- **core**: Link Organization to ticket
+- **core**: Link KB to ticket
+- **access**: Add project_management permissions to teams avail permissions
+
+### Fixes
+
+- **core**: Add missing KB article delete signal for ticket linking cleanup
+- **core**: Ensure for KB article permissions can be correctly checked
+- **core**: use cooorect model name for choices
+- **itam**: Use Device organization for device operating system
+- **settings**: remove field `owner_organization` from App Settings
+- **core**: Use object organization for ticket linked items
+- **itam**: Use Software organization for Software Version
+- **itam**: Use Operating System organization for OS Version
+- **itam**: Use Device organization for device software
+- **core**: Use Ticket organization for ticket linked items
+- **core**: Use parent model organization for object notes
+- **access**: During permission checking also use `get_serializer` if avail
+- **access**: default to empty when attempting to get view attribute
+- **core**: Use ticket organization for permission checking for adding a comment
+- **itam**: KB url must use `obj` not `item` when building ursl for device type
+- **itam**: KB url must use `obj` not `item` when building ursl for device model
+- **core**: Add missing migrations for linking kb to ticket
+- **core**: Ensure that a user cant reply to a discussion reply
+- **core**: Add Org, Team and KB article to ticket linked Item serializer
+- **core**: Ticket Linked Item serializer removed from inheriting from common serializer.
+- **core**: Ticket model serializer must inherit from common serializer
+- **core**: Ticket Related Item model serializer must inherit from common serializer
+- **core**: Ticket Linked Item model serializer must inherit from common serializer
+- **core**: Ticket Comment  model serializer must inherit from common serializer
+- **core**: Notes model serializer must inherit from common serializer
+- **docker**: Correct nginx proxy headers passed to gunicorn
+- **core**: Generate the correct url for a ticket comment when it's a discussion
+- **core**: organization field set to `write_only=True`
+- **core**: If ticket comment is a reply, add the parent id post validation
+
+### Refactoring
+
+- **access**: Adjust permission check logic to use try..catch instead of gettattr due to base method throwing exception
+- **base**: move model calling of clean to tenancy model class
+- **docker**: gunicorn config moved to con file
+- **core**: Add ticket comment organization post validation
+
+### Tests
+
+- **core**: KB article delete ticket link clean up checks
+- **core**: KB Ticket linking serializer checks
+- **core**: KB Ticket linking permission checks
+- **core**: Add data for ticket comment does not use organization field
+- revert test case changes from 1c065601f6030aeb6065fa9f1b9afb23e1783646
+- **information_management**: Add model test cases for Model KB Article
+- **information_management**: Add API v2 Endpoint test cases for Model KB Article
+- **information_management**: Add Viewset test cases for Model KB Article
+- **information_management**: Add Serializer test cases for Model KB Article
+- **api**: mv test case change denied delete to apipermissionchange test cases
+- **base**: Ensure Models inherit from Tenancy and SaveHistory Classes
+- **core**: test to ensure that a user cant reply to a comment that is already part of a discussion
+- **core**: test to ensure that a user can reply to a comment (start comment)
+
 ## 1.5.0 (2024-12-09)
 
 ### feat
