@@ -32,7 +32,7 @@ class TicketLinkedItem(TenancyObject):
         SERVICE          = 5, 'Service'
         SOFTWARE         = 6, 'Software'
 
-        KB               = 7, 'Knowledge Base Article'
+        KB               = 7, 'Knowledge Base'
         ORGANIZATION     = 8, 'Organization'
         TEAM             = 9, 'Team'
 
@@ -119,7 +119,7 @@ class TicketLinkedItem(TenancyObject):
 
         elif self.item_type == TicketLinkedItem.Modules.KB:
 
-            item_type = 'kb'
+            item_type = 'knowledge_base'
 
         elif self.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
