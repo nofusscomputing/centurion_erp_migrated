@@ -21,11 +21,21 @@ class BaseModel:
     """ Model to test """
 
 
-    @pytest.mark.skip(reason="figure out how to test sub-sub-class")
+
     def test_class_inherits_save_history(self):
         """ Confirm class inheritence
 
         TenancyObject must inherit SaveHistory
+        """
+
+        assert issubclass(self.model, SaveHistory)
+
+
+
+    def test_class_inherits_tenancy_objecy(self):
+        """ Confirm class inheritence
+
+        TenancyObject must inherit TenancyObject
         """
 
         assert issubclass(self.model, TenancyObject)

@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.forms import ValidationError
 
+from rest_framework.reverse import reverse
+
 from access.fields import AutoCreatedField, AutoLastModifiedField
 from access.models import TenancyObject, Team
 
@@ -414,17 +416,37 @@ class TicketComment(
         return query
 
 
-    def get_url_kwargs(self) -> dict:
+    def get_url( self, request = None ) -> str:
         """Fetch the URL kwargs
 
         Returns:
             dict: kwargs required for generating the URL with `reverse`
         """
 
-        return {
+        kwargs: dict = {
             'ticket_id': self.ticket.id,
             'pk': self.id
         }
+
+        url_name: str = '_api_v2_ticket_comment'
+
+        if getattr(self.parent, 'id', None):
+
+            kwargs: dict = {
+                'ticket_id': self.ticket.id,
+                'parent_id': self.parent.id,
+                'pk': self.id
+            }
+
+            url_name: str = '_api_v2_ticket_comment_threads'
+
+
+        if request:
+
+            return reverse(f"v2:{url_name}-detail", request=request, kwargs = kwargs )
+
+        return reverse(f"v2:{url_name}-detail", kwargs = kwargs )
+
 
 
     @property

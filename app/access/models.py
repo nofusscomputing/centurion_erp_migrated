@@ -109,6 +109,16 @@ class Organization(SaveHistory):
             ]
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Notes",
             "slug": "notes",
             "sections": []
@@ -311,6 +321,8 @@ class TenancyObject(SaveHistory):
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
 
+        self.clean()
+
         if self.organization is None:
 
             raise ValidationError('Organization not defined')
@@ -371,6 +383,16 @@ class Team(Group, TenancyObject):
                     "name": "Users",
                     "field": "users",
                 },
+            ]
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
             ]
         },
         {

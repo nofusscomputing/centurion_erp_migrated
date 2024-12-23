@@ -80,6 +80,14 @@ class TicketCommentValidationAPI:
         )
 
 
+        self.item_reply = self.model.objects.create(
+            organization=organization,
+            parent = self.item,
+            body = 'some text for the discussion comment',
+            ticket = self.ticket
+        )
+
+
     def test_serializer_validation_add_valid_item(self):
         """Serializer Validation Check
 
@@ -212,6 +220,74 @@ class TicketCommentValidationAPI:
             serializer.is_valid(raise_exception = True)
 
         assert err.value.get_codes()['comment_type'][0] == 'required'
+
+
+    def test_serializer_validation_can_reply_to_comment(self):
+        """Serializer Validation Check
+
+        Ensure that if the comment being replyed to is not a reply to
+        a comment (a discussion), then a reply can be made.
+        """
+
+        mock_view = MockView()
+        mock_view.action = 'create'
+        mock_view.kwargs: dict = {
+            'ticket_id': int(self.ticket.id),
+        }
+
+        mock_request = MockRequest()
+        mock_request._user = self.user
+
+        serializer_data:dict = self.serializer_data.copy()
+
+        serializer_data.update({ 'body': 'reply to an un-replied comment'})
+
+        serializer = self.serializer(
+            context = {
+                'view': mock_view,
+                'request': mock_request
+            },
+            data = serializer_data
+        )
+
+        assert serializer.is_valid(raise_exception = True)
+
+
+    def test_serializer_validation_no_reply_to_a_reply(self):
+        """Serializer Validation Check
+
+        Ensure that if the comment being replyed to is a reply to a
+        discussion, that you can't reply to it.
+        """
+
+        mock_view = MockView()
+        mock_view.action = 'create'
+        mock_view.kwargs: dict = {
+            'ticket_id': int(self.ticket.id),
+            'parent_id': int(self.item_reply.id)
+        }
+
+        mock_request = MockRequest()
+        mock_request._user = self.user
+
+        serializer_data:dict = self.serializer_data.copy()
+
+        serializer_data.update({ 'body': 'reply to a replied comment'})
+
+
+        with pytest.raises(ValidationError) as err:
+
+            serializer = self.serializer(
+                context = {
+                    'view': mock_view,
+                    'request': mock_request
+                },
+                data = serializer_data
+            )
+
+            serializer.is_valid(raise_exception = True)
+
+        assert err.value.get_codes()['parent'] == 'single_discussion_replies_only'
 
 
 

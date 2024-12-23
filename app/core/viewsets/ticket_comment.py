@@ -30,6 +30,8 @@ from core.serializers.ticket_comment import (
     TicketCommentITILTaskTriageModelSerializer,
 
     TicketCommentModelSerializer,
+    TicketCommentAddModelSerializer,
+    TicketCommentChangeModelSerializer,
     TicketCommentViewSerializer
 )
 
@@ -175,6 +177,10 @@ class ViewSet(ModelViewSet):
 
     model = TicketComment
 
+    parent_model = Ticket
+
+    parent_model_pk_kwarg = 'ticket_id'
+
 
     def get_queryset(self):
 
@@ -260,27 +266,35 @@ class ViewSet(ModelViewSet):
 
                 else:
 
-                    comment_type = int(self.request.data['comment_type'])
+                    if(
+                        self.request._request.method != 'GET'
+                    ):
+
+                        comment_type = int(self.request.data['comment_type'])
 
 
-                if comment_type == int(TicketComment.CommentType.COMMENT):
+                if(
+                    self.request._request.method != 'GET'
+                ):
 
-                    serializer_prefix = serializer_prefix + 'ITILFollowUp'
+                    if comment_type == int(TicketComment.CommentType.COMMENT):
 
-                elif comment_type == int(TicketComment.CommentType.SOLUTION):
+                        serializer_prefix = serializer_prefix + 'ITILFollowUp'
 
-                    serializer_prefix = serializer_prefix + 'ITILSolution'
+                    elif comment_type == int(TicketComment.CommentType.SOLUTION):
 
-                elif comment_type == int(TicketComment.CommentType.TASK):
+                        serializer_prefix = serializer_prefix + 'ITILSolution'
 
-                    serializer_prefix = serializer_prefix + 'ITILTask'
+                    elif comment_type == int(TicketComment.CommentType.TASK):
 
-                else:
+                        serializer_prefix = serializer_prefix + 'ITILTask'
 
-                    raise  centurion_exceptions.ValidationError(
-                        detail = 'Unable to determine the serializer',
-                        code = 'serializer_unknwon'
-                    )
+                    else:
+
+                        raise  centurion_exceptions.ValidationError(
+                            detail = 'Unable to determine the serializer',
+                            code = 'serializer_unknwon'
+                        )
 
 
         if 'Import' not in serializer_prefix:
@@ -319,7 +333,6 @@ class ViewSet(ModelViewSet):
         if (
             self.action == 'list'
             or self.action == 'retrieve'
-            # or self.action == 'metadata'
         ):
 
             return globals()['TicketCommentViewSerializer']

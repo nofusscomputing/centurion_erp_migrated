@@ -65,6 +65,14 @@ class SoftwareModelSerializer(
                 }
             ),
             'installations': reverse("v2:_api_v2_software_installs-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
+            'knowledge_base': reverse(
+                "v2:_api_v2_model_kb-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model': self.Meta.model._meta.model_name,
+                    'model_pk': item.pk
+                }
+            ),
             'notes': reverse("v2:_api_v2_software_notes-list", request=self._context['view'].request, kwargs={'software_id': item.pk}),
             'publisher': reverse("v2:_api_v2_manufacturer-list", request=self._context['view'].request),
             'services': 'ToDo',

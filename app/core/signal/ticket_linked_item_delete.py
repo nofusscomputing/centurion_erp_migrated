@@ -1,10 +1,8 @@
 
-from django import dispatch
 from django.dispatch import receiver
 
-from core.models.ticket.ticket_linked_items import TicketLinkedItem
+from core.models.ticket.ticket_linked_items import deleted_model, TicketLinkedItem
 
-deleted_model = dispatch.Signal()
 
 
 @receiver(deleted_model)

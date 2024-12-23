@@ -126,6 +126,16 @@ class OperatingSystem(OperatingSystemFieldsName, SaveHistory):
             ]
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Tickets",
             "slug": "ticket",
             "sections": [

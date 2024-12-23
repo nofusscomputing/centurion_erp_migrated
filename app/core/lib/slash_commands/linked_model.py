@@ -22,11 +22,17 @@ Available model types for linking are as follows:
 
 - device
 
+- kb
+
 - operating_system
+
+- organization
 
 - service
 
 - software
+
+- team
 
 For this command to process the following conditions must be met:
 
@@ -44,6 +50,14 @@ For this command to process the following conditions must be met:
 
         Slash command usage within a ticket description will add an action comment with the
         time spent. For a ticket comment, it's duration field is set to the duration valuee calculated.
+
+        ## Adding New Item
+
+        Adding a new item to be linked also requires that you update:
+        
+        - `__str__` function within `core.models.ticket.ticket_linked_item.TicketLinkedItem`
+
+        - `get_item` function within `app.core.serializar.ticket_linked_item.TicketLinkedItemViewSerializer`
 
         Args:
             match (re.Match): Named group matches
@@ -89,6 +103,14 @@ For this command to process the following conditions must be met:
 
                 item_type = TicketLinkedItem.Modules.DEVICE
 
+            elif model_type == 'kb':
+
+                from assistance.models.knowledge_base import KnowledgeBase
+
+                model = KnowledgeBase
+
+                item_type = TicketLinkedItem.Modules.KB
+
             elif  model_type == 'operating_system':
 
                 from itam.models.operating_system import OperatingSystem
@@ -96,6 +118,14 @@ For this command to process the following conditions must be met:
                 model = OperatingSystem
 
                 item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
+
+            elif  model_type == 'organization':
+
+                from access.models import Organization
+
+                model = Organization
+
+                item_type = TicketLinkedItem.Modules.ORGANIZATION
 
             elif model_type == 'service':
 
@@ -112,6 +142,14 @@ For this command to process the following conditions must be met:
                 model = Software
 
                 item_type = TicketLinkedItem.Modules.SOFTWARE
+
+            elif model_type == 'team':
+
+                from access.models import Team
+
+                model = Team
+
+                item_type = TicketLinkedItem.Modules.TEAM
 
             else:
 

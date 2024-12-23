@@ -64,6 +64,16 @@ class DeviceType(DeviceCommonFieldsName, SaveHistory):
             ]
         },
         {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
+        },
+        {
             "name": "Notes",
             "slug": "notes",
             "sections": []
@@ -300,6 +310,16 @@ class Device(DeviceCommonFieldsName, SaveHistory):
                     "field": "tickets",
                 }
             ],
+        },
+        {
+            "name": "Knowledge Base",
+            "slug": "kb_articles",
+            "sections": [
+                {
+                    "layout": "table",
+                    "field": "knowledge_base",
+                }
+            ]
         },
         {
             "name": "Notes",

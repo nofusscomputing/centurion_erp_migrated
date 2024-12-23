@@ -3,6 +3,8 @@ from rest_framework import serializers
 
 from access.serializers.organization import OrganizationBaseSerializer
 
+from api.serializers import common
+
 from app.serializers.user import UserBaseSerializer
 
 from config_management.serializers.config_group import ConfigGroupBaseSerializer
@@ -49,7 +51,10 @@ class NoteBaseSerializer(serializers.ModelSerializer):
 
 
 
-class NoteModelSerializer(NoteBaseSerializer):
+class NoteModelSerializer(
+    common.CommonModelSerializer,
+    NoteBaseSerializer
+):
 
 
     _urls = serializers.SerializerMethodField('get_url')

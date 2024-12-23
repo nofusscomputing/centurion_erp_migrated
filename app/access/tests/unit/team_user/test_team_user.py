@@ -8,6 +8,9 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from app.tests.abstract.models import BaseModel
 
+from core.mixin.history_save import SaveHistory
+
+
 
 class TeamUsersModel(
     TestCase,
@@ -58,3 +61,14 @@ class TeamUsersModel(
         """
 
         assert self.item.parent_object == self.parent_item
+
+
+
+    @pytest.mark.skip( reason = 'TeamUsers is not a tenancy object' )
+    def test_class_inherits_tenancy_objecy(self):
+        """ Confirm class inheritence
+
+        TenancyObject must inherit TenancyObject
+        """
+
+        pass

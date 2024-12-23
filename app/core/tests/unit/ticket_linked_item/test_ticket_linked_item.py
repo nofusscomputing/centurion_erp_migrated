@@ -3,6 +3,8 @@ from django.test import Client, TestCase
 
 from access.models import Organization
 
+from assistance.models.knowledge_base import KnowledgeBase
+
 from core.models.ticket.ticket_linked_items import Ticket, TicketLinkedItem
 
 from config_management.models.groups import ConfigGroups
@@ -152,6 +154,38 @@ class TicketLinkedItemDevice(
             organization = self.organization,
             name = 'one',
         )
+
+        super().setUpTestData()
+
+
+
+class TicketLinkedItemKB(
+    TicketLinkedItemBase,
+    TestCase
+):
+
+    item_type_enum = TicketLinkedItem.Modules.KB
+
+    item_model = KnowledgeBase
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        self.CreateOrg()
+
+        self.user_one = User.objects.create_user(username="user_one", password="password")
+
+        self.user_two = User.objects.create_user(username="user_two", password="password")
+
+        self.linked_item = self.item_model.objects.create(
+            organization = self.organization,
+            title = 'one',
+            content = 'sadsadsads',
+            target_user = self.user_one,
+            responsible_user = self.user_two
+        )
+
 
         super().setUpTestData()
 
