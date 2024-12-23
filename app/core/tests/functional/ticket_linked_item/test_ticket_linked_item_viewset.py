@@ -500,6 +500,76 @@ class ItemDeviceTicketSerializer(
 
 
 
+class ItemKBTicket:
+    """ Test Cases common to ALL ticket types """
+
+
+    item_class: str = 'knowledge_base'
+
+    item_type =  TicketLinkedItem.Modules.KB
+
+
+    @classmethod
+    def setUpTestData(self):
+
+        from assistance.models.knowledge_base import KnowledgeBase
+
+        self.CreateOrg()
+
+        self.user_one = User.objects.create_user(username="user_one", password="password")
+
+        self.user_two = User.objects.create_user(username="user_two", password="password")
+
+        self.linked_item = KnowledgeBase.objects.create(
+            organization = self.organization,
+            title = 'one',
+            content = 'sadsadsads',
+            target_user = self.user_one,
+            responsible_user = self.user_two
+        )
+
+
+        self.linked_item_two = KnowledgeBase.objects.create(
+            organization = self.organization,
+            title = 'two',
+            content = 'sadsadsads',
+            target_user = self.user_two,
+            responsible_user = self.user_one
+        )
+
+        super().setUpTestData()
+
+
+
+class ItemKBTicketPermissionsAPI(
+    ItemKBTicket,
+    BaseItemTicketPermissionsAPI,
+    TestCase
+):
+
+    pass
+
+
+
+class ItemKBTicketSerializer(
+    ItemKBTicket,
+    BaseItemTicketSerializer,
+    TestCase
+):
+
+    pass
+
+
+
+
+
+
+
+
+
+
+
+
 class ItemOperatingSystem:
     """ Test Cases common to ALL ticket types """
 

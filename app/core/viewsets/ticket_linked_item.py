@@ -1,8 +1,9 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from api.views.mixin import OrganizationPermissionAPI
-
 from api.viewsets.common import ModelViewSet
+
+from assistance.models.knowledge_base import KnowledgeBase
 
 from config_management.models.groups import ConfigGroups
 
@@ -174,6 +175,12 @@ class ViewSet(ModelViewSet):
                     item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
 
                     self.parent_model = Device
+
+                elif str(getattr(TicketLinkedItem.Modules, 'KB').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                    item_type = getattr(TicketLinkedItem.Modules, 'KB').value
+
+                    self.parent_model = KnowledgeBase
 
                 elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower().replace(' ', '_') == self.kwargs['item_class']:
 

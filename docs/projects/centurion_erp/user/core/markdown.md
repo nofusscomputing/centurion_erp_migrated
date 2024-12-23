@@ -74,6 +74,8 @@ A Model link is a reference to an item within the database. Supported model link
 
 - device
 
+- kb
+
 - service
 
 - software

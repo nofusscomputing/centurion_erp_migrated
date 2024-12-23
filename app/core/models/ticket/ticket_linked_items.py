@@ -1,4 +1,7 @@
+from django import dispatch
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 from rest_framework.reverse import reverse
 
@@ -7,7 +10,9 @@ from .ticket_enum_values import TicketValues
 from access.models import TenancyObject
 
 from core.middleware.get_request import get_request
-from core.models.ticket.ticket import Ticket
+from core.models.ticket.ticket import Ticket, KnowledgeBase
+
+deleted_model = dispatch.Signal()
 
 
 
@@ -32,7 +37,7 @@ class TicketLinkedItem(TenancyObject):
         SERVICE          = 5, 'Service'
         SOFTWARE         = 6, 'Software'
 
-        KB               = 7, 'Knowledge Base Article'
+        KB               = 7, 'Knowledge Base'
         ORGANIZATION     = 8, 'Organization'
         TEAM             = 9, 'Team'
 
@@ -119,7 +124,7 @@ class TicketLinkedItem(TenancyObject):
 
         elif self.item_type == TicketLinkedItem.Modules.KB:
 
-            item_type = 'kb'
+            item_type = 'knowledge_base'
 
         elif self.item_type == TicketLinkedItem.Modules.OPERATING_SYSTEM:
 
@@ -187,3 +192,10 @@ class TicketLinkedItem(TenancyObject):
         )
 
         comment.save()
+
+
+
+@receiver(post_delete, sender=KnowledgeBase, dispatch_uid='knowledge_base_delete_signal')
+def signal_deleted_model(sender, instance, using, **kwargs):
+
+    deleted_model.send(sender='knowledge_base_deleted', item_id=instance.id, item_type = TicketLinkedItem.Modules.KB)
