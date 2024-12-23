@@ -11,6 +11,8 @@ from rest_framework.utils.field_mapping import ClassLookupDict
 
 from rest_framework_json_api.utils import get_related_resource_type
 
+from access.models import Organization
+
 from app.serializers.user import User, UserBaseSerializer
 
 from core import fields as centurion_field
@@ -450,6 +452,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             'settings.view_appsettings',
         ]
 
+
+        # user = view.request.user
+
+        user_orgainzations = Organization.objects.filter(
+            manager = user
+        )
+
+
         for app, entry in self._nav.items():
 
             new_menu_entry: dict = {}
@@ -492,6 +502,17 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         if processed_permissions[app].get(permission, None):
 
                             new_pages += [ page ]
+
+
+                if(
+                    app == 'access'
+                    and permission == 'view_organization'
+                    and len(user_orgainzations) > 0
+                ):
+
+                    if page not in new_pages:
+
+                        new_pages += [ page ]
 
 
             if len(new_pages) > 0:

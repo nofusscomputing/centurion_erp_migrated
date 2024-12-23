@@ -13,7 +13,7 @@ from access.models import TenancyObject, Team
 from core.lib.slash_commands import SlashCommands
 
 from core.middleware.get_request import get_request
-from core.models.ticket.ticket_category import TicketCategory
+from core.models.ticket.ticket_category import TicketCategory, KnowledgeBase
 
 from project_management.models.project_milestone import Project, ProjectMilestone
 

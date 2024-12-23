@@ -6,6 +6,7 @@ from rest_framework.fields import empty
 from access.serializers.organization import Organization, OrganizationBaseSerializer
 from access.serializers.teams import TeamBaseSerializer
 
+from api.serializers import common
 from api.exceptions import UnknownTicketType
 
 from app.serializers.user import UserBaseSerializer
@@ -50,6 +51,7 @@ class TicketCommentBaseSerializer(serializers.ModelSerializer):
 
 
 class TicketCommentModelSerializer(
+    common.CommonModelSerializer,
     TicketCommentBaseSerializer,
 ):
     """Base class for Ticket Comment Model
@@ -177,22 +179,6 @@ class TicketCommentModelSerializer(
 
     def __init__(self, instance=None, data=empty, **kwargs):
 
-        if data != empty:
-
-            if 'view' in kwargs['context']:
-
-                if kwargs['context']['view'].action == 'create':
-
-                    if(
-                        'ticket_id' in kwargs['context']['view'].kwargs
-                        and not 'organization' in data
-                    ):
-
-                        data['organization'] = Ticket.objects.get(
-                            pk = int(self._kwargs['context']['view'].kwargs['ticket_id'])
-                        ).organization.id
-
-
         super().__init__(instance=instance, data=data, **kwargs)
 
         if 'context' in kwargs:
@@ -269,6 +255,25 @@ class TicketCommentModelSerializer(
 
                     self.validated_data['ticket_id'] = int(self._kwargs['context']['view'].kwargs['ticket_id'])
 
+                    self.validated_data['organization'] = Ticket.objects.get(
+                            pk = int(self.validated_data['ticket_id'])
+                        ).organization
+
+                    if 'parent_id' in self._kwargs['context']['view'].kwargs:
+
+                        self.validated_data['parent_id'] = int(self._kwargs['context']['view'].kwargs['parent_id'])
+
+                        comment = self.Meta.model.objects.filter( id = self.validated_data['parent_id'] )
+
+                        if list(comment)[0].parent_id:
+
+                            raise centurion_exceptions.ValidationError(
+                                detail = {
+                                    'parent': 'Replying to a discussion reply is not possible'
+                                },
+                                code = 'single_discussion_replies_only'
+                            )
+
                 else:
 
                     raise centurion_exceptions.ValidationError(
@@ -281,6 +286,28 @@ class TicketCommentModelSerializer(
                 
 
         return is_valid
+
+
+
+class TicketCommentAddModelSerializer(
+    TicketCommentModelSerializer,
+):
+    """Dummy Serializer
+
+    This serializer exists so that the DRF API Browser functions.
+    """
+
+    pass
+
+class TicketCommentChangeModelSerializer(
+    TicketCommentModelSerializer,
+):
+    """Dummy Serializer
+
+    This serializer exists so that the DRF API Browser functions.
+    """
+
+    pass
 
 
 

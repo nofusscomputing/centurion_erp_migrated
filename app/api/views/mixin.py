@@ -15,12 +15,32 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
     def has_permission(self, request, view):
 
+        # if view.kwargs.get('pk', None):
+
+        #     if(
+        #         str(type(view.get_object()).__name__).lower() == 'organization'
+        #     ):
+
+        #         if view.get_object().manager == request.user:
+
+        #             return True
+
         return self.permission_check(request, view)
 
 
     def has_object_permission(self, request, view, obj):
 
-        return self.permission_check(request, view, obj)
+        # if view.kwargs.get('pk', None):
+
+        #     if(
+        #         str(type(obj).__name__).lower() == 'organization'
+        #     ):
+
+        #         if obj.manager == request.user:
+
+        #             return True
+
+        return self.permission_check(request, view)
 
 
     def permission_check(self, request, view, obj=None) -> bool:
@@ -67,10 +87,34 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
 
                 if 'organization' in request.data:
 
-                    if not request.data['organization']:
-                        raise centurion_exceptions.ValidationError('you must provide an organization')
+                    serializer = None
 
-                    object_organization = int(request.data['organization'])
+                    try:    # Method throws exception if not overridden
+
+                        serializer = view.get_serializer_class()
+
+                    except Exception as e:
+
+                        serializer = None
+
+                    try:    # Method throws exception if not overridden
+
+                        serializer = view.get_serializer()
+
+                    except Exception as e:
+
+                        serializer = None
+
+
+                    if 'organization' not in getattr(serializer.Meta, 'read_only_fields', []):
+
+                        if not request.data['organization']:
+
+                            raise centurion_exceptions.ValidationError('you must provide an organization')
+
+                        object_organization = int(request.data['organization'])
+
+
             elif method == 'patch':
 
                 action = 'change'
@@ -88,7 +132,7 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                 action = 'view'
 
             if hasattr(self, 'obj'):
-
+                
                 permission = self.obj._meta.app_label + '.' + action + '_' + self.obj._meta.model_name
 
                 self.permission_required = [ permission ]
@@ -114,6 +158,13 @@ class OrganizationPermissionAPI(DjangoObjectPermissions, OrganizationMixin):
                     except ObjectDoesNotExist:
 
                         return False
+
+
+                if object_organization is None and getattr(view, 'parent_model', None):
+
+                    parent_model = view.parent_model.objects.get(pk=view.kwargs[view.parent_model_pk_kwarg])
+
+                    object_organization = parent_model.organization.id
 
 
             if obj:

@@ -97,6 +97,14 @@ class ConfigGroupModelSerializer(
                 request=self._context['view'].request,
                 kwargs={'config_group_id': item.pk}
             ),
+            'knowledge_base': reverse(
+                "v2:_api_v2_model_kb-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model': self.Meta.model._meta.model_name,
+                    'model_pk': item.pk
+                }
+            ),
             'organization': reverse(
                 'v2:_api_v2_organization-list',
                 request=self.context['view'].request,

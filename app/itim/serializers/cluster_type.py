@@ -61,6 +61,14 @@ class ClusterTypeModelSerializer(
                     'model_id': item.pk
                 }
             ),
+            'knowledge_base': reverse(
+                "v2:_api_v2_model_kb-list",
+                request=self._context['view'].request,
+                kwargs={
+                    'model': self.Meta.model._meta.model_name,
+                    'model_pk': item.pk
+                }
+            ),
             'notes': reverse("v2:_api_v2_cluster_type_notes-list", request=self._context['view'].request, kwargs={'cluster_type_id': item.pk}),
         }
 

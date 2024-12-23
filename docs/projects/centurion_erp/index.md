@@ -35,7 +35,7 @@ Centurion ERP contains the following modules:
 
 - [Cluster Management](./user/itim/cluster.md)
 
-- [Companion Ansible Collection](../ansible/collections/centurion/index.md)
+- [Companion Ansible Collection](../ansible/collection/centurion/index.md)
 
 - [Configuration Management](./user/config_management/index.md)
 

@@ -1,6 +1,7 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse
 
 from itam.serializers.operating_system_version import (
+    OperatingSystem,
     OperatingSystemVersion,
     OperatingSystemVersionModelSerializer,
     OperatingSystemVersionViewSerializer
@@ -117,6 +118,10 @@ class ViewSet( ModelViewSet ):
     ]
 
     model = OperatingSystemVersion
+
+    parent_model = OperatingSystem
+
+    parent_model_pk_kwarg = 'operating_system_id'
 
     documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
 
