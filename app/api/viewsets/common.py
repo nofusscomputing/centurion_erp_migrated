@@ -557,15 +557,10 @@ class ModelRetrieveUpdateViewSet(
 
 
 
-
 class ReadOnlyModelViewSet(
     viewsets.ReadOnlyModelViewSet,
     ModelViewSetBase
 ):
-
-    permission_classes = [
-        IsAuthenticated,
-    ]
 
 
     def retrieve(self, request, *args, **kwargs):
@@ -639,3 +634,21 @@ class ReadOnlyModelViewSet(
                 )
 
         return response
+
+
+
+class AuthUserReadOnlyModelViewSet(
+    ReadOnlyModelViewSet
+):
+    """Authenticated User Read-Only Viewset
+
+    Use this class if the model only requires that the user be authenticated
+    to obtain view permission.
+
+    Args:
+        ReadOnlyModelViewSet (class): Read-Only base class
+    """
+
+    permission_classes = [
+        IsAuthenticated,
+    ]
