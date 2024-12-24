@@ -467,3 +467,22 @@ class ClusterAPI(
         """
 
         assert type(self.api_data['_urls']['tickets']) is str
+
+
+
+    def test_api_field_exists_urls_external_links(self):
+        """ Test for existance of API Field
+
+        _urls.external_links field must exist
+        """
+
+        assert 'external_links' in self.api_data['_urls']
+
+
+    def test_api_field_type_urls_external_links(self):
+        """ Test for type for API Field
+
+        _urls.external_links field must be str
+        """
+
+        assert type(self.api_data['_urls']['external_links']) is str
