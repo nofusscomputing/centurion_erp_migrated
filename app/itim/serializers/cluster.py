@@ -71,6 +71,7 @@ class ClusterModelSerializer(
                 }
             ),
             'notes': reverse("v2:_api_v2_cluster_notes-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
+            'service': reverse("v2:_api_v2_service_cluster-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,
