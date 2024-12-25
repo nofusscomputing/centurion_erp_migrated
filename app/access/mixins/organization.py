@@ -123,6 +123,36 @@ class OrganizationMixin:
 
 
 
+    def get_permission_organizations(self, permission: str ) -> list([ int ]):
+        """Return Organization(s) the permission belongs to
+
+        Searches the users organizations for the required permission, if found
+        the organization is added to the list to return.
+
+        Args:
+            permission (str): Permission to search users organizations for
+
+        Returns:
+            Organizations (list): All Organizations where the permission was found.
+        """
+
+        _permission_organizations: list = []
+
+        for team in self.get_user_teams( self.request.user ):
+
+            for team_permission in team.permissions.all():
+
+                permission_value = str( team_permission.content_type.app_label + '.' + team_permission.codename )
+
+                if permission_value == permission:
+
+                    _permission_organizations += [ team.organization.id ]
+
+
+        return _permission_organizations
+
+
+
     def get_permission_required(self) -> str:
         """ Get / Generate Permission Required
 

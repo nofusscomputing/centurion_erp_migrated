@@ -39,6 +39,37 @@ class OrganizationPermissionMixin(
 
     """
 
+    _is_tenancy_model: bool = None
+
+    def is_tenancy_model(self, view) -> bool:
+        """Determin if the Model is a `Tenancy` Model
+
+        Will look at the model defined within the view unless a parent
+        model is found. If the latter is true, the parent_model will be used to
+        determin if the model is a `Tenancy` model
+
+        Args:
+            view (object): The View the HTTP request was mad to
+
+        Returns:
+            True (bool): Model is a Tenancy Model.
+            False (bool): Model is not a Tenancy model.
+        """
+
+        if not self._is_tenancy_model:
+
+            if hasattr(view, 'model'):
+
+                self._is_tenancy_model = issubclass(view.model, TenancyObject)
+
+                if view.get_parent_model():
+
+                    self._is_tenancy_model = issubclass(view.get_parent_model(), TenancyObject)
+
+        return self._is_tenancy_model
+
+
+
     def has_permission(self, request, view):
         """ Check if user has the required permission
 
@@ -67,6 +98,7 @@ class OrganizationPermissionMixin(
                 request = request
             )
 
+            view_action: str = None
 
             if(
                 view.action == 'create'
@@ -84,17 +116,9 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
-                obj_organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif view.action == 'destroy':
 
                 view_action = 'delete'
-
-                obj_organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
 
             elif (
                 view.action == 'list'
@@ -105,10 +129,6 @@ class OrganizationPermissionMixin(
             elif view.action == 'retrieve':
 
                 view_action = 'view'
-
-                obj_organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
 
             elif view.action == 'metadata':
 
@@ -127,27 +147,21 @@ class OrganizationPermissionMixin(
                 has_permission_required = view.get_permission_required() in getattr(view, '_user_permissions', [])
 
 
-                return True
 
-            elif(
-                obj_organization is not None
-                and is_tenancy_model
-            ):
+            if has_permission_required is True:
 
-
-                if view.has_organization_permission(
-                    organization = obj_organization.id,
-                    permissions_required = [ self.permission_required ]
-                ):
+                if obj_organization is None:
 
                     return True
 
-            elif(
-                self.permission_required in getattr(view, '_user_permissions', [])
-                and view.action == 'list'
-            ):
+                elif obj_organization is not None:
 
-                return True
+                    if view.has_organization_permission(
+                        organization = obj_organization.id,
+                        permissions_required = [ view.get_permission_required() ]
+                    ):
+
+                        return True
 
 
         except ValueError:
@@ -172,7 +186,20 @@ class OrganizationPermissionMixin(
                 return False
 
 
-            if getattr(view.get_obj_organization( obj = obj ), 'id', 'no-org-found') in view._user_organizations:
+            object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
+
+
+            if object_organization:
+
+                if(
+                    object_organization
+                    in view.get_permission_organizations( view.get_permission_required() )
+                ):
+
+                    return True
+
+
+            elif not self.is_tenancy_model( view ):
 
                 return True
 
