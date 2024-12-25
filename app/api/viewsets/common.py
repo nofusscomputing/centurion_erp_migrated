@@ -5,11 +5,11 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from access.mixin import OrganizationMixin
+from access.mixins.organization import OrganizationMixin
+from access.mixins.permissions import OrganizationPermissionMixin
 
 from api.auth import TokenScheme
 from api.react_ui_metadata import ReactUIMetadata
-from api.views.mixin import OrganizationPermissionAPI
 
 
 
@@ -65,7 +65,7 @@ class CommonViewSet(
     for detail view, Enables the UI can setup the page layout.
     """
 
-    permission_classes = [ OrganizationPermissionAPI ]
+    permission_classes = [ OrganizationPermissionMixin ]
     """Permission Class
 
     _Mandatory_, Permission check class
