@@ -127,6 +127,75 @@ class ViewSet(ModelViewSet):
 
     model = TicketLinkedItem
 
+
+    def get_parent_model(self):
+
+        if not self.parent_model:
+
+            if 'ticket_id' in self.kwargs:
+
+                self.parent_model = Ticket
+
+                self.parent_model_pk_kwarg = 'ticket_id'
+
+            elif 'item_id' in self.kwargs:
+
+                item_type: int = None
+
+                self.parent_model_pk_kwarg = 'item_id'
+
+                for choice in list(map(lambda c: c.name, TicketLinkedItem.Modules)):
+
+                    if str(getattr(TicketLinkedItem.Modules, 'CLUSTER').label).lower() == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'CLUSTER').value
+
+                        self.parent_model = Cluster
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').value
+
+                        self.parent_model = ConfigGroups
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
+
+                        self.parent_model = Device
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'KB').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'KB').value
+
+                        self.parent_model = KnowledgeBase
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower().replace(' ', '_') == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
+
+                        self.parent_model = OperatingSystem
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'SERVICE').value
+
+                        self.parent_model = Service
+
+                    elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE').label).lower() == self.kwargs['item_class']:
+
+                        item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
+
+                        self.parent_model = Software
+
+
+                self.item_type = item_type
+
+
+        return self.parent_model
+
+
+
     def get_serializer_class(self):
 
         if (
@@ -140,72 +209,20 @@ class ViewSet(ModelViewSet):
         return globals()[str( self.model._meta.verbose_name).replace(' ', '') + 'ModelSerializer']
 
 
+
     def get_queryset(self):
 
         if 'ticket_id' in self.kwargs:
 
             self.queryset = TicketLinkedItem.objects.filter(ticket=self.kwargs['ticket_id']).order_by('id')
 
-            self.parent_model = Ticket
-
-            self.parent_model_pk_kwarg = 'ticket_id'
-
         elif 'item_id' in self.kwargs:
 
-            item_type: int = None
-
-            self.parent_model_pk_kwarg = 'item_id'
-
-            for choice in list(map(lambda c: c.name, TicketLinkedItem.Modules)):
-
-                if str(getattr(TicketLinkedItem.Modules, 'CLUSTER').label).lower() == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'CLUSTER').value
-
-                    self.parent_model = Cluster
-
-                elif str(getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').label).lower().replace(' ', '_') == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'CONFIG_GROUP').value
-
-                    self.parent_model = ConfigGroups
-
-                elif str(getattr(TicketLinkedItem.Modules, 'DEVICE').label).lower() == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'DEVICE').value
-
-                    self.parent_model = Device
-
-                elif str(getattr(TicketLinkedItem.Modules, 'KB').label).lower().replace(' ', '_') == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'KB').value
-
-                    self.parent_model = KnowledgeBase
-
-                elif str(getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').label).lower().replace(' ', '_') == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'OPERATING_SYSTEM').value
-
-                    self.parent_model = OperatingSystem
-
-                elif str(getattr(TicketLinkedItem.Modules, 'SERVICE').label).lower() == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'SERVICE').value
-
-                    self.parent_model = Service
-
-                elif str(getattr(TicketLinkedItem.Modules, 'SOFTWARE').label).lower() == self.kwargs['item_class']:
-
-                    item_type = getattr(TicketLinkedItem.Modules, 'SOFTWARE').value
-
-                    self.parent_model = Software
 
             self.queryset = TicketLinkedItem.objects.filter(
                 item=int(self.kwargs['item_id']),
-                item_type = item_type
+                item_type = self.item_type
             )
-
-            self.item_type = item_type
 
         if 'pk' in self.kwargs:
 
