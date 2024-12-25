@@ -123,27 +123,67 @@ class OrganizationMixin:
 
 
 
-    def get_permission_required(self):
+    def get_permission_required(self) -> str:
+        """ Get / Generate Permission Required
+
+        If there is a requirement that there be custom/dynamic permissions,
+        this function can be safely overridden.
+
+        Raises:
+            ValueError: Unable to determin the view action
+
+        Returns:
+            str: Permission in format `<app_name>.<action>_<model_name>`
         """
-        Override of 'PermissionRequiredMixin' method so that this mixin can obtain the required permission.
-        """
 
-        if not hasattr(self, 'permission_required'):
 
-                return []
+        view_action: str = None
 
-        if self.permission_required is None:
-            raise ImproperlyConfigured(
-                f"{self.__class__.__name__} is missing the "
-                f"permission_required attribute. Define "
-                f"{self.__class__.__name__}.permission_required, or override "
-                f"{self.__class__.__name__}.get_permission_required()."
-            )
-        if isinstance(self.permission_required, str):
-            perms = (self.permission_required,)
-        else:
-            perms = self.permission_required
-        return perms
+        if(
+            self.action == 'create'
+            or getattr(self.request._stream, 'method', '') == 'POST'
+        ):
+
+            view_action = 'add'
+
+        elif (
+            self.action == 'partial_update'
+            or self.action == 'update'
+            or getattr(self.request._stream, 'method', '') == 'PATCH'
+            or getattr(self.request._stream, 'method', '') == 'PUT'
+        ):
+
+            view_action = 'change'
+
+        elif self.action == 'destroy':
+
+            view_action = 'delete'
+
+        elif (
+            self.action == 'list'
+        ):
+
+            view_action = 'view'
+
+        elif self.action == 'retrieve':
+
+            view_action = 'view'
+
+
+
+        if view_action is None:
+
+            raise ValueError('view_action could not be defined.')
+
+
+        permission = self.model._meta.app_label + '.' + view_action + '_' + self.model._meta.model_name
+
+        permission_required = permission
+
+
+        self.permission_required = permission_required
+
+        return self.permission_required
 
 
 

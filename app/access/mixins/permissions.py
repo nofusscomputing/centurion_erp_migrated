@@ -120,38 +120,12 @@ class OrganizationPermissionMixin(
                 raise ValueError('view_action could not be defined.')
 
 
-            permission = view.model._meta.app_label + '.' + view_action + '_' + view.model._meta.model_name
+            has_permission_required: bool = False
 
-            self.permission_required = permission
+            if getattr(view, '_user_permissions', []):
 
+                has_permission_required = view.get_permission_required() in getattr(view, '_user_permissions', [])
 
-            if hasattr(view, 'get_dynamic_permissions'):
-
-                self.permission_required = view.get_dynamic_permissions()
-
-                if type(self.permission_required) is list:
-
-                    if len(list(self.permission_required)) == 1:
-
-                        self.permission_required = self.permission_required[0]    # ToDo: cater for multiple permissions? is it required?
-
-
-            is_tenancy_model = issubclass(view.model, TenancyObject)
-
-            if view.get_parent_model():
-
-                is_tenancy_model = issubclass(view.get_parent_model(), TenancyObject)
-
-
-            if(
-                (
-                    self.permission_required in getattr(view, '_user_permissions', [])
-                    and not is_tenancy_model
-                    # and obj_organization is None
-                    and view.action != 'list'
-                )
-                or request.user.is_superuser
-            ):
 
                 return True
 
