@@ -184,7 +184,10 @@ class OrganizationMixin:
 
             view_action = 'change'
 
-        elif self.action == 'destroy':
+        elif(
+            self.action == 'destroy'
+            or getattr(self.request._stream, 'method', '') == 'DELETE'
+        ):
 
             view_action = 'delete'
 

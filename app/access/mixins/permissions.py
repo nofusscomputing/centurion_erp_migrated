@@ -120,7 +120,10 @@ class OrganizationPermissionMixin(
                     obj = view.get_object()
                 )
 
-            elif view.action == 'destroy':
+            elif(
+                view.action == 'destroy'
+                or getattr(view.request._stream, 'method', '') == 'DELETE'
+            ):
 
                 view_action = 'delete'
 
@@ -146,7 +149,7 @@ class OrganizationPermissionMixin(
 
                 return True
 
-            
+
             if view_action is None:
 
                 raise ValueError('view_action could not be defined.')
