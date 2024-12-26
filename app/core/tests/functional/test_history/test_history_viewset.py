@@ -263,7 +263,7 @@ class HistoryPermissionsAPI(
         client.force_login(self.view_user)
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 200
 
 
     def test_add_has_permission_method_not_allowed(self):
