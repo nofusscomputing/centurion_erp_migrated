@@ -116,9 +116,17 @@ class OrganizationPermissionMixin(
 
                 view_action = 'change'
 
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
+
             elif view.action == 'destroy':
 
                 view_action = 'delete'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
 
             elif (
                 view.action == 'list'
@@ -129,6 +137,10 @@ class OrganizationPermissionMixin(
             elif view.action == 'retrieve':
 
                 view_action = 'view'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
 
             elif view.action == 'metadata':
 

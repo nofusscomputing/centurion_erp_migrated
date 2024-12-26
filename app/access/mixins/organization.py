@@ -19,7 +19,6 @@ class OrganizationMixin:
 
         Args:
             obj (Model): Model of object
-            obj (dict): Request data of the object being created
 
         Raises:
             ValueError: When `obj` and `request` are both missing
