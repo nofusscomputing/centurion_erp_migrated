@@ -340,6 +340,22 @@ class HistoryPermissionsAPI(
         pass
 
 
+    # item is not tenancy object
+    def test_view_different_organizaiton_denied(self):
+        """ Check correct permission for view
+
+        This test case is a duplicate of a test case with the same name. This
+        test is not required as currently the history model is not a tenancy
+        model.
+        
+        see https://github.com/nofusscomputing/centurion_erp/issues/455 for
+        more details.
+
+        Attempt to view with user from different organization
+        """
+
+        pass
+
 
 class HistoryMetadata(
     ViewSetBase,
