@@ -217,7 +217,7 @@ class OrganizationPermissionsAPI(
             url = reverse( self.app_namespace + ':' + self.url_name + '-list' )
 
 
-        client.force_login( self.super_add_user )
+        client.force_login( self.add_user )
 
         response = client.post( url, data = self.add_data )
 
@@ -270,6 +270,17 @@ class OrganizationPermissionsAPI(
 
         assert len(response.data['results']) == 2
 
+
+    def test_add_different_organization_denied(self):
+        """ Check correct permission for add
+
+        This test is a duplicate of a test case with the same name.
+        Organizations are not tenancy models so this test does nothing of value
+
+        attempt to add as user from different organization
+        """
+
+        pass
 
 
 class OrganizationViewSet(

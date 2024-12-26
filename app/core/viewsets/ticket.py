@@ -86,7 +86,7 @@ class TicketViewSet(ModelViewSet):
     """
 
 
-    def get_dynamic_permissions(self):
+    def get_permission_required(self):
 
         organization = None
 
@@ -178,11 +178,12 @@ class TicketViewSet(ModelViewSet):
 
             raise ValueError('unable to determin the action_keyword')
 
-        self.permission_required = [
-            str('core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'),
-        ]
+        self.permission_required = str(
+            'core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'
+        )
 
-        return super().get_permission_required()
+        return self.permission_required
+
 
 
     def get_queryset(self):

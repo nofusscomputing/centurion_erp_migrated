@@ -263,7 +263,7 @@ class HistoryPermissionsAPI(
         client.force_login(self.view_user)
         response = client.get(url)
 
-        assert response.status_code == 403
+        assert response.status_code == 200
 
 
     def test_add_has_permission_method_not_allowed(self):
@@ -339,6 +339,22 @@ class HistoryPermissionsAPI(
 
         pass
 
+
+    # item is not tenancy object
+    def test_view_different_organizaiton_denied(self):
+        """ Check correct permission for view
+
+        This test case is a duplicate of a test case with the same name. This
+        test is not required as currently the history model is not a tenancy
+        model.
+        
+        see https://github.com/nofusscomputing/centurion_erp/issues/455 for
+        more details.
+
+        Attempt to view with user from different organization
+        """
+
+        pass
 
 
 class HistoryMetadata(
