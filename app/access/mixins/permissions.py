@@ -102,14 +102,14 @@ class OrganizationPermissionMixin(
 
             if(
                 view.action == 'create'
-                and getattr(view.request._stream, 'method', '') == 'POST'
+                and request.method == 'POST'
             ):
 
                 view_action = 'add'
 
             elif(
                 view.action == 'destroy'
-                and getattr(view.request._stream, 'method', '') == 'DELETE'
+                and request.method == 'DELETE'
             ):
 
                 view_action = 'delete'
@@ -126,7 +126,7 @@ class OrganizationPermissionMixin(
 
             elif (
                 view.action == 'partial_update'
-                and getattr(view.request._stream, 'method', '') == 'PATCH'
+                and request.method == 'PATCH'
             ):
 
                 view_action = 'change'
@@ -137,7 +137,7 @@ class OrganizationPermissionMixin(
 
             elif (
                 view.action == 'update'
-                and getattr(view.request._stream, 'method', '') == 'PUT'
+                and request.method == 'PUT'
             ):
 
                 view_action = 'change'
@@ -148,7 +148,7 @@ class OrganizationPermissionMixin(
 
             elif(
                 view.action == 'retrieve'
-                and getattr(view.request._stream, 'method', '') == 'GET' 
+                and request.method == 'GET' 
             ):
 
                 view_action = 'view'
@@ -159,7 +159,7 @@ class OrganizationPermissionMixin(
 
             elif(
                 view.action == 'metadata'
-                and getattr(view.request._stream, 'method', '') == 'OPTIONS'
+                and request.method == 'OPTIONS'
             ):
 
                 return True
