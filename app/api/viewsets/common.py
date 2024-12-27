@@ -456,7 +456,7 @@ class CommonViewSet(
 
     def get_view_name(self):
 
-        if hasattr(self, 'model'):
+        if getattr(self, 'model', None):
 
             if self.detail:
 
@@ -606,3 +606,13 @@ class AuthUserReadOnlyModelViewSet(
     permission_classes = [
         IsAuthenticated,
     ]
+
+
+class IndexViewset(
+    ModelViewSetBase,
+):
+
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
