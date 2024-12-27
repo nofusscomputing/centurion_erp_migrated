@@ -201,6 +201,10 @@ class OrganizationMixin:
 
             view_action = 'view'
 
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
 
 
         if view_action is None:
