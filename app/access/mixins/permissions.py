@@ -102,27 +102,14 @@ class OrganizationPermissionMixin(
 
             if(
                 view.action == 'create'
-                or getattr(view.request._stream, 'method', '') == 'POST'
+                and getattr(view.request._stream, 'method', '') == 'POST'
             ):
 
                 view_action = 'add'
 
-            elif (
-                view.action == 'partial_update'
-                or view.action == 'update'
-                or getattr(view.request._stream, 'method', '') == 'PATCH'
-                or getattr(view.request._stream, 'method', '') == 'PUT'
-            ):
-
-                view_action = 'change'
-
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif(
                 view.action == 'destroy'
-                or getattr(view.request._stream, 'method', '') == 'DELETE'
+                and getattr(view.request._stream, 'method', '') == 'DELETE'
             ):
 
                 view_action = 'delete'
@@ -137,7 +124,32 @@ class OrganizationPermissionMixin(
 
                 view_action = 'view'
 
-            elif view.action == 'retrieve':
+            elif (
+                view.action == 'partial_update'
+                and getattr(view.request._stream, 'method', '') == 'PATCH'
+            ):
+
+                view_action = 'change'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
+
+            elif (
+                view.action == 'update'
+                and getattr(view.request._stream, 'method', '') == 'PUT'
+            ):
+
+                view_action = 'change'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
+
+            elif(
+                view.action == 'retrieve'
+                and getattr(view.request._stream, 'method', '') == 'GET' 
+            ):
 
                 view_action = 'view'
 
@@ -145,7 +157,10 @@ class OrganizationPermissionMixin(
                     obj = view.get_object()
                 )
 
-            elif view.action == 'metadata':
+            elif(
+                view.action == 'metadata'
+                and getattr(view.request._stream, 'method', '') == 'OPTIONS'
+            ):
 
                 return True
 
