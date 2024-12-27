@@ -94,6 +94,15 @@ class OrganizationPermissionMixin(
 
             view.get_user_organizations( request.user )
 
+            permission_required = view.get_permission_required()
+
+            has_permission_required: bool = permission_required in getattr(view, '_user_permissions', [])
+
+            if not has_permission_required:
+
+                return False
+
+
             obj_organization: Organization = view.get_obj_organization(
                 request = request
             )
@@ -170,26 +179,16 @@ class OrganizationPermissionMixin(
                 raise ValueError('view_action could not be defined.')
 
 
-            has_permission_required: bool = False
+            if obj_organization is None:
 
-            if getattr(view, '_user_permissions', []):
+                return True
 
-                has_permission_required = view.get_permission_required() in getattr(view, '_user_permissions', [])
+            elif obj_organization is not None:
 
-
-
-            if has_permission_required is True:
-
-                if obj_organization is None:
-
-                    return True
-
-                elif obj_organization is not None:
-
-                    if view.has_organization_permission(
-                        organization = obj_organization.id,
-                        permissions_required = [ view.get_permission_required() ]
-                    ):
+                if view.has_organization_permission(
+                    organization = obj_organization.id,
+                    permissions_required = [ view.get_permission_required() ]
+                ):
 
                         return True
 
