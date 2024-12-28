@@ -90,6 +90,10 @@ class TicketViewSet(ModelViewSet):
 
         organization = None
 
+        if self._permission_required:
+
+            return self._permission_required
+
 
         if(
             self.action == 'create'
@@ -181,11 +185,11 @@ class TicketViewSet(ModelViewSet):
 
             raise ValueError('unable to determin the action_keyword')
 
-        self.permission_required = str(
+        self._permission_required = str(
             'core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'
         )
 
-        return self.permission_required
+        return self._permission_required
 
 
 
