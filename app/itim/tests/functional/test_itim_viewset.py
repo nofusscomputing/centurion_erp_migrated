@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.shortcuts import reverse
 from django.test import Client, TestCase
 
+from rest_framework.permissions import IsAuthenticated
+
 from access.models import Organization
 
 from api.tests.abstract.viewsets import ViewSetCommon
@@ -40,3 +42,17 @@ class ITIMViewset(
 
         client.force_login(self.view_user)
         self.http_options_response_list = client.options(url)
+
+
+
+    def test_view_attr_permission_classes_value(self):
+        """Attribute Test
+
+        Attribute `permission_classes` must be metadata class `ReactUIMetadata`
+        """
+
+        view_set = self.viewset()
+
+        assert view_set.permission_classes[0] is IsAuthenticated
+
+        assert len(view_set.permission_classes) == 1

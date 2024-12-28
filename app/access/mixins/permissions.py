@@ -73,11 +73,35 @@ class OrganizationPermissionMixin(
     def has_permission(self, request, view):
         """ Check if user has the required permission
 
+        Permission flow is as follows:
+
+        - Un-authenticated users. Access Denied
+
+        - Authenticated user whom make a request using wrong method. Access
+        Denied
+
+        - Authenticated user who is not in same organization as object. Access
+        Denied
+
+        - Authenticated user who is in same organization as object, however is
+        missing the correct permission. Access Denied
+
+        Depending upon user type, they will recieve different feedback. In order
+        they are: 
+
+        - Non-authenticated users will **always** recieve HTTP/401
+
+        - Authenticated users who use an unsupported method, HTTP/405
+
+        - Authenticated users missing the correct permission recieve HTTP/403
+
         Args:
             request (object): The HTTP Request Object
             view (_type_): The View/Viewset Object the request was made to
 
         Raises:
+            PermissionDenied: User does not have the required permission.
+            NotAuthenticated: User is not logged into Centurion.
             ValueError: Could not determin the view action.
 
         Returns:
@@ -87,12 +111,36 @@ class OrganizationPermissionMixin(
 
         if request.user.is_anonymous:
 
-            return False
+            raise centurion_exceptions.NotAuthenticated()
 
         try:
 
 
             view.get_user_organizations( request.user )
+
+            has_permission_required: bool = False
+
+            user_permissions = getattr(view, '_user_permissions', None)
+
+            permission_required = view.get_permission_required()
+
+
+            if permission_required and user_permissions:
+                # No permission_required couldnt get permissions
+                # No user_permissions, user missing the required permission
+
+                has_permission_required: bool = permission_required in user_permissions
+
+
+            if request.method not in view.allowed_methods:
+
+                raise centurion_exceptions.MethodNotAllowed(method = request.method)
+
+
+            elif not has_permission_required and not request.user.is_superuser:
+
+                raise centurion_exceptions.PermissionDenied()
+
 
             obj_organization: Organization = view.get_obj_organization(
                 request = request
@@ -102,27 +150,14 @@ class OrganizationPermissionMixin(
 
             if(
                 view.action == 'create'
-                or getattr(view.request._stream, 'method', '') == 'POST'
+                and request.method == 'POST'
             ):
 
                 view_action = 'add'
 
-            elif (
-                view.action == 'partial_update'
-                or view.action == 'update'
-                or getattr(view.request._stream, 'method', '') == 'PATCH'
-                or getattr(view.request._stream, 'method', '') == 'PUT'
-            ):
-
-                view_action = 'change'
-
-                obj_organization: Organization = view.get_obj_organization(
-                    obj = view.get_object()
-                )
-
             elif(
                 view.action == 'destroy'
-                or getattr(view.request._stream, 'method', '') == 'DELETE'
+                and request.method == 'DELETE'
             ):
 
                 view_action = 'delete'
@@ -137,7 +172,32 @@ class OrganizationPermissionMixin(
 
                 view_action = 'view'
 
-            elif view.action == 'retrieve':
+            elif (
+                view.action == 'partial_update'
+                and request.method == 'PATCH'
+            ):
+
+                view_action = 'change'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
+
+            elif (
+                view.action == 'update'
+                and request.method == 'PUT'
+            ):
+
+                view_action = 'change'
+
+                obj_organization: Organization = view.get_obj_organization(
+                    obj = view.get_object()
+                )
+
+            elif(
+                view.action == 'retrieve'
+                and request.method == 'GET' 
+            ):
 
                 view_action = 'view'
 
@@ -145,7 +205,10 @@ class OrganizationPermissionMixin(
                     obj = view.get_object()
                 )
 
-            elif view.action == 'metadata':
+            elif(
+                view.action == 'metadata'
+                and request.method == 'OPTIONS'
+            ):
 
                 return True
 
@@ -155,37 +218,47 @@ class OrganizationPermissionMixin(
                 raise ValueError('view_action could not be defined.')
 
 
-            has_permission_required: bool = False
+            if obj_organization is None or request.user.is_superuser:
 
-            if getattr(view, '_user_permissions', []):
+                return True
 
-                has_permission_required = view.get_permission_required() in getattr(view, '_user_permissions', [])
+            elif obj_organization is not None:
 
-
-
-            if has_permission_required is True:
-
-                if obj_organization is None:
-
-                    return True
-
-                elif obj_organization is not None:
-
-                    if view.has_organization_permission(
-                        organization = obj_organization.id,
-                        permissions_required = [ view.get_permission_required() ]
-                    ):
+                if view.has_organization_permission(
+                    organization = obj_organization.id,
+                    permissions_required = [ view.get_permission_required() ]
+                ):
 
                         return True
 
 
-        except ValueError:
+        except ValueError as e:
+
+            # ToDo: This exception could be used in traces as it provides
+            # information as to dodgy requests. This exception is raised
+            # when the method does not match the view action.
+
+            print(traceback.format_exc())
+
+        except centurion_exceptions.Http404 as e:
+            # This exception genrally means that the user is not in the same
+            # organization as the object as objects are filtered to users
+            # organizations ONLY.
 
             pass
 
-        except Exception as e:
+        except centurion_exceptions.ObjectDoesNotExist as e:
+            # This exception genrally means that the user is not in the same
+            # organization as the object as objects are filtered to users
+            # organizations ONLY.
 
-            print(traceback.format_exc())
+            pass
+
+        except centurion_exceptions.PermissionDenied as e:
+            # This Exception will be raised after this function has returned
+            # False.
+
+            pass
 
 
         return False
@@ -209,12 +282,13 @@ class OrganizationPermissionMixin(
                 if(
                     object_organization
                     in view.get_permission_organizations( view.get_permission_required() )
+                    or request.user.is_superuser
                 ):
 
                     return True
 
 
-            elif not self.is_tenancy_model( view ):
+            elif not self.is_tenancy_model( view ) or request.user.is_superuser:
 
                 return True
 

@@ -151,6 +151,9 @@ class OrganizationMixin:
         return _permission_organizations
 
 
+    _permission_required: str = None
+    """Cached Permissions required"""
+
 
     def get_permission_required(self) -> str:
         """ Get / Generate Permission Required
@@ -164,6 +167,11 @@ class OrganizationMixin:
         Returns:
             str: Permission in format `<app_name>.<action>_<model_name>`
         """
+
+        if self._permission_required:
+
+            return self._permission_required
+
 
 
         view_action: str = None
@@ -201,6 +209,14 @@ class OrganizationMixin:
 
             view_action = 'view'
 
+        elif self.action == 'metadata':
+
+            view_action = 'view'
+
+        elif self.action is None:
+
+            return False
+
 
 
         if view_action is None:
@@ -213,9 +229,9 @@ class OrganizationMixin:
         permission_required = permission
 
 
-        self.permission_required = permission_required
+        self._permission_required = permission_required
 
-        return self.permission_required
+        return self._permission_required
 
 
 
@@ -234,15 +250,15 @@ class OrganizationMixin:
     """
 
 
-    _user_organizations: list = None
+    _user_organizations: list = []
     """Cached User Organizations"""
 
 
-    _user_teams: list = None
+    _user_teams: list = []
     """Cached User Teams"""
 
 
-    _user_permissions: list = None
+    _user_permissions: list = []
     """Cached User User Permissions"""
 
 

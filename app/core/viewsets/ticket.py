@@ -90,6 +90,10 @@ class TicketViewSet(ModelViewSet):
 
         organization = None
 
+        if self._permission_required:
+
+            return self._permission_required
+
 
         if(
             self.action == 'create'
@@ -108,9 +112,13 @@ class TicketViewSet(ModelViewSet):
                 or self.action == 'update'
             ):
 
-                obj = list(self.queryset)[0]
+                queryset = self.get_queryset()
 
-                organization = obj.organization
+                if len(queryset) > 0:
+
+                    obj = queryset[0]
+
+                    organization = obj.organization
 
         if self.action == 'create':
 
@@ -170,7 +178,10 @@ class TicketViewSet(ModelViewSet):
                 action_keyword = 'triage'
 
 
-        elif self.action is None:
+        elif(
+            self.action is None
+            or self.action == 'metadata'
+        ):
 
             action_keyword = 'view'
 
@@ -178,11 +189,11 @@ class TicketViewSet(ModelViewSet):
 
             raise ValueError('unable to determin the action_keyword')
 
-        self.permission_required = str(
+        self._permission_required = str(
             'core.' + action_keyword + '_ticket_' + self._ticket_type).lower().replace(' ', '_'
         )
 
-        return self.permission_required
+        return self._permission_required
 
 
 

@@ -91,8 +91,6 @@ nav:
 
           - projects/centurion_erp/development/api/models/itam_device.md
 
-          - projects/centurion_erp/development/api/models/access_organization_permission_checking.md
-
           - projects/centurion_erp/development/api/models/ticket.md
 
           - projects/centurion_erp/development/api/models/tenancy_object.md
