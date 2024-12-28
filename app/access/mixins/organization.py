@@ -213,6 +213,10 @@ class OrganizationMixin:
 
             view_action = 'view'
 
+        elif self.action is None:
+
+            return False
+
 
 
         if view_action is None:

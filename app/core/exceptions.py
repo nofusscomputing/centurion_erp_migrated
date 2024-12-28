@@ -1,6 +1,11 @@
+from django.core.exceptions import (
+    ObjectDoesNotExist
+)
+
 from rest_framework import exceptions, status
 from rest_framework.exceptions import (
     MethodNotAllowed,
+    NotAuthenticated,
     ParseError,
     PermissionDenied,
     ValidationError,

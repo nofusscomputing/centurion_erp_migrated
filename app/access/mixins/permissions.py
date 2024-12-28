@@ -73,11 +73,35 @@ class OrganizationPermissionMixin(
     def has_permission(self, request, view):
         """ Check if user has the required permission
 
+        Permission flow is as follows:
+
+        - Un-authenticated users. Access Denied
+
+        - Authenticated user whom make a request using wrong method. Access
+        Denied
+
+        - Authenticated user who is not in same organization as object. Access
+        Denied
+
+        - Authenticated user who is in same organization as object, however is
+        missing the correct permission. Access Denied
+
+        Depending upon user type, they will recieve different feedback. In order
+        they are: 
+
+        - Non-authenticated users will **always** recieve HTTP/401
+
+        - Authenticated users who use an unsupported method, HTTP/405
+
+        - Authenticated users missing the correct permission recieve HTTP/403
+
         Args:
             request (object): The HTTP Request Object
             view (_type_): The View/Viewset Object the request was made to
 
         Raises:
+            PermissionDenied: User does not have the required permission.
+            NotAuthenticated: User is not logged into Centurion.
             ValueError: Could not determin the view action.
 
         Returns:
@@ -87,20 +111,35 @@ class OrganizationPermissionMixin(
 
         if request.user.is_anonymous:
 
-            return False
+            raise centurion_exceptions.NotAuthenticated()
 
         try:
 
 
             view.get_user_organizations( request.user )
 
+            has_permission_required: bool = False
+
+            user_permissions = getattr(view, '_user_permissions', None)
+
             permission_required = view.get_permission_required()
 
-            has_permission_required: bool = permission_required in getattr(view, '_user_permissions', [])
 
-            if not has_permission_required and not request.user.is_superuser:
+            if permission_required and user_permissions:
+                # No permission_required couldnt get permissions
+                # No user_permissions, user missing the required permission
 
-                return False
+                has_permission_required: bool = permission_required in user_permissions
+
+
+            if request.method not in view.allowed_methods:
+
+                raise centurion_exceptions.MethodNotAllowed(method = request.method)
+
+
+            elif not has_permission_required and not request.user.is_superuser:
+
+                raise centurion_exceptions.PermissionDenied()
 
 
             obj_organization: Organization = view.get_obj_organization(
@@ -196,13 +235,23 @@ class OrganizationPermissionMixin(
         except ValueError as e:
 
             # ToDo: This exception could be used in traces as it provides
-            # information as to dodgy requests
+            # information as to dodgy requests. This exception is raised
+            # when the method does not match the view action.
+
+            print(traceback.format_exc())
+
+        except centurion_exceptions.ObjectDoesNotExist as e:
+            # This exception genrally means that the user is not in the same
+            # organization as the object as objects are filtered to users
+            # organizations ONLY.
 
             pass
 
-        except Exception as e:
+        except centurion_exceptions.PermissionDenied as e:
+            # This Exception will be raised after this function has returned
+            # False.
 
-            print(traceback.format_exc())
+            pass
 
 
         return False
