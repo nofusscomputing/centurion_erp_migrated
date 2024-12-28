@@ -112,9 +112,13 @@ class TicketViewSet(ModelViewSet):
                 or self.action == 'update'
             ):
 
-                obj = list(self.get_queryset())[0]
+                queryset = self.get_queryset()
 
-                organization = obj.organization
+                if len(queryset) > 0:
+
+                    obj = queryset[0]
+
+                    organization = obj.organization
 
         if self.action == 'create':
 
