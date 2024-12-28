@@ -170,7 +170,10 @@ class TicketViewSet(ModelViewSet):
                 action_keyword = 'triage'
 
 
-        elif self.action is None:
+        elif(
+            self.action is None
+            or self.action == 'metadata'
+        ):
 
             action_keyword = 'view'
 
