@@ -250,15 +250,15 @@ class OrganizationMixin:
     """
 
 
-    _user_organizations: list = None
+    _user_organizations: list = []
     """Cached User Organizations"""
 
 
-    _user_teams: list = None
+    _user_teams: list = []
     """Cached User Teams"""
 
 
-    _user_permissions: list = None
+    _user_permissions: list = []
     """Cached User User Permissions"""
 
 
