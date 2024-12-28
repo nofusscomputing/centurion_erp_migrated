@@ -240,6 +240,13 @@ class OrganizationPermissionMixin(
 
             print(traceback.format_exc())
 
+        except centurion_exceptions.Http404 as e:
+            # This exception genrally means that the user is not in the same
+            # organization as the object as objects are filtered to users
+            # organizations ONLY.
+
+            pass
+
         except centurion_exceptions.ObjectDoesNotExist as e:
             # This exception genrally means that the user is not in the same
             # organization as the object as objects are filtered to users
