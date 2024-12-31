@@ -4,8 +4,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResp
 
 from rest_framework.response import Response
 
-
-from api.tasks import process_inventory
 from api.viewsets.common import ModelCreateViewSet
 
 from core import exceptions as centurion_exception
@@ -13,6 +11,7 @@ from core.http.common import Http
 
 from itam.models.device import Device
 from itam.serializers.inventory import InventorySerializer
+from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
 

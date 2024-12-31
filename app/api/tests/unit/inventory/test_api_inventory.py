@@ -16,11 +16,10 @@ from access.models import Organization, Team, TeamUsers, Permission
 from api.views.mixin import OrganizationPermissionAPI
 from api.serializers.inventory import Inventory
 
-from api.tasks import process_inventory
-
 from itam.models.device import Device, DeviceOperatingSystem, DeviceSoftware
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
+from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
 
