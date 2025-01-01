@@ -2,6 +2,8 @@ import json
 
 from django.db.models import Q
 
+from kombu.exceptions import OperationalError
+
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from rest_framework.response import Response
@@ -134,6 +136,10 @@ class ViewSet( ModelCreateViewSet ):
 
             response_data: dict = {"task_id": f"{task.id}"}
 
+        except OperationalError as e:
+
+            status = 503
+            response_data = f'RabbitMQ error: {e.args[0]}'
 
         except centurion_exception.PermissionDenied as e:
 
