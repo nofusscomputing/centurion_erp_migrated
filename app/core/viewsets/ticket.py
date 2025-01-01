@@ -285,57 +285,59 @@ class TicketViewSet(ModelViewSet):
                 ).organization.pk
 
 
-            if (    # Must be first as the priority to pickup
-                self._ticket_type
-                and self.action != 'list'
-                and self.action != 'retrieve'
-            ):
+            if organization:
 
-
-                if self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ]
+                if (    # Must be first as the priority to pickup
+                    self._ticket_type
+                    and self.action != 'list'
+                    and self.action != 'retrieve'
                 ):
 
-                    serializer_prefix = serializer_prefix + 'Import'
 
-                elif self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ]
-                ):
+                    if self.has_organization_permission(
+                        organization = organization,
+                        permissions_required = [
+                            'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
+                        ]
+                    ):
 
-                    serializer_prefix = serializer_prefix + 'Triage'
+                        serializer_prefix = serializer_prefix + 'Import'
 
-                elif self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.change_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ]
-                ):
+                    elif self.has_organization_permission(
+                        organization = organization,
+                        permissions_required = [
+                            'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
+                        ]
+                    ):
 
-                    serializer_prefix = serializer_prefix + 'Change'
+                        serializer_prefix = serializer_prefix + 'Triage'
 
-                elif self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.add_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ]
-                ):
+                    elif self.has_organization_permission(
+                        organization = organization,
+                        permissions_required = [
+                            'core.change_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
+                        ]
+                    ):
 
-                    serializer_prefix = serializer_prefix + 'Add'
+                        serializer_prefix = serializer_prefix + 'Change'
 
-                elif self.has_organization_permission(
-                    organization = organization,
-                    permissions_required = [
-                        'core.view_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                    ]
-                ):
+                    elif self.has_organization_permission(
+                        organization = organization,
+                        permissions_required = [
+                            'core.add_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
+                        ]
+                    ):
 
-                    serializer_prefix = serializer_prefix + 'View'
+                        serializer_prefix = serializer_prefix + 'Add'
+
+                    elif self.has_organization_permission(
+                        organization = organization,
+                        permissions_required = [
+                            'core.view_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
+                        ]
+                    ):
+
+                        serializer_prefix = serializer_prefix + 'View'
 
 
         if (
