@@ -347,6 +347,10 @@ class OrganizationMixin:
 
         has_permission: bool = False
 
+        if not organization:
+
+            return has_permission
+
         for team in self.get_user_teams( user = self.request.user ):
 
             if team.organization.id == int(organization):
