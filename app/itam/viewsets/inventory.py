@@ -217,3 +217,7 @@ class ViewSet( ModelCreateViewSet ):
 
 
         return super().get_permission_required()
+
+
+    def get_serializer_class(self):
+        return InventorySerializer
