@@ -173,6 +173,16 @@ class OrganizationMixin:
             return self._permission_required
 
 
+        if hasattr(self, 'get_dynamic_permissions'):
+
+            self._permission_required = self.get_dynamic_permissions()
+
+            if type(self._permission_required) is list:
+
+                self._permission_required = self._permission_required[0]
+
+            return self._permission_required
+
 
         view_action: str = None
 
