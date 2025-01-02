@@ -222,7 +222,7 @@ class ViewSet( ModelCreateViewSet ):
             self.inventory_action = 'new'
 
 
-        return super().get_permission_required()
+        return self.permission_required
 
 
     def get_serializer_class(self):
