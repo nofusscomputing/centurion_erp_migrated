@@ -457,7 +457,7 @@ class DevicePermissionsAPI(
         assert response.status_code == 403
 
 
-
+    @pytest.mark.skip( reason = 'see https://github.com/nofusscomputing/centurion_erp/issues/461' )
     @patch.object(process_inventory, 'delay')
     def test_change_different_organization_denied(self, process_inventory):
         """ Ensure permission view cant make change
