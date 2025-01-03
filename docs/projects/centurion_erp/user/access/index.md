@@ -34,3 +34,11 @@ Unlike filesystem based permssions, Centurion ERP permissions are not inclusive,
 - To `view` an item you must have its corresponding `view` permission
 
 The exclusitvity is that each of the permissions listed above, dont include an assumed permission. For instance if you have the `add` permission for an item, you will not be able to view it. That would require the `view` permission.
+
+
+### Gloabl Organization
+
+If the webmaster has setup Centurion ERP to have a [global organization](../settings/app_settings.md#global-organization), as long as the user has the a `view` permission for the model in question in **any** organization, they will be able to view that item within the global organization. This is not the same for the other permissions: `add`, `change` and `delete`. To which they must be granted those permissions within the global organization exclusively.
+
+!!! tip
+    User `A` is in organization `A` and the webmaster has setup Centurion to use organization `B` as the global organization. If user `A` has been granted permission `itam.view_software` in organization `A` they will be able to view software within both organization `A` and `B`.

@@ -9,6 +9,13 @@ about: https://gitlab.com/nofusscomputing/infrastructure/configuration-managemen
 Application settings contain global settings that are applicable to the entire application. Only a super admin can change these settings.
 
 
+## Global Organization
+
+A Global organization is where **ALL** items that the webmaster has configured as global are placed. This Organization's purpose is the single location where items are saved to if they are set as global via the application settings.
+
+A global organizations permissions work slightly different than other organizations. Please see [permissions](../access/index.md#gloabl-organization) for more details.
+
+
 ## Global Software
 
 It's possible to enforce that all software is set as global. On defining this setting you must set an organization that the global software will be created in. Then when any software is created it will be set to global and saved to the global organization regardless of the users selected settings.

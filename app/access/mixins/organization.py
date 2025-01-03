@@ -361,9 +361,19 @@ class OrganizationMixin:
 
             return has_permission
 
+        from settings.models.app_settings import AppSettings
+
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
         for team in self.get_user_teams( user = self.request.user ):
 
-            if team.organization.id == int(organization):
+            if(
+                team.organization.id == int(organization)
+                or getattr(app_settings.global_organization, 'id', 0) == int(organization)
+            ):
 
                 for permission in team.permissions.all():
 
