@@ -508,27 +508,3 @@ class DevicePermissionsAPI(
         response = client.post(url, data=self.change_data, content_type='application/json')
 
         assert response.status_code == 403
-
-
-
-
-# class DeviceViewSet(
-#     ViewSetBase,
-#     SerializersTestCases,
-#     TestCase
-# ):
-
-#     pass
-
-
-
-# class DeviceMetadata(
-#     ViewSetBase,
-#     MetadataAttributesFunctional,
-#     MetaDataNavigationEntriesFunctional,
-#     TestCase
-# ):
-
-#     menu_id = 'itam'
-
-#     menu_entry_id = 'device'
