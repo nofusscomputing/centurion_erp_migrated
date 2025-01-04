@@ -1,3 +1,70 @@
+## 1.7.0 (2025-01-04)
+
+### feat
+
+- **access**: Enable Objects from global organization to be viewable by user with the permission
+- **access**: Enable Objects from globally set organization to return within query
+- **access**: Enable the calling of the dynamic permissions function to obtain permissions
+- **itam**: Cater for RabbitMQ errors when uploading inventory
+- **itam**: On Inventory upload validate existing device
+- **access**: During permission checking also capture Http404
+- **access**: Super User to be granted permission
+- **access**: Cache the permission required during permission checking
+- **api**: Add `IndexViewset` to ViewSet mixin
+- **access**: If the user lacks the permission during permission checks, return sooner
+- **access**: Enforce view action and HTTP/Method match for permission checks
+- **itim**: External Links to display on cluster details page
+- **api**: Add API v2 Endpoint for cluster services
+- **api**: distinguish between read-only and authenticateed user permissions
+
+### Fixes
+
+- **api**: Ensure ALL required classes for viewset are inherited
+- **itam**: Dont query parent class for permissions
+- **core**: If no org specified serializer fetch, dont attempt to access
+- **access**: If no org specified during permission check, rtn false for permission
+- **itam**: return serializer for inventory endpoint
+- **api**: base index must inherit from IndexViewset
+- **core**: Dont attempt to access the object if it doesn't exist when fetching ticket permissions
+- **access**: Cached list objects must be a list including an empty one as required
+- **core**: when gather ticket permissions, use getter as object may not exist
+- **core**: action metadata to use view permission for tickets
+- **access**: Use request.method for determining the HTTP/Method for permission checks
+- **access**: Add HTTP/Method=DELETE as valid option  for object delete/destroy.
+- **access**: Ensure Object permission are checked when an object is having an action performed against it.
+- **core**: History View is a read-only view
+- **core**: Permissions for Related ticket to be derived from ticket org
+- **access**: Team User permission organiztion is team org
+
+### Refactoring
+
+- **itam**: Device UUID field requires no default
+- **itam**: mv inventory task to itam app
+- **access**: Use exceptions for permission flow as required
+- **api**: dedup code within viewset mixin
+- **access**: Object permission checking moved to `has_object_permission` function
+- **access**: move ability to get required permissions from permissions mixin to organization mixin
+- **core**: move ticket linked item to dynamic parent model
+- **api**: Use new re-writen Mixins for Tenancy and Permission checks
+- **access**: Organization Permission Mixin now caters for API ONLY
+- **access**: Organization Mixin now caters for API ONLY
+
+### Tests
+
+- **access**: Skip test case for appsettings different organization due to model not being tenancy model.
+- **access**: Ensure items returned from query are from user organization and/or globally set organization
+- **itam**: API v2 Inventory Permission Check skip diff org
+- **itam**: API v2 Inventory Permission Checks
+- mv inventory test to itam app
+- **access**: Test Cases for Organization Permission Mixin
+- **api**: Adjust test case for metadata visibility
+- **core**: remove different org testcase from history checks
+- **core**: When testing if history access is possible for user with perms, correct status is HTTP/200
+- **access**: When adding org, test case must use non-super user
+- **itim**: Ensure external_links are returned as part of _urls
+- **itim**: Add API v2 permission checks for cluster services
+- **itim**: Add API v2 permission checks for device services
+
 ## 1.6.0 (2024-12-23)
 
 ### feat
