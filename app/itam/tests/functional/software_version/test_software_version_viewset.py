@@ -12,6 +12,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 
 from itam.models.software import Software, SoftwareVersion
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ViewSetBase:
@@ -44,6 +46,39 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+
+
+        software = Software.objects.create(
+                organization = self.organization,
+                name = 'software'
+            )
+
+
+
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = '12',
+            software = software
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+
+
+
 
 
         view_permissions = Permission.objects.get(
@@ -121,11 +156,6 @@ class ViewSetBase:
             team = view_team,
             user = self.view_user
         )
-
-        software = Software.objects.create(
-                organization = self.organization,
-                name = 'software'
-            )
 
         software_b = Software.objects.create(
                 organization = different_organization,
