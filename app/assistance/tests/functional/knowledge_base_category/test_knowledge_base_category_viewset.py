@@ -12,6 +12,9 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 
 from assistance.models.knowledge_base import KnowledgeBaseCategory
 
+from settings.models.app_settings import AppSettings
+
+
 
 
 class ViewSetBase:
@@ -46,8 +49,29 @@ class ViewSetBase:
         self.different_organization = different_organization
 
 
+        self.view_user = User.objects.create_user(username="test_user_view", password="password")
 
-        # self.url_kwargs = {}
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = 'onesdsad',
+            target_user = self.view_user
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+
 
 
         view_permissions = Permission.objects.get(
@@ -120,7 +144,6 @@ class ViewSetBase:
         self.no_permissions_user = User.objects.create_user(username="test_no_permissions", password="password")
 
 
-        self.view_user = User.objects.create_user(username="test_user_view", password="password")
         self.view_user_b = User.objects.create_user(username="test_user_view_b", password="password")
         teamuser = TeamUsers.objects.create(
             team = view_team,

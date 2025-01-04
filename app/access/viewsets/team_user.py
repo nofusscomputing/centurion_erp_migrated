@@ -145,6 +145,10 @@ class ViewSet( ModelViewSet ):
 
     model = TeamUsers
 
+    parent_model = Team
+
+    parent_model_pk_kwarg = 'team_id'
+
     documentation: str = ''
 
     view_description = 'Users belonging to a single team'

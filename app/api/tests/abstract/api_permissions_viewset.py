@@ -113,6 +113,16 @@ class APIPermissionView:
             url = reverse(self.app_namespace + ':' + self.url_name + '-list')
 
 
+        viewable_organizations = [
+            self.organization.id,
+        ]
+
+        if getattr(self, 'global_organization', None):    # Cater for above test that also has global org
+
+            viewable_organizations += [ self.global_organization.id ]
+
+
+
         client.force_login(self.view_user)
         response = client.get(url)
 
@@ -120,11 +130,56 @@ class APIPermissionView:
 
         for item in response.data['results']:
 
-            if int(item['organization']['id']) != self.organization.id:
+            if int(item['organization']['id']) not in viewable_organizations:
 
                 contains_different_org = True
+                print(f'Failed returned row was: {item}')
 
         assert not contains_different_org
+
+
+
+    def test_returned_data_from_user_and_global_organizations_only(self):
+        """Check items returned
+
+        Items returned from the query Must be from the users organization and
+        global ONLY!
+        """
+
+        client = Client()
+        url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs=self.url_kwargs)
+
+
+        only_from_user_org: bool = True
+
+        viewable_organizations = [
+            self.organization.id,
+            self.global_organization.id
+        ]
+
+
+        assert getattr(self.global_organization, 'id', False)    # fail if no global org set
+        assert getattr(self.global_org_item, 'id', False)    # fail if no global item set
+
+
+        client.force_login(self.view_user)
+        response = client.get(url)
+
+        assert len(response.data['results']) >= 2    # fail if only one item extist.
+
+
+        for row in response.data['results']:
+
+            if row['organization']['id'] not in viewable_organizations:
+
+                only_from_user_org = False
+
+                print(f'Users org: {self.organization.id}')
+                print(f'global org: {self.global_organization.id}')
+                print(f'Failed returned row was: {row}')
+
+        assert only_from_user_org
+
 
 
 

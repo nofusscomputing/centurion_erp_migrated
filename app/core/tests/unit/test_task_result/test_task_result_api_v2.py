@@ -53,7 +53,7 @@ class CeleryTaskResultAPI(
 
         self.item = self.model.objects.create(
             task_id = 'd15233ee-a14d-4135-afe5-e406b1b61330',
-            task_name = 'api.tasks.process_inventory',
+            task_name = 'itam.tasks.process_inventory',
             task_args = '{"random": "value"}',
             task_kwargs = 'sdas',
             status = "SUCCESS",

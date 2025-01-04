@@ -13,6 +13,8 @@ from api.tests.abstract.test_metadata_functional import MetadataAttributesFuncti
 
 from project_management.models.projects import Project
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ViewSetBase:
@@ -45,6 +47,31 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+
+
+
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = 'global_item'
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+
+
 
 
         view_permissions = Permission.objects.get(

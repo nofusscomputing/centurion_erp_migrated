@@ -3,12 +3,12 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from api.viewsets.common import CommonViewSet
+from api.viewsets.common import IndexViewset
 
 
 
 @extend_schema(exclude = True)
-class Index(CommonViewSet):
+class Index(IndexViewset):
 
     allowed_methods: list = [
         'GET',

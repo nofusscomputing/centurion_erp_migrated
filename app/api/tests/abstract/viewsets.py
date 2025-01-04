@@ -1,5 +1,6 @@
+from access.mixins.permissions import OrganizationPermissionMixin
+
 from api.react_ui_metadata import ReactUIMetadata
-from api.views.mixin import OrganizationPermissionAPI
 
 
 
@@ -145,7 +146,7 @@ class AllViewSet:
 
         view_set = self.viewset()
 
-        assert view_set.permission_classes[0] is OrganizationPermissionAPI
+        assert view_set.permission_classes[0] is OrganizationPermissionMixin
 
         assert len(view_set.permission_classes) == 1
 

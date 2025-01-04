@@ -2,7 +2,7 @@ from django.db.models import Q
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import ReadOnlyModelViewSet
 
 from core.serializers.history import (
     History,
@@ -27,7 +27,7 @@ from core.serializers.history import (
     update = extend_schema( exclude = True ),
     partial_update = extend_schema( exclude = True )
 )
-class ViewSet(ModelViewSet):
+class ViewSet(ReadOnlyModelViewSet):
 
     allowed_methods = [
         'GET',

@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.urls import reverse
 
 from rest_framework import serializers
@@ -41,9 +42,59 @@ class InventorySerializer(serializers.Serializer):
             ):
 
                 raise centurion_exceptions.ValidationError(
-                    detail = 'Serial Number or UUID is required',
+                    detail = 'Serial Number and/or UUID is required',
                     code = 'no_serial_or_uuid'
                 )
+
+
+            obj = Device.objects.filter(
+                Q(
+                    name=str(data['name']).lower(),
+                    serial_number = str(data['serial_number']).lower()
+                )
+                  |
+                Q(
+                    name = str(data['name']).lower(),
+                    uuid = str(data['uuid']).lower()
+                )
+                    |
+                Q(
+                    serial_number = str(data['serial_number']).lower()
+                )
+                  |
+                Q(
+                    uuid = str(data['uuid']).lower()
+                )
+            )
+
+            if len(obj) > 1:
+
+                raise centurion_exceptions.ValidationError(
+                    detail = {
+                        'detail': 'Object is not unique. Confirm that uuid and/or serial number is unique'
+                    },
+                    code = 'not_unique'
+                )
+
+            elif len(obj) == 1:
+
+                obj = obj[0]
+
+                if obj.name == str(data['name']).lower():
+
+                    if(
+                        obj.serial_number != str(data['serial_number']).lower()
+                        and obj.uuid != str(data['uuid']).lower()
+                    ):
+
+                        raise centurion_exceptions.ValidationError(
+                            detail = {
+                                'detail': 'Device exists, however the serial number and/or UUID dont match'
+                            },
+                            code = 'not_unique'
+                        )
+
+
 
             return data
 

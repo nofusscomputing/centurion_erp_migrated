@@ -14,6 +14,8 @@ from itam.models.device import Device
 
 from itim.models.services import Service, Port
 
+from settings.models.app_settings import AppSettings
+
 
 
 class ViewSetBase:
@@ -46,6 +48,40 @@ class ViewSetBase:
         different_organization = Organization.objects.create(name='test_different_organization')
 
         self.different_organization = different_organization
+
+
+
+
+        device = Device.objects.create(
+            organization=organization,
+            name = 'device'
+        )
+
+
+
+        self.global_organization = Organization.objects.create(
+            name = 'test_global_organization'
+        )
+
+        self.global_org_item = self.model.objects.create(
+            organization = self.global_organization,
+            name = 'global_item',
+            device = device,
+            config_key_variable = 'value'
+        )
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
+        app_settings.global_organization = self.global_organization
+
+        app_settings.save()
+
+
+
+
+
 
 
         view_permissions = Permission.objects.get(
@@ -122,11 +158,6 @@ class ViewSetBase:
         teamuser = TeamUsers.objects.create(
             team = view_team,
             user = self.view_user
-        )
-
-        device = Device.objects.create(
-            organization=organization,
-            name = 'device'
         )
 
         port = Port.objects.create(

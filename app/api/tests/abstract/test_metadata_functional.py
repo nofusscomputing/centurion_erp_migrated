@@ -615,54 +615,7 @@ class MetaDataNavigationEntriesFunctional:
             content_type='application/json'
         )
 
-        no_menu_entry_found: bool = True
-
-        for nav_menu in response.data['navigation']:
-
-            if nav_menu['name'] == self.menu_id:
-
-                for menu_entry in nav_menu['pages']:
-
-                    if menu_entry['name'] == self.menu_entry_id:
-
-                        no_menu_entry_found = False
-
-        assert no_menu_entry_found
-
-
-
-    def test_navigation_no_empty_menu_add_user(self):
-        """Test HTTP/Options Method Navigation Entry
-
-        Ensure that a user with add permission, does not
-        have any nave menu without pages
-        """
-
-        client = Client()
-        client.force_login(self.add_user)
-
-        if getattr(self, 'url_kwargs', None):
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-        response = client.options(
-            url,
-            content_type='application/json'
-        )
-
-        no_empty_menu_found: bool = True
-
-        for nav_menu in response.data['navigation']:
-
-            if len(nav_menu['pages']) == 0:
-
-                no_empty_menu_found = False
-
-        assert no_empty_menu_found
+        assert response.status_code == 403
 
 
 
@@ -689,54 +642,8 @@ class MetaDataNavigationEntriesFunctional:
             content_type='application/json'
         )
 
-        no_menu_entry_found: bool = True
 
-        for nav_menu in response.data['navigation']:
-
-            if nav_menu['name'] == self.menu_id:
-
-                for menu_entry in nav_menu['pages']:
-
-                    if menu_entry['name'] == self.menu_entry_id:
-
-                        no_menu_entry_found = False
-
-        assert no_menu_entry_found
-
-
-
-    def test_navigation_no_empty_menu_change_user(self):
-        """Test HTTP/Options Method Navigation Entry
-
-        Ensure that a user with change permission, does not
-        have any nave menu without pages
-        """
-
-        client = Client()
-        client.force_login(self.change_user)
-
-        if getattr(self, 'url_kwargs', None):
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-        response = client.options(
-            url,
-            content_type='application/json'
-        )
-
-        no_empty_menu_found: bool = True
-
-        for nav_menu in response.data['navigation']:
-
-            if len(nav_menu['pages']) == 0:
-
-                no_empty_menu_found = False
-
-        assert no_empty_menu_found
+        assert response.status_code == 403
 
 
 
@@ -763,54 +670,8 @@ class MetaDataNavigationEntriesFunctional:
             content_type='application/json'
         )
 
-        no_menu_entry_found: bool = True
 
-        for nav_menu in response.data['navigation']:
-
-            if nav_menu['name'] == self.menu_id:
-
-                for menu_entry in nav_menu['pages']:
-
-                    if menu_entry['name'] == self.menu_entry_id:
-
-                        no_menu_entry_found = False
-
-        assert no_menu_entry_found
-
-
-
-    def test_navigation_no_empty_menu_delete_user(self):
-        """Test HTTP/Options Method Navigation Entry
-
-        Ensure that a user with delete permission, does not
-        have any nave menu without pages
-        """
-
-        client = Client()
-        client.force_login(self.delete_user)
-
-        if getattr(self, 'url_kwargs', None):
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list', kwargs = self.url_kwargs)
-
-        else:
-
-            url = reverse(self.app_namespace + ':' + self.url_name + '-list')
-
-        response = client.options(
-            url,
-            content_type='application/json'
-        )
-
-        no_empty_menu_found: bool = True
-
-        for nav_menu in response.data['navigation']:
-
-            if len(nav_menu['pages']) == 0:
-
-                no_empty_menu_found = False
-
-        assert no_empty_menu_found
+        assert response.status_code == 403
 
 
 
