@@ -536,7 +536,11 @@ class ModelViewSetBase(
 
 class ModelViewSet(
     ModelViewSetBase,
+    Create,
     Retrieve,
+    Update,
+    Destroy,
+    List,
     viewsets.ModelViewSet,
 ):
 
