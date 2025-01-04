@@ -276,6 +276,11 @@ class OrganizationPermissionMixin(
 
             object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
 
+            from settings.models.app_settings import AppSettings
+
+            app_settings = AppSettings.objects.get(
+                owner_organization = None
+            )
 
             if object_organization:
 
@@ -283,6 +288,7 @@ class OrganizationPermissionMixin(
                     object_organization
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
+                    or getattr(app_settings.global_organization, 'id', 0) == int(object_organization)
                 ):
 
                     return True

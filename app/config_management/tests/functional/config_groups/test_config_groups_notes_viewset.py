@@ -60,3 +60,16 @@ class NotePermissionsAPI(
         self.url_view_kwargs = {'config_group_id': self.note_item.id, 'pk': self.item.pk }
 
         self.add_data = {'note': 'a note added', 'organization': self.organization.id}
+
+
+
+    def test_returned_data_from_user_and_global_organizations_only(self):
+        """Check items returned
+
+        This test case is a over-ride of a test case with the same name.
+        This model is not a tenancy model making this test not-applicable.
+
+        Items returned from the query Must be from the users organization and
+        global ONLY!
+        """
+        pass

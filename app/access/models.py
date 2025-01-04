@@ -11,6 +11,7 @@ from core.middleware.get_request import get_request
 from core.mixin.history_save import SaveHistory
 
 
+
 class Organization(SaveHistory):
 
     class Meta:
@@ -177,6 +178,16 @@ class TenancyManager(models.Manager):
 
 
         if request:
+
+            from settings.models.app_settings import AppSettings
+
+            app_settings = AppSettings.objects.get(
+                owner_organization = None
+            )
+
+            if app_settings.global_organization:
+
+                user_organizations += [ app_settings.global_organization.id ]
 
             # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
 

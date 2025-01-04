@@ -173,6 +173,16 @@ class OrganizationMixin:
             return self._permission_required
 
 
+        if hasattr(self, 'get_dynamic_permissions'):
+
+            self._permission_required = self.get_dynamic_permissions()
+
+            if type(self._permission_required) is list:
+
+                self._permission_required = self._permission_required[0]
+
+            return self._permission_required
+
 
         view_action: str = None
 
@@ -347,9 +357,23 @@ class OrganizationMixin:
 
         has_permission: bool = False
 
+        if not organization:
+
+            return has_permission
+
+        from settings.models.app_settings import AppSettings
+
+
+        app_settings = AppSettings.objects.get(
+            owner_organization = None
+        )
+
         for team in self.get_user_teams( user = self.request.user ):
 
-            if team.organization.id == int(organization):
+            if(
+                team.organization.id == int(organization)
+                or getattr(app_settings.global_organization, 'id', 0) == int(organization)
+            ):
 
                 for permission in team.permissions.all():
 

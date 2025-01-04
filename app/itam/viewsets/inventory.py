@@ -1,11 +1,13 @@
 import json
 
+from django.db.models import Q
+
+from kombu.exceptions import OperationalError
+
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
 from rest_framework.response import Response
 
-
-from api.tasks import process_inventory
 from api.viewsets.common import ModelCreateViewSet
 
 from core import exceptions as centurion_exception
@@ -13,6 +15,7 @@ from core.http.common import Http
 
 from itam.models.device import Device
 from itam.serializers.inventory import InventorySerializer
+from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
 
@@ -101,16 +104,42 @@ class ViewSet( ModelCreateViewSet ):
 
             self.default_organization = UserSettings.objects.get(user=request.user).default_organization
 
-            if Device.objects.filter(slug=str(data.validated_data['details']['name']).lower()).exists():
+            obj_organaization_id = getattr(self.default_organization, 'id', None)
 
-                self.obj = Device.objects.get(slug=str(data.validated_data['details']['name']).lower())
 
-                device = self.obj
+            obj = Device.objects.filter(
+                Q(
+                    name=str(data.validated_data['details']['name']).lower(),
+                    serial_number = str(data.validated_data['details']['serial_number']).lower()
 
-            task = process_inventory.delay(data.validated_data, self.default_organization.id)
+                )
+                  |
+                Q(
+                    name = str(data.validated_data['details']['name']).lower(),
+                    uuid = str(data.validated_data['details']['uuid']).lower()
+                )
+            )
+
+
+            if len(obj) == 1:
+
+                obj_organaization_id = obj[0].organization.id
+
+
+            if not obj_organaization_id:
+
+                raise centurion_exception.ValidationError({
+                    'detail': 'No Default organization set for user'
+                })
+
+            task = process_inventory.delay(data.validated_data, obj_organaization_id)
 
             response_data: dict = {"task_id": f"{task.id}"}
 
+        except OperationalError as e:
+
+            status = 503
+            response_data = f'RabbitMQ error: {e.args[0]}'
 
         except centurion_exception.PermissionDenied as e:
 
@@ -193,4 +222,8 @@ class ViewSet( ModelCreateViewSet ):
             self.inventory_action = 'new'
 
 
-        return super().get_permission_required()
+        return self.permission_required
+
+
+    def get_serializer_class(self):
+        return InventorySerializer

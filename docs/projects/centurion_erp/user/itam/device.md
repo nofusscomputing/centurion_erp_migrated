@@ -139,5 +139,13 @@ Example Report
     ]
 }
 
-
 ```
+
+
+#### Permissions
+
+The user that uploads an inventory will require the correct permissions. The required permissions are as follows:
+
+- `itam.add_device` For adding a new device via inventory
+
+- `itam.change_device` For updating an existing device via inventory
