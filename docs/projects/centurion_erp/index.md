@@ -139,13 +139,15 @@ Below is a list of modules/features we intend to add to Centurion. To find out w
 
     - IT Operations
 
+        - Release and Deployment Management _[see #462](https://github.com/nofusscomputing/centurion_erp/issues/462)_
+
         - Service level management _[see #396](https://github.com/nofusscomputing/centurion_erp/issues/396)_
 
     - Order Management _[see #94](https://github.com/nofusscomputing/centurion_erp/issues/94)_
 
         - Supplier Management _[see #123](https://github.com/nofusscomputing/centurion_erp/issues/123)_
 
-    - Service Catalog _[see #1384](https://github.com/nofusscomputing/centurion_erp/issues/384)_
+    - Service Catalog _[see #384](https://github.com/nofusscomputing/centurion_erp/issues/384)_
 
 
 - **Planned Integrations:**

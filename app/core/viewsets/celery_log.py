@@ -6,7 +6,7 @@ from core.serializers.celery_log import (
     TaskResultViewSerializer
 )
 
-from api.viewsets.common import ReadOnlyModelViewSet
+from api.viewsets.common import AuthUserReadOnlyModelViewSet
 
 
 
@@ -29,7 +29,7 @@ from api.viewsets.common import ReadOnlyModelViewSet
         }
     ),
 )
-class ViewSet(ReadOnlyModelViewSet):
+class ViewSet(AuthUserReadOnlyModelViewSet):
 
     filterset_fields = [
         'periodic_task_name',

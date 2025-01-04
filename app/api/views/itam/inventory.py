@@ -14,10 +14,9 @@ from api.serializers.inventory import Inventory
 from core.http.common import Http
 
 from itam.models.device import Device
+from itam.tasks.inventory import process_inventory
 
 from settings.models.user_settings import UserSettings
-
-from api.tasks import process_inventory
 
 
 

@@ -7,6 +7,7 @@ from access.mixin import OrganizationMixin
 from api.viewsets.common import ModelListRetrieveDeleteViewSet
 
 from core.serializers.ticket_related import (
+    Ticket,
     RelatedTickets,
     RelatedTicketModelSerializer,
     RelatedTicketViewSerializer,
@@ -78,6 +79,10 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
     ]
 
     model = RelatedTickets
+
+    parent_model = Ticket
+
+    parent_model_pk_kwarg = 'ticket_id'
 
 
     def get_serializer_class(self):

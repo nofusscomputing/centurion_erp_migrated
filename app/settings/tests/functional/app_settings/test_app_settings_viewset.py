@@ -197,6 +197,18 @@ class AppSettingsPermissionsAPI(
 ):
 
 
+    def test_returned_data_from_user_and_global_organizations_only(self):
+        """Check items returned
+
+        This test case is a over-ride of a test case with the same name.
+        This model is not a tenancy model making this test not-applicable.
+
+        Items returned from the query Must be from the users organization and
+        global ONLY!
+        """
+        pass
+
+
 
     def test_add_create_not_allowed(self):
         """ Check correct permission for add 
@@ -210,6 +222,18 @@ class AppSettingsPermissionsAPI(
             url = reverse(self.app_namespace + ':' + self.url_name + '-list')
 
         assert e.typename == 'NoReverseMatch'
+
+
+    def test_change_different_organization_denied(self):
+        """ Ensure permission view cant make change
+
+        This test case is N/A as app settings are not a tenancy model
+
+        Attempt to make change as user from different organization
+        """
+
+        pass
+
 
 
     def test_delete_has_permission(self):
@@ -232,6 +256,17 @@ class AppSettingsPermissionsAPI(
         """Test not required
 
         this test is not required as this model is not a tenancy model
+        """
+
+        pass
+
+
+    def test_view_different_organizaiton_denied(self):
+        """ Check correct permission for view
+
+        This test case is N/A as app settings are not a tenancy model
+
+        Attempt to view with user from different organization
         """
 
         pass

@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ReadOnlyModelViewSet
+from api.viewsets.common import AuthUserReadOnlyModelViewSet
 
 from app.serializers.user import (
     User,
@@ -28,7 +28,7 @@ from app.serializers.user import (
     ),
 )
 class ViewSet(
-    ReadOnlyModelViewSet
+    AuthUserReadOnlyModelViewSet
 ):
 
 

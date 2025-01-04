@@ -183,7 +183,6 @@ class Device(DeviceCommonFieldsName, SaveHistory):
 
     uuid = models.CharField(
         blank = True,
-        default = None,
         help_text = 'System GUID/UUID.',
         max_length = 50,
         null = True,

@@ -1,6 +1,6 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiResponse
 
-from api.viewsets.common import ModelViewSet
+from api.viewsets.common import ReadOnlyModelViewSet
 
 from itim.serializers.service import (
     Service,
@@ -18,7 +18,7 @@ from itim.serializers.service import (
         partial_update=extend_schema(exclude=True),
         destroy=extend_schema(exclude=True)
     )
-class ViewSet(ModelViewSet):
+class ViewSet(ReadOnlyModelViewSet):
 
     filterset_fields = [
         'cluster',

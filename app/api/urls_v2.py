@@ -73,7 +73,8 @@ from itim.viewsets import (
     port as port_v2,
     problem,
     service as service_v2,
-    service_device as service_device_v2
+    service_cluster,
+    service_device as service_device_v2,
 )
 
 from project_management.viewsets import (
@@ -153,6 +154,7 @@ router.register('itam/software/(?P<software_id>[0-9]+)/version', software_versio
 router.register('itim', itim_v2.Index, basename='_api_v2_itim_home')
 router.register('itim/ticket/change', change.ViewSet, basename='_api_v2_ticket_change')
 router.register('itim/cluster', cluster_v2.ViewSet, basename='_api_v2_cluster')
+router.register('itim/cluster/(?P<cluster_id>[0-9]+)/service', service_cluster.ViewSet, basename='_api_v2_service_cluster')
 router.register('itim/cluster/(?P<cluster_id>[0-9]+)/notes', notes_v2.ViewSet, basename='_api_v2_cluster_notes')
 router.register('itim/ticket/incident', incident.ViewSet, basename='_api_v2_ticket_incident')
 router.register('itim/ticket/problem', problem.ViewSet, basename='_api_v2_ticket_problem')

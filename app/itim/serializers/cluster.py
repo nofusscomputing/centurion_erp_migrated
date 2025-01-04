@@ -54,6 +54,7 @@ class ClusterModelSerializer(
 
         return {
             '_self': item.get_url( request = self._context['view'].request ),
+            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?cluster=true',
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,
@@ -71,6 +72,7 @@ class ClusterModelSerializer(
                 }
             ),
             'notes': reverse("v2:_api_v2_cluster_notes-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
+            'service': reverse("v2:_api_v2_service_cluster-list", request=self._context['view'].request, kwargs={'cluster_id': item.pk}),
             'tickets': reverse(
                 "v2:_api_v2_item_tickets-list",
                 request=self._context['view'].request,

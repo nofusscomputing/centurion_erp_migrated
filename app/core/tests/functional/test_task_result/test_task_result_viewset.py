@@ -147,7 +147,7 @@ class TaskResultPermissionsAPI(
 
         self.item = self.model.objects.create(
             task_id = 'd15233ee-a14d-4135-afe5-e406b1b61330',
-            task_name = 'api.tasks.process_inventory',
+            task_name = 'itam.tasks.process_inventory',
             task_args = '{"random": "value"}',
             task_kwargs = 'sdas',
             status = "SUCCESS",
@@ -207,6 +207,18 @@ class TaskResultPermissionsAPI(
             team = different_organization_team,
             user = self.different_organization_user
         )
+
+
+    def test_returned_data_from_user_and_global_organizations_only(self):
+        """Check items returned
+
+        This test case is a over-ride of a test case with the same name.
+        This model is not a tenancy model making this test not-applicable.
+
+        Items returned from the query Must be from the users organization and
+        global ONLY!
+        """
+        pass
 
 
     def test_add_no_permission_denied(self):
