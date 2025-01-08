@@ -285,69 +285,81 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             }
 
 
-            if field.context['view'].kwargs.get('pk', None):
+            if(
+                field.context['view'].kwargs.get('pk', None)
+                or field.context['view'].metadata_markdown
+            ):
+
+                queryset = field.context['view'].get_queryset()
 
                 from core.lib.slash_commands.linked_model import CommandLinkedModel
+                from core.models.ticket.ticket import Ticket
 
-                value = getattr(list(field.context['view'].queryset)[0], field.source, None)
+                for obj in queryset:
 
-                if value:
+                    value = getattr(obj, field.source, None)
 
-                    linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + value + ' ')
-                    linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', value)
+                    if field.source == 'display_name':
 
-                    from core.models.ticket.ticket import Ticket
-
-                for ticket, number in linked_tickets:
-
-                    try:
-
-                        item = Ticket.objects.get( pk = number )
-
-                        field_info["render"]['tickets'].update({
-                            number: {
-                                'status': Ticket.TicketStatus.All(item.status).label,
-                                'ticket_type': Ticket.TicketType(item.ticket_type).label,
-                                'title': str(item),
-                                'url': str(item.get_url()).replace('/api/v2', '')
-                            }
-                        })
-
-                    except Ticket.DoesNotExist as e:
-
-                        pass
+                        value = str(obj)
 
 
-                for model_type, model_id in linked_models:
+                    if value:
 
-                    try:
+                        linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
+                        linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
-                        model, item_type = CommandLinkedModel().get_model( model_type )
 
-                        if model:
+                    for ticket, number in linked_tickets:
 
-                            item = model.objects.get( pk = model_id )
+                        try:
 
-                            item_meta = { 
-                                model_id: {
+                            item = Ticket.objects.get( pk = number )
+
+                            field_info["render"]['tickets'].update({
+                                number: {
+                                    'status': Ticket.TicketStatus.All(item.status).label,
+                                    'ticket_type': Ticket.TicketType(item.ticket_type).label,
                                     'title': str(item),
-                                    'url': str(item.get_url()).replace('/api/v2', ''),
+                                    'url': str(item.get_url()).replace('/api/v2', '')
                                 }
-                            }
+                            })
 
-                            if not field_info["render"]['models'].get(model_type, None):
+                        except Ticket.DoesNotExist as e:
 
-                                field_info["render"]['models'].update({
-                                    model_type: item_meta
-                                })
+                            pass
 
-                            else:
 
-                                field_info["render"]['models'][model_type].update( item_meta )
+                    for model_type, model_id in linked_models:
 
-                    except model.DoesNotExist as e:
+                        try:
 
-                        pass
+                            model, item_type = CommandLinkedModel().get_model( model_type )
+
+                            if model:
+
+                                item = model.objects.get( pk = model_id )
+
+                                item_meta = { 
+                                    model_id: {
+                                        'title': str(item),
+                                        'url': str(item.get_url()).replace('/api/v2', ''),
+                                    }
+                                }
+
+                                if not field_info["render"]['models'].get(model_type, None):
+
+                                    field_info["render"]['models'].update({
+                                        model_type: item_meta
+                                    })
+
+                                else:
+
+                                    field_info["render"]['models'][model_type].update( item_meta )
+
+                        except model.DoesNotExist as e:
+
+                            pass
 
 
         return field_info

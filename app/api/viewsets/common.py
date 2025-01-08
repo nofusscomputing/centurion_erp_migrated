@@ -321,6 +321,13 @@ class CommonViewSet(
     required to generate the UI.
     """
 
+    metadata_markdown: bool = False
+    """Query for item within markdown and add to view metadata
+    
+    **Note:** This is not required for detail view as by default the metadata
+    is always gathered.
+    """
+
     model_documentation: str = None
     """Model Documentation URL
     
