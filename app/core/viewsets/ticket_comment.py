@@ -175,6 +175,8 @@ class ViewSet(ModelViewSet):
         'body',
     ]
 
+    metadata_markdown = True
+
     model = TicketComment
 
     parent_model = Ticket
