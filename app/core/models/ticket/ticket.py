@@ -1287,3 +1287,6 @@ class RelatedTickets(TenancyObject):
 
             comment.save()
 
+    def __str__(self):
+
+        return str( '#' + str(self.from_ticket_id.id) )

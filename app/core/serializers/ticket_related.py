@@ -9,6 +9,7 @@ from api.serializers import common
 from core.serializers.ticket import Ticket, TicketBaseSerializer
 
 from core import exceptions as centurion_exceptions
+from core import fields as centurion_field
 from core.models.ticket.ticket import RelatedTickets
 
 
@@ -66,6 +67,7 @@ class RelatedTicketModelSerializer(
     RelatedTicketBaseSerializer
 ):
 
+    display_name = centurion_field.MarkdownField(source='__str__', required = True )
 
     _urls = serializers.SerializerMethodField('get_url')
 
