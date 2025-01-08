@@ -55,7 +55,7 @@ class TicketLinkedItemModelSerializer(
 ):
 
 
-    display_name = centurion_field.MarkdownField(source='__str__', required = True )
+    display_name = centurion_field.MarkdownField(source='__str__', required = False, read_only= True )
 
     _urls = serializers.SerializerMethodField('get_url')
 
