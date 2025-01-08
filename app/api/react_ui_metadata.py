@@ -293,7 +293,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                 if value:
 
-                    linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', value)
+                    linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + value + ' ')
                     linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', value)
 
                     from core.models.ticket.ticket import Ticket
@@ -309,7 +309,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                                 'status': Ticket.TicketStatus.All(item.status).label,
                                 'ticket_type': Ticket.TicketType(item.ticket_type).label,
                                 'title': str(item),
-                                'url': item.get_url()
+                                'url': str(item.get_url()).replace('/api/v2', '')
                             }
                         })
 
@@ -331,7 +331,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                             item_meta = { 
                                 model_id: {
                                     'title': str(item),
-                                    'url': item.get_url(),
+                                    'url': str(item.get_url()).replace('/api/v2', ''),
                                 }
                             }
 
@@ -345,7 +345,7 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
                                 field_info["render"]['models'][model_type].update( item_meta )
 
-                    except Ticket.DoesNotExist as e:
+                    except model.DoesNotExist as e:
 
                         pass
 
