@@ -309,6 +309,10 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
                         linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
                         linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
 
+                    if(getattr(obj, 'from_ticket_id_id', None)):
+
+                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(obj.to_ticket_id_id))
+
 
                     for ticket, number in linked_tickets:
 
