@@ -467,7 +467,7 @@ class Team(Group, TenancyObject):
 
 
     def __str__(self):
-        return self.team_name
+        return self.organization.name + ', ' + self.team_name
 
 
 
