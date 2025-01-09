@@ -81,6 +81,7 @@ class ExternalLinkModelSerializer(
             'id',
             'organization',
             'display_name',
+            'button_text',
             'name',
             'template',
             'colour',
