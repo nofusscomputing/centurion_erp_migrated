@@ -9,6 +9,7 @@ from api.serializers import common
 
 from assistance.models.model_knowledge_base_article import all_models, ModelKnowledgeBaseArticle
 from assistance.serializers.knowledge_base import KnowledgeBaseBaseSerializer
+from assistance.serializers.knowledge_base_category import KnowledgeBaseCategoryBaseSerializer
 
 from core import exceptions as centurion_exceptions
 
@@ -54,6 +55,7 @@ class ModelKnowledgeBaseArticleModelSerializer(
 ):
 
 
+    category = serializers.PrimaryKeyRelatedField(source = 'article.category', read_only = True)
 
     class Meta:
 
@@ -63,6 +65,7 @@ class ModelKnowledgeBaseArticleModelSerializer(
             'id',
             'organization',
             'article',
+            'category',
             'created',
             'modified',
         ]
@@ -136,5 +139,7 @@ class ModelKnowledgeBaseArticleModelSerializer(
 class ModelKnowledgeBaseArticleViewSerializer(ModelKnowledgeBaseArticleModelSerializer):
 
     article = KnowledgeBaseBaseSerializer( read_only = True )
+
+    category = KnowledgeBaseCategoryBaseSerializer(source = 'article.category', read_only = True )
 
     organization = OrganizationBaseSerializer( many=False, read_only=True )
