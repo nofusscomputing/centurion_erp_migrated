@@ -70,6 +70,13 @@ class ExternalLink(TenancyObject):
         verbose_name = 'Devices',
     )
 
+    service = models.BooleanField(
+        default = False,
+        blank = False,
+        help_text = 'Render link for service',
+        verbose_name = 'Service',
+    )
+
     software = models.BooleanField(
         default = False,
         blank = False,
@@ -107,10 +114,11 @@ class ExternalLink(TenancyObject):
                     "layout": "double",
                     "left": [
                         'cluster',
-                        'software',
+                        'service',
                     ],
                     "right": [
-                        'devices'
+                        'devices',
+                        'software',
                     ]
                 }
             ]

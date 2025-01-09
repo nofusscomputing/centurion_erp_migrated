@@ -60,6 +60,7 @@ class ViewSet(ModelViewSet):
     filterset_fields = [
         'cluster',
         'devices',
+        'service',
         'software',
     ]
 

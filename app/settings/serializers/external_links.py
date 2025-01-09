@@ -86,6 +86,7 @@ class ExternalLinkModelSerializer(
             'colour',
             'cluster',
             'devices',
+            'service',
             'software',
             'model_notes',
             'created',
