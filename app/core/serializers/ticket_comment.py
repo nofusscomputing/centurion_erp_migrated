@@ -187,15 +187,6 @@ class TicketCommentModelSerializer(
 
                 self.request = kwargs['context']['request']
 
-            if 'view' in kwargs['context']:
-
-                if kwargs['context']['view'].action == 'create':
-
-
-                    if 'request' in kwargs['context']['view'].kwargs:
-
-                        self.fields.fields['user'].initial = self.request._user.id
-
 
 
     def validate(self, attrs):
@@ -250,6 +241,8 @@ class TicketCommentModelSerializer(
         if 'view' in self._context:
 
             if self._context['view'].action == 'create':
+
+                self.validated_data['user'] = self.request._user
 
                 if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
