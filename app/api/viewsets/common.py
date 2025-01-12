@@ -52,6 +52,13 @@ class Create(
                     status = 501
                 )
 
+            else:
+
+                response = Response(
+                    data = e.detail,
+                    status = e.status_code
+                )
+
         return response
 
 
@@ -93,6 +100,13 @@ class Destroy(
                         'server_error': str(e)
                     },
                     status = 501
+                )
+
+            else:
+
+                response = Response(
+                    data = e.detail,
+                    status = e.status_code
                 )
 
         return response
@@ -137,6 +151,13 @@ class List(
                         'server_error': str(e)
                     },
                     status = 501
+                )
+
+            else:
+
+                response = Response(
+                    data = e.detail,
+                    status = e.status_code
                 )
 
         return response
@@ -188,12 +209,8 @@ class Retrieve(
 
             else:
 
-                ex = e.get_full_details()
-
                 response = Response(
-                    data = {
-                        'message': ex['message']
-                    },
+                    data = e.detail,
                     status = e.status_code
                 )
 
@@ -240,6 +257,13 @@ class Update(
                     status = 501
                 )
 
+            else:
+
+                response = Response(
+                    data = e.detail,
+                    status = e.status_code
+                )
+
         return response
 
 
@@ -275,6 +299,13 @@ class Update(
                         'server_error': str(e)
                     },
                     status = 501
+                )
+
+            else:
+
+                response = Response(
+                    data = e.detail,
+                    status = e.status_code
                 )
 
         return response
