@@ -1,4 +1,6 @@
 import pytest
+
+from django.conf import settings
 from django.test import Client
 
 from rest_framework.reverse import reverse
@@ -241,6 +243,83 @@ class MetadataAttributesFunctionalBase:
         """
 
         pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def test_method_options_request_detail_data_has_key_documentation(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data returned has key `documentation`
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert 'documentation' in response.data
+
+
+    def test_method_options_request_detail_data_key_documentation_is_str(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `documentation` is str
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert type(response.data['documentation']) is str
+
+
+    def test_method_options_request_detail_data_key_documentation_is_url(self):
+        """Test HTTP/Options Method
+
+        Ensure the request data key `documentation` is prefixed with settings.DOC_ROOT
+        """
+
+        client = Client()
+        client.force_login(self.view_user)
+
+        response = client.options(
+            reverse(
+                self.app_namespace + ':' + self.url_name + '-detail',
+                kwargs=self.url_view_kwargs
+            ),
+            content_type='application/json'
+        )
+
+        assert str(response.data['documentation']).startswith( str(settings.DOCS_ROOT) )
+
+
+
+
+
+
 
 
 
