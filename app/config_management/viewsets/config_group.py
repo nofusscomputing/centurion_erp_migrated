@@ -72,8 +72,6 @@ class ViewSet( ModelViewSet ):
 
     model = ConfigGroups
 
-    documentation: str = ''
-
     view_description = 'Information Management Knowledge Base Article(s)'
 
 

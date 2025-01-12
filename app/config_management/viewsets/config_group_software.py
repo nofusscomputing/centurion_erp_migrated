@@ -68,8 +68,6 @@ class ViewSet( ModelViewSet ):
 
     model = ConfigGroupSoftware
 
-    documentation: str = ''
-
     view_description = 'Software for a config group'
 
 

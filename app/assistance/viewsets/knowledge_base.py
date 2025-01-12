@@ -77,8 +77,6 @@ class ViewSet( ModelViewSet ):
 
     model = KnowledgeBase
 
-    documentation: str = ''
-
     view_description = 'Information Management Knowledge Base Article(s)'
 
 

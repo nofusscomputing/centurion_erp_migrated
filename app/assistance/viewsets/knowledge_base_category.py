@@ -74,8 +74,6 @@ class ViewSet( ModelViewSet ):
 
     model = KnowledgeBaseCategory
 
-    documentation: str = ''
-
     view_description = 'Settings, Knowledge Base Categories'
 
 

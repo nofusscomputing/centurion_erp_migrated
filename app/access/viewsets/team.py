@@ -122,8 +122,6 @@ class ViewSet( ModelViewSet ):
 
     model = Team
 
-    documentation: str = ''
-
     view_description = 'Teams belonging to a single organization'
 
 

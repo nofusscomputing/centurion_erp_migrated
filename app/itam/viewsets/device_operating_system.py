@@ -135,8 +135,6 @@ class ViewSet( ModelViewSet ):
 
     model = DeviceOperatingSystem
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Device Operating System'
 
 

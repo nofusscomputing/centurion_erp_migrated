@@ -72,8 +72,6 @@ class ViewSet( ModelViewSet ):
 
     model = Service
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Devices'
 
     def get_serializer_class(self):
