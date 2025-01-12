@@ -328,9 +328,12 @@ class CommonViewSet(
     is always gathered.
     """
 
+    _model_documentation: str = None
+    """Cached Model Documentation URL"""
+
     model_documentation: str = None
-    """Model Documentation URL
-    
+    """User Defined Model Documentation URL
+
     _Optional_, if specified will be add to detail view metadata"""
 
     page_layout: list = []
@@ -377,19 +380,38 @@ class CommonViewSet(
         return None
 
 
-    def get_model_documentation(self):
+    def get_model_documentation(self) -> str:
+        """Generate Documentation Path
 
-        if not self.model_documentation:
+        Documentation paths can be added in the following locations in priority of order (lower number is higher priority):
 
-            if hasattr(self.model, 'documentataion'):
+        1. `<viewset>.documentation`
 
-                self.model_documentation = self.model.documentation
+        2. `<model>.documentation`
 
-            else:
+        3. Auto-magic generate using app label and model name
 
-                self.model_documentation = ''
+        Returns:
+            str: Path to documentation
+        """
 
-        return self.model_documentation
+        if not self._model_documentation:
+
+            if getattr(self, 'documentation', None):
+
+                self._model_documentation = self.documentation
+
+            elif getattr(self.model, 'documentation', None):
+
+                self._model_documentation = self.model.documentation
+
+            elif getattr(self.model, '_meta', None):
+
+                self._model_documentation = self.model._meta.app_label + '/' + self.model._meta.model_name
+
+
+        return self._model_documentation
+
 
 
     def get_page_layout(self):
