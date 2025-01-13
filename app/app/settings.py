@@ -72,7 +72,7 @@ CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
 # PROMETHEUS_METRICS_EXPORT_PORT = 8010
 # PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
 
-METRICS_ENABLED = True                       # Enable Metrics
+METRICS_ENABLED = False                      # Enable Metrics
 METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
 METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
 
