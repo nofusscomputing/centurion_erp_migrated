@@ -30,3 +30,7 @@ Pygments==2.18.0
 celery==5.4.0
 django-celery-results==2.5.1
 sqlalchemy==2.0.31
+
+# metrics
+prometheus-client==0.21.1
+django-prometheus==2.3.1

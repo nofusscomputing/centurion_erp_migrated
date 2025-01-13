@@ -23,6 +23,7 @@
             "request": "launch",
             "module": "gunicorn",
             "args": [
+                "--config=../includes/etc/gunicorn.conf.py",
                 "--access-logfile",
                 "-",
                 "--workers",
