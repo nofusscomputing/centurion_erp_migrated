@@ -17,6 +17,8 @@ This documentation is targeted towards those whom administer the applications de
 
 - [Installation](./installation.md)
 
+- [Monitoring](./monitoring.md)
+
 
 ## Ansible Automation Platform / AWX
 
