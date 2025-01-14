@@ -35,8 +35,6 @@ class ViewSet(
         'model',
     ]
 
-    documentation: str = ''
-
     model = ContentType
 
     search_fields = [

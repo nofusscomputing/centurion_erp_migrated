@@ -71,6 +71,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         metadata["description"] = view.get_view_description()
 
+
+        if hasattr(view, 'get_model_documentation'):
+
+            if view.get_model_documentation():
+
+                metadata['documentation'] = str(settings.DOCS_ROOT) + str(view.get_model_documentation())
+
+
         metadata['urls']: dict = {}
 
         url_self = None
@@ -123,23 +131,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             metadata['layout'] = view.get_page_layout()
 
-
-            if hasattr(view, 'get_model_documentation'):
-
-                if view.get_model_documentation():
-
-                    metadata['documentation'] = view.get_model_documentation()
-
-
         elif view.suffix == 'List':
 
             if hasattr(view, 'table_fields'):
 
                 metadata['table_fields'] = view.get_table_fields()
-
-            if view.documentation:
-
-                metadata['documentation'] = view.documentation
 
             if hasattr(view, 'page_layout'):
 

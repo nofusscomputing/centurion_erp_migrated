@@ -71,8 +71,6 @@ class ViewSet( ModelViewSet ):
 
     model = Organization
 
-    documentation: str = ''
-
     view_description = 'Centurion Organizations'
 
     def get_serializer_class(self):

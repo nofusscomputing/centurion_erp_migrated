@@ -69,8 +69,6 @@ class ViewSet( ModelViewSet ):
 
     model = Software
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Softwares'
 
     def get_serializer_class(self):

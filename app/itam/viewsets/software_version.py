@@ -123,8 +123,6 @@ class ViewSet( ModelViewSet ):
 
     parent_model_pk_kwarg = 'software_id'
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Softwares'
 
 

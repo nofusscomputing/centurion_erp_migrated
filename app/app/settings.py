@@ -64,8 +64,17 @@ CELERY_WORKER_CONCURRENCY = 2 # worker_concurrency -  Default: Number of CPU cor
 CELERY_WORKER_DEDUPLICATE_SUCCESSFUL_TASKS = True # worker_deduplicate_successful_tasks
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 1 # worker_max_tasks_per_child
 # CELERY_WORKER_MAX_MEMORY_PER_CHILD = 10000 # 10000=10mb worker_max_memory_per_child - Default: No limit. Type: int (kilobytes)
-# CELERY_TASK_SEND_SENT_EVENT = True
+CELERY_TASK_SEND_SENT_EVENT = True
 CELERY_WORKER_SEND_TASK_EVENTS = True # worker_send_task_events
+
+
+# PROMETHEUS_METRICS_EXPORT_PORT_RANGE = range(8010, 8010)
+# PROMETHEUS_METRICS_EXPORT_PORT = 8010
+# PROMETHEUS_METRICS_EXPORT_ADDRESS = ''
+
+METRICS_ENABLED = False                      # Enable Metrics
+METRICS_EXPORT_PORT = 8080                   # Port to serve metrics on
+METRICS_MULTIPROC_DIR = '/tmp/prometheus'    # path the metrics from multiple-process' save to
 
 # django setting.
 CACHES = {
@@ -379,6 +388,21 @@ if DEBUG:
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+
+
+if METRICS_ENABLED:
+
+    INSTALLED_APPS += [ 'django_prometheus', ]
+
+    MIDDLEWARE = [ 
+        'django_prometheus.middleware.PrometheusBeforeMiddleware' 
+    ] + MIDDLEWARE + [
+        'django_prometheus.middleware.PrometheusAfterMiddleware',
+    ]
+
+    if DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+
+        DATABASES['default']['ENGINE'] = 'django_prometheus.db.backends.sqlite3',
 
 
 if SSO_ENABLED:

@@ -30,8 +30,6 @@ class ViewSet(
 ):
 
 
-    documentation: str = ''
-
     model = Permission
 
     view_description = 'Centurion Permissions'

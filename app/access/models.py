@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User, Group, Permission
-from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
 
 from .fields import *
 
+from core import exceptions as centurion_exceptions
 from core.middleware.get_request import get_request
 from core.mixin.history_save import SaveHistory
 
@@ -334,9 +334,14 @@ class TenancyObject(SaveHistory):
 
         self.clean()
 
-        if self.organization is None:
+        if not getattr(self, 'organization', None):
 
-            raise ValidationError('Organization not defined')
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'organization': 'Organization is required'
+                },
+                code = 'required'
+            )
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
