@@ -134,11 +134,9 @@ INSTALLED_APPS = [
     'drf_spectacular_sidecar',
     'config_management.apps.ConfigManagementConfig',
     'project_management.apps.ProjectManagementConfig',
-    'django_prometheus',
 ]
 
 MIDDLEWARE = [
-    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -149,7 +147,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.get_request.RequestMiddleware',
     'app.middleware.timezone.TimezoneMiddleware',
-    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 
@@ -182,7 +179,7 @@ WSGI_APPLICATION = 'app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django_prometheus.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
@@ -391,6 +388,21 @@ if DEBUG:
     INTERNAL_IPS = [
         "127.0.0.1",
     ]
+
+
+if METRICS_ENABLED:
+
+    INSTALLED_APPS += [ 'django_prometheus', ]
+
+    MIDDLEWARE = [ 
+        'django_prometheus.middleware.PrometheusBeforeMiddleware' 
+    ] + MIDDLEWARE + [
+        'django_prometheus.middleware.PrometheusAfterMiddleware',
+    ]
+
+    if DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
+
+        DATABASES['default']['ENGINE'] = 'django_prometheus.db.backends.sqlite3',
 
 
 if SSO_ENABLED:
