@@ -35,7 +35,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "cwd": "${workspaceFolder}/app"
+            "cwd": "${workspaceFolder}/app",
+            "env": {
+                "PROMETHEUS_MULTIPROC_DIR": ""
+            }
         },
         {
             "name": "Migrate",

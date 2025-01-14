@@ -100,6 +100,10 @@ ENV CI_PROJECT_URL=${CI_PROJECT_URL}
 ENV CI_COMMIT_SHA=${CI_COMMIT_SHA}
 ENV CI_COMMIT_TAG=${CI_COMMIT_TAG}
 
+# Var must exist, even empty so that the metrics settings logic functions
+# correctly
+ENV PROMETHEUS_MULTIPROC_DIR=""
+
 ENV IS_WORKER=False
 
 
