@@ -13,6 +13,15 @@ class SettingsDefault(TestCase):
     """ Test Settings file default values """
 
 
+    def test_setting_default_debug_off(self):
+        """ Ensure that debug is off within settings by default
+
+            Debug is only required during development with this setting must always remain off within the committed code.
+        """
+
+        assert not settings.DEBUG
+
+
     def test_setting_default_login_required(self):
         """ By default login should be required
         """
@@ -25,15 +34,6 @@ class SettingsDefault(TestCase):
         """
 
         assert settings.USE_TZ
-
-
-    def test_setting_default_debug_off(self):
-        """ Ensure that debug is off within settings by default
-
-            Debug is only required during development with this setting must always remain off within the committed code.
-        """
-
-        assert not settings.DEBUG
 
 
 
