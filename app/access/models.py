@@ -199,7 +199,7 @@ class TenancyManager(models.Manager):
                 for team_user in TeamUsers.objects.filter(user=user).prefetch_related('team__organization'):
 
 
-                    if team_user.team.organization.name not in user_organizations:
+                    if team_user.team.organization.id not in user_organizations:
 
 
                         if not user_organizations:
