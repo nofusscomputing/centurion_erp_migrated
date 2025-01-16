@@ -181,7 +181,7 @@ class TenancyManager(models.Manager):
 
             from settings.models.app_settings import AppSettings
 
-            app_settings = AppSettings.objects.get(
+            app_settings = AppSettings.objects.prefetch_related('global_organization').get(
                 owner_organization = None
             )
 
@@ -196,7 +196,7 @@ class TenancyManager(models.Manager):
 
             if user.is_authenticated:
 
-                for team_user in TeamUsers.objects.filter(user=user):
+                for team_user in TeamUsers.objects.filter(user=user).prefetch_related('team__organization'):
 
 
                     if team_user.team.organization.name not in user_organizations:

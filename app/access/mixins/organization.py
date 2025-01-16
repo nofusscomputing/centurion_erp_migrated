@@ -295,15 +295,16 @@ class OrganizationMixin:
 
         _user_permissions: list([ str ]) = []
 
-        for group in user.groups.all():
+        for group in user.groups.all().prefetch_related('team__permissions__content_type').prefetch_related('team__organization'):
 
-            team = teams.get(pk=group.id)
+            team = group.team
+
 
             if team not in _user_teams:
 
                 _user_teams += [ team ]
 
-                for permission in team.permissions.all():
+                for permission in group.team.permissions.all():
 
                     permission_value = str( permission.content_type.app_label + '.' + permission.codename )
 
