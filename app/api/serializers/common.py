@@ -17,13 +17,11 @@ class OrganizationField(serializers.PrimaryKeyRelatedField):
         if defined.
         """
 
-        app_settings = AppSettings.objects.all()
-
         queryset = Organization.objects.all()
 
-        if getattr(app_settings[0], 'global_organization', None):
+        if getattr(self.context['request'].app_settings, 'global_organization', None):
 
-            queryset = queryset.exclude(id=app_settings[0].global_organization.id)
+            queryset = queryset.exclude(id=self.context['request'].app_settings.global_organization.id)
 
         return queryset
 

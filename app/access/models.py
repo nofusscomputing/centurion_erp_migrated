@@ -179,15 +179,9 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            from settings.models.app_settings import AppSettings
+            if request.app_settings.global_organization:
 
-            app_settings = AppSettings.objects.prefetch_related('global_organization').get(
-                owner_organization = None
-            )
-
-            if app_settings.global_organization:
-
-                user_organizations += [ app_settings.global_organization.id ]
+                user_organizations += [ request.app_settings.global_organization.id ]
 
             # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
 

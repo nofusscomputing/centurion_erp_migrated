@@ -264,8 +264,6 @@ class OrganizationPermissionMixin(
         return False
 
 
-    _app_settings: any = None
-
     def has_object_permission(self, request, view, obj):
 
         try:
@@ -277,23 +275,13 @@ class OrganizationPermissionMixin(
 
             object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
 
-            if not self._app_settings:
-
-                from settings.models.app_settings import AppSettings
-
-                app_settings = AppSettings.objects.get(
-                    owner_organization = None
-                )
-
-                self._app_settings = app_settings
-
             if object_organization:
 
                 if(
                     object_organization
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
-                    or getattr(self._app_settings.global_organization, 'id', 0) == int(object_organization)
+                    or getattr(self.request.app_settings.global_organization, 'id', 0) == int(object_organization)
                 ):
 
                     return True
