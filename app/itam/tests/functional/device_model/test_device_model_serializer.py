@@ -6,7 +6,7 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
-from app.tests.abstract.mock_view import MockView
+from app.tests.abstract.mock_view import MockView, User
 
 from itam.serializers.device_model import DeviceModel, DeviceModelModelSerializer
 

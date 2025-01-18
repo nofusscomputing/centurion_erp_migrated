@@ -8,7 +8,7 @@ from access.models import Organization
 
 from core.serializers.notes import Notes, NoteModelSerializer
 
-from app.tests.abstract.mock_view import MockView
+from app.tests.abstract.mock_view import MockView, User
 
 from itam.models.device import Device
 
