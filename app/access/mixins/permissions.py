@@ -278,7 +278,7 @@ class OrganizationPermissionMixin(
                     object_organization
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
-                    or getattr(self.request.app_settings.global_organization, 'id', 0) == int(object_organization)
+                    or getattr(request.app_settings.global_organization, 'id', 0) == int(object_organization)
                 ):
 
                     return True
