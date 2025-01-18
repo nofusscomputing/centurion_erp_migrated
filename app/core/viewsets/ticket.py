@@ -266,6 +266,10 @@ class TicketViewSet(ModelViewSet):
 
                         organization = int(self.request.data['organization'])
 
+                        organization = Organization.objects.get(
+                            pk = organization
+                        )
+
             elif (
                 (
                     self.action == 'partial_update'
@@ -276,7 +280,7 @@ class TicketViewSet(ModelViewSet):
 
                 organization = self.model.objects.get(
                     pk = int(self.kwargs['pk'])
-                ).organization.pk
+                ).organization
 
 
             if organization:
