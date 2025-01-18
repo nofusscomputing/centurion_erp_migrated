@@ -69,6 +69,10 @@ class Organization(SaveHistory):
     def get_organization(self):
         return self
 
+    def __int__(self):
+
+        return self.id
+
     def __str__(self):
         return self.name
 
