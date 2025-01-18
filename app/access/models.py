@@ -69,6 +69,10 @@ class Organization(SaveHistory):
     def get_organization(self):
         return self
 
+    def __int__(self):
+
+        return self.id
+
     def __str__(self):
         return self.name
 
@@ -179,34 +183,26 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            from settings.models.app_settings import AppSettings
+            if request.app_settings.global_organization:
 
-            app_settings = AppSettings.objects.get(
-                owner_organization = None
-            )
+                user_organizations += [ request.app_settings.global_organization.id ]
 
-            if app_settings.global_organization:
-
-                user_organizations += [ app_settings.global_organization.id ]
-
-            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
 
             user = request.user
 
 
             if user.is_authenticated:
 
-                for team_user in TeamUsers.objects.filter(user=user):
+                for team in request.tenancy._user_teams:
 
 
-                    if team_user.team.organization.name not in user_organizations:
-
+                    if team.organization.id not in user_organizations:
 
                         if not user_organizations:
 
                             self.user_organizations = []
 
-                        user_organizations += [ team_user.team.organization.id ]
+                        user_organizations += [ team.organization.id ]
 
 
                 # if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:

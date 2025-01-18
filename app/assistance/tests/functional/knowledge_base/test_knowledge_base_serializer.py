@@ -8,6 +8,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization, Team
 
+from app.tests.abstract.mock_view import MockView
+
 from assistance.models.knowledge_base import KnowledgeBase
 from assistance.serializers.knowledge_base import KnowledgeBaseModelSerializer
 
@@ -33,6 +35,10 @@ class KnowledgeBaseValidationAPI(
         """
 
         organization = Organization.objects.create(name='test_org')
+
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.mock_view = MockView( user = self.user )
 
         self.organization = organization
 
@@ -77,7 +83,12 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
                 "content": "random note",
                 "target_user": self.add_user.id,
@@ -101,7 +112,12 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
                 "title": "teamone",
                 "content": "random note",
@@ -127,7 +143,12 @@ class KnowledgeBaseValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseModelSerializer(data={
+            serializer = KnowledgeBaseModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
                 "title": 'teamone',
                 "content": 'random note',
@@ -151,6 +172,10 @@ class KnowledgeBaseValidationAPI(
 
             serializer = KnowledgeBaseModelSerializer(
                 self.item_has_target_user,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "target_team": [ self.add_team.id ]
                 },
@@ -173,6 +198,10 @@ class KnowledgeBaseValidationAPI(
 
             serializer = KnowledgeBaseModelSerializer(
                 self.item_has_target_team,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "target_user": self.add_user.id
                 },

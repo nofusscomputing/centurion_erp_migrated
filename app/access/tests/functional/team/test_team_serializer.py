@@ -6,12 +6,15 @@ from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
+from access.middleware.auth import Tenancy
 from access.models import Organization, Permission
 
 from access.serializers.teams import (
     Team,
     TeamModelSerializer
 )
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -21,11 +24,35 @@ class MockView:
 
     kwargs: dict = {}
 
+    request = None
+
+
+    def __init__(self, user: User):
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.request = MockRequest( user = user, app_settings = app_settings)
+
 
 
 class MockRequest:
 
+    tenancy: Tenancy = None
+
     user = None
+
+    def __init__(self, user: User, app_settings):
+
+        self.user = user
+
+        self.app_settings = app_settings
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = app_settings
+        )
 
 
 
@@ -82,21 +109,21 @@ class TeamValidationAPI(
         """
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'organization_id': self.organization.id
         }
 
-        mock_request = MockRequest()
-        mock_request.user = self.user
+        # mock_request = MockRequest()
+        # mock_request.user = self.user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = TeamModelSerializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.valid_data
@@ -113,16 +140,16 @@ class TeamValidationAPI(
         """
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user)
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'organization_id': self.organization.id
         }
 
-        mock_request = MockRequest()
-        mock_request.user = self.user
+        # mock_request = MockRequest()
+        # mock_request.user = self.user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         data = self.valid_data.copy()
@@ -133,7 +160,7 @@ class TeamValidationAPI(
 
             serializer = TeamModelSerializer(
                 context = {
-                    'request': mock_request,
+                    'request': mock_view.request,
                     'view': mock_view,
                 },
                 data = data
@@ -153,16 +180,16 @@ class TeamValidationAPI(
         """
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user)
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'organization_id': self.organization.id
         }
 
-        mock_request = MockRequest()
-        mock_request.user = self.user
+        # mock_request = MockRequest()
+        # mock_request.user = self.user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         data = self.valid_data.copy()
@@ -171,7 +198,7 @@ class TeamValidationAPI(
 
         serializer = TeamModelSerializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = data

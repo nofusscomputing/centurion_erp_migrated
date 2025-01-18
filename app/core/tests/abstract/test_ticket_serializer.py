@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.test import TestCase
 
+from access.middleware.auth import Tenancy
 from access.models import Organization, Team, TeamUsers, Permission
 
 from rest_framework.exceptions import ValidationError
@@ -17,6 +18,8 @@ from core.models.ticket.ticket_category import TicketCategory
 from project_management.models.projects import Project
 from project_management.models.project_milestone import ProjectMilestone
 
+from settings.models.app_settings import AppSettings
+
 
 
 class MockView:
@@ -27,13 +30,39 @@ class MockView:
 
     action: str = None
 
+    app_settings: AppSettings = None
+
     kwargs: dict = {}
+
+    request = None
+
+
+    def __init__(self, user: User):
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.request = MockRequest( user = user, app_settings = app_settings)
 
 
 
 class MockRequest:
 
+    tenancy: Tenancy = None
+
     user = None
+
+    def __init__(self, user: User, app_settings):
+
+        self.user = user
+
+        self.app_settings = app_settings
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = app_settings
+        )
 
 
 
@@ -254,7 +283,7 @@ class TicketValidationAPI(
         #
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user )
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -265,15 +294,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.add_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.all_fields_data
@@ -313,7 +342,7 @@ class TicketValidationAPI(
         del self.all_fields_data_change['organization']    # ToDo: Test seperatly
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'partial_update'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -324,15 +353,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.change_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.all_fields_data_change,
@@ -359,7 +388,7 @@ class TicketValidationAPI(
         })
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user )
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -370,15 +399,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.triage_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.all_fields_data_triage,
@@ -417,7 +446,7 @@ class TicketValidationAPI(
         del self.all_fields_data_triage_change['organization']    # ToDo: Test seperatly
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'partial_update'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -428,15 +457,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.triage_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.all_fields_data_triage_change,
@@ -465,7 +494,7 @@ class TicketValidationAPI(
         })
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -476,15 +505,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.import_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.all_fields_data_import,
@@ -521,7 +550,7 @@ class TicketValidationAPI(
         Ensure that valid data has no validation errors.
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user )
         mock_view.action = 'create'
         mock_view._ticket_type_id = self.ticket_type_enum
         mock_view._ticket_type = self.ticket_type
@@ -532,15 +561,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.add_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = self.add_data
@@ -557,7 +586,7 @@ class TicketValidationAPI(
         Ensure that valid data has no validation errors.
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.change_user)
         mock_view.action = 'partial_update'
         mock_view._ticket_type = self.ticket_type
 
@@ -567,16 +596,16 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.change_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.change_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.change_serializer(
             instance = self.ticket,
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = {
@@ -601,7 +630,7 @@ class TicketValidationAPI(
             'opened_by': self.add_user.id,
         })
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.import_user)
         mock_view.action = 'create'
         mock_view._ticket_type = self.ticket_type
 
@@ -611,15 +640,15 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.import_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.import_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         serializer = self.import_serializer(
             context = {
-                'request': mock_request,
+                'request': mock_view.request,
                 'view': mock_view,
             },
             data = data
@@ -640,7 +669,7 @@ class TicketValidationAPI(
 
         del data['title']
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'create'
         mock_view._ticket_type = self.ticket_type
 
@@ -650,17 +679,17 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         with pytest.raises(ValidationError) as err:
 
             serializer = self.add_serializer(
                 context = {
-                    'request': mock_request,
+                    'request': mock_view.request,
                     'view': mock_view,
                 },
                 data = data
@@ -684,7 +713,7 @@ class TicketValidationAPI(
         del data['description']
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'create'
         mock_view._ticket_type = self.ticket_type
 
@@ -694,17 +723,17 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         with pytest.raises(ValidationError) as err:
 
             serializer = self.add_serializer(
                 context = {
-                    'request': mock_request,
+                    'request': mock_view.request,
                     'view': mock_view,
                 },
                 data = data
@@ -728,7 +757,7 @@ class TicketValidationAPI(
         del data['organization']
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.add_user)
         mock_view.action = 'create'
         mock_view._ticket_type = self.ticket_type
 
@@ -738,17 +767,17 @@ class TicketValidationAPI(
                 'project_id': self.project.id
             }
 
-        mock_request = MockRequest()
-        mock_request.user = self.add_user
+        # mock_request = MockRequest()
+        # mock_request.user = self.add_user
 
-        mock_view.request = mock_request
+        # mock_view.request = mock_request
 
 
         with pytest.raises(ValidationError) as err:
 
             serializer = self.add_serializer(
                 context = {
-                    'request': mock_request,
+                    'request': mock_view.request,
                     'view': mock_view,
                 },
                 data = data

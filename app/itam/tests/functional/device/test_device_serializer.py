@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itam.serializers.device import Device, DeviceModelSerializer
 
 
@@ -26,6 +28,10 @@ class DeviceValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.mock_view = MockView( user = self.user )
+
         self.organization = organization
 
         self.item = self.model.objects.create(
@@ -43,7 +49,12 @@ class DeviceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = DeviceModelSerializer(data={
+            serializer = DeviceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
             })
 
@@ -64,6 +75,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "name": '0-start-with-number'
                 },
@@ -87,6 +102,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "name": 'has_a_hyphon'
                 },
@@ -110,6 +129,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "name": 'ends-with-dash-'
                 },
@@ -133,6 +156,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": 'g0000000-0000-0000-0000-000000000000'
                 },
@@ -156,6 +183,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '0000000-0000-0000-0000-000000000000'
                 },
@@ -179,6 +210,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-g000-0000-0000-000000000000'
                 },
@@ -201,6 +236,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-000-0000-0000-000000000000'
                 },
@@ -224,6 +263,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-g000-0000-000000000000'
                 },
@@ -246,6 +289,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-000-0000-000000000000'
                 },
@@ -269,6 +316,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-0000-g000-000000000000'
                 },
@@ -291,6 +342,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-0000-000-000000000000'
                 },
@@ -314,6 +369,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-0000-0000-g00000000000'
                 },
@@ -336,6 +395,10 @@ class DeviceValidationAPI(
 
             serializer = DeviceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "uuid": '00000000-0000-0000-0000-00000000000'
                 },

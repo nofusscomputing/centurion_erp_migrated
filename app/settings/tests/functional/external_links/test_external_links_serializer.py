@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from settings.serializers.external_links import (
     ExternalLink,
     ExternalLinkModelSerializer
@@ -29,6 +31,8 @@ class ExternalLinkValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
         self.organization = organization
 
         self.valid_data: dict = {
@@ -36,6 +40,9 @@ class ExternalLinkValidationAPI(
             'name': 'a name',
             'template': 'http://example.com/{{ val }}'
         }
+
+        self.mock_view = MockView( user = self.user )
+
 
 
 
@@ -47,6 +54,10 @@ class ExternalLinkValidationAPI(
         """
 
         serializer = ExternalLinkModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
             data = self.valid_data
         )
 
@@ -67,6 +78,10 @@ class ExternalLinkValidationAPI(
         with pytest.raises(ValidationError) as err:
 
             serializer = ExternalLinkModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data = data
             )
 
@@ -90,6 +105,10 @@ class ExternalLinkValidationAPI(
         with pytest.raises(ValidationError) as err:
 
             serializer = ExternalLinkModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data = data
             )
 

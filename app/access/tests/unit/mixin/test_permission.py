@@ -7,6 +7,8 @@ from django.test import TestCase
 
 from rest_framework.generics import GenericAPIView
 
+from access.middleware.auth import Tenancy
+
 from api.viewsets.common import ModelViewSet
 
 from access.mixins.organization import OrganizationMixin
@@ -15,6 +17,8 @@ from access.models import Organization, Team, TeamUsers, Permission
 
 from core import exceptions as centurion_exceptions
 from core.models.manufacturer import Manufacturer
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -41,9 +45,14 @@ class MyMockView(
         stream: MockStream = None
 
         _stream: MockStream = None
- 
 
-        def __init__(self, data: dict, method: str, user: User):
+
+
+        tenancy: Tenancy = None
+
+
+
+        def __init__(self, data: dict, method: str, user: User, tenancy: Tenancy):
 
             self.data = data
 
@@ -54,6 +63,8 @@ class MyMockView(
             # self.stream = self._stream
 
             self.user = user
+
+            self.tenancy = tenancy
 
 
     action: str = None
@@ -81,10 +92,18 @@ class MyMockView(
 
         self.mocked_object = obj
 
+        tenancy = Tenancy(
+                user = user,
+                app_settings = AppSettings.objects.get(
+                    owner_organization = None
+                )
+            )
+
         self.request = self.MockRequest(
             data = data,
             method = method,
-            user = user
+            user = user,
+            tenancy = tenancy
         )
 
 

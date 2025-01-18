@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itam.models.device import Device
 
 from itim.models.services import Port
@@ -31,7 +33,11 @@ class ServiceValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
         self.organization = organization
+
+        self.mock_view = MockView( user = self.user )
 
 
         self.port = Port.objects.create(
@@ -92,6 +98,10 @@ class ServiceValidationAPI(
         """
 
         serializer = ServiceModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
             data={
                 'organization': self.organization.id,
                 'name': 'service',
@@ -114,6 +124,10 @@ class ServiceValidationAPI(
         """
 
         serializer = ServiceModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
             data={
                 'organization': self.organization.id,
                 'name': 'service',
@@ -137,13 +151,18 @@ class ServiceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ServiceModelSerializer(data={
-                'organization': self.organization.id,
-                'port': [
-                    self.port.id
-                ],
-                'config_key_variable': 'a_key',
-                'device': self.device.id
+            serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
+                    'organization': self.organization.id,
+                    'port': [
+                        self.port.id
+                    ],
+                    'config_key_variable': 'a_key',
+                    'device': self.device.id
             })
 
             serializer.is_valid(raise_exception = True)
@@ -160,7 +179,12 @@ class ServiceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ServiceModelSerializer(data={
+            serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 'organization': self.organization.id,
                 'name': 'service',
                 'config_key_variable': 'a_key',
@@ -180,7 +204,12 @@ class ServiceValidationAPI(
         no validation error occurs
         """
 
-        serializer = ServiceModelSerializer(data={
+        serializer = ServiceModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
+            data={
             'organization': self.organization.id,
             'name': 'service',
             'config_key_variable': 'a_key',
@@ -199,7 +228,12 @@ class ServiceValidationAPI(
         no validation error occurs
         """
 
-        serializer = ServiceModelSerializer(data={
+        serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+            data={
             'organization': self.organization.id,
             'name': 'service',
             'port': [
@@ -223,7 +257,12 @@ class ServiceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ServiceModelSerializer(data={
+            serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 'organization': self.organization.id,
                 'name': 'service',
                 'config_key_variable': 'a_key',
@@ -245,7 +284,12 @@ class ServiceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ServiceModelSerializer(data={
+            serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 'organization': self.organization.id,
                 'name': 'service',
                 'port': [
@@ -269,7 +313,12 @@ class ServiceValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ServiceModelSerializer(data={
+            serializer = ServiceModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 'organization': self.organization.id,
                 'name': 'service',
                 'port': [
@@ -297,6 +346,10 @@ class ServiceValidationAPI(
 
             serializer = ServiceModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     'dependent_service': [
                         self.item_two.id

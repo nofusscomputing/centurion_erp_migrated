@@ -242,7 +242,7 @@ class TicketCommentModelSerializer(
 
             if self._context['view'].action == 'create':
 
-                self.validated_data['user'] = self.request._user
+                self.validated_data['user'] = self.request.user
 
                 if 'ticket_id' in self._kwargs['context']['view'].kwargs:
 
