@@ -125,6 +125,8 @@ class ViewSet(ModelViewSet):
 
     search_fields = []
 
+    metadata_markdown = True
+
     model = TicketLinkedItem
 
 

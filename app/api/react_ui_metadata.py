@@ -1,3 +1,5 @@
+import re
+
 from django.conf import settings
 from django.utils.encoding import force_str
 
@@ -69,6 +71,14 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
         metadata["description"] = view.get_view_description()
 
+
+        if hasattr(view, 'get_model_documentation'):
+
+            if view.get_model_documentation():
+
+                metadata['documentation'] = str(settings.DOCS_ROOT) + str(view.get_model_documentation())
+
+
         metadata['urls']: dict = {}
 
         url_self = None
@@ -121,23 +131,11 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
 
             metadata['layout'] = view.get_page_layout()
 
-
-            if hasattr(view, 'get_model_documentation'):
-
-                if view.get_model_documentation():
-
-                    metadata['documentation'] = view.get_model_documentation()
-
-
         elif view.suffix == 'List':
 
             if hasattr(view, 'table_fields'):
 
                 metadata['table_fields'] = view.get_table_fields()
-
-            if view.documentation:
-
-                metadata['documentation'] = view.documentation
 
             if hasattr(view, 'page_layout'):
 
@@ -269,6 +267,100 @@ class ReactUIMetadata(OverRideJSONAPIMetadata):
             field_info["allows_include"] = (
                 field.field_name in serializer.included_serializers
             )
+
+
+        if field_info["type"] == 'Markdown':
+
+            linked_models = []
+
+            linked_tickets = []
+
+            field_info["render"] = {
+                'models': {},
+                'tickets': {},
+            }
+
+
+            if(
+                field.context['view'].kwargs.get('pk', None)
+                or field.context['view'].metadata_markdown
+            ):
+
+                queryset = field.context['view'].get_queryset()
+
+                from core.lib.slash_commands.linked_model import CommandLinkedModel
+                from core.models.ticket.ticket import Ticket
+
+                for obj in queryset:
+
+                    value = getattr(obj, field.source, None)
+
+                    if field.source == 'display_name':
+
+                        value = str(obj)
+
+
+                    if value:
+
+                        linked_models = re.findall(r'\s\$(?P<model_type>[a-z_]+)-(?P<model_id>\d+)[\s|\n]?', ' ' + str(value) + ' ')
+                        linked_tickets = re.findall(r'(?P<ticket>#(?P<number>\d+))', str(value))
+
+                    if(getattr(obj, 'from_ticket_id_id', None)):
+
+                        linked_tickets += re.findall(r'(?P<ticket>#(?P<number>\d+))', '#' + str(obj.to_ticket_id_id))
+
+
+                    for ticket, number in linked_tickets:
+
+                        try:
+
+                            item = Ticket.objects.get( pk = number )
+
+                            field_info["render"]['tickets'].update({
+                                number: {
+                                    'status': Ticket.TicketStatus.All(item.status).label,
+                                    'ticket_type': Ticket.TicketType(item.ticket_type).label,
+                                    'title': str(item),
+                                    'url': str(item.get_url()).replace('/api/v2', '')
+                                }
+                            })
+
+                        except Ticket.DoesNotExist as e:
+
+                            pass
+
+
+                    for model_type, model_id in linked_models:
+
+                        try:
+
+                            model, item_type = CommandLinkedModel().get_model( model_type )
+
+                            if model:
+
+                                item = model.objects.get( pk = model_id )
+
+                                item_meta = { 
+                                    model_id: {
+                                        'title': str(item),
+                                        'url': str(item.get_url()).replace('/api/v2', ''),
+                                    }
+                                }
+
+                                if not field_info["render"]['models'].get(model_type, None):
+
+                                    field_info["render"]['models'].update({
+                                        model_type: item_meta
+                                    })
+
+                                else:
+
+                                    field_info["render"]['models'][model_type].update( item_meta )
+
+                        except model.DoesNotExist as e:
+
+                            pass
+
 
         return field_info
 

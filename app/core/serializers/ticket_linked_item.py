@@ -6,6 +6,7 @@ from access.serializers.organization import OrganizationBaseSerializer
 
 from assistance.serializers.request import TicketBaseSerializer
 
+from core import fields as centurion_field
 from core.fields.badge import BadgeField
 from core.models.ticket.ticket import Ticket
 from core.models.ticket.ticket_linked_items import TicketLinkedItem
@@ -53,6 +54,8 @@ class TicketLinkedItemModelSerializer(
     TicketLinkedItemBaseSerializer,
 ):
 
+
+    display_name = centurion_field.MarkdownField(source='__str__', required = False, read_only= True )
 
     _urls = serializers.SerializerMethodField('get_url')
 
@@ -157,6 +160,7 @@ class TicketLinkedItemViewSerializer(TicketLinkedItemModelSerializer):
     organization = OrganizationBaseSerializer(many=False, read_only=True)
 
     item = serializers.SerializerMethodField('get_item')
+
 
     def get_item(self, item) -> dict:
 

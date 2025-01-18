@@ -56,6 +56,7 @@ class ServiceModelSerializer(
 
         return {
             '_self': item.get_url( request = self._context['view'].request ),
+            'external_links': reverse("v2:_api_v2_external_link-list", request=self._context['view'].request) + '?service=true',
             'history': reverse(
                 "v2:_api_v2_model_history-list",
                 request=self._context['view'].request,

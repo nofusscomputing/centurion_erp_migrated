@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itim.serializers.port import Port, PortModelSerializer
 
 
@@ -26,12 +28,16 @@ class PortValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
         self.organization = organization
 
         # self.item = self.model.objects.create(
         #     organization=organization,
         #     number = 'os name',
         # )
+
+        self.mock_view = MockView( user = self.user )
 
 
 
@@ -41,7 +47,12 @@ class PortValidationAPI(
         Ensure that a valid item has no validation errors
         """
 
-        serializer = PortModelSerializer(data={
+        serializer = PortModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
+            data={
             "organization": self.organization.id,
             "number": 80,
             "protocol": Port.Protocol.TCP
@@ -59,7 +70,12 @@ class PortValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = PortModelSerializer(data={
+            serializer = PortModelSerializer(
+                context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
+            data={
                 "organization": self.organization.id,
                 # "number": 80,
                 "protocol": Port.Protocol.TCP
@@ -79,7 +95,12 @@ class PortValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = PortModelSerializer(data={
+            serializer = PortModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
                 "number": 80,
                 # "protocol": Port.Protocol.TCP

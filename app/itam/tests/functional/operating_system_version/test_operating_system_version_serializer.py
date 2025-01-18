@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itam.serializers.operating_system_version import OperatingSystem, OperatingSystemVersion, OperatingSystemVersionModelSerializer
 
 
@@ -25,6 +27,10 @@ class OperatingSystemVersionValidationAPI(
         """
 
         organization = Organization.objects.create(name='test_org')
+
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.mock_view = MockView( user = self.user )
 
         self.organization = organization
 
@@ -49,7 +55,12 @@ class OperatingSystemVersionValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = OperatingSystemVersionModelSerializer(data={
+            serializer = OperatingSystemVersionModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
             })
 

@@ -10,6 +10,9 @@ This section of the documentation contains different items related to the develo
 
 Centurion ERP is a Django Application. We have added a lot of little tid bits that aid in the development process. i.e. abstract classes, tests etc. This allows for decreased development times as items that are common are what could easily be considered templated with the only additional requirement is to add that objests differences.
 
+!!! note
+    The development documentation does require a rewrite to cater for the application changes introduced in v1.4. Specifically that the direction of Centurion ERP being an API application with a seperate UI. Some of theses development docs do cover post v1.4 changes.
+
 
 ## Areas of the code
 

@@ -12,6 +12,7 @@ from access.models import Organization, Team, TeamUsers, Permission
 from api.tests.abstract.api_fields import APITenancyObject
 
 from assistance.models.model_knowledge_base_article import KnowledgeBase, ModelKnowledgeBaseArticle
+from assistance.models.knowledge_base import KnowledgeBaseCategory
 
 from itam.models.device import Device
 
@@ -66,7 +67,11 @@ class ModelKnowledgeBaseArticleAPI(
         knowledge_base = KnowledgeBase.objects.create(
             organization = self.organization,
             title = 'title',
-            content = 'sdfsdf'
+            content = 'sdfsdf',
+            category = KnowledgeBaseCategory.objects.create(
+                organization = self.organization,
+                name = 'cat',
+            )
         )
 
         device = Device.objects.create(
@@ -271,3 +276,98 @@ class ModelKnowledgeBaseArticleAPI(
         """
 
         assert type(self.api_data['article']['url']) is str
+
+
+
+    def test_api_field_exists_category(self):
+        """ Test for existance of API Field
+
+        category field must exist
+        """
+
+        assert 'category' in self.api_data
+
+
+    def test_api_field_type_category(self):
+        """ Test for type for API Field
+
+        category field must be dict
+        """
+
+        assert type(self.api_data['category']) is dict
+
+
+
+    def test_api_field_exists_category_id(self):
+        """ Test for existance of API Field
+
+        category.id field must exist
+        """
+
+        assert 'id' in self.api_data['category']
+
+
+    def test_api_field_type_category_id(self):
+        """ Test for type for API Field
+
+        category.id field must be dict
+        """
+
+        assert type(self.api_data['category']['id']) is int
+
+
+
+    def test_api_field_exists_category_display_name(self):
+        """ Test for existance of API Field
+
+        category.display_name field must exist
+        """
+
+        assert 'display_name' in self.api_data['category']
+
+
+    def test_api_field_type_category_display_name(self):
+        """ Test for type for API Field
+
+        category.display_name field must be dict
+        """
+
+        assert type(self.api_data['category']['display_name']) is str
+
+
+
+    def test_api_field_exists_category_name(self):
+        """ Test for existance of API Field
+
+        category.name field must exist
+        """
+
+        assert 'name' in self.api_data['category']
+
+
+    def test_api_field_type_category_name(self):
+        """ Test for type for API Field
+
+        category.name field must be dict
+        """
+
+        assert type(self.api_data['category']['name']) is str
+
+
+
+    def test_api_field_exists_category_url(self):
+        """ Test for existance of API Field
+
+        category.url field must exist
+        """
+
+        assert 'url' in self.api_data['category']
+
+
+    def test_api_field_type_category_url(self):
+        """ Test for type for API Field
+
+        category.url field must be dict
+        """
+
+        assert type(self.api_data['category']['url']) is str

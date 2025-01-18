@@ -69,7 +69,7 @@ class ViewSet( ModelViewSet ):
 
     model = OperatingSystem
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
+    documentation: str = model._meta.app_label + '/operating_system'
 
     view_description = 'Operating Systems'
 

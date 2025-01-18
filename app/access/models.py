@@ -1,12 +1,12 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User, Group, Permission
-from django.forms import ValidationError
 
 from rest_framework.reverse import reverse
 
 from .fields import *
 
+from core import exceptions as centurion_exceptions
 from core.middleware.get_request import get_request
 from core.mixin.history_save import SaveHistory
 
@@ -68,6 +68,10 @@ class Organization(SaveHistory):
 
     def get_organization(self):
         return self
+
+    def __int__(self):
+
+        return self.id
 
     def __str__(self):
         return self.name
@@ -179,34 +183,26 @@ class TenancyManager(models.Manager):
 
         if request:
 
-            from settings.models.app_settings import AppSettings
+            if request.app_settings.global_organization:
 
-            app_settings = AppSettings.objects.get(
-                owner_organization = None
-            )
+                user_organizations += [ request.app_settings.global_organization.id ]
 
-            if app_settings.global_organization:
-
-                user_organizations += [ app_settings.global_organization.id ]
-
-            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
 
             user = request.user
 
 
             if user.is_authenticated:
 
-                for team_user in TeamUsers.objects.filter(user=user):
+                for team in request.tenancy._user_teams:
 
 
-                    if team_user.team.organization.name not in user_organizations:
-
+                    if team.organization.id not in user_organizations:
 
                         if not user_organizations:
 
                             self.user_organizations = []
 
-                        user_organizations += [ team_user.team.organization.id ]
+                        user_organizations += [ team.organization.id ]
 
 
                 # if len(user_organizations) > 0 and not user.is_superuser and self.model.is_global is not None:
@@ -334,9 +330,14 @@ class TenancyObject(SaveHistory):
 
         self.clean()
 
-        if self.organization is None:
+        if not getattr(self, 'organization', None):
 
-            raise ValidationError('Organization not defined')
+            raise centurion_exceptions.ValidationError(
+                detail = {
+                    'organization': 'Organization is required'
+                },
+                code = 'required'
+            )
 
         super().save(force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields)
 
@@ -467,7 +468,7 @@ class Team(Group, TenancyObject):
 
 
     def __str__(self):
-        return self.team_name
+        return self.organization.name + ', ' + self.team_name
 
 
 

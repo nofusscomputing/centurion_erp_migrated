@@ -8,6 +8,8 @@ from access.models import Organization
 
 from core.serializers.notes import Notes, NoteModelSerializer
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itam.models.device import Device
 
 
@@ -27,6 +29,10 @@ class NotesValidationAPI(
         """
 
         organization = Organization.objects.create(name='test_org')
+
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.mock_view = MockView( user = self.user )
 
         self.organization = organization
 
@@ -57,7 +63,12 @@ class NotesValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = NoteModelSerializer(data={
+            serializer = NoteModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
             })
 

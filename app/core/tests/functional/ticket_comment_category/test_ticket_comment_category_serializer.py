@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from core.serializers.ticket_comment_category import TicketCommentCategory, TicketCommentCategoryModelSerializer
 
 
@@ -26,6 +28,10 @@ class TicketCommentCategoryValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
+        self.mock_view = MockView( user = self.user )
+
         self.organization = organization
 
         self.item = self.model.objects.create(
@@ -42,6 +48,10 @@ class TicketCommentCategoryValidationAPI(
         """
 
         serializer = TicketCommentCategoryModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
             data={
                 "organization": self.organization.id,
                 "name": 'new category'
@@ -63,6 +73,10 @@ class TicketCommentCategoryValidationAPI(
 
             serializer = TicketCommentCategoryModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "parent": self.item.id,
                 },
@@ -83,7 +97,12 @@ class TicketCommentCategoryValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = TicketCommentCategoryModelSerializer(data={
+            serializer = TicketCommentCategoryModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
             })
 
@@ -100,6 +119,10 @@ class TicketCommentCategoryValidationAPI(
         """
 
         serializer = TicketCommentCategoryModelSerializer(
+            context = {
+                'request': self.mock_view.request,
+                'view': self.mock_view,
+            },
             data={
                 "organization": self.organization.id,
                 "name": self.item.name

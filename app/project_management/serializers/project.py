@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 from rest_framework.reverse import reverse
 
-from access.serializers.organization import OrganizationBaseSerializer
+from access.serializers.organization import Organization, OrganizationBaseSerializer
 
 from itam.serializers.device import DeviceBaseSerializer
 

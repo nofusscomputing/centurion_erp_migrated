@@ -115,8 +115,6 @@ class ViewSet( ModelViewSet ):
 
     model = ProjectMilestone
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Devices'
 
 

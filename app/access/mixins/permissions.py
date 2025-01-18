@@ -116,14 +116,11 @@ class OrganizationPermissionMixin(
         try:
 
 
-            view.get_user_organizations( request.user )
-
             has_permission_required: bool = False
 
-            user_permissions = getattr(view, '_user_permissions', None)
+            user_permissions = request.tenancy._user_permissions
 
             permission_required = view.get_permission_required()
-
 
             if permission_required and user_permissions:
                 # No permission_required couldnt get permissions
@@ -224,9 +221,9 @@ class OrganizationPermissionMixin(
 
             elif obj_organization is not None:
 
-                if view.has_organization_permission(
-                    organization = obj_organization.id,
-                    permissions_required = [ view.get_permission_required() ]
+                if request.tenancy.has_organization_permission(
+                    organization = obj_organization,
+                    permissions_required = view.get_permission_required()
                 ):
 
                         return True
@@ -264,7 +261,6 @@ class OrganizationPermissionMixin(
         return False
 
 
-
     def has_object_permission(self, request, view, obj):
 
         try:
@@ -276,19 +272,13 @@ class OrganizationPermissionMixin(
 
             object_organization: int = getattr(view.get_obj_organization( obj = obj ), 'id', None)
 
-            from settings.models.app_settings import AppSettings
-
-            app_settings = AppSettings.objects.get(
-                owner_organization = None
-            )
-
             if object_organization:
 
                 if(
                     object_organization
                     in view.get_permission_organizations( view.get_permission_required() )
                     or request.user.is_superuser
-                    or getattr(app_settings.global_organization, 'id', 0) == int(object_organization)
+                    or getattr(request.app_settings.global_organization, 'id', 0) == int(object_organization)
                 ):
 
                     return True

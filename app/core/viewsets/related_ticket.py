@@ -78,6 +78,8 @@ class ViewSet(ModelListRetrieveDeleteViewSet):
         'name',
     ]
 
+    metadata_markdown = True
+
     model = RelatedTickets
 
     parent_model = Ticket

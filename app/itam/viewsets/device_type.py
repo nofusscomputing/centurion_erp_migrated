@@ -70,8 +70,6 @@ class ViewSet( ModelViewSet ):
 
     model = DeviceType
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Device Models'
 
     def get_serializer_class(self):

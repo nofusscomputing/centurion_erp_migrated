@@ -67,8 +67,6 @@ class ViewSet( ModelViewSet ):
 
     model = ClusterType
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Devices'
 
 

@@ -63,8 +63,6 @@ class ViewSet( ModelCreateViewSet ):
 
     serializer_class = InventorySerializer
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_name = 'Device Inventory'
 
     view_description = __doc__

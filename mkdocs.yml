@@ -67,6 +67,8 @@ nav:
 
       - projects/centurion_erp/administration/installation.md
 
+      - projects/centurion_erp/administration/monitoring.md
+
     - Development:
 
       - projects/centurion_erp/development/index.md

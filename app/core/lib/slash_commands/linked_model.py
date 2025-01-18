@@ -77,81 +77,9 @@ For this command to process the following conditions must be met:
 
         try:
 
-            from core.models.ticket.ticket_linked_items import TicketLinkedItem
+            model, item_type = self.get_model( model_type )
 
-            if model_type == 'cluster':
-
-                from itim.models.clusters import Cluster
-
-                model = Cluster
-
-                item_type = TicketLinkedItem.Modules.CLUSTER
-
-            elif model_type == 'config_group':
-
-                from config_management.models.groups import ConfigGroups
-
-                model = ConfigGroups
-
-                item_type = TicketLinkedItem.Modules.CONFIG_GROUP
-
-            elif model_type == 'device':
-
-                from itam.models.device import Device
-
-                model = Device
-
-                item_type = TicketLinkedItem.Modules.DEVICE
-
-            elif model_type == 'kb':
-
-                from assistance.models.knowledge_base import KnowledgeBase
-
-                model = KnowledgeBase
-
-                item_type = TicketLinkedItem.Modules.KB
-
-            elif  model_type == 'operating_system':
-
-                from itam.models.operating_system import OperatingSystem
-
-                model = OperatingSystem
-
-                item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
-
-            elif  model_type == 'organization':
-
-                from access.models import Organization
-
-                model = Organization
-
-                item_type = TicketLinkedItem.Modules.ORGANIZATION
-
-            elif model_type == 'service':
-
-                from itim.models.services import Service
-
-                model = Service
-
-                item_type = TicketLinkedItem.Modules.SERVICE
-
-            elif model_type == 'software':
-
-                from itam.models.software import Software
-
-                model = Software
-
-                item_type = TicketLinkedItem.Modules.SOFTWARE
-
-            elif model_type == 'team':
-
-                from access.models import Team
-
-                model = Team
-
-                item_type = TicketLinkedItem.Modules.TEAM
-
-            else:
+            if not model:
 
                 return str(match.string[match.start():match.end()])
 
@@ -195,3 +123,90 @@ For this command to process the following conditions must be met:
             return str(match.string[match.start():match.end()])
 
         return None
+
+
+    def get_model(self, model_type) -> tuple():
+
+        model = None
+
+        item_type = None
+
+        from core.models.ticket.ticket_linked_items import TicketLinkedItem
+
+        if model_type == 'cluster':
+
+            from itim.models.clusters import Cluster
+
+            model = Cluster
+
+            item_type = TicketLinkedItem.Modules.CLUSTER
+
+        elif model_type == 'config_group':
+
+            from config_management.models.groups import ConfigGroups
+
+            model = ConfigGroups
+
+            item_type = TicketLinkedItem.Modules.CONFIG_GROUP
+
+        elif model_type == 'device':
+
+            from itam.models.device import Device
+
+            model = Device
+
+            item_type = TicketLinkedItem.Modules.DEVICE
+
+        elif model_type == 'kb':
+
+            from assistance.models.knowledge_base import KnowledgeBase
+
+            model = KnowledgeBase
+
+            item_type = TicketLinkedItem.Modules.KB
+
+        elif  model_type == 'operating_system':
+
+            from itam.models.operating_system import OperatingSystem
+
+            model = OperatingSystem
+
+            item_type = TicketLinkedItem.Modules.OPERATING_SYSTEM
+
+        elif  model_type == 'organization':
+
+            from access.models import Organization
+
+            model = Organization
+
+            item_type = TicketLinkedItem.Modules.ORGANIZATION
+
+        elif model_type == 'service':
+
+            from itim.models.services import Service
+
+            model = Service
+
+            item_type = TicketLinkedItem.Modules.SERVICE
+
+        elif model_type == 'software':
+
+            from itam.models.software import Software
+
+            model = Software
+
+            item_type = TicketLinkedItem.Modules.SOFTWARE
+
+        elif model_type == 'team':
+
+            from access.models import Team
+
+            model = Team
+
+            item_type = TicketLinkedItem.Modules.TEAM
+
+
+        return tuple([
+            model,
+            item_type
+        ])

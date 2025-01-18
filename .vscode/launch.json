@@ -23,6 +23,7 @@
             "request": "launch",
             "module": "gunicorn",
             "args": [
+                "--config=../includes/etc/gunicorn.conf.py",
                 "--access-logfile",
                 "-",
                 "--workers",
@@ -34,7 +35,10 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "cwd": "${workspaceFolder}/app"
+            "cwd": "${workspaceFolder}/app",
+            "env": {
+                "PROMETHEUS_MULTIPROC_DIR": ""
+            }
         },
         {
             "name": "Migrate",

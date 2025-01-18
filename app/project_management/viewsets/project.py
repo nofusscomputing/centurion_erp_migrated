@@ -6,7 +6,8 @@ from project_management.serializers.project import (
     Project,
     ProjectImportSerializer,
     ProjectModelSerializer,
-    ProjectViewSerializer
+    ProjectViewSerializer,
+    Organization,
 )
 
 from settings.models.user_settings import UserSettings
@@ -74,8 +75,6 @@ class ViewSet( ModelViewSet ):
 
     model = Project
 
-    documentation: str = 'https://nofusscomputing.com/docs/not_model_docs'
-
     view_description = 'Physical Devices'
 
 
@@ -85,7 +84,9 @@ class ViewSet( ModelViewSet ):
 
         if 'organization' in self.request.data:
 
-            organization = self.request.data['organization']
+            organization = int(self.request.data['organization'])
+
+            organization = Organization.objects.get( pk = organization )
 
         elif self.queryset:
         
@@ -93,14 +94,14 @@ class ViewSet( ModelViewSet ):
 
                 obj = list(self.queryset)[0]
 
-                organization = obj.organization.id
+                organization = obj.organization
 
 
         if organization:
 
-            if self.has_organization_permission(
+            if self.request.tenancy.has_organization_permission(
                 organization = organization,
-                permissions_required = ['project_management.import_project']
+                permissions_required = 'project_management.import_project'
             ) or self.request.user.is_superuser:
 
                 return globals()[str( self.model._meta.verbose_name) + 'ImportSerializer']

@@ -130,7 +130,10 @@ class ModelKnowledgeBaseArticle(TenancyObject):
 
     table_fields: list = [
         'article',
+        'category',
+        'organization',
         'created',
+        'modified',
     ]
 
 

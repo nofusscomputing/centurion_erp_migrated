@@ -74,6 +74,25 @@ within the `deploy/` directory there is a docker compose file. running `docker c
 
 You may need to run migrations if your not mounting your own DB. to do this run `docker exec -ti centurion-erp python manage.py migrate`
 
+## Page speed tests
+
+to run page speed tests (requires a working prometheus and grafa setup). use the following
+
+
+``` bash
+
+clear; \
+  K6_PROMETHEUS_RW_TREND_STATS="p(99),p(95),p(90),max,min" \
+  K6_PROMETHEUS_RW_SERVER_URL=http://<prometheus url>:9090/api/v1/write \
+  BASE_URL="http://127.0.0.1:8002" \
+  AUTH_TOKEN="< api token of superuser>" \
+  k6 run \
+    -o experimental-prometheus-rw \
+    --tag "commit=$(git rev-parse HEAD)" \
+    --tag "testid=<name of test for ref>" \
+    test/page_speed.js
+
+```
 
 
 # Old working docs

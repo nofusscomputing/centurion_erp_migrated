@@ -175,6 +175,8 @@ class ViewSet(ModelViewSet):
         'body',
     ]
 
+    metadata_markdown = True
+
     model = TicketComment
 
     parent_model = Ticket
@@ -233,15 +235,13 @@ class ViewSet(ModelViewSet):
 
         ticket_type = str(ticket.get_ticket_type_display()).lower().replace(' ' , '_')
 
-        organization = int(ticket.organization.id)
+        organization = ticket.organization
 
         if organization:
 
-            if self.has_organization_permission(
+            if self.request.tenancy.has_organization_permission(
                 organization = organization,
-                permissions_required = [
-                    'core.import_ticketcomment'
-                ]
+                permissions_required = 'core.import_ticketcomment'
             ):
 
                 if (
@@ -301,9 +301,9 @@ class ViewSet(ModelViewSet):
 
             if self.action == 'create':
 
-                if self.has_organization_permission(
-                    organization = ticket.organization.id,
-                    permissions_required = [ 'core.triage_ticket_'+ ticket_type ],
+                if self.request.tenancy.has_organization_permission(
+                    organization = ticket.organization,
+                    permissions_required = 'core.triage_ticket_' + ticket_type,
                 ) and not self.request.user.is_superuser:
 
                     serializer_prefix = serializer_prefix + 'Triage'
@@ -318,9 +318,9 @@ class ViewSet(ModelViewSet):
                 or self.action == 'update'
             ):
 
-                if self.has_organization_permission(
-                    organization = ticket.organization.id,
-                    permissions_required = [ 'core.triage_ticket_'+ ticket_type ],
+                if self.request.tenancy.has_organization_permission(
+                    organization = ticket.organization,
+                    permissions_required = 'core.triage_ticket_'+ ticket_type,
                 ) and not self.request.user.is_superuser:
 
                     serializer_prefix = serializer_prefix + 'Triage'

@@ -33,10 +33,19 @@ class ExternalLink(TenancyObject):
         help_text = 'Name to display on link button',
         max_length = 30,
         unique = True,
-        verbose_name = 'Button Name',
+        verbose_name = 'Friendly Name',
     )
 
     slug = None
+
+    button_text = models.CharField(
+        blank = True,
+        help_text = 'Name to display on link button',
+        max_length = 30,
+        null = True,
+        unique = True,
+        verbose_name = 'Button Text',
+    )
 
     template = models.CharField(
         blank = False,
@@ -70,6 +79,13 @@ class ExternalLink(TenancyObject):
         verbose_name = 'Devices',
     )
 
+    service = models.BooleanField(
+        default = False,
+        blank = False,
+        help_text = 'Render link for service',
+        verbose_name = 'Service',
+    )
+
     software = models.BooleanField(
         default = False,
         blank = False,
@@ -92,6 +108,7 @@ class ExternalLink(TenancyObject):
                     "left": [
                         'organization',
                         'name',
+                        'button_text',
                         'template',
                         'colour',
                         'is_global',
@@ -107,10 +124,11 @@ class ExternalLink(TenancyObject):
                     "layout": "double",
                     "left": [
                         'cluster',
-                        'software',
+                        'service',
                     ],
                     "right": [
-                        'devices'
+                        'devices',
+                        'software',
                     ]
                 }
             ]

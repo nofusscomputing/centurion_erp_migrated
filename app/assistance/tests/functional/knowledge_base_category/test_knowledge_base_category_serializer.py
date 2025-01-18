@@ -8,6 +8,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization, Team
 
+from app.tests.abstract.mock_view import MockView, User
+
 from assistance.serializers.knowledge_base_category import KnowledgeBaseCategory, KnowledgeBaseCategoryModelSerializer
 
 
@@ -43,6 +45,8 @@ class KnowledgeBaseCategoryValidationAPI(
 
         self.add_user = User.objects.create_user(username="test_user_add", password="password")
 
+        self.mock_view = MockView( user = self.add_user )
+
         self.item_has_target_user = self.model.objects.create(
             organization=organization,
             name = 'random title',
@@ -66,12 +70,17 @@ class KnowledgeBaseCategoryValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseCategoryModelSerializer(data={
-                "organization": self.organization.id,
-                "target_user": self.add_user.id,
-                "target_team": [
-                    self.add_team.id
-                ]
+            serializer = KnowledgeBaseCategoryModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
+                    "organization": self.organization.id,
+                    "target_user": self.add_user.id,
+                    "target_team": [
+                        self.add_team.id
+                    ]
             })
 
             serializer.is_valid(raise_exception = True)
@@ -90,6 +99,10 @@ class KnowledgeBaseCategoryValidationAPI(
 
             serializer = KnowledgeBaseCategoryModelSerializer(
                 self.item_has_target_user,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "parent_category": self.item_has_target_user.id
                 },
@@ -110,13 +123,18 @@ class KnowledgeBaseCategoryValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseCategoryModelSerializer(data={
-                "organization": self.organization.id,
-                "name": "teamone",
-                "target_user": self.add_user.id,
-                "target_team": [
-                    self.add_team.id
-                ]
+            serializer = KnowledgeBaseCategoryModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
+                    "organization": self.organization.id,
+                    "name": "teamone",
+                    "target_user": self.add_user.id,
+                    "target_team": [
+                        self.add_team.id
+                    ]
             })
 
             serializer.is_valid(raise_exception = True)
@@ -133,7 +151,12 @@ class KnowledgeBaseCategoryValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = KnowledgeBaseCategoryModelSerializer(data={
+            serializer = KnowledgeBaseCategoryModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
                 "name": 'teamone' 
             })
@@ -155,6 +178,10 @@ class KnowledgeBaseCategoryValidationAPI(
 
             serializer = KnowledgeBaseCategoryModelSerializer(
                 self.item_has_target_user,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "target_team": [ self.add_team.id ]
                 },
@@ -177,6 +204,10 @@ class KnowledgeBaseCategoryValidationAPI(
 
             serializer = KnowledgeBaseCategoryModelSerializer(
                 self.item_has_target_team,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "target_user": self.add_user.id
                 },

@@ -32,8 +32,6 @@ class ViewSet(
 ):
 
 
-    documentation: str = ''
-
     filterset_fields = [
         'username',
         'first_name',

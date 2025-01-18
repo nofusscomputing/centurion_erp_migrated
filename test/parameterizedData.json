@@ -1,0 +1,34 @@
+{
+    "urls_list": [
+        "/access/organization",
+
+        "/assistance/knowledge_base",
+        "/assistance/ticket/request",
+
+        "/itam/device",
+        "/itam/operating_system",
+        "/itam/software",
+
+        "/itim/ticket/change",
+        "/itim/cluster",
+        "/itim/service",
+        "/itim/ticket/incident",
+        "/itim/ticket/problem",
+
+        "/project_management/project",
+
+        "/settings/celery_log",
+        "/settings/cluster_type",
+        "/settings/device_model",
+        "/settings/device_type",
+        "/settings/external_link",
+        "/settings/knowledge_base_category",
+        "/settings/manufacturer",
+        "/settings/port",
+        "/settings/project_state",
+        "/settings/project_type",
+        "/settings/software_category",
+        "/settings/ticket_category",
+        "/settings/ticket_comment_category"
+    ]
+}

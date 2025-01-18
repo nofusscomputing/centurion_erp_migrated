@@ -1,5 +1,8 @@
 # ITSM Docker Settings
 
+# If metrics enabled, see https://nofusscomputing.com/projects/centurion_erp/administration/monitoring/#django-exporter-setup)
+# to configure the database metrics.
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
