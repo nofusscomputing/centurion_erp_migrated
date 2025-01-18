@@ -116,14 +116,11 @@ class OrganizationPermissionMixin(
         try:
 
 
-            view.get_user_organizations( request.user )
-
             has_permission_required: bool = False
 
-            user_permissions = getattr(view, '_user_permissions', None)
+            user_permissions = request.tenancy._user_permissions
 
             permission_required = view.get_permission_required()
-
 
             if permission_required and user_permissions:
                 # No permission_required couldnt get permissions
@@ -224,9 +221,9 @@ class OrganizationPermissionMixin(
 
             elif obj_organization is not None:
 
-                if view.has_organization_permission(
-                    organization = obj_organization.id,
-                    permissions_required = [ view.get_permission_required() ]
+                if request.tenancy.has_organization_permission(
+                    organization = obj_organization,
+                    permissions_required = view.get_permission_required()
                 ):
 
                         return True

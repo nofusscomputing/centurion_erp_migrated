@@ -126,11 +126,9 @@ class TicketViewSet(ModelViewSet):
 
             if organization:
 
-                if self.has_organization_permission(
-                    organization = organization.id,
-                    permissions_required = [
-                        str('core.import_ticket_' + self._ticket_type).lower().replace(' ', '_')
-                    ]
+                if self.request.tenancy.has_organization_permission(
+                    organization = organization,
+                    permissions_required = str('core.import_ticket_' + self._ticket_type).lower().replace(' ', '_')
                 ):
 
                     action_keyword = 'import'
@@ -150,11 +148,9 @@ class TicketViewSet(ModelViewSet):
 
             if organization:
 
-                if self.has_organization_permission(
-                    organization = organization.id,
-                    permissions_required = [
-                        str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
-                    ]
+                if self.request.tenancy.has_organization_permission(
+                    organization = organization,
+                    permissions_required = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
                 ):
 
                     action_keyword = 'triage'
@@ -168,11 +164,9 @@ class TicketViewSet(ModelViewSet):
 
             action_keyword = 'change'
 
-            if self.has_organization_permission(
-                organization = organization.id,
-                permissions_required = [
-                    str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
-                ]
+            if self.request.tenancy.has_organization_permission(
+                organization = organization,
+                permissions_required = str('core.triage_ticket_' + self._ticket_type).lower().replace(' ', '_')
             ):
 
                 action_keyword = 'triage'
@@ -294,47 +288,37 @@ class TicketViewSet(ModelViewSet):
                 ):
 
 
-                    if self.has_organization_permission(
+                    if self.request.tenancy.has_organization_permission(
                         organization = organization,
-                        permissions_required = [
-                            'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                        ]
+                        permissions_required = 'core.import_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
                     ):
 
                         serializer_prefix = serializer_prefix + 'Import'
 
-                    elif self.has_organization_permission(
+                    elif self.request.tenancy.has_organization_permission(
                         organization = organization,
-                        permissions_required = [
-                            'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                        ]
+                        permissions_required = 'core.triage_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
                     ):
 
                         serializer_prefix = serializer_prefix + 'Triage'
 
-                    elif self.has_organization_permission(
+                    elif self.request.tenancy.has_organization_permission(
                         organization = organization,
-                        permissions_required = [
-                            'core.change_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                        ]
+                        permissions_required = 'core.change_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
                     ):
 
                         serializer_prefix = serializer_prefix + 'Change'
 
-                    elif self.has_organization_permission(
+                    elif self.request.tenancy.has_organization_permission(
                         organization = organization,
-                        permissions_required = [
-                            'core.add_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                        ]
+                        permissions_required = 'core.add_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
                     ):
 
                         serializer_prefix = serializer_prefix + 'Add'
 
-                    elif self.has_organization_permission(
+                    elif self.request.tenancy.has_organization_permission(
                         organization = organization,
-                        permissions_required = [
-                            'core.view_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
-                        ]
+                        permissions_required = 'core.view_ticket_' + str(self._ticket_type).lower().replace(' ', '_')
                     ):
 
                         serializer_prefix = serializer_prefix + 'View'
