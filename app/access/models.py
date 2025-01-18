@@ -147,6 +147,7 @@ class TenancyManager(models.Manager):
     This manager specifically caters for the multi-tenancy features of Centurion ERP.
     """
 
+    _team_user: any = None
 
     def get_queryset(self):
         """ Fetch the data
@@ -187,14 +188,17 @@ class TenancyManager(models.Manager):
 
                 user_organizations += [ request.app_settings.global_organization.id ]
 
-            # user = request.user._wrapped if hasattr(request.user,'_wrapped') else request.user
 
             user = request.user
 
 
             if user.is_authenticated:
 
-                for team_user in TeamUsers.objects.filter(user=user).prefetch_related('team__organization'):
+                if not self._team_user:
+
+                    self._team_user = TeamUsers.objects.filter(user=user).select_related('team', 'team__organization')
+
+                for team_user in self._team_user:
 
 
                     if team_user.team.organization.id not in user_organizations:
