@@ -7,6 +7,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView
+
 from core.serializers.ticket_related import (
     Ticket,
     RelatedTickets,
@@ -35,6 +37,7 @@ class RelatedTicketsValidationAPI(
 
         user = User.objects.create_user(username="test_user_view", password="password")
 
+        self.user = user
 
         self.ticket_one = Ticket.objects.create(
             organization = self.organization,
@@ -79,7 +82,13 @@ class RelatedTicketsValidationAPI(
         Ensure that a valid item is created and no validation error occurs
         """
 
+        mock_view = MockView( user = self.user )
+
         serializer = RelatedTicketModelSerializer(
+            context = {
+                'request': mock_view.request,
+                'view': mock_view,
+            },
             data={
                 'organization': self.organization.id,
                 'from_ticket_id': self.ticket_one.id,
@@ -101,7 +110,13 @@ class RelatedTicketsValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
+            mock_view = MockView( user = self.user )
+
             serializer = RelatedTicketModelSerializer(
+                context = {
+                    'request': mock_view.request,
+                    'view': mock_view,
+                },
                 data={
                     'organization': self.organization.id,
                     'from_ticket_id': self.ticket_one.id,
@@ -123,9 +138,15 @@ class RelatedTicketsValidationAPI(
         it raises a validation error
         """
 
+        mock_view = MockView( user = self.user )
+
         with pytest.raises(ValidationError) as err:
 
             serializer = RelatedTicketModelSerializer(
+                context = {
+                    'request': mock_view.request,
+                    'view': mock_view,
+                },
                 data={
                     'organization': self.organization.id,
                     'from_ticket_id': self.ticket_two.id,
@@ -147,9 +168,15 @@ class RelatedTicketsValidationAPI(
         error is thrown
         """
 
+        mock_view = MockView( user = self.user )
+
         with pytest.raises(ValidationError) as err:
 
             serializer = RelatedTicketModelSerializer(
+                context = {
+                    'request': mock_view.request,
+                    'view': mock_view,
+                },
                 data={
                     'organization': self.organization.id,
                     'from_ticket_id': self.ticket_two.id,
@@ -171,9 +198,15 @@ class RelatedTicketsValidationAPI(
         error is thrown
         """
 
+        mock_view = MockView( user = self.user )
+
         with pytest.raises(ValidationError) as err:
 
             serializer = RelatedTicketModelSerializer(
+                context = {
+                    'request': mock_view.request,
+                    'view': mock_view,
+                },
                 data={
                     'organization': self.organization.id,
                     'from_ticket_id': self.ticket_two.id,
@@ -195,9 +228,15 @@ class RelatedTicketsValidationAPI(
         error is thrown
         """
 
+        mock_view = MockView( user = self.user )
+
         with pytest.raises(ValidationError) as err:
 
             serializer = RelatedTicketModelSerializer(
+                context = {
+                    'request': mock_view.request,
+                    'view': mock_view,
+                },
                 data={
                     'organization': self.organization.id,
                     'from_ticket_id': self.ticket_two.id,

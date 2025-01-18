@@ -6,6 +6,8 @@ from rest_framework.exceptions import ValidationError
 
 from access.models import Organization
 
+from app.tests.abstract.mock_view import MockView, User
+
 from itim.serializers.cluster import Cluster, ClusterModelSerializer
 
 
@@ -26,12 +28,16 @@ class ClusterValidationAPI(
 
         organization = Organization.objects.create(name='test_org')
 
+        self.user = User.objects.create_user(username="test_user_view", password="password")
+
         self.organization = organization
 
         self.item = self.model.objects.create(
             organization=organization,
             name = 'os name',
         )
+
+        self.mock_view = MockView( user = self.user )
 
 
 
@@ -43,7 +49,12 @@ class ClusterValidationAPI(
 
         with pytest.raises(ValidationError) as err:
 
-            serializer = ClusterModelSerializer(data={
+            serializer = ClusterModelSerializer(
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
+                data={
                 "organization": self.organization.id,
             })
 
@@ -63,6 +74,10 @@ class ClusterValidationAPI(
 
             serializer = ClusterModelSerializer(
                 self.item,
+                context = {
+                    'request': self.mock_view.request,
+                    'view': self.mock_view,
+                },
                 data={
                     "parent_cluster": self.item.id,
                 },

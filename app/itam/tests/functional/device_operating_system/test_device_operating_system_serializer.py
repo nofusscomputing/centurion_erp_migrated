@@ -1,13 +1,17 @@
 import pytest
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
+from access.middleware.auth import Tenancy
 from access.models import Organization
 
 from itam.serializers.device_operating_system import Device, DeviceOperatingSystem, DeviceOperatingSystemModelSerializer
 from itam.models.operating_system import OperatingSystem, OperatingSystemVersion
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -16,6 +20,36 @@ class MockView:
     action: str = None
 
     kwargs: dict = {}
+
+    request = None
+
+
+    def __init__(self, user: User):
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.request = MockRequest( user = user, app_settings = app_settings)
+
+
+
+class MockRequest:
+
+    tenancy: Tenancy = None
+
+    user = None
+
+    def __init__(self, user: User, app_settings):
+
+        self.user = user
+
+        self.app_settings = app_settings
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = app_settings
+        )
 
 
 
@@ -36,6 +70,8 @@ class DeviceOperatingSystemValidationAPI(
         organization = Organization.objects.create(name='test_org')
 
         self.organization = organization
+
+        self.user = User.objects.create(username = 'org_user', password='random password')
 
         self.operating_system = OperatingSystem.objects.create(
             organization=organization,
@@ -81,7 +117,7 @@ class DeviceOperatingSystemValidationAPI(
         Ensure that an item can be created
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'device_id': self.valid_data['device']
@@ -89,6 +125,7 @@ class DeviceOperatingSystemValidationAPI(
 
         serializer = DeviceOperatingSystemModelSerializer(
             context = {
+                'request': mock_view.request,
                 'view': mock_view
             },
             data = self.valid_data
@@ -108,7 +145,7 @@ class DeviceOperatingSystemValidationAPI(
 
         del data['device']
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'device_id': self.valid_data['device']
@@ -116,6 +153,7 @@ class DeviceOperatingSystemValidationAPI(
 
         serializer = DeviceOperatingSystemModelSerializer(
             context = {
+                'request': mock_view.request,
                 'view': mock_view
             },
             data = data
@@ -134,7 +172,7 @@ class DeviceOperatingSystemValidationAPI(
 
         del data['operating_system_version']
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'device_id': self.valid_data['device']
@@ -144,6 +182,7 @@ class DeviceOperatingSystemValidationAPI(
 
             serializer = DeviceOperatingSystemModelSerializer(
                 context = {
+                    'request': mock_view.request,
                     'view': mock_view
                 },
                 data = data

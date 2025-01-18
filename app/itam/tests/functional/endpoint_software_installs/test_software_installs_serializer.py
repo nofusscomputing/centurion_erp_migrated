@@ -1,13 +1,17 @@
 import pytest
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 
 from rest_framework.exceptions import ValidationError
 
+from access.middleware.auth import Tenancy
 from access.models import Organization
 
 from itam.serializers.device_software import Device, DeviceSoftware, DeviceSoftwareModelSerializer, SoftwareInstallsModelSerializer
 from itam.models.software import Software, SoftwareCategory, SoftwareVersion
+
+from settings.models.app_settings import AppSettings
 
 
 
@@ -16,6 +20,36 @@ class MockView:
     action: str = None
 
     kwargs: dict = {}
+
+    request = None
+
+
+    def __init__(self, user: User):
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.request = MockRequest( user = user, app_settings = app_settings)
+
+
+
+class MockRequest:
+
+    tenancy: Tenancy = None
+
+    user = None
+
+    def __init__(self, user: User, app_settings):
+
+        self.user = user
+
+        self.app_settings = app_settings
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = app_settings
+        )
 
 
 
@@ -36,6 +70,8 @@ class SoftwareInstallsValidationAPI(
         organization = Organization.objects.create(name='test_org')
 
         self.organization = organization
+
+        self.user = User.objects.create(username = 'org_user', password='random password')
 
         self.software_category = SoftwareCategory.objects.create(
             organization=organization,
@@ -82,7 +118,7 @@ class SoftwareInstallsValidationAPI(
         """
 
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'software_id': self.software.pk
@@ -93,6 +129,7 @@ class SoftwareInstallsValidationAPI(
 
         serializer = SoftwareInstallsModelSerializer(
             context = {
+                'request': mock_view.request,
                 'view': mock_view
             },
             data = data
@@ -108,7 +145,7 @@ class SoftwareInstallsValidationAPI(
         Ensure that if creating and no device is provided a validation exception is thrown
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'software_id': self.software.pk
@@ -122,6 +159,7 @@ class SoftwareInstallsValidationAPI(
 
             serializer = SoftwareInstallsModelSerializer(
                 context = {
+                'request': mock_view.request,
                 'view': mock_view
                 },
                 data = data
@@ -140,7 +178,7 @@ class SoftwareInstallsValidationAPI(
         occurs as the serializer provides the device from the view.
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
 
         mock_view.kwargs = {
             'software_id': self.software.pk
@@ -152,6 +190,7 @@ class SoftwareInstallsValidationAPI(
 
         serializer = SoftwareInstallsModelSerializer(
             context = {
+                'request': mock_view.request,
                 'view': mock_view
             },
             data = data

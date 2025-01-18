@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.exceptions import ValidationError
 
+from access.middleware.auth import Tenancy
 from access.models import Organization
 
 from core.serializers.ticket_comment import (
@@ -20,6 +21,8 @@ from core.serializers.ticket_comment import (
     TicketCommentITILTaskTriageModelSerializer,
 )
 
+from settings.models.app_settings import AppSettings
+
 
 class MockView:
 
@@ -27,11 +30,35 @@ class MockView:
 
     kwargs: dict = {}
 
+    request = None
+
+
+    def __init__(self, user: User):
+
+        app_settings = AppSettings.objects.select_related('global_organization').get(
+            owner_organization = None
+        )
+
+        self.request = MockRequest( user = user, app_settings = app_settings)
+
 
 
 class MockRequest:
 
-    _user = None
+    tenancy: Tenancy = None
+
+    user = None
+
+    def __init__(self, user: User, app_settings):
+
+        self.user = user
+
+        self.app_settings = app_settings
+
+        self.tenancy = Tenancy(
+            user = user,
+            app_settings = app_settings
+        )
 
 
 
@@ -94,11 +121,11 @@ class TicketCommentValidationAPI:
         Ensure that a valid item it does not raise a validation error
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
         mock_view.action = 'create'
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
 
         mock_view.kwargs: dict = {
@@ -108,7 +135,7 @@ class TicketCommentValidationAPI:
         serializer = self.serializer(
             context = {
                 'view': mock_view,
-                'request': mock_request
+                'request': mock_view.request
             },
             data = self.serializer_data
         )
@@ -122,16 +149,16 @@ class TicketCommentValidationAPI:
         Ensure that no specified ticket raises a validation error
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user)
         mock_view.action = 'create'
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
         serializer = self.serializer(
             context = {
                 'view': mock_view,
-                'request': mock_request
+                'request': mock_view.request
             },
             data = self.serializer_data
         )
@@ -141,7 +168,7 @@ class TicketCommentValidationAPI:
             serializer = self.serializer(
                 context = {
                     'view': mock_view,
-                    'request': mock_request
+                    'request': mock_view.request
                 },
                 data = self.serializer_data
             )
@@ -157,15 +184,15 @@ class TicketCommentValidationAPI:
         Ensure that if no body specified a validation error is raised
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'ticket_id': int(self.ticket.id)
         }
 
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
 
         serializer_data:dict = self.serializer_data.copy()
@@ -177,7 +204,7 @@ class TicketCommentValidationAPI:
             serializer = self.serializer(
                 context = {
                     'view': mock_view,
-                    'request': mock_request
+                    'request': mock_view.request
                 },
                 data = serializer_data
             )
@@ -193,7 +220,7 @@ class TicketCommentValidationAPI:
         Ensure that if no comment_type specified a validation error is raised
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'ticket_id': int(self.ticket.id)
@@ -203,8 +230,8 @@ class TicketCommentValidationAPI:
         serializer_data:dict = self.serializer_data.copy()
         del serializer_data['comment_type']
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
 
         with pytest.raises(ValidationError) as err:
@@ -212,7 +239,7 @@ class TicketCommentValidationAPI:
             serializer = self.serializer(
                 context = {
                     'view': mock_view,
-                    'request': mock_request
+                    'request': mock_view.request
                 },
                 data = serializer_data
             )
@@ -229,14 +256,14 @@ class TicketCommentValidationAPI:
         a comment (a discussion), then a reply can be made.
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user)
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'ticket_id': int(self.ticket.id),
         }
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
         serializer_data:dict = self.serializer_data.copy()
 
@@ -245,7 +272,7 @@ class TicketCommentValidationAPI:
         serializer = self.serializer(
             context = {
                 'view': mock_view,
-                'request': mock_request
+                'request': mock_view.request
             },
             data = serializer_data
         )
@@ -260,15 +287,15 @@ class TicketCommentValidationAPI:
         discussion, that you can't reply to it.
         """
 
-        mock_view = MockView()
+        mock_view = MockView( user = self.user )
         mock_view.action = 'create'
         mock_view.kwargs: dict = {
             'ticket_id': int(self.ticket.id),
             'parent_id': int(self.item_reply.id)
         }
 
-        mock_request = MockRequest()
-        mock_request._user = self.user
+        # mock_request = MockRequest()
+        # mock_request._user = self.user
 
         serializer_data:dict = self.serializer_data.copy()
 
@@ -280,7 +307,7 @@ class TicketCommentValidationAPI:
             serializer = self.serializer(
                 context = {
                     'view': mock_view,
-                    'request': mock_request
+                    'request': mock_view.request
                 },
                 data = serializer_data
             )
