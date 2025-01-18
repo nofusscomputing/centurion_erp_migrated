@@ -318,7 +318,7 @@ class ViewSet(ModelViewSet):
                 or self.action == 'update'
             ):
 
-                if self.has_organization_permission(
+                if self.request.tenancy.has_organization_permission(
                     organization = ticket.organization,
                     permissions_required = 'core.triage_ticket_'+ ticket_type,
                 ) and not self.request.user.is_superuser:
