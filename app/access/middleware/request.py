@@ -4,24 +4,28 @@ from django.contrib.auth.middleware import (
     partial,
 )
 from django.contrib.auth.models import User, Group
+from django.utils.deprecation import MiddlewareMixin
 
 from access.models import Organization, Team
 
 from settings.models.app_settings import AppSettings
 
 
-class AuthenticationMiddleware(AuthenticationMiddleware):
+class RequestTenancy(MiddlewareMixin):
+    """Access Middleware
+
+    Serves the purpose of adding the users tenancy details to rhe request
+    object.
+    """
 
 
     def process_request(self, request):
-
-        super().process_request(request)
 
         request.app_settings = AppSettings.objects.select_related('global_organization').get(
             owner_organization = None
         )
 
-        request.tenancy = Tenancy(request.user, request.app_settings)
+        request.tenancy = Tenancy(user = request.user, app_settings = request.app_settings)
 
 
 

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from rest_framework.exceptions import ValidationError
 
-from access.middleware.auth import Tenancy
+from access.middleware.request import Tenancy
 from access.models import Organization
 
 from core.serializers.ticket_comment import (

@@ -7,7 +7,7 @@ from django.test import TestCase
 
 from rest_framework.generics import GenericAPIView
 
-from access.middleware.auth import Tenancy
+from access.middleware.request import Tenancy
 
 from api.viewsets.common import ModelViewSet
 
