@@ -262,7 +262,7 @@ class TicketComment(
 
     user = models.ForeignKey(
         User,
-        blank= True,
+        blank= False,
         help_text = 'Who made the comment',
         null = True,
         on_delete = models.DO_NOTHING,
